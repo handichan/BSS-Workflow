@@ -1,0 +1,41 @@
+Query succeeded!
+Query succeeded!
+Query succeeded!
+Measure map has 200 measures.
+County annual data (2024 breakthrough) has 169 measures.
+Scout (breakthrough) has 169 measures.
+Both county annual data (2024 breakthrough) and Scout (breakthrough) have the same measures-set.
+===============================================================
+
+Query succeeded!
+Query succeeded!
+Measure map has 200 measures.
+County annual data (2024 ineff) has 62 measures.
+Scout (ineff) has 62 measures.
+Both county annual data (2024 ineff) and Scout (ineff) have the same measures-set.
+===============================================================
+
+Query succeeded!
+Query succeeded!
+Measure map has 200 measures.
+County annual data (2024 mid) has 151 measures.
+Scout (mid) has 151 measures.
+Both county annual data (2024 mid) and Scout (mid) have the same measures-set.
+===============================================================
+
+Query succeeded!
+Query succeeded!
+Measure map has 200 measures.
+County annual data (2024 high) has 152 measures.
+Scout (high) has 152 measures.
+Both county annual data (2024 high) and Scout (high) have the same measures-set.
+===============================================================
+
+Query succeeded!
+Query succeeded!
+Measure map has 200 measures.
+County annual data (2024 stated_policies) has 115 measures.
+Scout (stated_policies) has 115 measures.
+Both county annual data (2024 stated_policies) and Scout (stated_policies) have the same measures-set.
+===============================================================
+

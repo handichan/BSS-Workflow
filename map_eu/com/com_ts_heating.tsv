@@ -1,0 +1,42 @@
+shape_ts	description	in.heating_fuel	in.hvac_heat_type	applicability	upgrade	shape_end_use	version
+com_heating_ts_1	Variable Speed HP RTU, Electric Backup	Electricity	Electric Resistance	TRUE	1	heating	2024-07-19
+com_heating_ts_1	Variable Speed HP RTU, Electric Backup	FuelOil	Furnace	TRUE	1	heating	2024-07-19
+com_heating_ts_1	Variable Speed HP RTU, Electric Backup	NaturalGas	Furnace	TRUE	1	heating	2024-07-19
+com_heating_ts_1	Variable Speed HP RTU, Electric Backup	Propane	Furnace	TRUE	1	heating	2024-07-19
+com_heating_ts_2	Variable Speed HP RTU, Original Heating Fuel Backup	FuelOil	Furnace	TRUE	2	heating	2024-07-19
+com_heating_ts_2	Variable Speed HP RTU, Original Heating Fuel Backup	NaturalGas	Furnace	TRUE	2	heating	2024-07-19
+com_heating_ts_2	Variable Speed HP RTU, Original Heating Fuel Backup	Propane	Furnace	TRUE	2	heating	2024-07-19
+com_heating_ts_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Electric Resistance	TRUE	3	heating	2024-07-19
+com_heating_ts_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	FuelOil	Furnace	TRUE	3	heating	2024-07-19
+com_heating_ts_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	NaturalGas	Furnace	TRUE	3	heating	2024-07-19
+com_heating_ts_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	Propane	Furnace	TRUE	3	heating	2024-07-19
+com_heating_ts_4	HP Boiler, Electric Backup	FuelOil	Boiler 	TRUE	8	heating	2024-07-19
+com_heating_ts_4	HP Boiler, Electric Backup	NaturalGas	Boiler 	TRUE	8	heating	2024-07-19
+com_heating_ts_4	HP Boiler, Electric Backup	Propane	Boiler 	TRUE	8	heating	2024-07-19
+com_heating_ts_5	HP Boiler, Gas Backup	NaturalGas	Boiler 	TRUE	9	heating	2024-07-19
+com_heating_ts_6	GSHP heating	DistrictHeating	District	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Electricity	Electric Resistance	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Electricity	ASHP	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Electricity	WSHP	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Electricity	GSHP	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Electricity	Furnace	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	FuelOil	Furnace	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	FuelOil	Boiler 	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	NaturalGas	Boiler 	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	NaturalGas	Furnace	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Propane	Furnace	TRUE	18	heating	2024-07-19
+com_heating_ts_6	GSHP heating	Propane	Boiler 	TRUE	18	heating	2024-07-19
+com_heating_ts_7	Electric resistance	Electricity	Electric Resistance	TRUE	0	heating	2024-07-19
+com_heating_ts_8	Fossil furnace	FuelOil	Furnace	TRUE	0	heating	2024-07-19
+com_heating_ts_8	Fossil furnace	NaturalGas	Furnace	TRUE	0	heating	2024-07-19
+com_heating_ts_8	Fossil furnace	Propane	Furnace	TRUE	0	heating	2024-07-19
+com_heating_ts_9	Fossil Boiler 	FuelOil	Boiler 	TRUE	0	heating	2024-07-19
+com_heating_ts_9	Fossil Boiler 	NaturalGas	Boiler 	TRUE	0	heating	2024-07-19
+com_heating_ts_9	Fossil Boiler 	Propane	Boiler 	TRUE	0	heating	2024-07-19
+com_heating_ts_10	Variable Speed HP RTU, Electric Backup, Envelope	Electricity	Electric Resistance	TRUE	31	heating	2024-07-19
+com_heating_ts_10	Variable Speed HP RTU, Electric Backup, Envelope	FuelOil	Furnace	TRUE	31	heating	2024-07-19
+com_heating_ts_10	Variable Speed HP RTU, Electric Backup, Envelope	NaturalGas	Furnace	TRUE	31	heating	2024-07-19
+com_heating_ts_10	Variable Speed HP RTU, Electric Backup, Envelope	Propane	Furnace	TRUE	31	heating	2024-07-19
+com_heating_ts_11	HP Boiler, Electric Backup, Envelope	FuelOil	Boiler 	TRUE	31	heating	2024-07-19
+com_heating_ts_11	HP Boiler, Electric Backup, Envelope	NaturalGas	Boiler 	TRUE	31	heating	2024-07-19
+com_heating_ts_11	HP Boiler, Electric Backup, Envelope	Propane	Boiler 	TRUE	31	heating	2024-07-19

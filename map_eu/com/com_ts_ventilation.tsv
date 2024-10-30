@@ -1,0 +1,65 @@
+shape_ts	description	in.hvac_cool_type	in.hvac_category	in.hvac_heat_type	applicability	upgrade	shape_end_use	version
+com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Boiler 	TRUE	1	ventilation	2024-07-19
+com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	District	TRUE	1	ventilation	2024-07-19
+com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Electric Resistance	TRUE	1	ventilation	2024-07-19
+com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Furnace	TRUE	1	ventilation	2024-07-19
+com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Boiler 	TRUE	2	ventilation	2024-07-19
+com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	District	TRUE	2	ventilation	2024-07-19
+com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Electric Resistance	TRUE	2	ventilation	2024-07-19
+com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Furnace	TRUE	2	ventilation	2024-07-19
+com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Boiler 	TRUE	3	ventilation	2024-07-19
+com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	District	TRUE	3	ventilation	2024-07-19
+com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Electric Resistance	TRUE	3	ventilation	2024-07-19
+com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Furnace	TRUE	3	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	ACC	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	District	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	DX	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	WCC	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	DX	Small Packaged Unit	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	Evaporative Cooling	Small Packaged Unit	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	ACC	Zone-by-Zone	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	District	Zone-by-Zone	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	DX	Zone-by-Zone	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_4	Boiler + rtac&chiller	WCC	Zone-by-Zone	Boiler 	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	ACC	Multizone CAV/VAV	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	District	Multizone CAV/VAV	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	DX	Multizone CAV/VAV	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	DX	Multizone CAV/VAV	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	WCC	Multizone CAV/VAV	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	DX	Small Packaged Unit	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	DX	Small Packaged Unit	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	Evaporative Cooling	Small Packaged Unit	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	ACC	Zone-by-Zone	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	District	Zone-by-Zone	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	DX	Zone-by-Zone	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	None	Zone-by-Zone	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_5	Fossil furnace + rtac&chiller	WCC	Zone-by-Zone	District	TRUE	0	ventilation	2024-07-19
+com_ventilation_6	Fossil furnace + cac&rac	DX	Residential Style Central Systems	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_6	Fossil furnace + cac&rac	None	Residential Style Central Systems	Furnace	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	ACC	Multizone CAV/VAV	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	District	Multizone CAV/VAV	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	DX	Multizone CAV/VAV	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	WCC	Multizone CAV/VAV	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	None	Other HVAC	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	District	Small Packaged Unit	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	DX	Small Packaged Unit	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	Evaporative Cooling	Small Packaged Unit	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	ACC	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	District	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	DX	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_7	Resistance heat + rtac&chiller	WCC	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	2024-07-19
+com_ventilation_8	GSHP	GSHP	Zone-by-Zone	GSHP	TRUE	18	ventilation	2024-07-19
+com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	District	TRUE	31	ventilation	2024-07-19
+com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Electric Resistance	TRUE	31	ventilation	2024-07-19
+com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Furnace	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	ACC	Multizone CAV/VAV	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	District	Multizone CAV/VAV	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Multizone CAV/VAV	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	WCC	Multizone CAV/VAV	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Small Packaged Unit	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	Evaporative Cooling	Small Packaged Unit	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	ACC	Zone-by-Zone	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	District	Zone-by-Zone	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Zone-by-Zone	Boiler 	TRUE	31	ventilation	2024-07-19
+com_ventilation_10	Boiler + rtac&chiller, Envelope	WCC	Zone-by-Zone	Boiler 	TRUE	31	ventilation	2024-07-19
