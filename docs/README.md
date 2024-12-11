@@ -40,6 +40,34 @@ This document provides an overview of the structure and content of the dataset. 
   - Schema information included for each file.
   - Typically contains data points relevant to the hierarchical path (`122024/county_annual_breakthrough_amy/sector=res/year=2024/in.state=AL`).
 
+### Additional Data: CSV Files
+- Parquet files for annual county level data include CSV data with the following columns:
+  1. `in.county`
+  2. `fuel`
+  3. `meas`
+  4. `tech_stage`
+  5. `multiplier_annual`
+  6. `state_ann_kwh`
+  7. `turnover`
+  8. `county_ann_kwh`
+  9. `scout_run`
+  10. `end_use`
+  11. `sector`
+  12. `year`
+  13. `in.state`
+
+- Parquet files for annual county level data include CSV data with the following columns:
+  1. `in.county`
+  2. `timestamp_hour`
+  3. `turnover`
+  4. `tech_stage`
+  5. `county_hourly_kwh`
+  6. `scout_run`
+  7. `end_use`
+  8. `sector`
+  9. `year`
+  10. `in.state`
+
 ## Example Path
 Here is an example path to a Parquet file:
 ```
