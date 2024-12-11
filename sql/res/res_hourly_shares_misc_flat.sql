@@ -45,7 +45,7 @@ ts_month AS(
 -- aggregate to annual by state
 ts_year AS(
 	SELECT "in.state",
-		sum(misc)/12 as misc_flat_month
+		sum(misc_month)/12 as misc_flat_month
 	FROM ts_month
 	GROUP BY "in.state"
 ),
