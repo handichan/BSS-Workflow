@@ -323,7 +323,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_2	res_heating_ts_1	res	fossil	Electric boiler	fossil	Electric boiler
 (R) Ref. Case Electric Dryer	Other	res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Resistance dryer	Resistance dryer	Resistance dryer	Resistance dryer
-(R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other	Other	Other
+(R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_2	res_misc_ts_2	res	Other	Other	Other	Other
 (R) Ref. Case Electric Range	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Electric range	Electric range	Electric range	Electric range
 (R) Ref. Case Electric Range FS	Cooking	res_cook_ann_1	res_cook_ann_2	res_cook_ts_1	res_cook_ts_2	res	Fossil range	Electric range	Fossil range	Electric range
 (R) Ref. Case Electronics	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and Electronics	Computers and Electronics	Computers and Electronics	Computers and Electronics
