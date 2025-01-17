@@ -5,7 +5,7 @@ FROM county_hourly_breakthrough_amy -- variable?
 ),
 
 county_hourly_totals as(
-SELECT "in.county",timestamp_hour,extract(month from timestamp_hour) as "month",turnover,"in.state","year", sum(county_hourly_kwh) as county_total_hourly_kwh
+SELECT "in.county",timestamp_hour,"month",turnover,"in.state","year", sum(county_hourly_kwh) as county_total_hourly_kwh
 FROM sub
 GROUP BY "in.county",timestamp_hour,"month",turnover,"in.state","year"
 )
