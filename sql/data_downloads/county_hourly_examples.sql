@@ -66,5 +66,5 @@ SELECT 'G1200310' as "in.county", CAST('High electric heat' AS varchar) as examp
 UNION ALL
 SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as example_type
 )
-SELECT county_hourly_breakthrough_amy.* FROM county_hourly_breakthrough_amy
+SELECT county_hourly_breakthrough_amy.*, example_type FROM county_hourly_breakthrough_amy
 RIGHT JOIN example_counties ON county_hourly_breakthrough_amy."in.county" = example_counties."in.county";
