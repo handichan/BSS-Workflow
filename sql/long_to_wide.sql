@@ -9,14 +9,7 @@ SELECT
     END AS sector,
     "in.state" as state,
     "in.county" as county,
-    -- update the year of the timestamp to match the projection year
-    date_parse(
-        CONCAT(
-            CAST(year AS VARCHAR), '-', 
-            date_format(timestamp_hour, '%m-%d %H:%i:%s.%f')
-        ), 
-        '%Y-%m-%d %H:%i:%s.%f'
-    ) AS date_time,
+    timestamp_hour AS date_time,
     end_use,
     county_hourly_kwh
     -- convert to variable
