@@ -1,13 +1,13 @@
 meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	original_desc	measure_desc	original_desc_simple	measure_desc_simple
 (C) 90.1 Lighting	Lighting	com_light_ann_1	com_light_ann_1	com_light_ts_1	com_light_ts_1	com	Lighting	Lighting, 90.1	Lighting	Lighting, 90.1
 (C) 90.1 Plug Loads	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, 90.1	Computers and electronics	Computers and electronics
-(C) Best HP FS (NG Boiler)	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_10	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	HP boiler, best	RTAC or chiller	HP boiler, best
+(C) Best HP FS (NG Boiler)	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_10	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	Boiler, best HP	RTAC or chiller	Boiler, best HP
 (C) Best HP FS (NG Boiler)	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_10	com_heating_ts_9	com_heating_ts_4	com	NG boiler + RTAC or chiller	Boiler, best HP	fossil	Boiler, best HP
 (C) Best HP FS (NG Boiler)	Ventilation	com_hvac_ann_9	com_hvac_ann_10	com_ventilation_4	com_ventilation_4	com	NG boiler + RTAC or chiller	Boiler, best HP	RTAC or chiller	Boiler, best HP
 (C) Best HP FS (NG Furnace & AC)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_cooling_ts_7	com_cooling_ts_7	com	NG furnace + central or room AC	HP, best	Central or room AC	HP, best
 (C) Best HP FS (NG Furnace & AC)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_heating_ts_8	com_heating_ts_3	com	NG furnace + central or room AC	HP, best	fossil	HP, best
 (C) Best HP FS (NG Furnace & AC)	Ventilation	com_hvac_ann_12	com_hvac_ann_12	com_ventilation_6	com_ventilation_6	com	NG furnace + central or room AC	HP, best	Central or room AC	HP, best
-(C) Best HP FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	HP boiler, best	RTAC or chiller	HP boiler, best
+(C) Best HP FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	Boiler, best HP	RTAC or chiller	Boiler, best HP
 (C) Best HP FS (Other Fossil Boiler)	Heating (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_heating_ts_9	com_heating_ts_4	com	Other fossil boiler + RTAC or chiller	Boiler, best HP	fossil	Boiler, best HP
 (C) Best HP FS (Other Fossil Boiler)	Ventilation	com_hvac_ann_22	com_hvac_ann_22	com_ventilation_4	com_ventilation_4	com	Other fossil boiler + RTAC or chiller	Boiler, best HP	RTAC or chiller	Boiler, best HP
 (C) Best HP FS (Other Fossil Furnace & AC)	Cooling (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, best	Central or room AC	HP, best
@@ -19,13 +19,13 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Best HP FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_28	com_hvac_ann_30	com_cooling_ts_9	com_cooling_ts_3	com	Other fossil RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
 (C) Best HP FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_28	com_hvac_ann_30	com_heating_ts_8	com_heating_ts_3	com	Other fossil RTU + RTAC or chiller	HP, best	fossil	HP, best
 (C) Best HP FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_28	com_hvac_ann_30	com_ventilation_5	com_ventilation_2	com	Other fossil RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
-(C) Best HP Pt. FS (NG Boiler)	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_11	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	HP boiler, best with fossil backup	RTAC or chiller	HP boiler, best with fossil backup
+(C) Best HP Pt. FS (NG Boiler)	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_11	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	Boiler, best HP with fossil backup	RTAC or chiller	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (NG Boiler)	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_11	com_heating_ts_9	com_heating_ts_5	com	NG boiler + RTAC or chiller	Boiler, best HP with fossil backup	fossil	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (NG Boiler)	Ventilation	com_hvac_ann_9	com_hvac_ann_11	com_ventilation_4	com_ventilation_4	com	NG boiler + RTAC or chiller	Boiler, best HP with fossil backup	RTAC or chiller	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (NG Furnace & AC)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_cooling_ts_7	com_cooling_ts_7	com	NG furnace + central or room AC	HP, best with fossil backup	Central or room AC	HP, best with fossil backup
 (C) Best HP Pt. FS (NG Furnace & AC)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_heating_ts_8	com_heating_ts_2	com	NG furnace + central or room AC	Boiler, best HP with fossil backup	fossil	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (NG Furnace & AC)	Ventilation	com_hvac_ann_12	com_hvac_ann_12	com_ventilation_6	com_ventilation_6	com	NG furnace + central or room AC	HP, best with fossil backup	Central or room AC	HP, best with fossil backup
-(C) Best HP Pt. FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	HP boiler, best with fossil backup	RTAC or chiller	HP boiler, best with fossil backup
+(C) Best HP Pt. FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	Boiler, best HP with fossil backup	RTAC or chiller	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (Other Fossil Boiler)	Heating (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_heating_ts_9	com_heating_ts_5	com	Other fossil boiler + RTAC or chiller	HP, best with fossil backup	fossil	HP, best with fossil backup
 (C) Best HP Pt. FS (Other Fossil Boiler)	Ventilation	com_hvac_ann_22	com_hvac_ann_22	com_ventilation_4	com_ventilation_4	com	Other fossil boiler + RTAC or chiller	Boiler, best HP with fossil backup	RTAC or chiller	Boiler, best HP with fossil backup
 (C) Best HP Pt. FS (Other Fossil Furnace & AC)	Cooling (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, best with fossil backup	Central or room AC	HP, best with fossil backup
@@ -54,7 +54,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Brk. HP FS (Other Fossil Furnace & AC)	Cooling (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, breakthrough	Central or room AC	HP, breakthrough
 (C) Brk. HP FS (Other Fossil Furnace & AC)	Heating (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_heating_ts_8	com_heating_ts_8	com	Other fossil furnace + central or room AC	HP, breakthrough	fossil	HP, breakthrough
 (C) Brk. HP FS (Other Fossil Furnace & AC)	Ventilation	com_hvac_ann_24	com_hvac_ann_24	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, breakthrough	Central or room AC	HP, breakthrough
-(C) Bst. HP FS (NG Boiler) & Env.+	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_cooling_ts_9	com_cooling_ts_11	com	NG boiler + RTAC or chiller	HP boiler, best with env +	RTAC or chiller	HP boiler, best
+(C) Bst. HP FS (NG Boiler) & Env.+	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_cooling_ts_9	com_cooling_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env +	RTAC or chiller	Boiler, best HP
 (C) Bst. HP FS (NG Boiler) & Env.+	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_heating_ts_9	com_heating_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env +	fossil	Boiler, best HP
 (C) Bst. HP FS (NG Boiler) & Env.+	Ventilation	com_hvac_ann_9	com_hvac_ann_40	com_ventilation_4	com_ventilation_10	com	NG boiler + RTAC or chiller	Boiler, best HP with env +	RTAC or chiller	Boiler, best HP
 (C) Bst. HP FS (RTU, NG Ht.) & Env.+	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_18	com_cooling_ts_9	com_cooling_ts_3	com	NG RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
@@ -269,8 +269,8 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_heating_ts_2	res_heating_ts_11	res	fossil	ASHP, ESTAR with fossil backup and env	fossil	ASHP, ESTAR with fossil backup
 (R) ES HP TS (Resist.) & Env.	Cooling (Equip.)	res_hvac_ann_1	res_hvac_ann_6	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with env	AC	ASHP, ESTAR
 (R) ES HP TS (Resist.) & Env.	Heating (Equip.)	res_hvac_ann_1	res_hvac_ann_6	res_heating_ts_1	res_heating_ts_8	res	ER	ASHP, ESTAR with env	ER	ASHP, ESTAR
-(R) ESTAR 120V HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, ESTAR 120V	Water heater, fossil	Water heater, HP, ESTAR 120V
-(R) ESTAR 240V HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, ESTAR 240V	Water heater, fossil	Water heater, HP, ESTAR 240V
+(R) ESTAR 120V HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, ESTAR	Water heater, fossil	Water heater, HP, ESTAR
+(R) ESTAR 240V HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, ESTAR	Water heater, fossil	Water heater, HP, ESTAR
 (R) ESTAR GSHP (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_15	res_cooling_ts_1	res_cooling_ts_5	res	AC	GSHP, ESTAR	AC	GSHP, ESTAR
 (R) ESTAR GSHP (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_15	res_heating_ts_2	res_heating_ts_7	res	fossil	GSHP, ESTAR	fossil	GSHP, ESTAR
 (R) ESTAR GSHP (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_26	res_cooling_ts_1	res_cooling_ts_5	res	AC	GSHP, ESTAR	AC	GSHP, ESTAR
