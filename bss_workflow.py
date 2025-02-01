@@ -11,7 +11,6 @@ import sys
 import rpy2.robjects as robjects
 
 pd.set_option('display.max_columns', None)
-
 JSON_PATH = 'json/input.json'
 
 CSV_DIR = "csv"
@@ -21,20 +20,11 @@ DATABASE_NAME = "euss_oedi"
 BUCKET_NAME = 'handibucket'
 
 EUGROUP_DIR = f"map_eu"
+R_DIR = f"R"
 
-# SCOUT_RESULTS_FILE = "exo_wenv_091824.json"
-# SCOUT_RESULTS_FILE = "ineff_exog.json"
-# SCOUT_RESULTS_FILE = "breakthrough_exog.json"
-# SCOUT_RESULTS_FILE = "high_exog.json"
-# SCOUT_RESULTS_FILE = "mid_exog.json"
-# SCOUT_RESULTS_FILE = "stated_policies_exog.json"
-
-# SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", SCOUT_RESULTS_FILE)
-
-SCOUT_RUN_DATE = "2024-09-30"
-
-measversion = "20240927"
-versionid = '20240923'
+SCOUT_RUN_DATE = "2024-11-13"
+measversion = "20241124"
+versionid = "20240923"
 
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
@@ -50,6 +40,7 @@ US_STATES = [
     'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
     'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
     'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+
 
 
 def get_end_uses(sectorid):
@@ -332,10 +323,6 @@ def calc_annual(df, include_baseline, turnover):
                 else 0
                 if row['component'] == 'equipment + env' 
                 else None, axis=1)
-    
-    # with_packages = with_packages.assign(original_ann = lambda x: (
-    #     x.efficient_mmbtu - x.efficient_measure_mmbtu) / 
-    #     3412*10**6)
 
     with_packages = with_packages[['meas_separated', 'reg', 'end_use', 'fuel', 'year', 'efficient_mmbtu',
            'efficient_measure_mmbtu', 'efficient_measure_env_mmbtu',
@@ -356,9 +343,13 @@ def calc_annual(df, include_baseline, turnover):
             state_ann_kwh = lambda x: x.value / 3412*10**6)
         grouped_base['tech_stage'] = 'original_ann'
         grouped_base['turnover'] = 'baseline'
-        grouped_base = grouped_base.merge(envelope_map[envelope_map['component']=='equipment'],on='meas',how='left')
-        grouped_base['meas'] = grouped_base.apply(lambda row: row['meas_separated'] 
-                      if pd.notnull(row['meas_separated']) and isinstance(row['meas_separated'], (str)) 
+        grouped_base = grouped_base.merge(
+            envelope_map[envelope_map['component']=='equipment'],
+            on='meas',how='left')
+        grouped_base['meas'] = \
+            grouped_base.apply(lambda row: row['meas_separated'] 
+                      if pd.notnull(row['meas_separated']) and isinstance(
+                        row['meas_separated'], (str)) 
                       else row['meas'], axis=1)
         grouped_base = grouped_base[['meas','reg',
             'end_use','fuel','year','tech_stage','state_ann_kwh','turnover']]
@@ -383,7 +374,8 @@ def file_to_df(file_path):
     elif file_path.endswith('.csv'):
         df = pd.read_csv(file_path)
     else:
-        raise ValueError("Unsupported file format. Please provide a .tsv or .csv file.")
+        raise ValueError(
+            "Unsupported file format. Please provide a .tsv or .csv file.")
     return df
 
 
@@ -495,12 +487,14 @@ def execute_athena_query_to_df(athena_client, query, wait=True):
 
     status = 'RUNNING'
     while status == 'RUNNING' or status == 'QUEUED':
-        response = athena_client.get_query_execution(QueryExecutionId=query_execution_id)
+        response = athena_client.get_query_execution(
+            QueryExecutionId=query_execution_id)
         status = response['QueryExecution']['Status']['State']
         if status == 'SUCCEEDED':
             print('Query succeeded!')
         elif status == 'FAILED':
-            raise Exception('Query failed: {}'.format(response['QueryExecution']['Status']['StateChangeReason']))
+            raise Exception('Query failed: {}'.format(
+                response['QueryExecution']['Status']['StateChangeReason']))
         elif status == 'CANCELLED':
             raise Exception('Query was cancelled.')
         time.sleep(2)
@@ -516,7 +510,7 @@ def test_county(athena_client):
         "test_county_hourly_total.sql", "test_county_hourly_enduse.sql"]
 
     years = [2024,2030,2040,2050]
-    turnovers = ['breakthrough','ineff','mid','high','stated_policies']
+    turnovers = ['breakthrough','ineff','mid','high','stated']
 
     for sql_file in sql_files:
         csv_out = f"{sql_file.split('.')[0]}.csv"
@@ -606,7 +600,7 @@ def test_compare_measures(athena_client):
     out = f"./diagnostics/{txt_out}"
 
     # years = [2024,2030,2040,2050]
-    turnovers = ['breakthrough','ineff','mid','high','stated_policies']
+    turnovers = ['breakthrough','ineff','mid','high','stated']
     years = [2024]
 
     query_county_annual = f"""
@@ -622,7 +616,8 @@ def test_compare_measures(athena_client):
     with open(out, 'w') as file:
         sys.stdout = file
         
-        lst_measure_map = (execute_athena_query_to_df(athena_client, query_measure_map).dropna(how='all'))['meas'].tolist()
+        lst_measure_map = (execute_athena_query_to_df(
+            athena_client, query_measure_map).dropna(how='all'))['meas'].tolist()
 
         for my_turnover in turnovers:
             for my_year in years:
@@ -630,8 +625,11 @@ def test_compare_measures(athena_client):
                 query1 = query1.replace("YEARID", f"{my_year}")
                 query2 = query_scout.replace("TURNOVERID", f"{my_turnover}")
 
-                county_annual_lst = (execute_athena_query_to_df(athena_client, query1).dropna(how='all'))['meas'].tolist()
-                scout_lst = (execute_athena_query_to_df(athena_client, query2).dropna(how='all'))['meas'].tolist()
+                county_annual_lst = (
+                    execute_athena_query_to_df(athena_client, query1).dropna(
+                        how='all'))['meas'].tolist()
+                scout_lst = (execute_athena_query_to_df(
+                    athena_client, query2).dropna(how='all'))['meas'].tolist()
 
                 print(f"Measure map has {len(lst_measure_map)} measures.")
                 print(f"County annual data ({my_year} {my_turnover}) has {len(county_annual_lst)} measures.")
@@ -655,7 +653,6 @@ def sql_to_s3table(s3_client, athena_client, sql_file, sectorid, yearid, turnove
     sql_file = f"{sectorid}/{sql_file}"
     query = read_sql_file(sql_file)
     suff = f"{sectorid} {turnover} {yearid}"
-
     END_USES = get_end_uses(sectorid)
 
     if "VERSIONID" in query:
@@ -702,7 +699,8 @@ def s3_create_tables_from_csvdir(s3_client, athena_client):
             elif file_name.endswith('.tsv'):
                 delimiter = '\t'
             else:
-                raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
+                raise ValueError(
+                    "Unsupported file format. Please provide a .csv or .tsv file.")
             
             df = pd.read_csv(local_path, delimiter=delimiter)
 
@@ -731,7 +729,8 @@ def s3_create_table_from_tsv(s3_client, athena_client, local_path):
         elif file_name.endswith('.tsv'):
             delimiter = '\t'
         else:
-            raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
+            raise ValueError(
+                "Unsupported file format. Please provide a .csv or .tsv file.")
 
         df = pd.read_csv(local_path, delimiter=delimiter)
 
@@ -739,7 +738,8 @@ def s3_create_table_from_tsv(s3_client, athena_client, local_path):
         _, _ = execute_athena_query(athena_client, sql_query, True)
 
 
-def s3_insert_to_table_from_tsv(s3_client, athena_client, local_path, dest_table_name):
+def s3_insert_to_table_from_tsv(
+    s3_client, athena_client, local_path, dest_table_name):
     table_name = os.path.splitext(os.path.basename(local_path))[0]
     s3_create_table_from_tsv(s3_client, athena_client, local_path)
     sql_query = f"""
@@ -762,7 +762,8 @@ def df_to_s3table2(s3_client, athena_client, df, table_name):
         sql_query = sql_create_table(df, table_name, file_format)
         _, _ = execute_athena_query(athena_client, sql_query, True)
 
-def run_r_script(file_path):
+def run_r_script(r_file):
+    os.path.join(R_DIR, r_file)
     with open(file_path, 'r') as file:
         r_code = file.read()
     try:
@@ -771,6 +772,17 @@ def run_r_script(file_path):
     except Exception as e:
         print(f"Error executing R script: {e}")
 
+
+def get_csvs_for_run_test(athena_client):
+    sql_files = ['county_100_hrs.sql','county_ann_eu.sql',
+        'county_hourly_examples.sql','county_monthly_maxes.sql',
+        'state_monthly_2024.sql']
+    for sql_file in sql_files:
+        sql_file = f"{SQL_DIR}/{sql_file}"
+        csv_file = sql_file.replace(".sql", ".csv")
+        query = read_sql_file(sql_file)
+        df = execute_athena_query_to_df(athena_client, query, wait=True)
+        df.to_csv(f"R/{csv_file}", index=False)
 
 def main(base_dir):
 
@@ -781,10 +793,8 @@ def main(base_dir):
         s3_client = session.client('s3')
         athena_client = session.client('athena')
 
-        s3_create_tables_from_csvdir(s3_client, athena_client)
-        sectors = ['res','com']
-        years = ['2024','2030','2040','2050']
-        turnovers = ['breakthrough','ineff','mid','high','stated_policies']
+        # s3_create_tables_from_csvdir(s3_client, athena_client)
+        sectors = ['res']
 
         tbl_res = [
             "tbl_ann_mult.sql",
@@ -839,52 +849,71 @@ def main(base_dir):
             "com_hourly_shares_cooking.sql"
         ]
         for sectorid in sectors:
-            for yearid in years:
-                for myturnover in turnovers:
-                    if sectorid == 'res':
-                        tbl_names = tbl_res
-                    if sectorid == 'com':
-                        tbl_names = tbl_com
-                    
-                    for tbl_name in tbl_names:
-                        sql_to_s3table(s3_client, athena_client, tbl_name, sectorid, yearid, myturnover)
+            if sectorid == 'res':
+                tbl_names = tbl_res
+            if sectorid == 'com':
+                tbl_names = tbl_com
+            
+            for tbl_name in tbl_names:
+                sql_to_s3table(s3_client, athena_client,
+                    tbl_name, sectorid, yearid=None, turnover=None)
 
-        ## UNUSED
-        # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("addons", "county2tz_2.tsv"))
-        # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ann_cook.tsv"))
-        # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ts_cook.tsv"))
-        # s3_insert_to_table_from_tsv(s3_client, athena_client, os.path.join("addons", "ann_dis_mult_cook.csv"), "annual_disaggregation_multipliers_0719")
+    if opts.gen_scoutdata is True:
+        session = boto3.Session()
+        s3_client = session.client('s3')
+        athena_client = session.client('athena')
+
+        scout_files = [
+            "breakthrough_exog.json",
+            "ineff_exog.json",
+            "high_exog.json",
+            "mid_exog.json",
+            "stated_exog.json"
+            ]
+
+        measure_map = file_to_df(MEAS_MAP_FILE)
+        s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
+        for scout_file in scout_files:
+            SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
+            myturnover = scout_file.split('_')[0]
+
+            if scout_file in ["ineff_exog.json", "stated_exog.json"]:
+                scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
+                scout_ann_df, scout_ann_local_path = \
+                    calc_annual_noenv(scout_df, include_baseline = True,
+                                      turnover = myturnover)
+            else:
+                scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
+                scout_ann_df, scout_ann_local_path = \
+                    calc_annual(scout_df, include_baseline = True,
+                                turnover = myturnover)
+
+            check_missing_meas(measure_map, scout_df)
+            s3_create_table_from_tsv(s3_client, athena_client,
+                scout_ann_local_path)
+            print(f"Finished adding scout data {scout_file}")
 
     if opts.gen_county is True:
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
 
-
-        measure_map = file_to_df(MEAS_MAP_FILE)
-        if SCOUT_RESULTS_FILE in ["ineff_exog.json", "stated_policies_exog.json"]:
-            scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
-            scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = turnover)
-        else:
-            scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
-            scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = turnover)
-
-        check_missing_meas(measure_map, scout_df)
-
-        s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
-        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
-
-        sectors = ['res','com']
+        sectors = ['res']
         years = ['2024','2030','2040','2050']
-        turnovers = ['breakthrough','ineff','mid','high','stated_policies']
+        turnovers = ['breakthrough','ineff','mid','high','stated']
 
         for sectorid in sectors:
+        
             for yearid in years:
                 for myturnover in turnovers:
-                    # sql_to_s3table(s3_client, athena_client, "tbl_ann_county.sql", sectorid, yearid, myturnover)
-                    # sql_to_s3table(s3_client, athena_client, "annual_county.sql", sectorid, yearid, myturnover)
-                    sql_to_s3table(s3_client, athena_client, "tbl_hr_county.sql", sectorid, yearid, myturnover)
-                    sql_to_s3table(s3_client, athena_client, "hourly_county.sql", sectorid, yearid, myturnover)
+                    sql_to_s3table(s3_client, athena_client,
+                        "tbl_ann_county.sql", sectorid, yearid, myturnover)
+                    sql_to_s3table(s3_client, athena_client,
+                        "annual_county.sql", sectorid, yearid, myturnover)
+                    sql_to_s3table(s3_client, athena_client,
+                        "tbl_hr_county.sql", sectorid, yearid, myturnover)
+                    sql_to_s3table(s3_client, athena_client,
+                        "hourly_county.sql", sectorid, yearid, myturnover)
 
     if opts.run_test is True:
         session = boto3.Session()
@@ -895,6 +924,9 @@ def main(base_dir):
         test_multipliers(athena_client)
         test_compare_measures(athena_client)
         run_r_script('annual_graphs.R')
+        
+        get_csvs_for_run_test(athena_client)
+        run_r_script('county and hourly graphs.R')
 
         
 if __name__ == "__main__":
@@ -907,7 +939,9 @@ if __name__ == "__main__":
     parser.add_argument("--gen_mults", action="store_true",
                         help=""""Generate Stock tables""")
     parser.add_argument("--gen_county", action="store_true",
-                        help=""""Generate County Hourly""")
+                        help=""""Generate County Data""")
+    parser.add_argument("--gen_scoutdata", action="store_true",
+                        help=""""Generate Scout Data""")
     parser.add_argument("--run_test", action="store_true",
                         help=""""Run Diagnosis""")
 
