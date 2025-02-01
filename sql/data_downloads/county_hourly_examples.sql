@@ -10,7 +10,7 @@ GROUP BY "in.county"
 ),
 county_totals as(
 SELECT "in.county",turnover,"in.state","year",sum(county_hourly_kwh) as county_total_ann_kwh 
-FROM long_county_hourly_high_amy -- variable?
+FROM  long_county_hourly_ineff_amy -- variable?
 WHERE turnover!='baseline'
 AND "year" IN (2024,2050)
 AND "in.county" IN (SELECT "in.county" FROM ns WHERE n>=50)
@@ -69,10 +69,10 @@ SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as examp
 ),
 
 county_hourly_totals AS(
-SELECT long_county_hourly_high_amy."in.county", timestamp_hour,
-turnover, "year", "in.state", example_type, sum(county_hourly_kwh) as county_total_hourly_kwh FROM long_county_hourly_high_amy
-RIGHT JOIN example_counties ON long_county_hourly_high_amy."in.county" = example_counties."in.county"
-GROUP BY long_county_hourly_high_amy."in.county", timestamp_hour, turnover, "year", "in.state", example_type),
+SELECT  long_county_hourly_ineff_amy."in.county", timestamp_hour,
+turnover, "year", "in.state", example_type, sum(county_hourly_kwh) as county_total_hourly_kwh FROM  long_county_hourly_ineff_amy
+RIGHT JOIN example_counties ON  long_county_hourly_ineff_amy."in.county" = example_counties."in.county"
+GROUP BY  long_county_hourly_ineff_amy."in.county", timestamp_hour, turnover, "year", "in.state", example_type),
 
 day_with_max AS(
 SELECT "in.county", turnover as turnover_max, "year", 
