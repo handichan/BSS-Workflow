@@ -11,8 +11,8 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.clothes_washer.energy_consumption" as cw
-	FROM "resstock_amy2018_release_2024.2_by_state" as ts
-		RIGHT JOIN "resstock_amy2018_release_2024.2_metadata" as meta 
+	FROM "resstock_tmy3_release_2024.2_by_state" as ts
+		RIGHT JOIN "resstock_tmy3_release_2024.2_metadata" as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'

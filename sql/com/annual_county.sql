@@ -17,7 +17,7 @@ measure_map_ann_long AS
     'original_ann' AS tech_stage,
     original_ann AS group_ann,
     sector
-FROM measure_map_MEASVERSION
+FROM measure_map
 
 UNION ALL
 
@@ -27,7 +27,7 @@ SELECT
     'measure_ann' AS tech_stage,
     measure_ann AS group_ann,
     sector
-FROM measure_map_MEASVERSION),
+FROM measure_map),
 
 scout_meas AS
 (SELECT 

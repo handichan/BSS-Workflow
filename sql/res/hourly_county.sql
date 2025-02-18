@@ -26,7 +26,7 @@ SELECT
     Scout_end_use,
     'original_ann' AS tech_stage,
     original_ts AS shape_ts
-FROM measure_map_MEASVERSION
+FROM measure_map
 
 UNION ALL
 
@@ -35,7 +35,7 @@ SELECT
     Scout_end_use,
     'measure_ann' AS tech_stage,
     measure_ts AS shape_ts
-FROM measure_map_MEASVERSION
+FROM measure_map
 ),
 
 to_disagg AS (
@@ -90,12 +90,10 @@ hourly_ungrouped AS (
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
     "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
-    FROM res_hourly_disaggregation_multipliers_VERSIONID
+    FROM res_hourly_disaggregation_multipliers_VERSIONID_flat
     WHERE multiplier_hourly >= 0
     -- convert to variable
-    AND end_use = 'ENDUSEID'
-    -- convert to variable
-    AND group_version = '2024-07-19') AS h
+    AND end_use = 'ENDUSEID') AS h
     ON gd."in.county" = h."in.county"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts

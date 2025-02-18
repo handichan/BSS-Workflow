@@ -5,7 +5,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'res_dw_ann_1' AS group_ann,
 		sum(meta."out.electricity.dishwasher.energy_consumption") as dw
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "resstock_tmy3_release_2024.2_metadata" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
 		meta."in.county",

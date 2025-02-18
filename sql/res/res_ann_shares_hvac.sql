@@ -12,7 +12,7 @@ WITH meta_filtered AS (
 		chars.group_ann,
 		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating,
 		sum(meta."out.electricity.cooling.energy_consumption") as cooling
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "resstock_tmy3_release_2024.2_metadata" as meta
 		RIGHT JOIN res_ann_hvac as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_cooling_type" = chars."in.hvac_cooling_type"
 		AND cast(meta.upgrade as varchar) = chars.upgrade

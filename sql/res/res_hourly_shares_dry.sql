@@ -12,7 +12,7 @@ WITH meta_shapes AS (
 		meta."in.state",
 		chars.shape_ts,
 		chars.upgrade
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "resstock_tmy3_release_2024.2_metadata" as meta
 		RIGHT JOIN res_ts_dry as chars ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -28,7 +28,7 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.clothes_dryer.energy_consumption" as drying
-	FROM "resstock_amy2018_release_2024.2_by_state" as ts
+	FROM "resstock_tmy3_release_2024.2_by_state" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry)
