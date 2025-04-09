@@ -11,10 +11,12 @@
 # Diagnosis routines to the resulting county annual and county hourly results
 To analyze the consistencies of multipliers, county-level data and measures, option `--run_test` is available for use. This parameter also visualize the county annual and county hourly results for further analysis. 
 
-- `test_multipliers` Query `test_multipliers_annual.sql` and `test_multipliers_hourly.sql` to check the consistency on the multipliers via the number of counties.
-- `test_county`Query `test_county_annual_total.sql`, `test_county_annual_enduse.sql`, `test_county_hourly_total.sql`, and `test_county_hourly_enduse.sql` to check 
-- `test_compare_measures`
-- `run_r_script`
+- `test_multipliers` To check consistencies on the multipliers via the number of counties. Files included:
+  - `test_multipliers_annual.sql` and `test_multipliers_hourly.sql` 
+- `test_county`To check consistencies on the county-level results. SQL files included:
+  - `test_county_annual_total.sql`, `test_county_annual_enduse.sql`, `test_county_hourly_total.sql`, and `test_county_hourly_enduse.sql`.
+- `test_compare_measures` To check if `map_meas\measure_map.tsv` include all measures in each of the scenario results.
+- `run_r_script` To visualize county annual and hourly results for further analysis.
   - `annual_graphs.R`
   - `county and hourly graphs.R`
 
