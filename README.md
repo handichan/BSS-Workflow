@@ -8,7 +8,7 @@
    - Note that this process may generate a timeout or exceeded partitions errors. In the case of time out error, please modify the sql code to refrain from using data from multiple years (<3 years). For exceeded partitions error, please comment out the `partition by` part of the sql code.
 - `--convert_long_to_wide` Convert the resulting combined county level data from 3) into a wide format for publication.
 
-# Diagnosis routines to the resulting county annual and county hourly results
+# Diagnosis routines
 To analyze the consistencies of multipliers, county-level data and measures, option `--run_test` is available for use. This parameter also visualize the county annual and county hourly results for further analysis. 
 
 - `test_multipliers` To check consistencies on the multipliers via the number of counties. Files included:
