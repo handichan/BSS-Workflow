@@ -7,7 +7,16 @@
 -  - This process include querying `sql\combine_annual_2024_2050.sql` and `sql\combine_hourly_2024_2050.sql` files.
    - Note that this process may generate a timeout or exceeded partitions errors. In the case of time out error, please modify the sql code to refrain from using data from multiple years (<3 years). For exceeded partitions error, please comment out the `partition by` part of the sql code.
 - `--convert_long_to_wide` Convert the resulting combined county level data from 3) into a wide format for publication.
-- `--test_county` Query testing routines available in 
+
+# Diagnosis routines to the resulting county annual and county hourly results
+To analyze the consistencies of multipliers, county-level data and measures, option `--run_test` is available for use. This parameter also visualize the county annual and county hourly results for further analysis. 
+
+- `test_multipliers` Query `test_multipliers_annual.sql` and `test_multipliers_hourly.sql` to check the consistency on the multipliers via the number of counties.
+- `test_county`Query `test_county_annual_total.sql`, `test_county_annual_enduse.sql`, `test_county_hourly_total.sql`, and `test_county_hourly_enduse.sql` to check 
+- `test_compare_measures`
+- `run_r_script`
+  - `annual_graphs.R`
+  - `county and hourly graphs.R`
 
 # Dataset Structure and Content
 
