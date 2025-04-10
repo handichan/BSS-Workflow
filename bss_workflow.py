@@ -123,44 +123,6 @@ def reshape_json(data, path=[]):
     return rows
 
 
-def scout_to_df_noenv(filename):
-    new_columns = [
-            'meas', 'adoption_scn', 'metric',
-            'reg', 'bldg_type', 'end_use',
-            'fuel', 'year', 'value']
-    with open(f'{filename}', 'r') as fname:
-        json_df = json.load(fname)
-    meas = list(json_df.keys())[:-1]
-
-    all_df = pd.DataFrame()
-    for mea in meas:
-        json_data = json_df[mea]["Markets and Savings (by Category)"]
-
-        data_from_json = reshape_json(json_data)
-        
-        df_from_json = pd.DataFrame(
-                    data_from_json)
-        df_from_json['meas'] = mea
-        all_df = df_from_json if all_df.empty else pd.concat(
-            [all_df, df_from_json], ignore_index=True)
-        cols = ['meas'] + [col for col in all_df if col != 'meas']
-        all_df = all_df[cols]
-
-    all_df.columns = new_columns
-    all_df = all_df[all_df['metric'].isin(['Efficient Energy Use (MMBtu)',
-        'Efficient Energy Use, Measure (MMBtu)',
-        'Baseline Energy Use (MMBtu)'])]
-    
-    # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])]
-    to_shift['value'] = to_shift['year']
-    to_shift['year'] = to_shift['fuel']
-    to_shift['fuel'] = 'Electric'
-
-    df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
-
-    return(df)
-
 
 def calc_annual_noenv(df, include_baseline, turnover):
     
@@ -984,7 +946,7 @@ def gen_scoutdata(s3_client, athena_client):
 
         if scout_file in ["ineff_exog.json", "stated_exog.json","ineff20182023_exog.json",
             "ineffrecal_exog.json", "ineffrecal_01092025.json", "ineffuncal_12102024.json"]:
-            scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
+            scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover)
         else:
             scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
