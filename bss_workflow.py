@@ -122,40 +122,118 @@ def reshape_json(data, path=[]):
         rows.append(path + [data])
     return rows
 
-
-
-def calc_annual_noenv(df, include_baseline, turnover):
+def compute_no_package_energy(wide_df):
+    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
+        df = wide_df.copy()
+    else:
+        df = wide_df[wide_df['efficient_measure_env_mmbtu'].isna()].copy()
     
-    efficient = df[df['metric'].isin(['Efficient Energy Use (MMBtu)',
-        'Efficient Energy Use, Measure (MMBtu)'])]
-    grouped = efficient.groupby(['meas','metric','reg',
-        'end_use','fuel','year'])['value'].sum().reset_index()
-    wide = grouped.pivot(index=['meas','reg','end_use','fuel','year'],
-        columns='metric', values='value').reset_index()
-    wide.columns = ['meas','reg','end_use','fuel','year','efficient_mmbtu',
-                    'efficient_measure_mmbtu']
-    wide = wide.assign(original_ann = lambda x: (
-        x.efficient_mmbtu - x.efficient_measure_mmbtu) / 
-        3412*10**6, measure_ann = lambda x: x.efficient_measure_mmbtu / 
-        3412*10**6)
-    long = wide.melt(id_vars = ['meas','reg','end_use','fuel','year'],
-        value_vars = ['original_ann','measure_ann'], 
-        var_name = 'tech_stage', value_name = 'state_ann_kwh')
+    df['original_ann'] = (df['efficient_mmbtu'] - df['efficient_measure_mmbtu']) / 3412 * 1e6
+    df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
+    return df
+
+def compute_with_package_energy(wide_df):
+    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
+        return pd.DataFrame(columns=no_pkg.columns)
+
+    df = wide_df[~pd.isna(wide_df['efficient_measure_env_mmbtu'])].copy()
+    df = df.merge(envelope_map, on='meas', how='left')
+
+    def calc_measure(row):
+        if row['component'] == 'equipment':
+            return (row['efficient_measure_mmbtu'] - row['efficient_measure_env_mmbtu']) / 3412 * 1e6
+        elif row['component'] == 'equipment + env':
+            return row['efficient_measure_env_mmbtu'] / 3412 * 1e6
+        return None
+
+    def calc_original(row):
+        if row['component'] == 'equipment':
+            return (row['efficient_mmbtu'] - row['efficient_measure_mmbtu']) / 3412 * 1e6
+        elif row['component'] == 'equipment + env':
+            return 0
+        return None
+
+    df['measure_ann'] = df.apply(calc_measure, axis=1)
+    df['original_ann'] = df.apply(calc_original, axis=1)
+
+    # Select and rename
+    keep_cols = ['meas_separated', 'reg', 'end_use', 'fuel', 'year',
+                    'efficient_mmbtu', 'efficient_measure_mmbtu',
+                    'efficient_measure_env_mmbtu', 'original_ann', 'measure_ann']
+    if include_bldg_type:
+        keep_cols.insert(2, 'bldg_type')
+
+    # Ensure all expected columns exist
+    keep_cols = [col for col in keep_cols if col in df.columns]
+
+    df = df[keep_cols].rename(columns={'meas_separated': 'meas'})
+    return df
+
+
+def calc_annual(df, include_baseline, turnover, include_bldg_type):
+
+    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
+    if include_bldg_type:
+        grouping_cols.insert(3, 'bldg_type')
+        pivot_index.insert(2, 'bldg_type')
+
+    efficient_metrics = [
+        'Efficient Energy Use (MMBtu)',
+        'Efficient Energy Use, Measure (MMBtu)',
+        'Efficient Energy Use, Measure-Envelope (MMBtu)'
+    ]
+
+    efficient = df[df['metric'].isin(efficient_metrics)].copy()
+    grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
+    wide = grouped.pivot(index=pivot_index, columns='metric', values='value').reset_index()
+
+    metric_rename_map = {
+        'Efficient Energy Use (MMBtu)': 'efficient_mmbtu',
+        'Efficient Energy Use, Measure (MMBtu)': 'efficient_measure_mmbtu',
+        'Efficient Energy Use, Measure-Envelope (MMBtu)': 'efficient_measure_env_mmbtu'
+    }
+    wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
+
+    no_pkg = compute_no_package_energy(wide)
+    with_pkg = compute_with_package_energy(wide)
+
+    id_vars = pivot_index
+    long = pd.concat([no_pkg, with_pkg], ignore_index=True).melt(
+        id_vars=id_vars,
+        value_vars=['original_ann', 'measure_ann'],
+        var_name='tech_stage',
+        value_name='state_ann_kwh'
+    )
     long['turnover'] = turnover
+
     to_return = long
-    
+
+    # Optional baseline
     if include_baseline:
-        base = df[df['metric']=='Baseline Energy Use (MMBtu)']
-        grouped_base = base.groupby(['meas','metric','reg','end_use',
-            'fuel','year'])['value'].sum().reset_index().assign(
-            state_ann_kwh = lambda x: x.value / 3412*10**6)
+        base = df[df['metric'] == 'Baseline Energy Use (MMBtu)'].copy()
+        grouped_base = base.groupby(grouping_cols)['value'].sum().reset_index()
+        grouped_base['state_ann_kwh'] = grouped_base['value'] / 3412 * 1e6
         grouped_base['tech_stage'] = 'original_ann'
         grouped_base['turnover'] = 'baseline'
-        to_return = pd.concat([to_return,grouped_base[['meas','reg',
-            'end_use','fuel','year','tech_stage','state_ann_kwh','turnover']]])
 
-    # local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{turnover}_prior.tsv")
-    # to_return.to_csv(local_path, sep='\t', index = False)
+        grouped_base = grouped_base.merge(
+            envelope_map[envelope_map['component'] == 'equipment'],
+            on='meas',
+            how='left'
+        )
+
+        grouped_base['meas'] = grouped_base.apply(
+            lambda row: row['meas_separated']
+            if pd.notnull(row.get('meas_separated')) and isinstance(row.get('meas_separated'), str)
+            else row['meas'],
+            axis=1
+        )
+
+        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
+        to_return = pd.concat([to_return, grouped_base], ignore_index=True)
+
 
     to_return['sector'] = to_return.apply(add_sector, axis=1)
     to_return['scout_run'] = SCOUT_RUN_DATE
@@ -164,7 +242,7 @@ def calc_annual_noenv(df, include_baseline, turnover):
     to_return.to_csv(local_path, sep='\t', index = False)
     return(to_return, local_path)
 
-
+# convert the Scout json to a data frame
 def scout_to_df(filename):
     new_columns = [
             'meas', 'adoption_scn', 'metric',
@@ -687,88 +765,6 @@ def run_r_script(r_file):
         print(f"Error executing R script: {e}")
 
 
-def calc_annual(df, include_baseline, turnover):
-    envelope_map = file_to_df(ENVELOPE_MAP_FILE)
-
-    efficient = df[df['metric'].isin(['Efficient Energy Use (MMBtu)',
-        'Efficient Energy Use, Measure (MMBtu)',
-        'Efficient Energy Use, Measure-Envelope (MMBtu)'])]
-
-    grouped = efficient.groupby(['meas','metric','reg',
-        'end_use','fuel','year'])['value'].sum().reset_index()
-
-    # print(efficient.columns)
-    print(f">>>>>>>>>>>>>>>> COLUMN NAMES= {grouped.columns}")
-    wide = grouped.pivot(index=['meas','reg','end_use','fuel','year'],
-        columns='metric', values='value').reset_index()
-
-    wide.columns = ['meas','reg','end_use','fuel','year','efficient_mmbtu',
-                    'efficient_measure_mmbtu','efficient_measure_env_mmbtu']
-    no_packages = wide[pd.isna(wide['efficient_measure_env_mmbtu'])]
-    no_packages = no_packages.assign(original_ann = lambda x: (
-        x.efficient_mmbtu - x.efficient_measure_mmbtu) / 
-        3412*10**6, measure_ann = lambda x: x.efficient_measure_mmbtu / 
-        3412*10**6)
-
-    with_packages = wide[~pd.isna(wide['efficient_measure_env_mmbtu'])]
-    with_packages = with_packages.merge(envelope_map,on='meas',how='left')
-    with_packages['measure_ann'] = with_packages.apply(
-    lambda row: (row['efficient_measure_mmbtu'] - row['efficient_measure_env_mmbtu']) / 3412*10**6 
-                if row['component'] == 'equipment' 
-                else row['efficient_measure_env_mmbtu'] /3412*10**6
-                if row['component'] == 'equipment + env' 
-                else None, axis=1)
-
-
-    with_packages['original_ann'] = with_packages.apply(
-    lambda row: (row['efficient_mmbtu'] - row['efficient_measure_mmbtu']) / 3412*10**6 
-                if row['component'] == 'equipment' 
-                else 0
-                if row['component'] == 'equipment + env' 
-                else None, axis=1)
-    
-    # with_packages = with_packages.assign(original_ann = lambda x: (
-    #     x.efficient_mmbtu - x.efficient_measure_mmbtu) / 
-    #     3412*10**6)
-
-    with_packages = with_packages[['meas_separated', 'reg', 'end_use', 'fuel', 'year', 'efficient_mmbtu',
-           'efficient_measure_mmbtu', 'efficient_measure_env_mmbtu',
-           'original_ann', 'measure_ann']]
-    with_packages = with_packages.rename(columns={'meas_separated': 'meas'})
-
-    long = pd.concat([no_packages,with_packages]).melt(id_vars = ['meas','reg','end_use','fuel','year'],
-        value_vars = ['original_ann','measure_ann'], 
-        var_name = 'tech_stage', value_name = 'state_ann_kwh')
-    long['turnover'] = turnover
-
-    to_return = long
-    
-    if include_baseline:
-        base = df[df['metric']=='Baseline Energy Use (MMBtu)']
-        grouped_base = base.groupby(['meas','metric','reg','end_use',
-            'fuel','year'])['value'].sum().reset_index().assign(
-            state_ann_kwh = lambda x: x.value / 3412*10**6)
-        grouped_base['tech_stage'] = 'original_ann'
-        grouped_base['turnover'] = 'baseline'
-        grouped_base = grouped_base.merge(envelope_map[envelope_map['component']=='equipment'],on='meas',how='left')
-        grouped_base['meas'] = grouped_base.apply(lambda row: row['meas_separated'] 
-                      if pd.notnull(row['meas_separated']) and isinstance(row['meas_separated'], (str)) 
-                      else row['meas'], axis=1)
-        grouped_base = grouped_base[['meas','reg',
-            'end_use','fuel','year','tech_stage','state_ann_kwh','turnover']]
-        #grouped_base = grouped_base.rename(columns={'meas_separated': 'meas'})
-        to_return = pd.concat([to_return,grouped_base])
-
-    # local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{turnover}_prior.tsv")
-    # to_return.to_csv(local_path, sep='\t', index = False)
-
-    to_return['sector'] = to_return.apply(add_sector, axis=1)
-    to_return['scout_run'] = SCOUT_RUN_DATE
-
-    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{turnover}.tsv")
-    to_return.to_csv(local_path, sep='\t', index = False)
-    return(to_return, local_path)
-
 
 def list_all_objects(s3_client, bucket, prefix):
     """
@@ -944,13 +940,8 @@ def gen_scoutdata(s3_client, athena_client):
         SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
         myturnover = scout_file.split('_')[0]
 
-        if scout_file in ["ineff_exog.json", "stated_exog.json","ineff20182023_exog.json",
-            "ineffrecal_exog.json", "ineffrecal_01092025.json", "ineffuncal_12102024.json"]:
-            scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
-            scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover)
-        else:
-            scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
-            scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = myturnover)
+        scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
+        scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
 
         check_missing_meas(measure_map, scout_df)
         s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
