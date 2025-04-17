@@ -98,9 +98,7 @@ round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 
 
 #sample sizes and county names
-ns<-arrow::read_parquet("ResStock2024_2baseline_amy.parquet",col_select = c("bldg_id","in.county","in.county_name","in.state")) %>% group_by(in.county,in.county_name,in.state) %>% summarize(n=n()) %>%
-  mutate(county_name=paste0(in.state,", ", in.county_name)) %>% ungroup() %>%
-  select(in.county,n,county_name)
+ns<-read_csv("../map_meas/resstock_ns.csv")
 
 
 #width for annual graphs changeable based on number of scenarios
