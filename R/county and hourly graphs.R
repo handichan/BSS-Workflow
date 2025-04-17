@@ -31,15 +31,13 @@ county_monthly_maxes <- generated %>%
   map_dfr(read_csv) %>%
   mutate(turnover = factor(turnover, levels = c("baseline", "stated", "mid", "high", "breakthrough", "ineff"), ordered = TRUE))
 
-
 generated <- paste0(input_dir,"/",list.files(input_dir, pattern = "county_hourly_examples\\.csv$"))
 county_hourly_examples_list <- generated %>%
   set_names(~ str_extract(path_file(.x), "^[^_]+")) %>%
   map(read_csv)
 
-state_monthly_2024<-read_csv(paste0(input_dir,"/",filename_prefix,"state_monthly_2024.csv"))
 
-state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage_fossil.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T)) %>%
+state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T)) %>%
     # this won't be needed once the measure map from 1/29/2025 is used
     mutate(description=case_when(description=="HP boiler, best" ~ "Boiler, best HP",
                                description=="Water heater, HP, ESTAR 240V" ~ "Water heater, HP, ESTAR",
@@ -391,40 +389,6 @@ psample<-with_ex_labels %>%
   ggtitle("Day with the Peak Hour")
 save_plot(paste0(graph_dir,"/example_peak_days_",day_labels[1,"turnover"],".jpg"),psample,base_height = 18,base_width = 8,bg="white")
 }
-
-# compare state-level seasonal ratios to EIA ------------------------------
-
-#https://drive.google.com/open?id=1btgB7_rSUJSTANdQ_kgGN3evd1baOQf8&usp=drive_fs
-eia<-read_csv("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Standard Scenarios/Workflow design/Comparison Data/eia_gas_and_electricity_by_state_sector_year_month.csv")
-
-eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
-  mutate(month=(match(month, month.abb)),
-         season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
-         in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
-         sector=if_else(sector=="commercial","com","res")) %>%
-  group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
-  group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
-  pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer)
-
-bss_ratios_sector<-state_monthly_2024 %>%
-  mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
-  pivot_wider(names_from=season,values_from=monthly_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer) %>%
-  arrange(max_winter_to_max_summer)
-
-eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
-  ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
-  geom_hline(yintercept = 1,color="grey30")+
-  geom_boxplot()+
-  geom_point(data=bss_ratios_sector ,color="red")+
-  scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
-  ylab("winter max / summer max")+
-  facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
-  ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
-save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
-
 
 
 # annual, national --------------------------------------------------------
