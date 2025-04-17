@@ -12,28 +12,30 @@ theme_set(theme_bw())
 # BSS results created by SQL queries --------------------------------------
 
 # the data frame names are analogous to the names of the SQL queries that created them
-
 input_dir <- "generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
-county_ann_eu<-read_csv(paste0(input_dir,"/",filename_prefix,"county_ann_eu.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
-county_100_hrs<-read_csv(paste0(input_dir,"/",filename_prefix,"county_100_hrs.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
-county_monthly_maxes<-read_csv(paste0(input_dir,"/",filename_prefix,"county_monthly_maxes.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
+generated<-paste0(input_dir,"/",list.files(input_dir, pattern = "county_ann_eu\\.csv$"))
+county_ann_eu <- generated %>%
+  map_dfr(read_csv) %>%
+  mutate(turnover = factor(turnover, levels = c("baseline", "stated", "mid", "high", "breakthrough", "ineff"), ordered = TRUE))
 
-county_hourly_examples_stated<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_stated.csv"))
-county_hourly_examples_mid<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_mid.csv"))
-county_hourly_examples_high<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_high.csv"))
-county_hourly_examples_breakthrough<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_breakthrough.csv"))
-county_hourly_examples_ineff<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_ineff.csv"))
+generated<-paste0(input_dir,"/",list.files(input_dir, pattern = "county_100_hrs\\.csv$"))
+county_100_hrs <- generated %>%
+  map_dfr(read_csv) %>%
+  mutate(turnover = factor(turnover, levels = c("baseline", "stated", "mid", "high", "breakthrough", "ineff"), ordered = TRUE))
 
-county_hourly_examples_list <- list(
-  county_hourly_examples_stated,
-  county_hourly_examples_mid,
-  county_hourly_examples_high,
-  county_hourly_examples_breakthrough,
-  county_hourly_examples_ineff
-)
+generated<-paste0(input_dir,"/",list.files(input_dir, pattern = "county_monthly_maxes\\.csv$"))
+county_monthly_maxes <- generated %>%
+  map_dfr(read_csv) %>%
+  mutate(turnover = factor(turnover, levels = c("baseline", "stated", "mid", "high", "breakthrough", "ineff"), ordered = TRUE))
+
+
+generated <- paste0(input_dir,"/",list.files(input_dir, pattern = "county_hourly_examples\\.csv$"))
+county_hourly_examples_list <- generated %>%
+  set_names(~ str_extract(path_file(.x), "^[^_]+")) %>%
+  map(read_csv)
 
 state_monthly_2024<-read_csv(paste0(input_dir,"/",filename_prefix,"state_monthly_2024.csv"))
 
