@@ -1,28 +1,77 @@
 # Steps to generate county annual and hourly results
-- `--gen_scoutdata` Query scout data from local to AWS via AWS Athena.
-  - Scout results should be stored within `\scout_resuls`.
-  - Having this parameter will also check whether scout measures are already mapped in the measure mapping file, `map_meas\measure_map.tsv`. If not, please add an entry manually on the measure map file.
-- `--gen_countydata` Query county annual and county hourly data by building type, year, and scenario.
-- `--combine_countydata` Combine the county annual results from 2) into a single table and the county hourly results, also from 2) into another table.
--  - This process include querying `sql\combine_annual_2024_2050.sql` and `sql\combine_hourly_2024_2050.sql` files.
-   - Note that this process may generate a timeout or exceeded partitions errors. In the case of time out error, please modify the sql code to refrain from using data from multiple years (<3 years). For exceeded partitions error, please comment out the `partition by` part of the sql code.
-- `--convert_long_to_wide` Convert the resulting combined county level data from 3) into a wide format for publication.
+
+<b>1. `--gen_scoutdata`</b>  
+   - Query scout data from local to AWS via AWS Athena.  
+   - Scout results should be stored within `\scout_results`.  
+   - This flag also checks whether scout measures are already mapped in the measure mapping file, `map_meas\measure_map.tsv`. If not, please add them manually.
+
+<b>2. `--gen_countydata`</b>  
+   - Query county annual and hourly data by building type, year, and scenario.  
+   - Uses SQL templates under `sql/com/` and `sql/res/` to generate data.  
+   - Outputs are stored in S3 and registered as external Athena tables.  
+   - Table format:  
+     `county_annual_<sector>_<year>_<turnover>`  
+     `county_hourly_<sector>_<year>_<turnover>`
+
+<b>3. `--combine_countydata`</b>  
+   - Combine results from `--gen_countydata` into two tables: one annual, one hourly.  
+   - Runs `sql\combine_annual_2024_2050.sql` and `sql\combine_hourly_2024_2050.sql`.  
+   <!-- 
+   - May raise timeout or partition errors. For timeouts, reduce year range. For partition errors, remove the `PARTITIONED BY` clause.
+   -->
+
+<b>4. `--convert_long_to_wide`</b>  
+   - Converts long-format county data into wide format for publication and reporting.
+
+
+
 
 # Diagnosis routines
 To analyze the consistencies of multipliers, county-level data and measures, option `--run_test` is available for use. This parameter also visualize the county annual and county hourly results for further analysis. 
 
-- `test_multipliers` To check consistencies on the multipliers via the number of counties. Files included:
-  - `test_multipliers_annual.sql` and `test_multipliers_hourly.sql` 
-- `test_county`To check consistencies on the county-level results. SQL files included:
-  - `test_county_annual_total.sql`, `test_county_annual_enduse.sql`, `test_county_hourly_total.sql`, and `test_county_hourly_enduse.sql`.
-- `test_compare_measures` To check if `map_meas\measure_map.tsv` include all measures in each of the scenario results.
-- `run_r_script` To visualize county annual and hourly results for further analysis.
-  - `annual_graphs.R`
-  - `county and hourly graphs.R`
+- <b>`--test_multipliers`</b>
+  -  To check consistencies on the multipliers via the number of counties. 
+  - Files included: 
+    - `test_multipliers_annual.sql` 
+    - `test_multipliers_hourly.sql` 
+- <b>`--test_county`</b>
+  - To check consistencies on the county-level results. 
+  - SQL files included:
+    - `test_county_annual_total.sql`
+    - `test_county_annual_enduse.sql`
+    - `test_county_hourly_total.sql`
+    - `test_county_hourly_enduse.sql`.
+- <b>  `--test_compare_measures`</b> 
+  - To check if `map_meas\measure_map.tsv` include all measures in each of the scenario results.
+
+-  <b>`--get_csvs_for_R`</b>  
+   - Queries multiple turnover scenarios from Athena and generates CSV files for R-based plotting.  
+   - Outputs are saved under `R/generated_csvs/` with filenames formatted as `<turnover>_<query_name>.csv`.  
+- <b>`--run_r_script`</b>  
+   - Runs R scripts for visualizing the annual and hourly county-level energy results for further analysis.  
+   - The following R scripts are executed sequentially:  
+     - `annual_graphs.R`: Generates summary plots for annual metrics.  
+     - `county and hourly graphs.R`: Produces detailed charts by county and time resolution.
+
+
+### Workflow Runtime Summary
+
+The <code>bss_workflow</code> was tested on a laptop with an Intel Core i7 processor, using a network with a download speed of 107 Mbps and an upload speed of 131 Mbps. Approximate runtimes for each function are listed below.
+
+If the runtime significantly exceeds these benchmarks and encounters errors such as <code>Exception: Query failed: Query timeout</code>, we recommend manually cleaning the corresponding tables in both S3 and AWS Glue before rerunning the workflow.
+
+
+| Step                     | Runtime        |
+|--------------------------|----------------|
+| `gen_countydata - commercial`   | ~ 6 hours            |
+| `gen_countydata - residential`   | 2.5 hours     |
+| `combine_countydata`     | 13 min       |
+| `get_csvs_for_R`         | 2h 10 min   |
+
 
 # Dataset Structure and Content
 
-This document provides an overview of the structure and content of the dataset. The dataset is organized hierarchically with the following structure:
+This table provides an overview of the structure and content of the dataset. The dataset is organized hierarchically with the following structure:
 
 ## Structure Overview
 ```
