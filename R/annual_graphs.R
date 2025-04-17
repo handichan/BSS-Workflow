@@ -1,6 +1,11 @@
 # initialize ---------------------------------------------------------------------
 setwd("R")
 
+#install the packages if they're not already installed
+packages <- c("tidyverse", "scales")
+install.packages(setdiff(packages, rownames(installed.packages())))
+
+#load required packages
 library(tidyverse)
 library(scales)
 theme_set(theme_bw())

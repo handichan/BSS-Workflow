@@ -3,9 +3,17 @@
 
 setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
 
+#install the packages if they're not already installed
+packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
+install.packages(setdiff(packages, rownames(installed.packages())))
+
+#load required packages
 library(tidyverse)
 library(scales)
 library(cowplot)
+library(maps)
+library(mapdata)
+library(colorspace)
 theme_set(theme_bw())
 
 
@@ -47,9 +55,6 @@ state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage_fossil.csv")) %>% muta
 
 # map data ----------------------------------------------------------------
 
-library(maps)
-library(mapdata)
-library(colorspace)
 
 #shape files for counties 
 county_map<-map_data("county") %>% filter(region!="hawaii")
