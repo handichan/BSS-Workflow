@@ -55,7 +55,7 @@ def scout_to_df(filename, energy_metrics_only=False):
 
 # calculates the number of households with electric heating, cooling, and total per year
 # works on the output of scout_to_df if energy_metrics_only == False
-def calc_hh_counts(df):
+def calc_hh_counts(df, turnover):
     
     # this also filters only to residential measures
     df = df[df['metric'].str.contains('Stock') &
@@ -175,5 +175,6 @@ def calc_hh_counts(df):
     )
     
     final_result = final[['year', 'reg', 'elec_heating_hh', 'cooling_hh', 'hh']].rename(columns={'reg': 'state'})
+    final_result['scenario'] = turnover
     return(final_result)
 
