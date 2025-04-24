@@ -18,7 +18,7 @@ CASE WHEN "out.params.steamer_fuel_type" = 'Gas' then cast("out.params.num_steam
 CASE WHEN "out.params.steamer_fuel_type" = 'Electric' then cast("out.params.num_steamers" as double) * weight else 0 end as elec_steamers,
 CASE WHEN "out.params.broiler_fuel_type" = 'Gas' then cast("out.params.num_broilers" as double) * weight else 0 end as gas_broilers,
 CASE WHEN "out.params.broiler_fuel_type" = 'Electric' then cast("out.params.num_broilers" as double) * weight else 0 end as elec_broilers
-FROM "comstock_amy2018_release_2024.1_metadata"
+FROM "comstock_amy2018_release_2024.2_parquet"
 WHERE upgrade = 22 
 ),
 unnormalized as(

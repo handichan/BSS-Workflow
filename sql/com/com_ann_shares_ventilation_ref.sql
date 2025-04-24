@@ -5,7 +5,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'com_hvac_ann_41' AS group_ann,
 		sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
-	FROM "comstock_amy2018_release_2024.1_metadata" as meta
+	FROM "comstock_amy2018_release_2024.2_parquet" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
 		meta."in.nhgis_county_gisjoin",

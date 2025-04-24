@@ -5,7 +5,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'com_misc_ann_1' AS group_ann,
 		sum(meta."calc.weighted.electricity.interior_equipment.energy_consumption..tbtu") as misc
-	FROM "comstock_amy2018_release_2024.1_metadata" as meta
+	FROM "comstock_amy2018_release_2024.2_parquet" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
 		meta."in.nhgis_county_gisjoin",

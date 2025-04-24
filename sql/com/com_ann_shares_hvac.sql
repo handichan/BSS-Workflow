@@ -10,7 +10,7 @@ WITH meta_filtered AS (
         sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
-    FROM "comstock_amy2018_release_2024.1_metadata" as meta
+    FROM "comstock_amy2018_release_2024.2_parquet" as meta
         RIGHT JOIN com_ann_hvac as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade
