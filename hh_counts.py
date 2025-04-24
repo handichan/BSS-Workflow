@@ -134,7 +134,6 @@ def calc_hh_counts(df, turnover):
     comb['share_elec_heat'] = comb['heating_units_elec'] / comb['heating_units_total']
     comb['share_cooling'] = comb['cooling_units'] / comb['heating_units_total']
     comb['scenario'] = turnover
-    comb.rename(columns={'reg': 'state'})
 
-    return(comb)
+    return(comb.rename(columns={'reg': 'state'}))
 
