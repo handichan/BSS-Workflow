@@ -53,11 +53,11 @@ def scout_to_df(filename, energy_metrics_only=False):
 
     return(df)
 
-# calculates the number of households with electric heating, cooling, and total per year
+# calculates the number of households with electric heating, cooling, and total per year, assuming that each HH has one unit of heating equipment
 # works on the output of scout_to_df if energy_metrics_only == False
 def calc_hh_counts(df, turnover):
         
-    # Filter metrics that contain "units equipment"
+    # Filter metrics that contain "units equipment"; also filters to res
     stock = df[df['metric'].str.contains("units equipment", na=False)]
     
     # Total heating units from baseline
@@ -74,7 +74,6 @@ def calc_hh_counts(df, turnover):
         .reset_index()
     )
     
-    # Add logic for `heating_units_elec`
     elec_heat['heating_units_elec'] = np.where(
         elec_heat['Baseline Stock (units equipment)'] > 0,
         elec_heat['Baseline Stock (units equipment)'],
@@ -85,7 +84,6 @@ def calc_hh_counts(df, turnover):
         )
     )
     
-    # Group and summarize
     elec_heat = (
         elec_heat.groupby(['year', 'reg'], as_index=False)
         .agg(heating_units_elec=('heating_units_elec', 'sum'))
@@ -108,7 +106,6 @@ def calc_hh_counts(df, turnover):
         "(R) Ref. Case Resist. Heat, No Cooling (TS)"
     ]
     
-    # Define cooling_units with logic from R case_when
     cool_wide['cooling_units'] = np.where(
         cool_wide['meas'].isin(no_cool_meas),
         0,
