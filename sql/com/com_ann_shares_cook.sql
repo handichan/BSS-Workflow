@@ -19,7 +19,7 @@ CASE WHEN "out.params.steamer_fuel_type" = 'Electric' then cast("out.params.num_
 CASE WHEN "out.params.broiler_fuel_type" = 'Gas' then cast("out.params.num_broilers" as double) * weight else 0 end as gas_broilers,
 CASE WHEN "out.params.broiler_fuel_type" = 'Electric' then cast("out.params.num_broilers" as double) * weight else 0 end as elec_broilers
 FROM "comstock_amy2018_release_2024.2_parquet"
-WHERE upgrade = 22 
+WHERE upgrade = 28 
 ),
 unnormalized as(
 SELECT "in.state","in.county", sum(gas_broilers+gas_steamers+gas_ranges+gas_ovens+gas_griddles+gas_fryers) as gas_equip,
