@@ -1,181 +1,193 @@
 group_ann	original	description	in.heating_fuel	in.hvac_combined_type	upgrade	shape_ts_cooling	shape_ts_heating	version
-com_hvac_ann_1	ashp	ashp	Electricity	DOAS+Zone terminal equipment_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_1	ashp	ashp	Electricity	DOAS+Zone terminal equipment_WSHP_WSHP	0	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_1	ashp	ashp	Electricity	Central Single-zone RTU_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_1	ashp	ashp	Electricity	Zone terminal equipment_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	Central Single-zone RTU_District_DX	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	Central Multi-zone VAV RTU_District_DX	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Single-zone RTU_Boiler _DX	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Zone terminal equipment_Boiler _DX	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	8	com_cooling_ts_6	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	DOAS+Zone terminal equipment_District_District	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	DistrictHeating	Central Multi-zone VAV RTU_District_District	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_10	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	8	com_cooling_ts_5	com_heating_ts_4	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	Central Single-zone RTU_District_DX	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	Central Multi-zone VAV RTU_District_DX	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Single-zone RTU_Boiler _DX	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Zone terminal equipment_Boiler _DX	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	9	com_cooling_ts_6	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	DOAS+Zone terminal equipment_District_District	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	DistrictHeating	Central Multi-zone VAV RTU_District_District	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_11	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Gas Backup	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	9	com_cooling_ts_5	com_heating_ts_5	2024-07-19
-com_hvac_ann_12	ng furnace+cac&rac	ng furnace+cac&rac	NaturalGas	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_12	ng furnace+cac&rac	ng furnace+cac&rac	NaturalGas	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Zone terminal equipment_Furnace_None	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Zone terminal equipment_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_17	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_17	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	NaturalGas	Zone terminal equipment_Furnace_None	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_17	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	NaturalGas	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_17	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	NaturalGas	Zone terminal equipment_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_18	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_18	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	NaturalGas	Zone terminal equipment_Furnace_None	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_18	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	NaturalGas	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_18	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	NaturalGas	Zone terminal equipment_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_19	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_19	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	NaturalGas	Zone terminal equipment_Furnace_None	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_19	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	NaturalGas	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_19	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	NaturalGas	Zone terminal equipment_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	DOAS+Zone terminal equipment_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	FuelOil	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	FuelOil	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	Propane	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	Propane	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	2024-07-19
-com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Zone terminal equipment_Furnace_None	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	Propane	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_29	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_29	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	FuelOil	Zone terminal equipment_Furnace_None	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_29	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	FuelOil	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_29	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_29	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup	Propane	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_30	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_30	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	FuelOil	Zone terminal equipment_Furnace_None	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_30	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	FuelOil	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_30	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_30	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Propane	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_31	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_31	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	FuelOil	Zone terminal equipment_Furnace_None	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_31	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	FuelOil	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_31	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_31	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup	Propane	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	None_Electric Resistance_None	0	com_cooling_ts_6	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Zone terminal equipment_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	2024-07-19
-com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Multi-zone VAV RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Single-zone RTU_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	None_Electric Resistance_None	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Single-zone RTU_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Zone terminal equipment_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_36	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Multi-zone VAV RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Single-zone RTU_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	None_Electric Resistance_None	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Single-zone RTU_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Zone terminal equipment_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_37	resistance heat+rtac&chiller	resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	2024-07-19
-com_hvac_ann_38	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_38	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	FuelOil	Zone terminal equipment_Furnace_None	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_38	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	FuelOil	Central Single-zone RTU_Furnace_DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_38	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_38	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	Propane	Central Single-zone RTU_Furnace_DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	Central Single-zone RTU_District_DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	Central Multi-zone VAV RTU_District_DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Single-zone RTU_Boiler _DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Zone terminal equipment_Boiler _DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	DOAS+Zone terminal equipment_District_District	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	DistrictHeating	Central Multi-zone VAV RTU_District_District	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_39	ng boiler+rtac&chiller	ng boiler+rtac&chiller to HP Boiler, Electric Backup + env	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	31	com_cooling_ts_10	com_heating_ts_10	2024-07-19
-com_hvac_ann_4	ghsp	ghsp	Electricity	DOAS+Zone terminal equipment_GSHP_GSHP	0	com_cooling_ts_8	com_heating_ts_6	2024-07-19
-com_hvac_ann_40	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	31	com_cooling_ts_11	com_heating_ts_11	2024-07-19
-com_hvac_ann_40	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	NaturalGas	Zone terminal equipment_Furnace_None	31	com_cooling_ts_11	com_heating_ts_11	2024-07-19
-com_hvac_ann_40	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	NaturalGas	Central Single-zone RTU_Furnace_DX	31	com_cooling_ts_11	com_heating_ts_11	2024-07-19
-com_hvac_ann_40	ng furnace+rtac&chiller	ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env	NaturalGas	Zone terminal equipment_Furnace_DX	31	com_cooling_ts_11	com_heating_ts_11	2024-07-19
-com_hvac_ann_5	ghsp	ghsp to Comprehensive Geothermal Heat Pump Package, Hydronic GHP, Packaged GHP, or Console GHP	Electricity	DOAS+Zone terminal equipment_GSHP_GSHP	18	com_cooling_ts_8	com_heating_ts_6	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_District	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_District	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	0	com_cooling_ts_5	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Single-zone RTU_District_DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
-com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	2024-07-19
+com_hvac_ann_1	ashp	ashp	Electricity	DOAS+Zone terminal equipment_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_1	ashp	ashp	Electricity	DOAS+Zone terminal equipment_WSHP_WSHP	0	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_1	ashp	ashp	Electricity	Central Single-zone RTU_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_1	ashp	ashp	Electricity	Zone terminal equipment_ASHP_ASHP	0	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	Central Single-zone RTU_District_DX	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_DX	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Single-zone RTU_Boiler _DX	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Zone terminal equipment_Boiler _DX	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	11	com_cooling_ts_6	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_District	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_District	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_10	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	11	com_cooling_ts_5	com_heating_ts_4	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	Central Single-zone RTU_District_DX	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_DX	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Single-zone RTU_Boiler _DX	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Zone terminal equipment_Boiler _DX	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	12	com_cooling_ts_6	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	DOAS+Zone terminal equipment_District_District	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	DistrictHeating	Central Multi-zone VAV RTU_District_District	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_11	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Gas Backup"	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	12	com_cooling_ts_5	com_heating_ts_5	4/24/25
+com_hvac_ann_12	ng furnace+cac&rac	ng furnace+cac&rac	NaturalGas	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_12	ng furnace+cac&rac	ng furnace+cac&rac	NaturalGas	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Zone terminal equipment_Furnace_None	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_16	ng furnace+rtac&chiller	ng furnace+rtac&chiller	NaturalGas	Zone terminal equipment_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_17	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_17	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	NaturalGas	Zone terminal equipment_Furnace_None	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_17	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	NaturalGas	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_17	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	NaturalGas	Zone terminal equipment_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_18	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_18	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	NaturalGas	Zone terminal equipment_Furnace_None	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_18	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	NaturalGas	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_18	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	NaturalGas	Zone terminal equipment_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_19	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_19	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	NaturalGas	Zone terminal equipment_Furnace_None	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_19	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	NaturalGas	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_19	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	NaturalGas	Zone terminal equipment_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	DOAS+Zone terminal equipment_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	FuelOil	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_22	other fossil boiler+rtac&chiller	other fossil boiler+rtac&chiller	Propane	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	FuelOil	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	FuelOil	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	Propane	Residential forced air_Furnace_DX	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_24	other fossil furnace+cac&rac	other fossil furnace+cac&rac	Propane	Residential forced air_Furnace_None	0	com_cooling_ts_7	com_heating_ts_8	4/24/25
+com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Zone terminal equipment_Furnace_None	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	FuelOil	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_28	other fossil furnace+rtac&chiller	other fossil furnace+rtac&chiller	Propane	Central Single-zone RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_29	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_29	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	FuelOil	Zone terminal equipment_Furnace_None	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_29	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	FuelOil	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_29	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_29	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Propane	Central Single-zone RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_30	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_30	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	FuelOil	Zone terminal equipment_Furnace_None	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_30	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	FuelOil	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_30	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_30	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Propane	Central Single-zone RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_31	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_31	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	FuelOil	Zone terminal equipment_Furnace_None	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_31	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	FuelOil	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_31	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_31	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Original Heating Fuel Backup"	Propane	Central Single-zone RTU_Furnace_DX	2	com_cooling_ts_1	com_heating_ts_2	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Furnace_DX	0	com_cooling_ts_6	com_heating_ts_8	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	0	com_cooling_ts_5	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	None_Electric Resistance_None	0	com_cooling_ts_6	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Single-zone RTU_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Zone terminal equipment_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	4/24/25
+com_hvac_ann_35	resistance heat+rtac&chiller	resistance heat+rtac&chiller	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	0	com_cooling_ts_6	com_heating_ts_7	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Multi-zone VAV RTU_Furnace_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Single-zone RTU_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	None_Electric Resistance_None	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Single-zone RTU_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Zone terminal equipment_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_36	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	1	com_cooling_ts_1	com_heating_ts_1	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Multi-zone VAV RTU_Furnace_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_ACC	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_WCC	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	DOAS+Zone terminal equipment_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Single-zone RTU_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_ACC	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_WCC	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_District	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	None_Electric Resistance_None	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Single-zone RTU_Electric Resistance_Evaporative Cooling	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Single-zone RTU_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Zone terminal equipment_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_37	resistance heat+rtac&chiller	"resistance heat+rtac&chiller to Variable Speed HP RTU, Electric Backup, Energy Recovery"	Electricity	Central Multi-zone VAV RTU_Electric Resistance_DX	3	com_cooling_ts_3	com_heating_ts_3	4/24/25
+com_hvac_ann_38	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_38	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	FuelOil	Zone terminal equipment_Furnace_None	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_38	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	FuelOil	Central Single-zone RTU_Furnace_DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_38	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_38	other fossil furnace+rtac&chiller	"other fossil furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	Propane	Central Single-zone RTU_Furnace_DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	Central Single-zone RTU_District_DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	Central Multi-zone VAV RTU_District_DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Single-zone RTU_Boiler _DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Zone terminal equipment_Boiler _DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	DOAS+Zone terminal equipment_District_District	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	DistrictHeating	Central Multi-zone VAV RTU_District_District	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_39	ng boiler+rtac&chiller	"ng boiler+rtac&chiller to HP Boiler, Electric Backup + env"	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	37	com_cooling_ts_10	com_heating_ts_10	4/24/25
+com_hvac_ann_4	ghsp	ghsp	Electricity	DOAS+Zone terminal equipment_GSHP_GSHP	0	com_cooling_ts_8	com_heating_ts_6	4/24/25
+com_hvac_ann_40	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	NaturalGas	Central Single-zone RTU_Furnace_Evaporative Cooling	37	com_cooling_ts_11	com_heating_ts_11	4/24/25
+com_hvac_ann_40	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	NaturalGas	Zone terminal equipment_Furnace_None	37	com_cooling_ts_11	com_heating_ts_11	4/24/25
+com_hvac_ann_40	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	NaturalGas	Central Single-zone RTU_Furnace_DX	37	com_cooling_ts_11	com_heating_ts_11	4/24/25
+com_hvac_ann_40	ng furnace+rtac&chiller	"ng furnace+rtac&chiller to Variable Speed HP RTU, Electric Backup + env"	NaturalGas	Zone terminal equipment_Furnace_DX	37	com_cooling_ts_11	com_heating_ts_11	4/24/25
+com_hvac_ann_5	ghsp	"ghsp to Comprehensive Geothermal Heat Pump Package, Hydronic GHP, Packaged GHP, or Console GHP"	Electricity	DOAS+Zone terminal equipment_GSHP_GSHP	22	com_cooling_ts_8	com_heating_ts_6	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	DOAS+Zone terminal equipment_District_District	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_District	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	DOAS+Zone terminal equipment_Boiler _District	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _ACC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _WCC	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _District	0	com_cooling_ts_5	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Single-zone RTU_District_DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	DistrictHeating	Central Multi-zone VAV RTU_District_DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Single-zone RTU_Boiler _Evaporative Cooling	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Single-zone RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Zone terminal equipment_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+com_hvac_ann_9	ng boiler+rtac&chiller	ng boiler+rtac&chiller	NaturalGas	Central Multi-zone VAV RTU_Boiler _DX	0	com_cooling_ts_6	com_heating_ts_9	4/24/25
+					0			
+					0			
+					1			
+					1			
+					1			
+					1			
+					1			
+					3			
+					3			
+					3			
+					3			
+					3			
