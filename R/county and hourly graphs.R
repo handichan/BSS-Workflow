@@ -1,8 +1,8 @@
 
 
 
-setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
-
+# setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
+setwd("D:/lbl23Fall/BPA git for push/R")
 #install the packages if they're not already installed
 packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
 install.packages(setdiff(packages, rownames(installed.packages())))
@@ -29,15 +29,15 @@ county_ann_eu<-read_csv(paste0(input_dir,"/",filename_prefix,"county_ann_eu.csv"
 county_100_hrs<-read_csv(paste0(input_dir,"/",filename_prefix,"county_100_hrs.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
 county_monthly_maxes<-read_csv(paste0(input_dir,"/",filename_prefix,"county_monthly_maxes.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
 
-county_hourly_examples_stated<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_stated.csv"))
-county_hourly_examples_mid<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_mid.csv"))
+# county_hourly_examples_stated<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_stated.csv"))
+# county_hourly_examples_mid<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_mid.csv"))
 county_hourly_examples_high<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_high.csv"))
 county_hourly_examples_breakthrough<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_breakthrough.csv"))
 county_hourly_examples_ineff<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_ineff.csv"))
 
 county_hourly_examples_list <- list(
-  county_hourly_examples_stated,
-  county_hourly_examples_mid,
+  # county_hourly_examples_stated,
+  # county_hourly_examples_mid,
   county_hourly_examples_high,
   county_hourly_examples_breakthrough,
   county_hourly_examples_ineff
@@ -155,10 +155,12 @@ plot_map_hist<-function(data_list){
       
       # Extract turnover and end_use parts
       turnover_label <- to[parts[1]] # First part is turnover
-      subset_label <- c(eu,s)[parts[2]] # Second part is end_use or sector
+      # subset_label <- c(eu,s)[parts[2]] # Second part is end_use or sector
       
       # Combine into a single label, skipping NA
-      paste(na.omit(c(turnover_label, subset_label)), collapse = " - ")
+      paste(na.omit(c(turnover_label)))
+
+      # paste(na.omit(c(turnover_label, subset_label)), collapse = " - ")
     }),
     names(combined_plots) # Assign names
   )
@@ -396,35 +398,35 @@ save_plot(paste0(graph_dir,"/example_peak_days_",day_labels[1,"turnover"],".jpg"
 # compare state-level seasonal ratios to EIA ------------------------------
 
 #https://drive.google.com/open?id=1btgB7_rSUJSTANdQ_kgGN3evd1baOQf8&usp=drive_fs
-eia<-read_csv("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Standard Scenarios/Workflow design/Comparison Data/eia_gas_and_electricity_by_state_sector_year_month.csv")
+# eia<-read_csv("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Standard Scenarios/Workflow design/Comparison Data/eia_gas_and_electricity_by_state_sector_year_month.csv")
 
-eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
-  mutate(month=(match(month, month.abb)),
-         season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
-         in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
-         sector=if_else(sector=="commercial","com","res")) %>%
-  group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
-  group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
-  pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer)
+# eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
+#   mutate(month=(match(month, month.abb)),
+#          season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
+#          in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
+#          sector=if_else(sector=="commercial","com","res")) %>%
+#   group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
+#   group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
+#   pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
+#   mutate(max_winter_to_max_summer=Winter/Summer)
 
-bss_ratios_sector<-state_monthly_2024 %>%
-  mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
-  pivot_wider(names_from=season,values_from=monthly_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer) %>%
-  arrange(max_winter_to_max_summer)
+# bss_ratios_sector<-state_monthly_2024 %>%
+#   mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
+#   group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
+#   pivot_wider(names_from=season,values_from=monthly_max) %>%
+#   mutate(max_winter_to_max_summer=Winter/Summer) %>%
+#   arrange(max_winter_to_max_summer)
 
-eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
-  ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
-  geom_hline(yintercept = 1,color="grey30")+
-  geom_boxplot()+
-  geom_point(data=bss_ratios_sector ,color="red")+
-  scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
-  ylab("winter max / summer max")+
-  facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
-  ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
-save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
+# eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
+#   ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
+#   geom_hline(yintercept = 1,color="grey30")+
+#   geom_boxplot()+
+#   geom_point(data=bss_ratios_sector ,color="red")+
+#   scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
+#   ylab("winter max / summer max")+
+#   facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
+#   ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
+# save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
 
 
 

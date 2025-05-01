@@ -8,6 +8,11 @@ from argparse import ArgumentParser
 from io import StringIO
 import math
 import sys
+import boto3
+import rpy2.robjects as robjects
+
+
+from botocore.exceptions import ClientError
 # os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
 # os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
 # import rpy2.robjects as robjects
@@ -20,7 +25,7 @@ CSV_DIR = "csv"
 OUTPUT_DIR = "agg_results"
 EXTERNAL_S3_DIR = "datasets"
 DATABASE_NAME = "euss_oedi"
-BUCKET_NAME = 'handibucket'
+BUCKET_NAME = 'xinweiz'
 
 EUGROUP_DIR = f"map_eu"
 
@@ -1180,12 +1185,16 @@ def main(base_dir):
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
+        glue_client = session.client('glue') 
+        database = 'euss_oedi'
 
-        gen_scoutdata(s3_client, athena_client)
-        gen_countydata(s3_client, athena_client)
-        combine_countydata(athena_client)
-        convert_long_to_wide(athena_client)
-        test_county(athena_client)
+        # gen_scoutdata(s3_client, athena_client)
+        # gen_countydata(s3_client, athena_client)
+        # combine_countydata(athena_client)
+        # convert_long_to_wide(athena_client)
+        # test_county(athena_client)
+        run_r_script('county and hourly graphs.R')
+
 
     if opts.bssbucket_insert is True:
         session = boto3.Session()
