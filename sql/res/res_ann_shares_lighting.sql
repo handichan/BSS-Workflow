@@ -5,7 +5,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'res_light_ann_1' AS group_ann,
 		sum(meta."out.electricity.lighting_exterior.energy_consumption" + meta."out.electricity.lighting_interior.energy_consumption" + meta."out.electricity.lighting_garage.energy_consumption") as lighting
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "resstock_tmy3_release_2024.2_metadata" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
 		meta."in.county",

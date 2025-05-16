@@ -16,7 +16,7 @@ measure_map_ann_long AS
     Scout_end_use,
     'original_ann' AS tech_stage,
     original_ann AS group_ann
-FROM measure_map_MEASVERSION
+FROM measure_map
 
 UNION ALL
 
@@ -25,7 +25,7 @@ SELECT
     Scout_end_use,
     'measure_ann' AS tech_stage,
     measure_ann AS group_ann
-FROM measure_map_MEASVERSION),
+FROM measure_map),
 
 scout_meas AS
 (SELECT 
@@ -63,9 +63,7 @@ SELECT
 FROM scout_meas
 JOIN (SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use FROM res_annual_disaggregation_multipliers_VERSIONID
 -- convert to variable
-WHERE group_version = '2024-07-19' 
--- convert to variable
-AND end_use = 'ENDUSEID') as ann_disag
+WHERE end_use = 'ENDUSEID') as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"
 AND scout_meas.end_use = ann_disag.end_use

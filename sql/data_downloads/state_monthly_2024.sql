@@ -2,7 +2,7 @@
 -- for comparison with EIA 861
 
 with with_month as 
-(SELECT *, month(timestamp_hour) as "month" FROM county_hourly_breakthrough_amy 
+(SELECT *, month(timestamp_hour) as "month" FROM long_county_hourly_TURNOVERID_amy 
 WHERE "year" = 2024 AND turnover='baseline'
 )
 

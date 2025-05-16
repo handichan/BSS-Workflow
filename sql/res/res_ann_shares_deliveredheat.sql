@@ -8,7 +8,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_52' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata"
+	FROM "resstock_tmy3_release_2024.2_metadata"
 	WHERE upgrade = 0
 	GROUP BY 
 		"in.county",
@@ -20,7 +20,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_84' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata"
+	FROM "resstock_tmy3_release_2024.2_metadata"
 	WHERE upgrade = 0
 	AND "in.heating_fuel" != 'Electricity'
 	GROUP BY 
@@ -33,7 +33,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_86' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata"
+	FROM "resstock_tmy3_release_2024.2_metadata"
 	WHERE upgrade = 16
 	AND "in.heating_fuel" != 'Electricity'
 	GROUP BY 

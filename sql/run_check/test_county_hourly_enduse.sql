@@ -5,14 +5,14 @@ SELECT turnover, end_use,
        SUM(CASE WHEN source = 'state_res' THEN kwh ELSE 0 END) AS scout_residential_sum
 FROM (
     SELECT 'commercial' AS source, turnover, end_use, county_hourly_kwh AS kwh
-    FROM county_hourly_com_YEARID_TURNOVERID
-    WHERE county_hourly_kwh = county_hourly_kwh
+    FROM long_county_hourly_TURNOVERID_amy
+    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = YEARID AND sector = 'com'
 
     UNION ALL
     
     SELECT 'residential' AS source, turnover, end_use, county_hourly_kwh AS kwh
-    FROM county_hourly_res_YEARID_TURNOVERID
-    WHERE county_hourly_kwh = county_hourly_kwh
+    FROM long_county_hourly_TURNOVERID_amy
+    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = YEARID AND sector = 'res'
     
     UNION ALL
     

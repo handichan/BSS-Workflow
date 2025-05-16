@@ -8,7 +8,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.clothes_dryer.energy_consumption") as drying
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "resstock_tmy3_release_2024.2_metadata" as meta
 		RIGHT JOIN res_ann_dry as chars ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_dry)
