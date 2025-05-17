@@ -1,6 +1,6 @@
 shape_ts	description	in.hvac_cool_type	in.hvac_category	applicability	upgrade	shape_end_use	version
-com_cooling_ts_1	"Variable Speed HP RTU, Electric Backup"	DX	Small Packaged Unit	TRUE	1	cooling	4/24/25
-com_cooling_ts_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	DX	Small Packaged Unit	TRUE	3	cooling	4/24/25
+com_cooling_ts_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	TRUE	1	cooling	4/24/25
+com_cooling_ts_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	TRUE	3	cooling	4/24/25
 com_cooling_ts_4	Evaporative cooling	Evaporative Cooling	Small Packaged Unit	TRUE	0	cooling	4/24/25
 com_cooling_ts_5	Chiller	ACC	Zone-by-Zone	TRUE	0	cooling	4/24/25
 com_cooling_ts_5	Chiller	ACC	Multizone CAV/VAV	TRUE	0	cooling	4/24/25
@@ -41,16 +41,16 @@ com_cooling_ts_9	Chiller or RTAC	DX	Multizone CAV/VAV	TRUE	0	cooling	4/24/25
 com_cooling_ts_9	Chiller or RTAC	DX	Zone-by-Zone	TRUE	0	cooling	4/24/25
 com_cooling_ts_9	Chiller or RTAC	None	Other HVAC	TRUE	0	cooling	4/24/25
 com_cooling_ts_9	Chiller or RTAC	None	Zone-by-Zone	TRUE	0	cooling	4/24/25
-com_cooling_ts_10	"Variable Speed HP RTU, Electric Backup, Energy Recovery, Envelop"	DX	Small Packaged Unit	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	ACC	Zone-by-Zone	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	ACC	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	District	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	District	Zone-by-Zone	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	District	Small Packaged Unit	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	WCC	Zone-by-Zone	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	WCC	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	DX	Small Packaged Unit	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	DX	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	DX	Zone-by-Zone	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	None	Other HVAC	TRUE	37	cooling	4/24/25
-com_cooling_ts_11	"Chiller or RTAC , Envelope"	None	Zone-by-Zone	TRUE	37	cooling	4/24/25
+com_cooling_ts_10	Variable Speed HP RTU, Electric Backup, Energy Recovery, Envelop	DX	Small Packaged Unit	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	ACC	Zone-by-Zone	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	ACC	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	District	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	District	Zone-by-Zone	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	District	Small Packaged Unit	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	WCC	Zone-by-Zone	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	WCC	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	DX	Small Packaged Unit	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	DX	Multizone CAV/VAV	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	DX	Zone-by-Zone	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	None	Other HVAC	TRUE	37	cooling	4/24/25
+com_cooling_ts_11	Chiller or RTAC , Envelope	None	Zone-by-Zone	TRUE	37	cooling	4/24/25
