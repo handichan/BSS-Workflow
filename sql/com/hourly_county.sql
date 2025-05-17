@@ -11,12 +11,9 @@ WITH filtered_annual AS (
     "year",
     end_use
     FROM county_annual_com_YEARID_TURNOVERID
-    -- convert to variable
     WHERE "year" = YEARID
       AND county_ann_kwh > 0
-      -- convert to variable
       AND scout_run = 'SCOUTRUNDATE'
-      -- convert to variable
       AND end_use = 'ENDUSEID'
 ),
 
@@ -92,7 +89,6 @@ hourly_ungrouped AS (
     "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM com_hourly_disaggregation_multipliers_VERSIONID
     WHERE multiplier_hourly >= 0
-    -- convert to variable
     AND end_use = 'ENDUSEID'
     -- convert to variable
     AND group_version = '2024-07-19') AS h

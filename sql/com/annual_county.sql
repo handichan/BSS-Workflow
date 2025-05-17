@@ -2,12 +2,9 @@ INSERT INTO county_annual_com_YEARID_TURNOVERID
 WITH electric_df AS (
     SELECT *
     FROM scout_annual_state_TURNOVERID
-    -- convert to variable
     WHERE scout_run = 'SCOUTRUNDATE'
     AND fuel = 'Electric'
-    -- convert to variable
     AND end_use = 'ENDUSEID'
-    -- convert to variable
     AND year = YEARID
 ),
 measure_map_ann_long AS
@@ -67,7 +64,6 @@ FROM scout_meas
 JOIN (SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use FROM com_annual_disaggregation_multipliers_VERSIONID
 -- convert to variable
 WHERE group_version = '2024-07-19' 
--- convert to variable
 AND end_use = 'ENDUSEID') as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"
