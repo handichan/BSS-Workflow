@@ -375,3 +375,35 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Secondary Fossil Heating	Heating (Equip.)	res_hvac_ann_84	res_hvac_ann_84	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil	fossil	fossil
 (R) Brk. HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, breakthrough HP	Water heater, fossil	Water heater, breakthrough HP
 (R) Ref. Case Electric Dryer FS	Other	res_dry_ann_1	res_dry_ann_2	res_dry_ts_1	res_dry_ts_3	res	Dryer, fossil	Dryer, resistance	Dryer, fossil	Dryer, resistance
+(C) Building Codes	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics
+(C) Building Performance Standards	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics
+(C) Building Codes	Cooling (Equip.)	com_hvac_ann_43	com_hvac_ann_43	com_cooling_ts_10	com_cooling_ts_10	com	Cooling	Cooling, codes	Cooling	Cooling
+(C) Building Performance Standards	Cooling (Equip.)	com_hvac_ann_43	com_hvac_ann_43	com_cooling_ts_10	com_cooling_ts_10	com	Cooling	Cooling, BPS	Cooling	Cooling
+(C) Building Codes	Heating (Equip.)	com_hvac_ann_42	com_hvac_ann_42	com_heating_ts_10	com_heating_ts_10	com	Heating	Heating, codes	Heating	Heating
+(C) Building Performance Standards	Heating (Equip.)	com_hvac_ann_42	com_hvac_ann_42	com_heating_ts_10	com_heating_ts_10	com	Heating	Heating, BPS	Heating	Heating
+(C) Building Codes	Lighting	com_light_ann_1	com_light_ann_1	com_light_ts_1	com_light_ts_1	com	Lighting	Lighting, codes	Lighting	Lighting
+(C) Building Performance Standards	Lighting	com_light_ann_1	com_light_ann_1	com_light_ts_1	com_light_ts_1	com	Lighting	Lighting, BPS	Lighting	Lighting
+(C) Building Codes	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other, codes	Other	Other
+(C) Building Performance Standards	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other, BPS	Other	Other
+(C) Building Codes	Refrigeration	com_refrig_ann_1	com_refrig_ann_1	com_refrig_ts_1	com_refrig_ts_1	com	Refrigeration	Refrigeration, codes	Refrigeration	Refrigeration
+(C) Building Performance Standards	Refrigeration	com_refrig_ann_1	com_refrig_ann_1	com_refrig_ts_1	com_refrig_ts_1	com	Refrigeration	Refrigeration, BPS	Refrigeration	Refrigeration
+(C) Building Codes	Ventilation	com_hvac_ann_41	com_hvac_ann_41	com_ventilation_11	com_ventilation_11	com	Ventilation	Ventilation, codes	Ventilation	Ventilation
+(C) Building Performance Standards	Ventilation	com_hvac_ann_41	com_hvac_ann_41	com_ventilation_11	com_ventilation_11	com	Ventilation	Ventilation, BPS	Ventilation	Ventilation
+(C) Building Codes	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heating	Water heating, codes	Water heating	Water heating
+(C) Building Performance Standards	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heating	Water heating, BPS	Water heating	Water heating
+(R) Building Codes	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics
+(R) Building Performance Standards	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics
+(R) Building Codes	Cooling (Equip.)	res_hvac_ann_87	res_hvac_ann_87	res_cooling_ts_6	res_cooling_ts_6	res	Cooling	Cooling, codes	Cooling	Cooling
+(R) Building Performance Standards	Cooling (Equip.)	res_hvac_ann_87	res_hvac_ann_87	res_cooling_ts_6	res_cooling_ts_6	res	Cooling	Cooling, BPS	Cooling	Cooling
+(R) Building Codes	Heating (Equip.)	res_hvac_ann_86	res_hvac_ann_86	res_heating_ts_8	res_heating_ts_8	res	Heating	Heating, codes	Heating	Heating
+(R) Building Performance Standards	Heating (Equip.)	res_hvac_ann_86	res_hvac_ann_86	res_heating_ts_8	res_heating_ts_8	res	Heating	Heating, BPS	Heating	Heating
+(R) Building Codes	Lighting	res_light_ann_1	res_light_ann_1	res_light_ts_1	res_light_ts_1	res	Lighting	Lighting, codes	Lighting	Lighting
+(R) Building Performance Standards	Lighting	res_light_ann_1	res_light_ann_1	res_light_ts_1	res_light_ts_1	res	Lighting	Lighting, BPS	Lighting	Lighting
+(R) Building Codes	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other, codes	Other	Other
+(R) Building Performance Standards	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other, BPS	Other	Other
+(R) Building Codes	Refrigeration	res_refrig_ann_1	res_refrig_ann_1	res_refrig_ts_1	res_refrig_ts_1	res	Refrigeration	Refrigeration, codes	Refrigeration	Refrigeration
+(R) Building Performance Standards	Refrigeration	res_refrig_ann_1	res_refrig_ann_1	res_refrig_ts_1	res_refrig_ts_1	res	Refrigeration	Refrigeration, BPS	Refrigeration	Refrigeration
+(R) Building Codes	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, codes	Ventilation	Ventilation
+(R) Building Performance Standards	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, BPS	Ventilation	Ventilation
+(R) Building Codes	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heating	Water heating, codes	Water heating	Water heating
+(R) Building Performance Standards	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heating	Water heating, BPS	Water heating	Water heating
