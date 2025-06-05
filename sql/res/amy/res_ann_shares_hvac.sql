@@ -17,7 +17,7 @@ WITH meta_filtered AS (
 		AND meta."in.hvac_cooling_type" = chars."in.hvac_cooling_type"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_hvac)
-	AND group_ann NOT IN ('res_hvac_ann_52','res_hvac_ann_84')
+	AND group_ann NOT IN ('res_hvac_ann_52','res_hvac_ann_84','res_hvac_ann_87')
 	GROUP BY 
 		meta."in.county",
 		meta."in.state",

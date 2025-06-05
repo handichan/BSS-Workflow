@@ -15,6 +15,7 @@ WITH meta_filtered AS (
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade
     WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac)
+    AND group_ann NOT IN ('com_hvac_ann_42','com_hvac_ann_43')
     GROUP BY 
         meta."in.nhgis_county_gisjoin",
         meta."in.state",
