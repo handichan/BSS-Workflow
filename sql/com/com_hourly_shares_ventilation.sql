@@ -62,7 +62,6 @@ SELECT "in.county",
 	timestamp_hour,
 	ventilation as kwh,
 	ventilation / sum(ventilation) OVER (PARTITION BY "in.county", shape_ts, "version") as multiplier_hourly,
-    "version" AS group_version,
     'com' AS sector,
     "in.state",
 	'Ventilation' as end_use

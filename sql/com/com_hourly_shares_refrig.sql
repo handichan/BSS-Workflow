@@ -37,7 +37,6 @@ SELECT "in.county",
 	timestamp_hour,
 	refrigeration as kwh,
 	refrigeration / sum(refrigeration) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
-    '2024-07-19' AS group_version,
     'com' AS sector,
     "in.state",
 	'Refrigeration' as end_use

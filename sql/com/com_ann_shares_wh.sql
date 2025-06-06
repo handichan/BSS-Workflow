@@ -18,7 +18,6 @@ WITH meta_filtered AS (
 SELECT  "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
     wh / sum(wh) OVER (PARTITION BY "in.state", group_ann, "version") as multiplier_annual,
-    "version" as group_version,
     'com' AS sector,
     "in.state",
     'Water Heating' AS end_use

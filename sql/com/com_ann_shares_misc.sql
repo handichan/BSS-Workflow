@@ -15,7 +15,6 @@ WITH meta_filtered AS (
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
     misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
-	'2024-07-19' AS group_version,
     'com' AS sector,
     "in.state",
     'Other' AS end_use
@@ -27,7 +26,6 @@ UNION ALL
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
     misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
-	'2024-07-19' AS group_version,
     'com' AS sector,
     "in.state",
     'Computers and Electronics' AS end_use

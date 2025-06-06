@@ -89,9 +89,7 @@ hourly_ungrouped AS (
     "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM com_hourly_disaggregation_multipliers_VERSIONID
     WHERE multiplier_hourly >= 0
-    AND end_use = 'ENDUSEID'
-    -- convert to variable
-    AND group_version = '2024-07-19') AS h
+    AND end_use = 'ENDUSEID' AS h
     ON gd."in.county" = h."in.county"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts

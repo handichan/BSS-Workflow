@@ -70,7 +70,6 @@ tz,
 timestamp_hour,
 int_equip_diff as kwh,
 int_equip_diff/sum(int_equip_diff) OVER (PARTITION BY tz) as multiplier_hourly,
-'2024-07-19' as group_version,
 'com' as sector,
 'Cooking' as end_use
 FROM ts_diff_not_norm)
@@ -81,7 +80,6 @@ shape_ts,
 timestamp_hour,
 kwh,
 multiplier_hourly,
-group_version,
 sector,
 "in.state",
 end_use

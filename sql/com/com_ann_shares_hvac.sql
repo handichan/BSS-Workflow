@@ -39,7 +39,6 @@ FROM meta_filtered
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
         heating_mult AS multiplier_annual,
-        "version" as group_version,
         'com' AS sector,
         "in.state",
         'Heating (Equip.)' AS end_use
@@ -52,7 +51,6 @@ FROM meta_filtered
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
         cooling_mult AS multiplier_annual,
-        "version" as group_version,
         'com' AS sector,
         "in.state",
         'Cooling (Equip.)' AS end_use
@@ -66,7 +64,6 @@ FROM meta_filtered
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
         ventilation_mult AS multiplier_annual,
-        "version" as group_version,
         'com' AS sector,
         "in.state",
         'Ventilation' AS end_use

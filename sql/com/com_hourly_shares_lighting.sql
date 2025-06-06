@@ -37,7 +37,6 @@ SELECT "in.county",
 	timestamp_hour,
 	lights as kwh,
 	lights / sum(lights) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
-    '2024-07-19' AS group_version,
     'com' AS sector,
     "in.state",
 	'Lighting' as end_use

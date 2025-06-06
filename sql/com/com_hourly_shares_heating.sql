@@ -62,7 +62,6 @@ SELECT "in.county",
 	timestamp_hour,
 	heating as kwh,
 	heating / sum(heating) OVER (PARTITION BY "in.county", shape_ts, "version") as multiplier_hourly,
-    "version" AS group_version,
     'com' AS sector,
     "in.state",
 	'Heating (Equip.)' as end_use

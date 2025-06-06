@@ -5,7 +5,6 @@ CREATE EXTERNAL TABLE com_hourly_disaggregation_multipliers_VERSIONID(
     timestamp_hour timestamp,
     kwh double,
     multiplier_hourly double,
-    group_version string,
     sector string,
     `in.state` string,
     end_use string

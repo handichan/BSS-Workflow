@@ -36,7 +36,6 @@ FROM unnormalized)
         "in.county" ,
         'com_cook_ann_1' as group_ann,
         gas_share AS multiplier_annual,
-        '2024-07-19' as group_version,
         'com' AS sector,
         "in.state",
         'Cooking' AS end_use
@@ -49,7 +48,6 @@ FROM unnormalized)
         "in.county",
         'com_cook_ann_2' as group_ann,
         elec_share AS multiplier_annual,
-        '2024-07-19' as group_version,
         'com' AS sector,
         "in.state",
         'Cooking' AS end_use

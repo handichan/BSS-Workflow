@@ -15,7 +15,6 @@ WITH meta_filtered AS (
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
     refrigeration / sum(refrigeration) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
-	'2024-07-19' AS group_version,
     'com' AS sector,
     "in.state",
     'Refrigeration' AS end_use
