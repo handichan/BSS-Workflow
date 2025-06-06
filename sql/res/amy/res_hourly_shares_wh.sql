@@ -8,7 +8,7 @@ INSERT INTO res_hourly_disaggregation_multipliers_VERSIONID
 WITH meta_shapes AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
-		meta."in.county",
+		meta."in.weather_file_city",
 		meta."in.state",
 		chars.shape_ts,
 		chars.upgrade
@@ -21,7 +21,7 @@ WITH meta_shapes AS (
 -- calculate simplified end uses
 -- filter to the appropriate partitions!!!! doing it here vastly reduces the data scanned and therefore runtime
 ts_not_agg AS (
-	SELECT meta_shapes."in.county",
+	SELECT meta_shapes."in.weather_file_city",
 	meta_shapes."in.state",
 		meta_shapes.shape_ts,
 		CASE
@@ -33,9 +33,9 @@ ts_not_agg AS (
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_wh)
 ),
--- aggregate to hourly by county, and shape
+-- aggregate to hourly by weather file, and shape
 ts_agg AS(
-	SELECT "in.county",
+	SELECT "in.weather_file_city",
 	"in.state",
 		shape_ts,
 		timestamp_hour,
@@ -43,16 +43,15 @@ ts_agg AS(
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.state",
-        "in.county",
+        "in.weather_file_city",
 		shape_ts
 )
 -- normalize the shapes
-SELECT "in.county",
+SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
 	wh as kwh,
-	wh / sum(wh) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
-    '2024-07-19' AS group_version,
+	wh / sum(wh) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
 	'Water Heating' as end_use

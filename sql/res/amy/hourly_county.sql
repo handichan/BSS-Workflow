@@ -1,6 +1,7 @@
 INSERT INTO  county_hourly_res_YEARID_TURNOVERID
 WITH filtered_annual AS (
     SELECT "in.county",
+    "in.weather_file_city",
     meas,
     tech_stage,
     turnover,
@@ -11,12 +12,9 @@ WITH filtered_annual AS (
     "year",
     end_use
     FROM county_annual_res_YEARID_TURNOVERID
-    -- convert to variable
     WHERE "year" = YEARID
       AND county_ann_kwh > 0
-      -- convert to variable
       AND scout_run = 'SCOUTRUNDATE'
-      -- convert to variable
       AND end_use = 'ENDUSEID'
 ),
 
@@ -43,6 +41,7 @@ to_disagg AS (
         fa."in.state",
         fa."year",
         fa."in.county",
+        fa."in.weather_file_city",
         fa.end_use,
         mmtsl.shape_ts,
         fa.turnover,
@@ -60,6 +59,7 @@ grouped_disagg AS (
         "in.state",
         "year",
         "in.county",
+        "in.weather_file_city",
         end_use,
         shape_ts,
         turnover,
@@ -70,6 +70,7 @@ grouped_disagg AS (
         "in.state",
         "year",
         "in.county",
+        "in.weather_file_city",
         end_use,
         shape_ts,
         turnover,
@@ -89,14 +90,11 @@ hourly_ungrouped AS (
         gd.scout_run
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
-    "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
+    "in.weather_file_city", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM res_hourly_disaggregation_multipliers_VERSIONID
     WHERE multiplier_hourly >= 0
-    -- convert to variable
-    AND end_use = 'ENDUSEID'
-    -- convert to variable
-    AND group_version = '2024-07-19') AS h
-    ON gd."in.county" = h."in.county"
+    AND end_use = 'ENDUSEID' AS h
+    ON gd."in.weather_file_city" = h."in.weather_file_city"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts
 ),

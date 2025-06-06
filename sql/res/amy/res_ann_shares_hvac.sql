@@ -8,6 +8,7 @@
 INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
 WITH meta_filtered AS (
 	SELECT meta."in.county",
+    	meta."in.weather_file_city",
 	    meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating,
@@ -20,39 +21,41 @@ WITH meta_filtered AS (
 	AND group_ann NOT IN ('res_hvac_ann_52','res_hvac_ann_84','res_hvac_ann_87')
 	GROUP BY 
 		meta."in.county",
+		meta."in.weather_file_city",
 		meta."in.state",
 		chars.group_ann
 ),
 geo_shares AS (
     SELECT "in.county",
-    "in.state",
-    group_ann,
-    heating,
-    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
-    cooling,
-    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult
+    	"in.weather_file_city",
+        "in.state",
+        group_ann,
+        heating,
+        heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
+        cooling,
+        cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult
 FROM meta_filtered
 )
-    SELECT 
-        "in.county",
-        group_ann,
-        heating_mult AS multiplier_annual,
-        '2024-07-19' AS group_version,
-        'res' AS sector,
-        "in.state",
-        'Heating (Equip.)' AS end_use
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    group_ann,
+    heating_mult AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use
 
-    FROM geo_shares
+FROM geo_shares
 
-    UNION ALL
+UNION ALL
 
-    SELECT 
-        "in.county",
-        group_ann,
-        cooling_mult AS multiplier_annual,
-        '2024-07-19' AS group_version,
-        'res' AS sector,
-        "in.state",
-        'Cooling (Equip.)' AS end_use
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    group_ann,
+    cooling_mult AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use
 
-    FROM geo_shares;
+FROM geo_shares;

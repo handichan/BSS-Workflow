@@ -5,6 +5,7 @@ INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
 
 WITH meta_filtered AS (
 	SELECT meta."in.county",
+		meta."in.weather_file_city",
 	    meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.hot_water.energy_consumption") as wh
@@ -15,15 +16,16 @@ WITH meta_filtered AS (
 	AND group_ann NOT IN ('res_wh_ann_6')
 	GROUP BY 
 		meta."in.county",
+		meta."in.weather_file_city",
 		meta."in.state",
 		chars.group_ann
 )
-    SELECT "in.county",
-    group_ann,
-    wh / sum(wh) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
-	'2024-07-19' AS group_version,
-    'res' AS sector,
-    "in.state",
-    'Water Heating' AS end_use
+SELECT "in.county",
+	"in.weather_file_city",
+	group_ann,
+	wh / sum(wh) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Water Heating' AS end_use
 FROM meta_filtered
 ;
