@@ -65,3 +65,21 @@ meas	meas_separated	component
 (R) Ref. Case Scnd. Elec. Heat & Env.++	(R) Ref. Case Scnd. Elec. Heat & Env.++	equipment + env
 (R) ES HP LFL & Env.	(R) ESTAR HP LFL	equipment
 (R) ES HP LFL & Env.	(R) ES HP LFL & Env.	equipment + env
+(R) Bst. HP Pt. FS (NG Frn.) & Env.+	(R) Bst. HP Pt. FS (NG Frn.) & Env.+	equipment + env
+(R) Ref. NG Furnace & AC & Env.	(R) Ref. NG Furnace & AC & Env.	equipment + env
+(R) Ref. NG Furnace & AC & Env.+	(R) Ref. NG Furnace & AC & Env.+	equipment + env
+(C) Bst. HP FS (NG Boiler) & Env.++	(C) Bst. HP FS (NG Boiler) & Env.++	equipment + env
+(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	equipment + env
+(C) Bst. HP FS (RTU, NG Ht.) & Env.+	(C) Bst. HP FS (RTU, NG Ht.) & Env.+	equipment + env
+(C) ES HP FS (RTU, NG Ht.) & Env.	(C) ES HP FS (RTU, NG Ht.) & Env.	equipment + env
+(R) Ref. NG Furnace & AC & Env.++	(R) Ref. NG Furnace & AC & Env.++	equipment + env
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	(C) Bst. HP FS (RTU, NG Ht.) & Env.++	equipment + env
+(R) Bst. HP Pt. FS (NG Frn.) & Env.+	(R) Best HP Pt. FS (NG Furnace)	equipment
+(R) Ref. NG Furnace & AC & Env.	(R) Ref. Case NG Furnace & AC	equipment
+(R) Ref. NG Furnace & AC & Env.+	(R) Ref. Case NG Furnace & AC	equipment
+(C) Bst. HP FS (NG Boiler) & Env.++	(C) Best HP FS (NG Boiler)	equipment
+(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	(R) Best HP Pt. FS (Other Fossil Furnace)	equipment
+(C) Bst. HP FS (RTU, NG Ht.) & Env.+	(C) Best HP FS (RTU, NG Heat)	equipment
+(C) ES HP FS (RTU, NG Ht.) & Env.	(C) ESTAR HP FS (RTU, NG Heat)	equipment
+(R) Ref. NG Furnace & AC & Env.++	(R) Ref. Case NG Furnace & AC	equipment
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	(C) Best HP FS (RTU, NG Heat)	equipment
