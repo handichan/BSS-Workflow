@@ -278,7 +278,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) ESTAR HP FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR	AC	ASHP, ESTAR
 (R) ESTAR HP FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_heating_ts_2	res_heating_ts_3	res	fossil	ASHP, ESTAR	fossil	ASHP, ESTAR
 (R) ESTAR HP FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR	none	ASHP, ESTAR
-(R) ESTAR HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_heating_ts_2	res_heating_ts_3	res	fossil	ASHP, ESTAR	fossil	ASHP, ESTAR
+(R) ESTAR HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_63	res_heating_ts_2	res_heating_ts_3	res	fossil	ASHP, ESTAR	fossil	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR	AC	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_2	res_heating_ts_3	res	fossil	ASHP, ESTAR	fossil	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_74	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR	none	ASHP, ESTAR
@@ -341,7 +341,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case NG Boiler & AC	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil	fossil	fossil
 (R) Ref. Case NG Furnace & AC	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case NG Furnace & AC	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil	fossil	fossil
-(R) Ref. Case NG Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_cooling_ts_0	res_cooling_ts_1	res	none	none	none	none
+(R) Ref. Case NG Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_cooling_ts_0	res_cooling_ts_0	res	none	none	none	none
 (R) Ref. Case NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil	fossil	fossil
 (R) Ref. Case NGHP	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_cooling_ts_1	res_cooling_ts_1	res	NGHP	NGHP	NGHP	NGHP
 (R) Ref. Case NGHP	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_heating_ts_2	res_heating_ts_2	res	NGHP	NGHP	NGHP	NGHP
@@ -363,11 +363,11 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Resist. WH	Water Heating	res_wh_ann_3	res_wh_ann_3	res_wh_ts_2	res_wh_ts_2	res	Water heater, resistance	Water heater, resistance	Water heater, resistance	Water heater, resistance
 (R) Ref. Case Resist. WH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_2	res	Water heater, fossil	Water heater, resistance	Water heater, fossil	Water heater, resistance
 (R) Ref. Case Resist. WH TS	Water Heating	res_wh_ann_3	res_wh_ann_3	res_wh_ts_2	res_wh_ts_2	res	Water heater, resistance	Water heater, resistance	Water heater, resistance	Water heater, resistance
-(R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_1	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
-(R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_1	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
-(R) Ref. Case Scnd. Elec. Heat & Env.	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_1	res	Secondary heating	Secondary heating with env	Secondary heating	Secondary heating
-(R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_1	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
-(R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_1	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
+(R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
+(R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
+(R) Ref. Case Scnd. Elec. Heat & Env.	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env	Secondary heating	Secondary heating
+(R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
+(R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
 (R) Ref. Case Scnd. Fossil Heat FS & Env.	Heating (Equip.)	res_hvac_ann_84	res_hvac_ann_84	res_heating_ts_2	res_heating_ts_1	res	fossil	Secondary heating with env	fossil	Secondary heating
 (R) Ref. Case Scnd. Fossil Heat FS & Env.+	Heating (Equip.)	res_hvac_ann_84	res_hvac_ann_84	res_heating_ts_2	res_heating_ts_13	res	fossil	Secondary heating with env +	fossil	Secondary heating
 (R) Ref. Case Scnd. Fossil Heat FS & Env.++	Heating (Equip.)	res_hvac_ann_84	res_hvac_ann_84	res_heating_ts_2	res_heating_ts_13	res	fossil	Secondary heating with env ++	fossil	Secondary heating
@@ -389,8 +389,8 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Building Performance Standards	Refrigeration	com_refrig_ann_1	com_refrig_ann_1	com_refrig_ts_1	com_refrig_ts_1	com	Refrigeration	Refrigeration, BPS	Refrigeration	Refrigeration
 (C) Building Codes	Ventilation	com_hvac_ann_41	com_hvac_ann_41	com_ventilation_11	com_ventilation_11	com	Ventilation	Ventilation, codes	Ventilation	Ventilation
 (C) Building Performance Standards	Ventilation	com_hvac_ann_41	com_hvac_ann_41	com_ventilation_11	com_ventilation_11	com	Ventilation	Ventilation, BPS	Ventilation	Ventilation
-(C) Building Codes	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heating	Water heating, codes	Water heating	Water heating
-(C) Building Performance Standards	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heating	Water heating, BPS	Water heating	Water heating
+(C) Building Codes	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heater	Water heater, codes	Water heater	Water heater
+(C) Building Performance Standards	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heater	Water heater, BPS	Water heater	Water heater
 (R) Building Codes	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics
 (R) Building Performance Standards	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics
 (R) Building Codes	Cooling (Equip.)	res_hvac_ann_87	res_hvac_ann_87	res_cooling_ts_6	res_cooling_ts_6	res	Cooling	Cooling, codes	Cooling	Cooling
@@ -405,5 +405,31 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Building Performance Standards	Refrigeration	res_refrig_ann_1	res_refrig_ann_1	res_refrig_ts_1	res_refrig_ts_1	res	Refrigeration	Refrigeration, BPS	Refrigeration	Refrigeration
 (R) Building Codes	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, codes	Ventilation	Ventilation
 (R) Building Performance Standards	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, BPS	Ventilation	Ventilation
-(R) Building Codes	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heating	Water heating, codes	Water heating	Water heating
-(R) Building Performance Standards	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heating	Water heating, BPS	Water heating	Water heating
+(R) Building Codes	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, codes	Water heater	Water heater
+(R) Building Performance Standards	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, BPS	Water heater	Water heater
+(R) Bst. HP Pt. FS (NG Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_cooling_ts_1	res_cooling_ts_8	res	AC	ASHP, best with fossil backup and env +	AC	ASHP, best with fossil backup
+(R) Bst. HP Pt. FS (NG Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_heating_ts_2	res_heating_ts_11	res	fossil	ASHP, best with fossil backup and env +	fossil	ASHP, best with fossil backup
+(C) Best NG Boiler & Chiller	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_9	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	NG boiler + RTAC or chiller, best	RTAC or chiller	RTAC or chiller, best
+(C) Best NG Boiler & Chiller	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_9	com_heating_ts_9	com_heating_ts_9	com	NG boiler + RTAC or chiller	NG boiler + RTAC or chiller, best	fossil	fossil
+(C) Best NG Boiler & Chiller	Ventilation	com_hvac_ann_9	com_hvac_ann_9	com_ventilation_4	com_ventilation_4	com	NG boiler + RTAC or chiller	NG boiler + RTAC or chiller, best	RTAC or chiller	RTAC or chiller, best
+(C) Bst. HP FS (NG Boiler) & Env.++	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_cooling_ts_9	com_cooling_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env ++	RTAC or chiller	Boiler, best HP
+(C) Bst. HP FS (NG Boiler) & Env.++	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_heating_ts_9	com_heating_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env ++	fossil	Boiler, best HP
+(C) Bst. HP FS (NG Boiler) & Env.++	Ventilation	com_hvac_ann_9	com_hvac_ann_40	com_ventilation_4	com_ventilation_10	com	NG boiler + RTAC or chiller	Boiler, best HP with env ++	RTAC or chiller	Boiler, best HP
+(R) Best 120V HP Dryer TS	Other	res_dry_ann_3	res_dry_ann_4	res_dry_ts_2	res_dry_ts_3	res	Dryer, resistance	Dryer, best HP 120V	Dryer, resistance	Dryer, best HP
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_cooling_ts_9	com_cooling_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	fossil	ASHP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Ventilation	com_hvac_ann_16	com_hvac_ann_39	com_ventilation_5	com_ventilation_9	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
+(R) Ref. NG Furnace & AC & Env.++	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env ++	AC	AC
+(R) Ref. NG Furnace & AC & Env.++	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil with env ++	fossil	fossil
+(R) Best 120V HP Dryer FS	Other	res_dry_ann_1	res_dry_ann_2	res_dry_ts_1	res_dry_ts_3	res	Dryer, fossil	Dryer, best HP 120V	Dryer, fossil	Dryer, best HP
+(R) Best Gas WH	Water Heating	res_wh_ann_1	res_wh_ann_1	res_wh_ts_1	res_wh_ts_1	res	Water heater, fossil	Water heater, fossil	Water heater, fossil	Water heater, fossil
+(R) Ref. NG Furnace & AC & Env.	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env	AC	AC
+(R) Ref. NG Furnace & AC & Env.	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil with env	fossil	fossil
+(R) Best NG Furnace & AC	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_cooling_ts_1	res_cooling_ts_3	res	AC	AC, best	AC	AC
+(R) Best NG Furnace & AC	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil	fossil	fossil
+(R) Best NG Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_cooling_ts_0	res_cooling_ts_0	res	none	none	none	none
+(R) Best NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil, best	fossil	fossil
+(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_cooling_ts_1	res_cooling_ts_8	res	AC	ASHP, best with fossil backup and env +	AC	ASHP, best with fossil backup
+(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_heating_ts_2	res_heating_ts_11	res	fossil	ASHP, best with fossil backup and env +	fossil	ASHP, best with fossil backup
+(R) Ref. NG Furnace & AC & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env +	AC	AC
+(R) Ref. NG Furnace & AC & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil with env +	fossil	fossil
