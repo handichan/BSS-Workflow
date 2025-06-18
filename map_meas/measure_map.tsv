@@ -391,6 +391,8 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Building Performance Standards	Ventilation	com_hvac_ann_41	com_hvac_ann_41	com_ventilation_11	com_ventilation_11	com	Ventilation	Ventilation, BPS	Ventilation	Ventilation
 (C) Building Codes	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heater	Water heater, codes	Water heater	Water heater
 (C) Building Performance Standards	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heater	Water heater, BPS	Water heater	Water heater
+(C) Building Codes	Cooking	com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Cooking	Cooking, codes	Cooking	Cooking
+(C) Building Performance Standards	Cooking	com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Cooking	Cooking, codes	Cooking	Cooking
 (R) Building Codes	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics
 (R) Building Performance Standards	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics
 (R) Building Codes	Cooling (Equip.)	res_hvac_ann_87	res_hvac_ann_87	res_cooling_ts_6	res_cooling_ts_6	res	Cooling	Cooling, codes	Cooling	Cooling
@@ -407,6 +409,8 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Building Performance Standards	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, BPS	Ventilation	Ventilation
 (R) Building Codes	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, codes	Water heater	Water heater
 (R) Building Performance Standards	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, BPS	Water heater	Water heater
+(R) Building Codes	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Cooking	Cooking, codes	Cooking	Cooking
+(R) Building Performance Standards	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Cooking	Cooking, codes	Cooking	Cooking
 (R) Bst. HP Pt. FS (NG Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_cooling_ts_1	res_cooling_ts_8	res	AC	ASHP, best with fossil backup and env +	AC	ASHP, best with fossil backup
 (R) Bst. HP Pt. FS (NG Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_heating_ts_2	res_heating_ts_11	res	fossil	ASHP, best with fossil backup and env +	fossil	ASHP, best with fossil backup
 (C) Best NG Boiler & Chiller	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_9	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	NG boiler + RTAC or chiller, best	RTAC or chiller	RTAC or chiller, best
