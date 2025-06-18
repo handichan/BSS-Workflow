@@ -8,9 +8,9 @@ from argparse import ArgumentParser
 from io import StringIO
 import math
 import sys
-# os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
-# os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
-# import rpy2.robjects as robjects
+os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
+os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
+import rpy2.robjects as robjects
 
 pd.set_option('display.max_columns', None)
 JSON_PATH = 'json/input.json'
@@ -25,8 +25,8 @@ BUCKET_NAME = 'handibucket'
 EUGROUP_DIR = f"map_eu"
 
 # SCOUT_RUN_DATE = "2024-09-30"
-SCOUT_RUN_DATE = "2025-01-28"
-versionid = "20240923_amy"
+SCOUT_RUN_DATE = "2025-06-16"
+versionid = "20250616_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
 MEAS_MAP_FILE = os.path.join("map_meas", f"measure_map.tsv")
@@ -122,6 +122,7 @@ def reshape_json(data, path=[]):
         rows.append(path + [data])
     return rows
 
+
 def compute_no_package_energy(wide_df):
     if 'efficient_measure_env_mmbtu' not in wide_df.columns:
         df = wide_df.copy()
@@ -132,7 +133,8 @@ def compute_no_package_energy(wide_df):
     df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
     return df
 
-def compute_with_package_energy(wide_df, include_bldg_type):
+
+def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
     if 'efficient_measure_env_mmbtu' not in wide_df.columns:
         return pd.DataFrame(columns=wide_df.columns)
 
@@ -170,8 +172,146 @@ def compute_with_package_energy(wide_df, include_bldg_type):
     return df
 
 
+def compute_with_package_energy_noenv(wide_df, include_bldg_type, envelope_map):
+    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
+        return pd.DataFrame(columns=wide_df.columns)
+
+    # df = wide_df[~pd.isna(wide_df['efficient_measure_env_mmbtu'])].copy()
+    # df = df.merge(envelope_map, on='meas', how='left')
+
+    def calc_measure(row):
+        if row['component'] == 'equipment':
+            return (row['efficient_measure_mmbtu'] - row['efficient_measure_env_mmbtu']) / 3412 * 1e6
+        elif row['component'] == 'equipment + env':
+            return row['efficient_measure_env_mmbtu'] / 3412 * 1e6
+        return None
+
+    def calc_original(row):
+        if row['component'] == 'equipment':
+            return (row['efficient_mmbtu'] - row['efficient_measure_mmbtu']) / 3412 * 1e6
+        elif row['component'] == 'equipment + env':
+            return 0
+        return None
+
+    df['measure_ann'] = df.apply(calc_measure, axis=1)
+    df['original_ann'] = df.apply(calc_original, axis=1)
+
+    # Select and rename
+    keep_cols = ['meas_separated', 'reg', 'end_use', 'fuel', 'year',
+                    'efficient_mmbtu', 'efficient_measure_mmbtu',
+                    # 'efficient_measure_env_mmbtu',
+                    'original_ann', 'measure_ann']
+    if include_bldg_type:
+        keep_cols.insert(2, 'bldg_type')
+
+    # Ensure all expected columns exist
+    keep_cols = [col for col in keep_cols if col in df.columns]
+
+    df = df[keep_cols].rename(columns={'meas_separated': 'meas'})
+    return df
+
+
+def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
+    envelope_map = file_to_df(ENVELOPE_MAP_FILE)
+
+    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
+    if include_bldg_type:
+        grouping_cols.insert(3, 'bldg_type')
+        pivot_index.insert(2, 'bldg_type')
+    keep_cols = pivot_index + ['original_ann', 'measure_ann']
+
+    efficient_metrics = [
+        'Efficient Energy Use (MMBtu)',
+        'Efficient Energy Use, Measure (MMBtu)'
+    ]
+
+    efficient = df[df['metric'].isin(efficient_metrics)].copy()
+    grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
+    wide = grouped.pivot(index=pivot_index, columns='metric', values='value').reset_index()
+
+    metric_rename_map = {
+        'Efficient Energy Use (MMBtu)': 'efficient_mmbtu',
+        'Efficient Energy Use, Measure (MMBtu)': 'efficient_measure_mmbtu'
+    }
+    wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
+    wide = compute_no_package_energy(wide)[keep_cols]
+
+    long = wide.melt(
+        id_vars=pivot_index,
+        value_vars=['original_ann', 'measure_ann'],
+        var_name='tech_stage',
+        value_name='state_ann_kwh'
+    )
+    long['turnover'] = turnover
+
+    to_return = long
+    
+
+    # Optional baseline
+    if include_baseline:
+        base = df[df['metric'] == 'Baseline Energy Use (MMBtu)'].copy()
+        grouped_base = base.groupby(grouping_cols)['value'].sum().reset_index()
+        grouped_base['state_ann_kwh'] = grouped_base['value'] / 3412 * 1e6
+        grouped_base['tech_stage'] = 'original_ann'
+        grouped_base['turnover'] = 'baseline'
+
+        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
+        to_return = pd.concat([to_return, grouped_base], ignore_index=True)
+
+
+    to_return['sector'] = to_return.apply(add_sector, axis=1)
+    to_return['scout_run'] = SCOUT_RUN_DATE
+
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{turnover}.tsv")
+    to_return.to_csv(local_path, sep='\t', index = False)
+    return(to_return, local_path)
+
+
+def scout_to_df_noenv(filename):
+    new_columns = [
+            'meas', 'adoption_scn', 'metric',
+            'reg', 'bldg_type', 'end_use',
+            'fuel', 'year', 'value']
+    with open(f'{filename}', 'r') as fname:
+        json_df = json.load(fname)
+    meas = list(json_df.keys())[:-1]
+
+    all_df = pd.DataFrame()
+    for mea in meas:
+        json_data = json_df[mea]["Markets and Savings (by Category)"]
+
+        data_from_json = reshape_json(json_data)
+        
+        df_from_json = pd.DataFrame(
+                    data_from_json)
+        df_from_json['meas'] = mea
+        all_df = df_from_json if all_df.empty else pd.concat(
+            [all_df, df_from_json], ignore_index=True)
+        cols = ['meas'] + [col for col in all_df if col != 'meas']
+        all_df = all_df[cols]
+
+    all_df.columns = new_columns
+    all_df = all_df[all_df['metric'].isin(['Efficient Energy Use (MMBtu)',
+        'Efficient Energy Use, Measure (MMBtu)',
+        'Baseline Energy Use (MMBtu)'])]
+    print('Removing (R) Electric FS (Secondary Fossil Heating)')
+    all_df = all_df[all_df['meas'] != '(R) Electric FS (Secondary Fossil Heating)']
+    
+    # fix measures that don't have a fuel key
+    to_shift = all_df[pd.isna(all_df['value'])]
+    to_shift['value'] = to_shift['year']
+    to_shift['year'] = to_shift['fuel']
+    to_shift['fuel'] = 'Electric'
+
+    df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
+
+    return(df)
+
 
 def calc_annual(df, include_baseline, turnover, include_bldg_type):
+    envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
     grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
     pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
@@ -198,7 +338,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
     wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
 
     no_pkg = compute_no_package_energy(wide)[keep_cols]
-    with_pkg = compute_with_package_energy(wide, include_bldg_type)[keep_cols]
+    with_pkg = compute_with_package_energy(wide, include_bldg_type, envelope_map)[keep_cols]
 
     long = pd.concat([no_pkg, with_pkg], ignore_index=True).melt(
         id_vars=pivot_index,
@@ -244,7 +384,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
     to_return.to_csv(local_path, sep='\t', index = False)
     return(to_return, local_path)
 
-# convert the Scout json to a data frame
+
 def scout_to_df(filename):
     new_columns = [
             'meas', 'adoption_scn', 'metric',
@@ -289,10 +429,6 @@ def scout_to_df(filename):
 
 def add_sector(row):
     if pd.isna(row['meas']):
-        # Uncomment the following lines if you need to print debug info
-        # print(row['meas'])
-        # print(row)
-        # print(row.index)
         return None
     else:
         # Extract the first section before space
@@ -385,7 +521,6 @@ def sql_create_table(df, table_name, file_format):
     return sql_str
 
 
-
 def start_athena_query(client, query, output_location):
     """Starts an Athena query execution and returns the query execution ID."""
     response = client.start_query_execution(
@@ -394,6 +529,7 @@ def start_athena_query(client, query, output_location):
         ResultConfiguration={'OutputLocation': output_location}
     )
     return response['QueryExecutionId']
+
 
 def wait_for_query_completion(client, query_execution_id):
     """Waits for the Athena query to complete and returns its final status."""
@@ -411,9 +547,11 @@ def wait_for_query_completion(client, query_execution_id):
         
         time.sleep(2)
 
+
 def fetch_query_results(client, query_execution_id):
     """Fetches the query results from Athena."""
     return client.get_query_results(QueryExecutionId=query_execution_id)
+
 
 def execute_athena_query(client, query, is_create, wait=True):
     """Executes an Athena query and optionally waits for completion."""
@@ -430,6 +568,7 @@ def execute_athena_query(client, query, is_create, wait=True):
         print(f"SQL query succeeded and results are stored in {result_loc}")
         return result_loc, fetch_query_results(client, query_execution_id) if not is_create else None
 
+
 def execute_athena_query_to_df(athena_client, query, wait=True):
     """Executes an Athena query and returns the result as a Pandas DataFrame."""
     output_location = f"s3://{BUCKET_NAME}/diagnosis_csv/"
@@ -443,7 +582,8 @@ def execute_athena_query_to_df(athena_client, query, wait=True):
     df = pd.read_csv(results_output_location)
     return df
 
-def execute_athena_query_to_df2(s3_client, athena_client, query):
+
+def execute_athena_query_to_df2(s3_client, athena_client, query, table_name):
     """Executes an Athena query, downloads results, and saves as CSV and Parquet."""
     s3_bucket_target = "bss-workflow"
     s3_folder = "annual/"
@@ -454,17 +594,16 @@ def execute_athena_query_to_df2(s3_client, athena_client, query):
     wait_for_query_completion(athena_client, query_execution_id)
     
     output_file = f"{s3_output_prefix}{query_execution_id}.csv"
-    local_parquet_file = "annual_results.parquet"
-    s3_client.download_file(BUCKET_NAME, output_file, "query_results.csv")
+    local_parquet_file = f"{table_name}.parquet"
+    s3_client.download_file(BUCKET_NAME, output_file, f"{table_name}.csv")
     
-    df = pd.read_csv("query_results.csv")
-    df.to_csv("annual_results.csv", index=False)
+    df = pd.read_csv(f"{table_name}.csv")
+    df.to_csv(f"{table_name}.csv", index=False)
     df.to_parquet(local_parquet_file, engine="pyarrow")
     print(f"Results saved as {local_parquet_file}")
     
     s3_client.upload_file(local_parquet_file, s3_bucket_target, f"{s3_folder}{local_parquet_file}")
     print(f"{local_parquet_file} is uploaded to {s3_bucket_target}/{s3_folder}")
-    
 
 
 def get_csvs_for_R(athena_client):
@@ -484,6 +623,8 @@ def get_csvs_for_R(athena_client):
             sql_path = f"data_downloads/{sql_file}"
             csv_file = sql_file.replace(".sql", ".csv")
             query = read_sql_file(sql_path)
+            if "BUCKETNAMEID" in query:
+                query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
             if "TURNOVERID" in query:
                 query = query.replace("TURNOVERID", f"{my_turnover}")
             df = execute_athena_query_to_df(athena_client, query, wait=True)
@@ -494,13 +635,364 @@ def get_csvs_for_R(athena_client):
             print(f"{csv_file} is saved!")
 
 
+def sql_to_s3table(s3_client, athena_client, sql_file, sectorid, yearid, turnover):
+    sql_file = f"{sectorid}/{sql_file}"
+    query = read_sql_file(sql_file)
+    suff = f"{sectorid} {turnover} {yearid}"
+    END_USES = get_end_uses(sectorid)
+    if "BUCKETNAMEID" in query:
+        query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
+    if "VERSIONID" in query:
+        query = query.replace("VERSIONID", f"{versionid}")
+    if "MEASVERSION" in query:
+        query = query.replace("MEASVERSION", f"{measversion}")
+    if "TURNOVERID" in query:
+        query = query.replace("TURNOVERID", f"{turnover}")
+    if "SCOUTRUNDATE" in query:
+        query = query.replace("SCOUTRUNDATE", f"{SCOUT_RUN_DATE}")
+    if "YEARID" in query:
+        query = query.replace("YEARID", f"{yearid}")
+    if "STATEID" in query:
+        for uss in US_STATES:
+            query1 = query.replace("STATEID", f"{uss}")
+            print(f"START QUERYING FOR {sql_file} {suff} {uss}")
+            # print(query1)
+            execute_athena_query(athena_client, query1, False) 
+    elif "ENDUSEID" in query:
+        for eu in END_USES:
+            query1 = query.replace("ENDUSEID_name", f"{eu.split()[0]}")
+            query1 = query1.replace("ENDUSEID", f"{eu}")
+            print(f"START QUERYING FOR {sql_file} {suff} {eu}")
+            # print(query1)
+            execute_athena_query(athena_client, query1, False)
+    print(f"START QUERYING FOR {sql_file} {suff}")
+    execute_athena_query(athena_client, query, False)
+    print(f"FINISHED QUERYING {sql_file} {suff}")
+
+
+def s3_create_tables_from_csvdir(s3_client, athena_client):
+    for file_name in os.listdir(EUGROUP_DIR):
+        local_path = os.path.join(EUGROUP_DIR, file_name)
+        table_name = os.path.splitext(file_name)[0]
+        file_format = os.path.splitext(file_name)[-1][1:]
+        if os.path.isfile(local_path):
+            s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
+            upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
+
+            # Determine the delimiter based on the file extension
+            if file_name.endswith('.csv'):
+                delimiter = ','
+            elif file_name.endswith('.tsv'):
+                delimiter = '\t'
+            else:
+                raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
+            
+            df = pd.read_csv(local_path, delimiter=delimiter)
+
+            sql_query = sql_create_table(df, table_name, file_format)
+            _, _ = execute_athena_query(athena_client, sql_query, True)
+
+
+def s3_create_table_from_tsv(s3_client, athena_client, local_path):
+
+    dir_name = os.path.dirname(local_path)
+    file_name = os.path.basename(local_path)
+    table_name = os.path.splitext(file_name)[0]
+    file_format = os.path.splitext(file_name)[-1][1:]
+    print(local_path)
+    print(table_name)
+    print(file_name)
+
+    if os.path.isfile(local_path):
+        s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
+        upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
+
+        # Determine the delimiter based on the file extension
+
+        if file_name.endswith('.csv'):
+            delimiter = ','
+        elif file_name.endswith('.tsv'):
+            delimiter = '\t'
+        else:
+            raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
+
+        df = pd.read_csv(local_path, delimiter=delimiter)
+
+        sql_query = sql_create_table(df, table_name, file_format)
+        _, _ = execute_athena_query(athena_client, sql_query, True)
+
+
+def s3_insert_to_table_from_tsv(s3_client, athena_client, local_path, dest_table_name):
+    table_name = os.path.splitext(os.path.basename(local_path))[0]
+    s3_create_table_from_tsv(s3_client, athena_client, local_path)
+    sql_query = f"""
+        INSERT INTO {dest_table_name}
+        SELECT *
+        FROM {table_name};
+    """
+    _, _ = execute_athena_query(athena_client, sql_query, True)
+
+
+def df_to_s3table2(s3_client, athena_client, df, table_name):
+    file_format = "tsv"
+    file_name = f"{table_name}.tsv"
+    local_path = os.path.join(OUTPUT_DIR, file_name)
+    df.to_csv(f"{OUTPUT_DIR}/{file_name}", index=False, delimiter=file_format)
+    if os.path.isfile(local_path):
+        s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
+        upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
+
+        sql_query = sql_create_table(df, table_name, file_format)
+        _, _ = execute_athena_query(athena_client, sql_query, True)
+
+
+def run_r_script(r_file):
+    r_path = os.path.join('R', r_file)
+    with open(r_path, 'r') as file:
+        r_code = file.read()
+    try:
+        robjects.r(r_code)
+        print("R script executed successfully.")
+    except Exception as e:
+        print(f"Error executing R script: {e}")
+
+
+def list_all_objects(s3_client, bucket, prefix):
+    """
+    Lists all objects in an S3 bucket for a given prefix, handling pagination.
+    """
+    paginator = s3_client.get_paginator('list_objects_v2')
+    operation_parameters = {'Bucket': bucket, 'Prefix': prefix}
+    all_objects = []
+
+    for page in paginator.paginate(**operation_parameters):
+        all_objects.extend(page.get('Contents', []))
+    
+    return all_objects
+
+
+def gen_multipliers(s3_client, athena_client):
+    sectors = ['res']
+
+    tbl_res = [
+        # "tbl_ann_mult.sql",
+        # "res_ann_shares_cook.sql",
+        # "res_ann_shares_lighting.sql",
+        # "res_ann_shares_refrig.sql",
+        # "res_ann_shares_wh.sql",
+        # "res_ann_shares_hvac.sql",
+        # "res_ann_shares_deliveredheat.sql",
+        # "res_ann_shares_cw.sql",
+        # "res_ann_shares_dry.sql",
+        # "res_ann_shares_dw.sql",
+        # "res_ann_shares_fanspumps.sql",
+        # "res_ann_shares_misc.sql",
+        # "res_ann_shares_poolpump.sql",
+
+        "tbl_hr_mult.sql",
+        "res_hourly_shares_cooling.sql",
+        "res_hourly_shares_heating.sql",
+        "res_hourly_shares_refrig.sql",
+        "res_hourly_shares_lighting.sql",
+        "res_hourly_shares_cook.sql",
+        "res_hourly_shares_wh.sql",
+        "res_hourly_shares_fanspumps.sql",
+        "res_hourly_shares_dw.sql",
+        "res_hourly_shares_dry.sql",
+        "res_hourly_shares_cw.sql",
+        "res_hourly_shares_poolpump.sql",
+        "res_hourly_shares_misc.sql",
+        "res_hourly_shares_misc_flat.sql"
+    ]
+
+    tbl_com = [
+        # "tbl_ann_mult.sql",
+        # "com_ann_shares_cook.sql",
+        # "com_ann_shares_hvac.sql",
+        # "com_ann_shares_lighting.sql",
+        # "com_ann_shares_refrig.sql",
+        # "com_ann_shares_ventilation_ref.sql",
+        # "com_ann_shares_wh.sql",
+        # "com_ann_shares_misc.sql",
+        # "com_ann_shares_fossil_heat.sql",
+        
+        "tbl_hr_mult.sql",
+        "com_hourly_shares_cooling.sql",
+        "com_hourly_shares_heating.sql",
+        "com_hourly_shares_lighting.sql",
+        "com_hourly_shares_refrig.sql",
+        "com_hourly_shares_ventilation.sql",
+        "com_hourly_shares_ventilation_ref.sql",
+        "com_hourly_shares_wh.sql",
+        "com_hourly_shares_misc.sql",
+        "com_hourly_shares_cooking.sql"
+    ]
+    for sectorid in sectors:
+        if sectorid == 'res':
+            tbl_names = tbl_res
+        if sectorid == 'com':
+            tbl_names = tbl_com
+        
+        for tbl_name in tbl_names:
+            sql_to_s3table(s3_client, athena_client, tbl_name, sectorid, yearid=None, turnover=None)
+
+    ## UNUSED
+    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("addons", "county2tz_2.tsv"))
+    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ann_cook.tsv"))
+    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ts_cook.tsv"))
+    # s3_insert_to_table_from_tsv(s3_client, athena_client, os.path.join("addons", "ann_dis_mult_cook.csv"), "annual_disaggregation_multipliers_0719")
+
+
+def convert_long_to_wide(athena_client):
+    sql_dir = "data_conversion"
+    sql_files = [
+        "long_to_wide.sql"
+    ]
+    turnovers = ['breakthrough','ineff','mid','high','stated']
+    for sql_file in sql_files:
+        print(f"Querying for {sql_file}")
+        for my_turnover in turnovers:
+            query = read_sql_file(f"{sql_dir}/{sql_file}")
+            if "TURNOVERID" in query:
+                query = query.replace("TURNOVERID", f"{my_turnover}")
+            if "BUCKETNAMEID" in query:
+                query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
+            execute_athena_query(athena_client, query, False)
+
+    # baseline
+    sql_file = "long_to_wide_baseline.sql"
+    print(f"Querying for {sql_file}")
+    query = read_sql_file(f"{sql_dir}/{sql_file}")
+    if "BUCKETNAMEID" in query:
+        query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
+    execute_athena_query(athena_client, query, False)
+
+
+def convert_long_to_wide_scout(s3_client, athena_client):
+    sql_dir = "data_conversion"
+    sql_files = [
+        "long_to_wide_ann.sql",
+        "long_to_wide_ann_baseline.sql"
+    ]
+    for sql_file in sql_files:
+        print(f"Querying for {sql_file}")
+        query = read_sql_file(f"{sql_dir}/{sql_file}")
+        if "BUCKETNAMEID" in query:
+            query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
+        execute_athena_query(athena_client, query, False)
+
+    # # download, parqueting, and upload to bss-workflow
+    # tables = ["wide_scout_annual_state", "wide_scout_annual_state_baseline"]
+    # for tname in tables:
+    #     query2 = f"SELECT * FROM {tname};"
+    #     execute_athena_query_to_df2(s3_client, athena_client, query2, tname)
+
+
+def county_partition_multipliers(s3_client, athena_client):
+    sql_dir = "sql"
+    counties_com_query = f"""
+        UNLOAD (SELECT "in.county",shape_ts,"timestamp_hour",multiplier_hourly,
+        "in.state" FROM com_hourly_disaggregation_multipliers_20240923_amy 
+        WHERE "in.county" = 'COUNTYFIPS') TO 's3://bss-ief-bucket/multipliers_partitioned/com/in_county=COUNTYFIPS/' 
+        WITH (format = 'PARQUET');
+    """
+    counties_res_query = f"""
+        UNLOAD (SELECT "in.county",shape_ts,"timestamp_hour",multiplier_hourly,
+        "in.state" FROM res_hourly_disaggregation_multipliers_20240923_amy_flat
+        WHERE "in.county" = 'COUNTYFIPS') TO 's3://bss-ief-bucket/multipliers_partitioned/res/in_county=COUNTYFIPS/' 
+        WITH (format = 'PARQUET');
+    """
+    countyfips = [
+        # "counties_com_hourly_mults.csv", 
+        "counties_res_hourly_mults.csv"]
+
+    for fipsfile in countyfips:
+        if fipsfile == "counties_com_hourly_mults.csv":
+            query = counties_com_query
+        elif fipsfile == "counties_res_hourly_mults.csv":
+            query = counties_res_query
+        print(query)
+        fips_all = (pd.read_csv(f"{sql_dir}/{fipsfile}"))["in.county"].tolist()
+        for fips in fips_all:
+            if "COUNTYFIPS" in query:
+                query1 = query.replace("COUNTYFIPS", f"{fips}")
+            execute_athena_query(athena_client, query1, False)
+
+
+def gen_scoutdata(s3_client, athena_client):
+    scout_files = [
+        # "breakthrough.json",
+        # "accel.json",
+        # "state.json",
+        # "ref.json",
+        "aeo.json",
+        # "fossil.json"
+        ]
+
+    measure_map = file_to_df(MEAS_MAP_FILE)
+    envelope_map = file_to_df(ENVELOPE_MAP_FILE)
+    # s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
+
+    for scout_file in scout_files:
+        print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
+        SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
+        myturnover = scout_file.split('_')[0]
+
+        if scout_file in ["aeo.json", "fossil.json"]:
+            scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
+            scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
+        else:
+            scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
+            scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
+        
+        # check_missing_meas(measure_map, scout_df)
+        check_missing_meas(envelope_map, scout_df)
+        # s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
+        print(f"Finished adding scout data {scout_file}")
+
+
+def gen_countydata(s3_client, athena_client):
+    sectors = ['res','com']
+    years = ['2024','2025','2030','2035','2040','2045','2050']
+    turnovers = ['breakthrough','mid','high','ineff','stated']
+
+    # years = ['2018','2019','2020','2021','2022','2023']
+    # turnovers = ['ineffuncal']
+
+    for sectorid in sectors:
+        for yearid in years:
+            for myturnover in turnovers:
+                sql_to_s3table(s3_client, athena_client, "tbl_ann_county.sql", sectorid, yearid, myturnover)
+                sql_to_s3table(s3_client, athena_client, "annual_county.sql", sectorid, yearid, myturnover)
+                # sql_to_s3table(s3_client, athena_client, "tbl_hr_county.sql", sectorid, yearid, myturnover)
+                # sql_to_s3table(s3_client, athena_client, "hourly_county.sql", sectorid, yearid, myturnover)
+
+
+def combine_countydata(athena_client):
+    sql_dir = "data_conversion"
+    sql_files = [
+        "combine_annual_2024_2050.sql",
+        # "combine_hourly_2024_2050.sql"
+    ]
+    turnovers = ['breakthrough','ineff','mid','high','stated']
+    for sql_file in sql_files:
+        print(f"Querying for {sql_file}")
+        for my_turnover in turnovers:
+            query = read_sql_file(f"{sql_dir}/{sql_file}")
+            if "TURNOVERID" in query:
+                query = query.replace("TURNOVERID", f"{my_turnover}")
+            if "BUCKETNAMEID" in query:
+                query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
+            execute_athena_query(athena_client, query, False)
+
+
 def test_county(athena_client):
     sql_dir = "run_check"
     sql_files = [
         "test_county_annual_total.sql",
         "test_county_annual_enduse.sql",
-        "test_county_hourly_total.sql",
-        "test_county_hourly_enduse.sql"
+        # "test_county_hourly_total.sql",
+        # "test_county_hourly_enduse.sql"
     ]
 
     years = ['2024','2025','2030','2035','2040','2045','2050']
@@ -520,6 +1012,8 @@ def test_county(athena_client):
                 # print(f"Querying for {my_turnover} {my_year}")
 
                 query = read_sql_file(f"{sql_dir}/{sql_file}")
+                if "BUCKETNAMEID" in query:
+                    query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
                 if "TURNOVERID" in query:
                     query = query.replace("TURNOVERID", f"{my_turnover}")
                 if "YEARID" in query:
@@ -645,331 +1139,132 @@ def test_compare_measures(athena_client):
     sys.stdout = sys.__stdout__
     print(f"{txt_out} is saved!")
 
-
-def sql_to_s3table(s3_client, athena_client, sql_file, sectorid, yearid, turnover):
-    sql_file = f"{sectorid}/{sql_file}"
-    query = read_sql_file(sql_file)
-    suff = f"{sectorid} {turnover} {yearid}"
-    END_USES = get_end_uses(sectorid)
-
-    if "VERSIONID" in query:
-        query = query.replace("VERSIONID", f"{versionid}")
-    if "MEASVERSION" in query:
-        query = query.replace("MEASVERSION", f"{measversion}")
-    if "TURNOVERID" in query:
-        query = query.replace("TURNOVERID", f"{turnover}")
-    if "SCOUTRUNDATE" in query:
-        query = query.replace("SCOUTRUNDATE", f"{SCOUT_RUN_DATE}")
-    if "YEARID" in query:
-        query = query.replace("YEARID", f"{yearid}")
-    if "STATEID" in query:
-        for uss in US_STATES:
-            query1 = query.replace("STATEID", f"{uss}")
-            print(f"START QUERYING FOR {sql_file} {suff} {uss}")
-            # print(query1)
-            execute_athena_query(athena_client, query1, False) 
-    elif "ENDUSEID" in query:
-        for eu in END_USES:
-            query1 = query.replace("ENDUSEID_name", f"{eu.split()[0]}")
-            query1 = query1.replace("ENDUSEID", f"{eu}")
-            print(f"START QUERYING FOR {sql_file} {suff} {eu}")
-            # print(query1)
-            execute_athena_query(athena_client, query1, False)
-    print(f"START QUERYING FOR {sql_file} {suff}")
-    execute_athena_query(athena_client, query, False)
-    print(f"FINISHED QUERYING {sql_file} {suff}")
-
-
-def s3_create_tables_from_csvdir(s3_client, athena_client):
-    for file_name in os.listdir(EUGROUP_DIR):
-        local_path = os.path.join(EUGROUP_DIR, file_name)
-        table_name = os.path.splitext(file_name)[0]
-        file_format = os.path.splitext(file_name)[-1][1:]
-        if os.path.isfile(local_path):
-            s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
-            upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
-
-            # Determine the delimiter based on the file extension
-            if file_name.endswith('.csv'):
-                delimiter = ','
-            elif file_name.endswith('.tsv'):
-                delimiter = '\t'
-            else:
-                raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
-            
-            df = pd.read_csv(local_path, delimiter=delimiter)
-
-            sql_query = sql_create_table(df, table_name, file_format)
-            _, _ = execute_athena_query(athena_client, sql_query, True)
-
-
-def s3_create_table_from_tsv(s3_client, athena_client, local_path):
-
-    dir_name = os.path.dirname(local_path)
-    file_name = os.path.basename(local_path)
-    table_name = os.path.splitext(file_name)[0]
-    file_format = os.path.splitext(file_name)[-1][1:]
-    print(local_path)
-    print(table_name)
-    print(file_name)
-
-    if os.path.isfile(local_path):
-        s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
-        upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
-
-        # Determine the delimiter based on the file extension
-
-        if file_name.endswith('.csv'):
-            delimiter = ','
-        elif file_name.endswith('.tsv'):
-            delimiter = '\t'
-        else:
-            raise ValueError("Unsupported file format. Please provide a .csv or .tsv file.")
-
-        df = pd.read_csv(local_path, delimiter=delimiter)
-
-        sql_query = sql_create_table(df, table_name, file_format)
-        _, _ = execute_athena_query(athena_client, sql_query, True)
-
-
-def s3_insert_to_table_from_tsv(s3_client, athena_client, local_path, dest_table_name):
-    table_name = os.path.splitext(os.path.basename(local_path))[0]
-    s3_create_table_from_tsv(s3_client, athena_client, local_path)
-    sql_query = f"""
-        INSERT INTO {dest_table_name}
-        SELECT *
-        FROM {table_name};
-    """
-    _, _ = execute_athena_query(athena_client, sql_query, True)
-
-
-def df_to_s3table2(s3_client, athena_client, df, table_name):
-    file_format = "tsv"
-    file_name = f"{table_name}.tsv"
-    local_path = os.path.join(OUTPUT_DIR, file_name)
-    df.to_csv(f"{OUTPUT_DIR}/{file_name}", index=False, delimiter=file_format)
-    if os.path.isfile(local_path):
-        s3_path = f"{EXTERNAL_S3_DIR}/{table_name}/{file_name}"
-        upload_file_to_s3(s3_client, local_path, BUCKET_NAME, s3_path)
-
-        sql_query = sql_create_table(df, table_name, file_format)
-        _, _ = execute_athena_query(athena_client, sql_query, True)
-
-
-def run_r_script(r_file):
-    r_path = os.path.join('R', r_file)
-    with open(r_path, 'r') as file:
-        r_code = file.read()
-    try:
-        robjects.r(r_code)
-        print("R script executed successfully.")
-    except Exception as e:
-        print(f"Error executing R script: {e}")
-
-
-
-def list_all_objects(s3_client, bucket, prefix):
-    """
-    Lists all objects in an S3 bucket for a given prefix, handling pagination.
-    """
-    paginator = s3_client.get_paginator('list_objects_v2')
-    operation_parameters = {'Bucket': bucket, 'Prefix': prefix}
-    all_objects = []
-
-    for page in paginator.paginate(**operation_parameters):
-        all_objects.extend(page.get('Contents', []))
-    
-    return all_objects
-
-
-def gen_multipliers(s3_client, athena_client):
-    # s3_create_tables_from_csvdir(s3_client, athena_client)
-    sectors = ['res']
-
-    tbl_res = [
-        "tbl_ann_mult.sql",
-        "res_ann_shares_cook.sql",
-        "res_ann_shares_lighting.sql",
-        "res_ann_shares_refrig.sql",
-        "res_ann_shares_wh.sql",
-        "res_ann_shares_hvac.sql",
-        "res_ann_shares_deliveredheat.sql",
-        "res_ann_shares_cw.sql",
-        "res_ann_shares_dry.sql",
-        "res_ann_shares_dw.sql",
-        "res_ann_shares_fanspumps.sql",
-        "res_ann_shares_misc.sql",
-        "res_ann_shares_poolpump.sql",
-
-        "tbl_hr_mult.sql",
-        "res_hourly_shares_cooling.sql",
-        "res_hourly_shares_heating.sql",
-        "res_hourly_shares_refrig.sql",
-        "res_hourly_shares_lighting.sql",
-        "res_hourly_shares_cook.sql",
-        "res_hourly_shares_wh.sql",
-        "res_hourly_shares_fanspumps.sql",
-        "res_hourly_shares_dw.sql",
-        "res_hourly_shares_dry.sql",
-        "res_hourly_shares_cw.sql",
-        "res_hourly_shares_poolpump.sql",
-        "res_hourly_shares_misc.sql",
-        "res_hourly_shares_misc_flat.sql"
-    ]
-
-    tbl_com = [
-        "tbl_ann_mult.sql",
-        "com_ann_shares_cook.sql",
-        "com_ann_shares_hvac.sql",
-        "com_ann_shares_lighting.sql",
-        "com_ann_shares_refrig.sql",
-        "com_ann_shares_ventilation_ref.sql",
-        "com_ann_shares_wh.sql",
-        "com_ann_shares_misc.sql",
-        "com_ann_shares_fossil_heat.sql",
-        
-        "tbl_hr_mult.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
-        "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_cooking.sql"
-    ]
-    for sectorid in sectors:
-        if sectorid == 'res':
-            tbl_names = tbl_res
-        if sectorid == 'com':
-            tbl_names = tbl_com
-        
-        for tbl_name in tbl_names:
-            sql_to_s3table(s3_client, athena_client, tbl_name, sectorid, yearid=None, turnover=None)
-
-    ## UNUSED
-    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("addons", "county2tz_2.tsv"))
-    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ann_cook.tsv"))
-    # s3_create_table_from_tsv(s3_client, athena_client, os.path.join("eugroup", "res_ts_cook.tsv"))
-    # s3_insert_to_table_from_tsv(s3_client, athena_client, os.path.join("addons", "ann_dis_mult_cook.csv"), "annual_disaggregation_multipliers_0719")
-
-
-def combine_countydata(athena_client):
-    sql_dir = "data_conversion"
-    sql_files = [
-        "combine_annual_2024_2050.sql",
-        "combine_hourly_2024_2050.sql"
-    ]
-    turnovers = ['breakthrough','ineff','mid','high','stated']
-    for sql_file in sql_files:
-        print(f"Querying for {sql_file}")
-        for my_turnover in turnovers:
-            query = read_sql_file(f"{sql_dir}/{sql_file}")
-            if "TURNOVERID" in query:
-                query = query.replace("TURNOVERID", f"{my_turnover}")
-            execute_athena_query(athena_client, query, False)
-
-def convert_long_to_wide(athena_client):
-    sql_dir = "data_conversion"
-    sql_files = [
-        "long_to_wide.sql"
-    ]
-    turnovers = ['breakthrough','ineff','mid','high','stated']
-    for sql_file in sql_files:
-        print(f"Querying for {sql_file}")
-        for my_turnover in turnovers:
-            query = read_sql_file(f"{sql_dir}/{sql_file}")
-            if "TURNOVERID" in query:
-                query = query.replace("TURNOVERID", f"{my_turnover}")
-            execute_athena_query(athena_client, query, False)
-
-def convert_long_to_wide_scout(s3_client, athena_client):
-    sql_dir = "data_conversion"
-    sql_files = [
-        "long_to_wide_ann.sql"
-    ]
-    for sql_file in sql_files:
-        print(f"Querying for {sql_file}")
-        query = read_sql_file(f"{sql_dir}/{sql_file}")
-        execute_athena_query(athena_client, query, False)
-
-    # download, parqueting, and upload to bss-workflow
-    TABLE_NAME = "wide_scout_annual_state"
-    query2 = f"SELECT * FROM {TABLE_NAME};"
-    execute_athena_query_to_df2(s3_client, athena_client, query2)
-
-def bssbucket_insert_scout(athena_client):
+def bssiefbucket_insert(athena_client, s3_bucket):
     query = f"""
-    CREATE TABLE wide_scout_annual_state_TURNOVERID_YEARID
+    CREATE TABLE bss_ief_buildings_total_TURNOVERID_YEARID
     WITH (
-        external_location = 's3://bss-workflow/annual/scenario=TURNOVERID/year=YEARID/',
+        external_location = 's3://BUCKETNAMEID/TURNOVERID/year=YEARID/',
         format = 'PARQUET',
         write_compression = 'SNAPPY',
         partitioned_by = ARRAY['state']
     ) AS
-    SELECT *
-    FROM wide_scout_annual_state
-    WHERE scenario = 'TURNOVERID' AND year = YEARID;
+    SELECT 
+        timestamp_hour,
+        turnover,
+        "in.county" AS county,
+        buildings_kwh,
+        year,
+        "in.state" AS state
+    FROM buildings_total_TURNOVERID
+    WHERE year = YEARID;
     """
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    print(query)
+    turnovers = ['breakthrough','ineff','high','stated']
     years = [2024,2025,2030,2035,2040,2045,2050]
-    sectors = ['res','com']
     for myturnover in turnovers:
         for myyear in years:
             query1 = query
-            if "TURNOVERID" in query:
+
+            if "BUCKETNAMEID" in query1:
+                query1 = query1.replace("BUCKETNAMEID", f"{s3_bucket}")
+            if "TURNOVERID" in query1:
                 query1 = query1.replace("TURNOVERID", f"{myturnover}")
             if "YEARID" in query:
                 query1 = query1.replace("YEARID", f"{myyear}")
-                print(f"Querying for {query1}")
-                execute_athena_query(athena_client, query1, False) 
+            print(f"Querying for {query1}")
+            execute_athena_query(athena_client, query1, False) 
 
 
-def gen_scoutdata(s3_client, athena_client):
-    scout_files = [
-        "breakthrough_exog.json",
-        "ineff_exog.json",
-        "high_exog.json",
-        "mid_exog.json",
-        "stated_exog.json"
-        ]
+def bssiefbucket_parquetmerge(s3, s3_bucket):
 
-    measure_map = file_to_df(MEAS_MAP_FILE)
-    s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
-    for scout_file in scout_files:
-        print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
-        SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
-        myturnover = scout_file.split('_')[0]
+    turnovers = ['breakthrough','ineff','high','stated']
+    years = [2024,2025,2030,2035,2040,2045,2050]
 
-        scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
-        scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
+    for myturnover in turnovers:
+        for myyear in years:
 
-        check_missing_meas(measure_map, scout_df)
-        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
-        print(f"Finished adding scout data {scout_file}")
+            top_level_folder = f'{myturnover}/year={myyear}/'
 
-def gen_countydata(s3_client, athena_client):
-    sectors = ['com','res']
-    years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+            response = s3.list_objects_v2(Bucket=s3_bucket, Prefix=top_level_folder)
+            # files = response.get('Contents', [])
+            files = list_all_objects(s3, s3_bucket, top_level_folder)
 
-    # years = ['2018','2019','2020','2021','2022','2023']
-    # turnovers = ['ineffuncal']
+            if not files:
+                print("No files found in the folder.")
+                exit()
 
-    for sectorid in sectors:
-        for yearid in years:
-            for myturnover in turnovers:
-                sql_to_s3table(s3_client, athena_client, "tbl_ann_county.sql", sectorid, yearid, myturnover)
-                sql_to_s3table(s3_client, athena_client, "annual_county.sql", sectorid, yearid, myturnover)
-                sql_to_s3table(s3_client, athena_client, "tbl_hr_county.sql", sectorid, yearid, myturnover)
-                sql_to_s3table(s3_client, athena_client, "hourly_county.sql", sectorid, yearid, myturnover)
+            state_folders = set()
+            for file in files:
+                file_key = file['Key']
+                # Skip files directly in the top-level folder
+                relative_path = file_key[len(top_level_folder):]
+                if '/' in relative_path:
+                    state_folder = relative_path.split('/')[0]
+                    state_folders.add(state_folder)
+            print(f"{myturnover} {myyear}\n{state_folders}")
 
-def bssbucket_insert(athena_client):
+            for state in state_folders:
+                print(f"Processing folder: {state}")
+                state_folder_prefix = f"{top_level_folder}{state}/"
+                
+                # List all files in the state folder
+                state_files_response = s3.list_objects_v2(Bucket=s3_bucket, Prefix=state_folder_prefix)
+                state_files = state_files_response.get('Contents', [])
+
+                os.makedirs(f'temp_files/{state}', exist_ok=True)
+                local_files = []
+
+                for file in state_files:
+                    file_key = file['Key']
+                    if not file_key.endswith('/'):  # Skip subdirectories
+                        # local_file_path = f'temp_files/{state}/{os.path.basename(file_key)}'
+                        local_file_path = os.path.join("temp_files", state, os.path.basename(file_key))
+                        s3.download_file(s3_bucket, file_key, local_file_path)
+                        local_files.append(local_file_path)
+
+                df_list = []
+                for file_path in local_files:
+                    try:
+                        df = pd.read_parquet(file_path)
+                        # print(f"Loaded Parquet file: {file_path}")
+                    except Exception as parquet_err:
+                        try:
+                            # Fallback to reading as CSV
+                            df = pd.read_csv(file_path)
+                            # print(f"Loaded CSV file: {file_path}")
+                        except Exception as csv_err:
+                            print(f"Skipping file (not readable): {file_path}")
+                            continue
+                    df_list.append(df)
+
+                if df_list:
+                    combined_df = pd.concat(df_list, ignore_index=True)
+                    combined_file_path = f'{state}.parquet'
+                    combined_df.to_parquet(combined_file_path, engine='pyarrow', index=False)
+
+                    # Upload the combined file to S3
+                    s3.upload_file(combined_file_path, s3_bucket, f'{top_level_folder}US states/{combined_file_path}')
+                    print(f"Uploaded combined file for state: {state}")
+                
+                # # Step 6: Delete state folder and its contents from S3
+                # print(f"Deleting state folder: {state_folder_prefix}")
+                # for file in state_files:
+                #     s3.delete_object(Bucket=s3_bucket, Key=file['Key'])
+
+                for file in local_files:
+                    os.remove(file)
+                os.rmdir(f'temp_files/{state}')
+                if df_list:
+                    os.remove(combined_file_path)
+
+            print("All state folders processed.")
+
+
+def bssbucket_insert(athena_client, dest_bucket):
     query = f"""
-    CREATE TABLE county_hourly_TURNOVERID_amy_SECTORID_YEARID
+    CREATE TABLE bss_county_hourly_TURNOVERID_amy_SECTORID_YEARID
     WITH (
-        external_location = 's3://bss-workflow/county_hourly/TURNOVERID/sector=SECTORID/year=YEARID/',
+        external_location = f's3://{dest_bucket}/county_hourly/TURNOVERID/sector=SECTORID/year=YEARID/',
         format = 'PARQUET',
         write_compression = 'SNAPPY',
         partitioned_by = ARRAY['state']
@@ -978,7 +1273,7 @@ def bssbucket_insert(athena_client):
     FROM wide_county_hourly_TURNOVERID_amy
     WHERE sector = 'SECTORLONGID' AND year = YEARID;
     """
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    turnovers = ['breakthrough','ineff','mid','high','stated','baseline']
     years = [2024,2025,2030,2035,2040,2045,2050]
     sectors = ['res','com']
     for myturnover in turnovers:
@@ -986,7 +1281,7 @@ def bssbucket_insert(athena_client):
             for myyear in years:
                 mysectorlong = "Commercial" if mysector == 'com' else "Residential"
                 query1 = query
-                if "TURNOVERID" in query:
+                if "TURNOVERID" in query1:
                     query1 = query1.replace("TURNOVERID", f"{myturnover}")
                 if "SECTORID" in query:
                     query1 = query1.replace("SECTORID", f"{mysector}")
@@ -994,19 +1289,15 @@ def bssbucket_insert(athena_client):
                     query1 = query1.replace("YEARID", f"{myyear}")
                 if "SECTORLONGID" in query:
                     query1 = query1.replace("SECTORLONGID", f"{mysectorlong}")
-                    print(f"Querying for {query1}")
-                    execute_athena_query(athena_client, query1, False) 
+                print(f"Querying for {query1}")
+                execute_athena_query(athena_client, query1, False) 
 
 
 def bssbucket_parquetmerge(s3, s3_bucket):
 
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    turnovers = ['breakthrough','ineff','mid','high','stated','baseline']
     years = [2024,2025,2030,2035,2040,2045,2050]
     sectors = ['com','res']
-
-    # turnovers = ['ineff']
-    # years = [2024]
-    # sectors = ['com']
 
     for myturnover in turnovers:
         for mysector in sectors:
@@ -1093,11 +1384,12 @@ def main(base_dir):
 
     if opts.create_json is True:
         convert_csv_folder_to_json('csv_raw', 'json/input.json')
+
     if opts.gen_mults is True:
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
-
+        # s3_create_tables_from_csvdir(s3_client, athena_client)
         gen_multipliers(s3_client, athena_client)
 
     if opts.gen_scoutdata is True:
@@ -1127,35 +1419,42 @@ def main(base_dir):
         athena_client = session.client('athena')
 
         convert_long_to_wide_scout(s3_client, athena_client)
-        # bssbucket_insert_scout(athena_client)
 
     if opts.gen_countyall is True:
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
 
-        gen_scoutdata(s3_client, athena_client)
-        gen_countydata(s3_client, athena_client)
-        combine_countydata(athena_client)
-        convert_long_to_wide(athena_client)
-        test_county(athena_client)
+        # gen_scoutdata(s3_client, athena_client)
+        # gen_countydata(s3_client, athena_client)
+        # combine_countydata(athena_client)
+        # test_county(athena_client)
+        run_r_script('annual_graphs.R')
+        # get_csvs_for_R(athena_client)
+        # run_r_script('county and hourly graphs.R')
+        # convert_long_to_wide(athena_client)
 
     if opts.bssbucket_insert is True:
         session = boto3.Session()
         s3_client = session.client('s3')
+        s3_bucket = 'bss-workflow'
         athena_client = session.client('athena')
 
-        bssbucket_insert(athena_client)
+        bssbucket_insert(athena_client, s3_bucket)
     
     if opts.bssbucket_parquetmerge is True:
         from urllib.parse import urlparse
         session = boto3.Session()
         athena_client = session.client('athena')
         s3 = boto3.client('s3')
-        s3_bucket = 'bss-workflow'
+        # s3_bucket = 'bss-workflow'
+        s3_bucket = 'bss-ief-bucket'
 
-        bssbucket_insert(athena_client)
-        bssbucket_parquetmerge(s3, s3_bucket)
+        # bssbucket_insert(athena_client, s3_bucket)
+        # bssbucket_parquetmerge(s3, s3_bucket)
+        
+        # bssiefbucket_insert(athena_client, s3_bucket)
+        bssiefbucket_parquetmerge(s3, s3_bucket)
 
     if opts.run_test is True:
         session = boto3.Session()
@@ -1163,13 +1462,22 @@ def main(base_dir):
         athena_client = session.client('athena')
 
         test_county(athena_client)
-        test_multipliers(athena_client)
-        test_compare_measures(athena_client)
+        # test_multipliers(athena_client)
+        # test_compare_measures(athena_client)
         
-        run_r_script('annual_graphs.R')
+        # run_r_script('annual_graphs.R')
 
-        get_csvs_for_R(athena_client)
-        run_r_script('county and hourly graphs.R')
+        # get_csvs_for_R(athena_client)
+        # run_r_script('county and hourly graphs.R')
+
+        # athena --> AWS Glue ->  S3
+
+    if opts.county_partition_mults is True:
+        session = boto3.Session()
+        s3_client = session.client('s3')
+        athena_client = session.client('athena')
+
+        county_partition_multipliers(s3_client, athena_client)
 
         
 if __name__ == "__main__":
@@ -1197,6 +1505,8 @@ if __name__ == "__main__":
                         help=""""Populate into bss-workflow""")
     parser.add_argument("--run_test", action="store_true",
                         help=""""Run Diagnosis""")
+    parser.add_argument("--county_partition_mults", action="store_true",
+                        help=""""Partition multipliers by county""")
 
     opts = parser.parse_args()
     base_dir = getcwd()
