@@ -32,7 +32,8 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 # for nice labeling
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies")
+to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",
+      accel="Accelerated Innovation",fossil="High Fuel Demand",ref="BAU",aeo="AEO",state="State and Local Action")
 # sector
 s<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
