@@ -21,9 +21,6 @@ for (file in list.files("../scout_results")){
     wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)) %>% filter(turnover!="baseline"))
   }
 }
-wide<-wide %>%
-  mutate(sector=if_else(str_detect(meas,"\\(R\\)"),"res","com")) %>%
-  filter(!is.na(sector))
 
 
 # nice names for the Scout measures
