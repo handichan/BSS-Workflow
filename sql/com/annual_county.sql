@@ -61,8 +61,11 @@ SELECT
     scout_meas."year",
     scout_meas.end_use
 FROM scout_meas
-JOIN (SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use FROM com_annual_disaggregation_multipliers_VERSIONID
-AND end_use = 'ENDUSEID') as ann_disag
+JOIN (
+    SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use 
+    FROM com_annual_disaggregation_multipliers_VERSIONID
+    WHERE end_use = 'ENDUSEID'
+) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"
 AND scout_meas.end_use = ann_disag.end_use
