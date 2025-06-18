@@ -66,7 +66,8 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",stated="Stated Policies")
+to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",stated="Stated Policies",
+      accel="Accelerated Innovation",fossil="High Fuel Demand",ref="BAU",aeo="AEO",state="State and Local Action",brk="Breakthrough")
 # sector
 s_label<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
