@@ -1,0 +1,6 @@
+group_ann	original	description	in.service_water_heating_fuel	upgrade	shape_ts_wh	version
+com_wh_ann_1	fossil wh	fossil wh	NaturalGas	0	com_wh_ts_1	2024-07-19
+com_wh_ann_1	fossil wh	fossil wh	Propane	0	com_wh_ts_1	2024-07-19
+com_wh_ann_1	fossil wh	fossil wh	DistrictHeating	0	com_wh_ts_1	2024-07-19
+com_wh_ann_1	fossil wh	fossil wh	FuelOil	0	com_wh_ts_1	2024-07-19
+com_wh_ann_2	electric wh	electric wh	Electricity	0	com_wh_ts_1	2024-07-19

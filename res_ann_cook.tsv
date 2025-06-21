@@ -1,0 +1,8 @@
+group_ann	original	description	in.cooking_range	upgrade	shape_ts_cook	version
+res_cook_ann_1	fossil cooking	fossil cooking	Gas	0	res_cook_ts_1	9/14/24
+res_cook_ann_1	fossil cooking	fossil cooking	Propane	0	res_cook_ts_1	9/14/24
+res_cook_ann_2	fossil cooking	fossil cooking to induction	Gas	11	res_cook_ts_2	9/14/24
+res_cook_ann_2	fossil cooking	fossil cooking to induction	Propane	11	res_cook_ts_2	9/14/24
+res_cook_ann_2	fossil cooking	fossil cooking to induction	None	11	res_cook_ts_2	9/14/24
+res_cook_ann_3	electric cooking	electric cooking	Electric Resistance	0	res_cook_ts_2	9/14/24
+res_cook_ann_3	electric cooking	electric cooking	Electric Induction	0	res_cook_ts_2	9/14/24
