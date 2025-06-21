@@ -5,11 +5,10 @@ CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_VERSIONID(
     timestamp_hour timestamp,
     kwh double,
     multiplier_hourly double,
-    group_version string,
     sector string,
     `in.state` string,
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://handibucket/res_hourly_multipliers_VERSIONID/'
+LOCATION 's3://BUCKETNAMEID/res_hourly_multipliers_VERSIONID/'
 ;

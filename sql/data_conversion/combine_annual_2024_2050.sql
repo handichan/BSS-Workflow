@@ -1,6 +1,6 @@
 CREATE TABLE long_county_annual_TURNOVERID_amy
 WITH (
-    external_location = 's3://handibucket/20250129/long/county_annual_TURNOVERID_amy/',
+    external_location = 's3://BUCKETNAMEID/20250616/long/county_annual_TURNOVERID_amy/',
     format = 'Parquet',
     partitioned_by = ARRAY['sector', 'year', 'in.state']
 ) AS

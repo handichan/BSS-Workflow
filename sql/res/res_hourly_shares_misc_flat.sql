@@ -77,7 +77,6 @@ SELECT "in.county",
 	timestamp_hour,
 	misc as kwh,
 	misc / sum(misc) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
-    '2024-12-11' AS group_version,
     'res' AS sector,
     "in.state",
 	'Other' as end_use
