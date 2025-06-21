@@ -772,7 +772,7 @@ def list_all_objects(s3_client, bucket, prefix):
 
 
 def gen_multipliers(s3_client, athena_client):
-    sectors = ['res']
+    sectors = ['com']
 
     tbl_res = [
         # "tbl_ann_mult.sql",
@@ -789,9 +789,9 @@ def gen_multipliers(s3_client, athena_client):
         # "res_ann_shares_misc.sql",
         # "res_ann_shares_poolpump.sql",
 
-        "tbl_hr_mult.sql",
-        "res_hourly_shares_cooling.sql",
-        "res_hourly_shares_heating.sql",
+        # "tbl_hr_mult.sql",
+        # "res_hourly_shares_cooling.sql",
+        # "res_hourly_shares_heating.sql",
         "res_hourly_shares_refrig.sql",
         "res_hourly_shares_lighting.sql",
         "res_hourly_shares_cook.sql",
@@ -816,11 +816,11 @@ def gen_multipliers(s3_client, athena_client):
         # "com_ann_shares_misc.sql",
         # "com_ann_shares_fossil_heat.sql",
         
-        "tbl_hr_mult.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
+        # "tbl_hr_mult.sql",
+        # "com_hourly_shares_cooling.sql",
+        # "com_hourly_shares_heating.sql",
+        # "com_hourly_shares_lighting.sql",
+        # "com_hourly_shares_refrig.sql",
         "com_hourly_shares_ventilation.sql",
         "com_hourly_shares_ventilation_ref.sql",
         "com_hourly_shares_wh.sql",
