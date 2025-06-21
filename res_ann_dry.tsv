@@ -1,9 +1,0 @@
-group_ann	original	description	in.clothes_dryer	upgrade	shape_ts_dry	version
-res_dry_ann_1	fossil clothes dryer	fossil clothes dryer	Gas	0	res_dry_ts_1	7/19/24
-res_dry_ann_1	fossil clothes dryer	fossil clothes dryer	None	0	res_dry_ts_1	7/19/24
-res_dry_ann_1	fossil clothes dryer	fossil clothes dryer	Propane	0	res_dry_ts_1	7/19/24
-res_dry_ann_2	fossil clothes dryer	fossil clothes dryer to heat pump	Gas	11	res_dry_ts_3	7/19/24
-res_dry_ann_2	fossil clothes dryer	fossil clothes dryer to heat pump	Propane	11	res_dry_ts_3	7/19/24
-res_dry_ann_2	fossil clothes dryer	fossil clothes dryer to heat pump	None	11	res_dry_ts_3	7/19/24
-res_dry_ann_3	ER clothes dryer	ER clothes dryer	Electric	0	res_dry_ts_2	7/19/24
-res_dry_ann_4	ER clothes dryer	ER clothes dryer to heat pump	Electric	11	res_dry_ts_3	7/19/24

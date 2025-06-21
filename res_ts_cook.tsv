@@ -1,8 +1,0 @@
-shape_ts	description	in.cooking_range	upgrade	version
-res_cook_ts_1	fossil cooking	Gas	0	9/16/24
-res_cook_ts_1	fossil cooking	Propane	0	9/16/24
-res_cook_ts_2	electric cooking	Gas	11	9/16/24
-res_cook_ts_2	electric cooking	Propane	11	9/16/24
-res_cook_ts_2	electric cooking	None	11	9/16/24
-res_cook_ts_2	electric cooking	Electric Resistance	11	9/16/24
-res_cook_ts_2	electric cooking	Electric Induction	11	9/16/24
