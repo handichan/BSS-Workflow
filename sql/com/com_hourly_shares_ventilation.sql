@@ -40,6 +40,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_ventilation)
+	AND ts.state='STATEID'
 ),
 -- aggregate to hourly by county, and shape
 ts_agg AS(
