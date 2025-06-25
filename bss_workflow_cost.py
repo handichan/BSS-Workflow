@@ -94,6 +94,7 @@ def scout_to_df(filename, myturnover):
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
     save_to_folder = 'cost_table_for_viz'
+    os.makedirs(save_to_folder, exist_ok=True)
     df.to_csv(f'{save_to_folder}/{myturnover}.csv', index=False)
     print(f"Saved scout data to csv in {save_to_folder}/{myturnover}.csv") 
     return(df)
@@ -108,27 +109,29 @@ def file_to_df(file_path):
         raise ValueError("Please provide a .tsv or .csv file.")
     return df
 
-def gen_scoutdata_cost():
+def gen_scoutdata_cost(subfolder=""):
     scout_files = [
-        "ineff.json",
-        "breakthrough.json",
-        "high.json",
-        "mid.json",
-        "stated.json"
-        ]
-    # measure_map = file_to_df(MEAS_MAP_FILE)
+        "aeo.json",
+        "ref.json",
+        "state.json",
+        "fossil.json",
+        "brk.json",
+        "accel.json"
+    ]
+    
     for scout_file in scout_files:
-        print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
-        SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
+        print(f">>>>>>>>>>>>>>>> FILE NAME = {scout_file}")
+        # Join subfolder if provided
+        scout_path = os.path.join("scout_results", subfolder, scout_file) if subfolder else os.path.join("scout_results", scout_file)
         myturnover = scout_file.split('_')[0]
-        scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH, myturnover)
+        scout_df = scout_to_df(scout_path, myturnover)
         
-def main(base_dir):
-    if opts.gen_scoutdata_cost is True:
+def main(base_dir, subfolder):
+    if opts.gen_scoutdata_cost:
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
-        gen_scoutdata_cost()
+        gen_scoutdata_cost(subfolder)
 
 
 
@@ -137,12 +140,14 @@ if __name__ == "__main__":
     start_time = time.time()
     parser = ArgumentParser()
     parser.add_argument("--gen_scoutdata_cost", action="store_true",
-                        help=""""Generate Scout Data for Cost""")
+                        help="Generate Scout Data for Cost")
+    parser.add_argument("--folder", type=str, default="",
+                        help="Subfolder under scout_results (e.g., 061425)")
 
 
     opts = parser.parse_args()
     base_dir = getcwd()
-    main(base_dir)
+    main(base_dir, opts.folder)
     hours, rem = divmod(time.time() - start_time, 3600)
     minutes, seconds = divmod(rem, 60)
     print("--- Overall Runtime: %s (HH:MM:SS.mm) ---" %
