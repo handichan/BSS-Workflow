@@ -1,7 +1,7 @@
 
 
 
-setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
+setwd("R")
 
 library(tidyverse)
 library(scales)
@@ -13,7 +13,7 @@ theme_set(theme_bw())
 
 # the data frame names are analogous to the names of the SQL queries that created them
 
-input_dir <- "generated_csvs" #directory where the csvs are stored
+input_dir <- "../generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 

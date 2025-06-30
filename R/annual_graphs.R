@@ -32,18 +32,26 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 # for nice labeling
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",
-      accel="Accelerated Innovation",fossil="High Fuel Demand",ref="BAU",aeo="AEO",state="State and Local Action",brk="Breakthrough")
+# this is the order they'll be shown in facet plots, etc
+to<-c(baseline="AEO 2023",aeo="AEO 2025",ref="Stated Policies",stated_policies="Stated Policies",
+      state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
+      fossil="High Fuel Demand",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
 # sector
 s<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
-eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",`Cooling (Equip.)`="Cooling",`Heating (Equip.)`="Heating",Lighting="Lighting",Other="Other",Refrigeration="Refrigeration",Ventilation="Ventilation",`Water Heating`="Water Heating")
+eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",`Cooling (Equip.)`="Cooling",`Heating (Equip.)`="Heating",
+      Lighting="Lighting",Other="Other",Refrigeration="Refrigeration",Ventilation="Ventilation",`Water Heating`="Water Heating")
 
 #fill colors
-colors<-c("#e41a1c","#fbb4ae","#377eb8","#b3cde3","#4daf4a",
-          "#ccebc5","#984ea3","#decbe4","#ff7f00","#fed9a6",
-          "#ffee33","#ffffcc","#a65628","#e5d8bd","#f781bf",
-          "#fddaec","#999999","#f2f2f2",
+colors<-c("#e41a1c","#fbb4ae",
+"#377eb8","#b3cde3",
+"#4daf4a","#ccebc5",
+"#984ea3","#decbe4",
+"#ff7f00","#fed9a6",
+          "#ffee33","#ffffcc",
+          "#a65628","#e5d8bd",
+          "#f781bf","#fddaec",
+          "#999999","#f2f2f2",
           "#5b92e5","#d4a017", "#8fbc8f","#ff69b4")
 #width changeable based on number of scenarios
 width<-(1+length(unique(wide$turnover)))*1.8
@@ -52,6 +60,9 @@ width<-(1+length(unique(wide$turnover)))*1.8
 # states to show as examples for heating and cooling
 states<-c("WA","CA","MA","FL")
 state_height<-length(states)*1.4
+
+# order the scenarios for plotting
+wide<-wide %>% mutate(turnover=factor(turnover,levels=to,ordered=T))
 
 # annual, national --------------------------------------------------------
 
