@@ -24,7 +24,7 @@ SELECT
     Scout_end_use,
     'original_ann' AS tech_stage,
     original_ts AS shape_ts
-FROM measure_map_MEASVERSION
+FROM measure_map
 
 UNION ALL
 
@@ -33,7 +33,7 @@ SELECT
     Scout_end_use,
     'measure_ann' AS tech_stage,
     measure_ts AS shape_ts
-FROM measure_map_MEASVERSION
+FROM measure_map
 ),
 
 to_disagg AS (
@@ -93,7 +93,7 @@ hourly_ungrouped AS (
     "in.weather_file_city", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM res_hourly_disaggregation_multipliers_VERSIONID
     WHERE multiplier_hourly >= 0
-    AND end_use = 'ENDUSEID' AS h
+    AND end_use = 'ENDUSEID') AS h
     ON gd."in.weather_file_city" = h."in.weather_file_city"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts

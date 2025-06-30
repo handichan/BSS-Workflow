@@ -40,7 +40,9 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_ventilation)
+	AND ts.state='STATEID'
 ),
+
 -- aggregate to hourly by county, and shape
 ts_agg AS(
 	SELECT "in.county",
@@ -53,8 +55,8 @@ ts_agg AS(
 	GROUP BY timestamp_hour,
 	"in.state",
         "in.county",
-		shape_ts,
-		"version"
+		"version",
+		shape_ts
 )
 -- normalize the shapes
 SELECT "in.county",

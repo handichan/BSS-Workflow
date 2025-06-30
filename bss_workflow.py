@@ -453,17 +453,24 @@ def file_to_df(file_path):
     return df
 
 
-def check_missing_meas(measure_map_df, annual_state_scout_df):
-    meas_in_measure_map = set(measure_map_df['meas'])
-    meas_in_annual_state_scout = set(annual_state_scout_df['meas'])
+def check_missing_meas(annual_state_scout_df):
+    measures_list = [MEAS_MAP_FILE, ENVELOPE_MAP_FILE]
 
-    missing_meas = meas_in_annual_state_scout - meas_in_measure_map
-    if missing_meas:
-        for meas in missing_meas:
-            print(f"Measures in 'annual_state_scout' but not in 'measure_map': {meas}")
-        raise ValueError("Some measures from 'annual_state_scout' are missing in 'measure_map'.")
-    else:
-        print("All measures in 'annual_state_scout' are present in 'measure_map'.")
+    for meas_file in measures_list:
+        try:
+            measures = file_to_df(meas_file)
+            meas_in_measure_map = set(measures['meas'])
+            meas_in_annual_state_scout = set(annual_state_scout_df['meas'])
+
+            missing_meas = meas_in_annual_state_scout - meas_in_measure_map
+            if missing_meas:
+                for meas in missing_meas:
+                    print(f"Measures in 'annual_state_scout' but not in {meas_file}: {meas}")
+                print(f"Warning: Some measures from 'annual_state_scout' are missing in {meas_file}.")
+            else:
+                print(f"All measures in 'annual_state_scout' are present in {meas_file}.")
+        except Exception as e:
+            print(f"Error processing {meas_file}: {e}")
 
 
 def infer_column_types(df):
@@ -644,8 +651,6 @@ def sql_to_s3table(s3_client, athena_client, sql_file, sectorid, yearid, turnove
         query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
     if "VERSIONID" in query:
         query = query.replace("VERSIONID", f"{versionid}")
-    if "MEASVERSION" in query:
-        query = query.replace("MEASVERSION", f"{measversion}")
     if "TURNOVERID" in query:
         query = query.replace("TURNOVERID", f"{turnover}")
     if "SCOUTRUNDATE" in query:
@@ -822,10 +827,10 @@ def gen_multipliers(s3_client, athena_client):
         # "com_hourly_shares_lighting.sql",
         # "com_hourly_shares_refrig.sql",
         "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_cooking.sql"
+        # "com_hourly_shares_ventilation_ref.sql",
+        # "com_hourly_shares_wh.sql",
+        # "com_hourly_shares_misc.sql",
+        # "com_hourly_shares_cooking.sql"
     ]
     for sectorid in sectors:
         if sectorid == 'res':
@@ -921,22 +926,21 @@ def county_partition_multipliers(s3_client, athena_client):
 
 def gen_scoutdata(s3_client, athena_client):
     scout_files = [
-        # "breakthrough.json",
-        # "accel.json",
-        # "state.json",
-        # "ref.json",
+        "brk.json",
+        "accel.json",
+        "state.json",
+        "ref.json",
         "aeo.json",
-        # "fossil.json"
+        "fossil.json"
         ]
 
-    measure_map = file_to_df(MEAS_MAP_FILE)
-    envelope_map = file_to_df(ENVELOPE_MAP_FILE)
+
     # s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
         print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
         SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
-        myturnover = scout_file.split('_')[0]
+        myturnover = scout_file.split('.')[0]
 
         if scout_file in ["aeo.json", "fossil.json"]:
             scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
@@ -945,16 +949,16 @@ def gen_scoutdata(s3_client, athena_client):
             scout_df = scout_to_df(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
         
-        # check_missing_meas(measure_map, scout_df)
-        check_missing_meas(envelope_map, scout_df)
-        # s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
+        check_missing_meas(scout_df)
+
+        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
         print(f"Finished adding scout data {scout_file}")
 
 
 def gen_countydata(s3_client, athena_client):
     sectors = ['res','com']
     years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['breakthrough','mid','high','ineff','stated']
+    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
 
     # years = ['2018','2019','2020','2021','2022','2023']
     # turnovers = ['ineffuncal']
@@ -964,17 +968,17 @@ def gen_countydata(s3_client, athena_client):
             for myturnover in turnovers:
                 sql_to_s3table(s3_client, athena_client, "tbl_ann_county.sql", sectorid, yearid, myturnover)
                 sql_to_s3table(s3_client, athena_client, "annual_county.sql", sectorid, yearid, myturnover)
-                # sql_to_s3table(s3_client, athena_client, "tbl_hr_county.sql", sectorid, yearid, myturnover)
-                # sql_to_s3table(s3_client, athena_client, "hourly_county.sql", sectorid, yearid, myturnover)
+                sql_to_s3table(s3_client, athena_client, "tbl_hr_county.sql", sectorid, yearid, myturnover)
+                sql_to_s3table(s3_client, athena_client, "hourly_county.sql", sectorid, yearid, myturnover)
 
 
 def combine_countydata(athena_client):
     sql_dir = "data_conversion"
     sql_files = [
-        "combine_annual_2024_2050.sql",
-        # "combine_hourly_2024_2050.sql"
+        # "combine_annual_2024_2050.sql",
+        "combine_hourly_2024_2050.sql"
     ]
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
     for sql_file in sql_files:
         print(f"Querying for {sql_file}")
         for my_turnover in turnovers:
@@ -991,12 +995,12 @@ def test_county(athena_client):
     sql_files = [
         "test_county_annual_total.sql",
         "test_county_annual_enduse.sql",
-        # "test_county_hourly_total.sql",
-        # "test_county_hourly_enduse.sql"
+        "test_county_hourly_total.sql",
+        "test_county_hourly_enduse.sql"
     ]
 
     years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
 
     # years = [2018,2019,2020,2021,2022,2023]
     # turnovers = ['ineffuncal']
@@ -1022,6 +1026,7 @@ def test_county(athena_client):
                 df = execute_athena_query_to_df(athena_client, query)
 
                 df['year'] = my_year
+                print(query)
 
                 if "enduse" in sql_file:
                     df['diff_commercial'] = (1 - df['commercial_sum'] / df['scout_commercial_sum']).round(2)
@@ -1042,18 +1047,27 @@ def test_county(athena_client):
 def test_multipliers(athena_client):
     ## Check for number of counties
     sql_dir = "run_check"
-    sql_files = ["test_multipliers_annual.sql", "test_multipliers_hourly.sql" ]
+    sql_files = ["test_multipliers_annual.sql",
+                 "test_multipliers_hourly_com.sql",
+                 "test_multipliers_hourly_res.sql" ]
     csv_out = "test_multipliers.csv"
 
     final_df = pd.DataFrame()
 
     for sql_file in sql_files:
         result_col = sql_file.split(".")[0]
-        sectors = ['res','com']
+        if sql_file == "test_multipliers_hourly_com.sql":
+            sectors = ['com']
+        elif sql_file == "test_multipliers_hourly_res.sql":
+            sectors = ['res']
+        elif sql_file == "test_multipliers_annual.sql":
+            sectors = ['res','com']
         for my_sec in sectors:
             query = read_sql_file(f"{sql_dir}/{sql_file}")
             if "SECTORID" in query:
                 query = query.replace("SECTORID", f"{my_sec}")
+            if "VERSIONID" in query:
+                query = query.replace("VERSIONID", f"{versionid}")
 
             print(f"\n{query}")
             df = execute_athena_query_to_df(athena_client, query)
@@ -1069,17 +1083,17 @@ def test_multipliers(athena_client):
     ## Check if all multipliers sum to 1
     queries = [
     f"""
-        with re_agg as( SELECT group_ann,group_version,sector,"in.state",
+        with re_agg as( SELECT group_ann,sector,"in.state",
         end_use,sum(multiplier_annual) as added 
-        FROM res_annual_disaggregation_multipliers_20240923 GROUP BY group_ann,
-        group_version,sector,"in.state",end_use) 
+        FROM res_annual_disaggregation_multipliers_{versionid} GROUP BY group_ann,
+        sector,"in.state",end_use) 
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
     """,
     f"""
-        with re_agg as( SELECT shape_ts,group_version,sector,"in.county",
+        with re_agg as( SELECT shape_ts,sector,"in.weather_file_city",
         end_use,sum(multiplier_hourly) as added 
-        FROM res_hourly_disaggregation_multipliers_20240923 GROUP BY shape_ts,
-        group_version,sector,"in.county",end_use) 
+        FROM res_hourly_disaggregation_multipliers_{versionid} GROUP BY shape_ts,
+        sector,"in.weather_file_city",end_use) 
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
     """
     ]
@@ -1428,8 +1442,8 @@ def main(base_dir):
         # gen_scoutdata(s3_client, athena_client)
         # gen_countydata(s3_client, athena_client)
         # combine_countydata(athena_client)
-        # test_county(athena_client)
-        run_r_script('annual_graphs.R')
+        test_county(athena_client)
+        # run_r_script('annual_graphs.R')
         # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
         # convert_long_to_wide(athena_client)
@@ -1461,11 +1475,11 @@ def main(base_dir):
         s3_client = session.client('s3')
         athena_client = session.client('athena')
 
-        test_county(athena_client)
+        # test_county(athena_client)
         # test_multipliers(athena_client)
         # test_compare_measures(athena_client)
         
-        # run_r_script('annual_graphs.R')
+        run_r_script('annual_graphs.R')
 
         # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')

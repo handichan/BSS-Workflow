@@ -3,17 +3,9 @@
 
 setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
 
-#install the packages if they're not already installed
-packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
-install.packages(setdiff(packages, rownames(installed.packages())))
-
-#load required packages
 library(tidyverse)
 library(scales)
 library(cowplot)
-library(maps)
-library(mapdata)
-library(colorspace)
 theme_set(theme_bw())
 
 
@@ -55,6 +47,9 @@ state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage_fossil.csv")) %>% muta
 
 # map data ----------------------------------------------------------------
 
+library(maps)
+library(mapdata)
+library(colorspace)
 
 #shape files for counties 
 county_map<-map_data("county") %>% filter(region!="hawaii")
@@ -98,7 +93,9 @@ round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 
 
 #sample sizes and county names
-ns<-read_csv("../map_meas/resstock_ns.csv")
+ns<-arrow::read_parquet("ResStock2024_2baseline_amy.parquet",col_select = c("bldg_id","in.county","in.county_name","in.state")) %>% group_by(in.county,in.county_name,in.state) %>% summarize(n=n()) %>%
+  mutate(county_name=paste0(in.state,", ", in.county_name)) %>% ungroup() %>%
+  select(in.county,n,county_name)
 
 
 #width for annual graphs changeable based on number of scenarios

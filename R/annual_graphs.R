@@ -1,24 +1,19 @@
 # initialize ---------------------------------------------------------------------
 setwd("R")
 
-#install the packages if they're not already installed
-packages <- c("tidyverse", "scales")
-install.packages(setdiff(packages, rownames(installed.packages())))
-
-#load required packages
 library(tidyverse)
 library(scales)
 theme_set(theme_bw())
 
 # Scout results - output of calc_annual 
 wide<-data.frame()
-for (file in list.files("../scout_results")){
+for (file in list.files("../agg_results")){
   if (nrow(wide)==0) {
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)))
+    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)))
   } else if(nrow(wide %>% filter(turnover=="baseline"))==0){
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)))
+    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)))
   }else{
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)) %>% filter(turnover!="baseline"))
+    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)) %>% filter(turnover!="baseline"))
   }
 }
 wide<-wide %>%
@@ -35,7 +30,7 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 # for nice labeling
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies")
+to<-c(baseline="ref",brk="brk",accel="accel",aeo="aeo",fossil="fossil",state="state")
 # sector
 s<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses

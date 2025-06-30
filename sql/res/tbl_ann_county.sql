@@ -1,6 +1,7 @@
 -- to hold results from Scout runs that have been disaggregated to annual, county
 CREATE EXTERNAL TABLE county_annual_res_YEARID_TURNOVERID (
     `in.county` string,
+    `in.weather_file_city` string,
     fuel string,
     meas string,
     tech_stage string,

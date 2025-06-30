@@ -1,6 +1,6 @@
 -- to hold hourly disaggregation multipliers calculated from BuildStock
 CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_VERSIONID(
-    `in.county` string,
+    `in.weather_file_city` string,
     shape_ts string,
     timestamp_hour timestamp,
     kwh double,

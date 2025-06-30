@@ -13,7 +13,7 @@ measure_map_ann_long AS
     Scout_end_use,
     'original_ann' AS tech_stage,
     original_ann AS group_ann
-FROM measure_map_MEASVERSION
+FROM measure_map
 
 UNION ALL
 
@@ -22,7 +22,7 @@ SELECT
     Scout_end_use,
     'measure_ann' AS tech_stage,
     measure_ann AS group_ann
-FROM measure_map_MEASVERSION),
+FROM measure_map),
 
 scout_meas AS
 (SELECT 
