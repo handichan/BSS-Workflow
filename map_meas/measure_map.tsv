@@ -312,7 +312,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Min. Efficiency ASHP FS, (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_63	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, minimum efficiency	none	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS, (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_63	res_heating_ts_2	res_heating_ts_3	res	fossil	ASHP, minimum efficiency	fossil	ASHP, minimum efficiency
 (R) Min. Efficiency HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, min. efficiency HP	Water heater, fossil	Water heater, min. efficiency HP
-(R) Min. Efficiency HPWH TS	Water Heating	res_wh_ann_3	res_wh_ann_4	res_wh_ts_2	res_wh_ts_3	res	Resistance water heater	Water heater, min. efficiency HP	Resistance water heater	Water heater, min. efficiency HP
+(R) Min. Efficiency HPWH TS	Water Heating	res_wh_ann_3	res_wh_ann_4	res_wh_ts_2	res_wh_ts_3	res	Water heater, resistance	Water heater, min. efficiency HP	Water heater, resistance	Water heater, min. efficiency HP
 (R) Ref. Case ASHP	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_cooling_ts_2	res_cooling_ts_2	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
 (R) Ref. Case ASHP	Heating (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_heating_ts_3	res_heating_ts_3	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
 (R) Ref. Case Bio or No Heat & AC	Cooling (Equip.)	res_hvac_ann_85	res_hvac_ann_85	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
