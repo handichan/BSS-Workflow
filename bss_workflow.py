@@ -1095,12 +1095,31 @@ def test_multipliers(athena_client):
         FROM res_hourly_disaggregation_multipliers_{versionid} GROUP BY shape_ts,
         sector,"in.weather_file_city",end_use) 
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
+    """,
+    f"""
+        with re_agg as( SELECT group_ann,sector,"in.state",
+        end_use,sum(multiplier_annual) as added 
+        FROM com_annual_disaggregation_multipliers_{versionid} GROUP BY group_ann,
+        sector,"in.state",end_use) 
+        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
+    """,
+    f"""
+        with re_agg as( SELECT shape_ts,sector,"in.county",
+        end_use,sum(multiplier_hourly) as added 
+        FROM com_hourly_disaggregation_multipliers_{versionid} GROUP BY shape_ts,
+        sector,"in.county",end_use) 
+        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
     """
     ]
     if (execute_athena_query_to_df(athena_client, queries[0])).empty:
-        print("Annual mutipliers are all sum to 1.\n")
+        print("Annual res mutipliers all sum to 1.\n")
     if (execute_athena_query_to_df(athena_client, queries[1])).empty:
-        print("Hourly mutipliers are all sum to 1.\n")
+        print("Hourly res mutipliers all sum to 1.\n")
+    if (execute_athena_query_to_df(athena_client, queries[2])).empty:
+        print("Annual com mutipliers all sum to 1.\n")
+    if (execute_athena_query_to_df(athena_client, queries[3])).empty:
+        print("Hourly com mutipliers all sum to 1.\n")
+
 
 
 def test_compare_measures(athena_client):
