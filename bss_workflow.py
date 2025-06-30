@@ -822,6 +822,7 @@ def gen_multipliers(s3_client, athena_client):
         # "com_ann_shares_fossil_heat.sql",
         
         # "tbl_hr_mult.sql",
+        "tbl_hr_mult_hvac_temp.sql",
         # "com_hourly_shares_cooling.sql",
         # "com_hourly_shares_heating.sql",
         # "com_hourly_shares_lighting.sql",
@@ -830,7 +831,8 @@ def gen_multipliers(s3_client, athena_client):
         # "com_hourly_shares_ventilation_ref.sql",
         # "com_hourly_shares_wh.sql",
         # "com_hourly_shares_misc.sql",
-        # "com_hourly_shares_cooking.sql"
+        # "com_hourly_shares_cooking.sql",
+        "com_hourly_hvac_norm.sql"
     ]
     for sectorid in sectors:
         if sectorid == 'res':
