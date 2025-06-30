@@ -1,6 +1,6 @@
 CREATE TABLE wide_scout_annual_state
 WITH (
-    external_location = 's3://handibucket/20250129/wide/scout_annual_state/',
+    external_location = 's3://BUCKETNAMEID/20250411/wide/scout_annual_state/',
     format = 'Parquet'
     -- partitioned_by = ARRAY['scenario', 'year', 'state']
 ) AS
@@ -13,19 +13,19 @@ WITH (
         SELECT "year", reg, turnover, fuel, sum(state_ann_kwh) as state_ann_kwh
         FROM scout_annual_state_mid
         WHERE turnover != 'baseline'
-        GROUP BY "year", reg, turnover, fuel    
+        GROUP BY "year", reg, turnover, fuel
 
         UNION ALL
         SELECT "year", reg, turnover, fuel, sum(state_ann_kwh) as state_ann_kwh
         FROM scout_annual_state_high
         WHERE turnover != 'baseline'
-        GROUP BY "year", reg, turnover, fuel    
+        GROUP BY "year", reg, turnover, fuel
         
         UNION ALL
         SELECT "year", reg, turnover, fuel, sum(state_ann_kwh) as state_ann_kwh
         FROM scout_annual_state_breakthrough
         WHERE turnover != 'baseline'
-        GROUP BY "year", reg, turnover, fuel    
+        GROUP BY "year", reg, turnover, fuel
         
         UNION ALL
         SELECT "year", reg, turnover, fuel, sum(state_ann_kwh) as state_ann_kwh

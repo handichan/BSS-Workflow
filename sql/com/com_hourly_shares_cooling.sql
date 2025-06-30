@@ -21,6 +21,7 @@ WITH meta_shapes AS (
         AND meta.applicability = chars.applicability
 		AND cast(meta.upgrade as varchar) = chars.upgrade
         ),
+
 -- get the timeseries data for the building ids
 -- mostly this step is to make aliases to make the next step nicer
 -- calculate simplified end uses

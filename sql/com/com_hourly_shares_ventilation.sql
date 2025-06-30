@@ -42,6 +42,7 @@ ts_not_agg AS (
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_ventilation)
 	AND ts.state='STATEID'
 ),
+
 -- aggregate to hourly by county, and shape
 ts_agg AS(
 	SELECT "in.county",
@@ -54,8 +55,8 @@ ts_agg AS(
 	GROUP BY timestamp_hour,
 	"in.state",
         "in.county",
-		shape_ts,
-		"version"
+		"version",
+		shape_ts
 )
 -- normalize the shapes
 SELECT "in.county",

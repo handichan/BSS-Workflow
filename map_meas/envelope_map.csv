@@ -1,0 +1,67 @@
+﻿meas,meas_separated,component
+(R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.,(R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.,equipment + env
+(R) ES HP Pt. FS (NG Frn.) & Env.,(R) ES HP Pt. FS (NG Frn.) & Env.,equipment + env
+(R) ES HP FS (Oth. Fs. Frn.) & Env.,(R) ES HP FS (Oth. Fs. Frn.) & Env.,equipment + env
+(R) ES HP FS (NG Frn.) & Env.,(R) ES HP FS (NG Frn.) & Env.,equipment + env
+(R) ES GSHP (Oth. Fs. Frn.) & Env.,(R) ES GSHP (Oth. Fs. Frn.) & Env.,equipment + env
+(R) ES GSHP (NG Frn.) & Env.,(R) ES GSHP (NG Frn.) & Env.,equipment + env
+(R) ES HP TS (Resist.) & Env.,(R) ES HP TS (Resist.) & Env.,equipment + env
+"(C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.","(C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.",equipment + env
+"(C) ES HP Pt. FS (RTU, NG Ht.) & Env.","(C) ES HP Pt. FS (RTU, NG Ht.) & Env.",equipment + env
+"(C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.","(C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.",equipment + env
+"(C) ES HP FS (RTU, NG Ht.) & Env.","(C) ES HP FS (RTU, NG Ht.) & Env.",equipment + env
+(R) Bst. HP FS (Oth. Fs. Frn.) & Env.+,(R) Bst. HP FS (Oth. Fs. Frn.) & Env.+,equipment + env
+(R) Bst. HP FS (NG Frn.) & Env.+,(R) Bst. HP FS (NG Frn.) & Env.+,equipment + env
+(R) Bst. HP FS (NG Boiler) & Env.+,(R) Bst. HP FS (NG Boiler) & Env.+,equipment + env
+(R) Bst. HP TS (Resist.) & Env.+,(R) Bst. HP TS (Resist.) & Env.+,equipment + env
+"(C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+","(C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+",equipment + env
+"(C) Bst. HP FS (RTU, NG Ht.) & Env.+","(C) Bst. HP FS (RTU, NG Ht.) & Env.+",equipment + env
+(C) Bst. HP FS (NG Boiler) & Env.+,(C) Bst. HP FS (NG Boiler) & Env.+,equipment + env
+(R) Brk. HP FS (Oth. Fs. Frn.) & Env.++,(R) Brk. HP FS (Oth. Fs. Frn.) & Env.++,equipment + env
+(R) Brk. HP FS (NG Frn.) & Env.++,(R) Brk. HP FS (NG Frn.) & Env.++,equipment + env
+(R) Brk. HP FS (NG Boiler) & Env.++,(R) Brk. HP FS (NG Boiler) & Env.++,equipment + env
+(R) Brk. HP TS (Resist.) & Env.++,(R) Brk. HP TS (Resist.) & Env.++,equipment + env
+(C) Brk. HP FS (Oth. Fs. Frn. AC) & Env.++,(C) Brk. HP FS (Oth. Fs. Frn. AC) & Env.++,equipment + env
+(C) Brk. HP FS (NG Frn. AC) & Env.++,(C) Brk. HP FS (NG Frn. AC) & Env.++,equipment + env
+(R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.,(R) ESTAR HP Pt. FS (Other Fossil Furnace),equipment
+(R) ES HP Pt. FS (NG Frn.) & Env.,(R) ESTAR HP Pt. FS (NG Furnace),equipment
+(R) ES HP FS (Oth. Fs. Frn.) & Env.,(R) ESTAR HP FS (Other Fossil Furnace),equipment
+(R) ES HP FS (NG Frn.) & Env.,(R) ESTAR HP FS (NG Furnace),equipment
+(R) ES GSHP (Oth. Fs. Frn.) & Env.,(R) ESTAR GSHP (Other Fossil Furnace),equipment
+(R) ES GSHP (NG Frn.) & Env.,(R) ESTAR GSHP (NG Furnace),equipment
+(R) ES HP TS (Resist.) & Env.,(R) ESTAR HP TS (Resist.),equipment
+"(C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.","(C) ESTAR HP Pt. FS (RTU, Other Fossil Heat)",equipment
+"(C) ES HP Pt. FS (RTU, NG Ht.) & Env.","(C) ESTAR HP Pt. FS (RTU, NG Heat)",equipment
+"(C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.","(C) ESTAR HP FS (RTU, Other Fossil Heat)",equipment
+"(C) ES HP FS (RTU, NG Ht.) & Env.","(C) ESTAR HP FS (RTU, NG Heat)",equipment
+(R) Bst. HP FS (Oth. Fs. Frn.) & Env.+,(R) Best HP FS (Other Fossil Furnace),equipment
+(R) Bst. HP FS (NG Frn.) & Env.+,(R) Best HP FS (NG Furnace),equipment
+(R) Bst. HP FS (NG Boiler) & Env.+,(R) Best HP FS (NG Boiler),equipment
+(R) Bst. HP TS (Resist.) & Env.+,(R) Best HP TS (Resist.),equipment
+"(C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+","(C) Best HP FS (RTU, Other Fossil Heat)",equipment
+"(C) Bst. HP FS (RTU, NG Ht.) & Env.+","(C) Best HP FS (RTU, NG Heat)",equipment
+(C) Bst. HP FS (NG Boiler) & Env.+,(C) Best HP FS (NG Boiler),equipment
+(R) Brk. HP FS (Oth. Fs. Frn.) & Env.++,(R) Brk. HP FS (Other Fossil Furnace),equipment
+(R) Brk. HP FS (NG Frn.) & Env.++,(R) Brk. HP FS (NG Furnace),equipment
+(R) Brk. HP FS (NG Boiler) & Env.++,(R) Brk. HP FS (NG Boiler),equipment
+(R) Brk. HP TS (Resist.) & Env.++,(R) Brk. HP TS (Resist.),equipment
+(C) Brk. HP FS (Oth. Fs. Frn. AC) & Env.++,(C) Brk. HP FS (Other Fossil Furnace & AC),equipment
+(C) Brk. HP FS (NG Frn. AC) & Env.++,(C) Brk. HP FS (NG Furnace & AC),equipment
+(R) Ref. Case Scnd. Fossil Heat FS & Env.,(R) Electric FS (Secondary Fossil Heating),equipment
+(R) Ref. Case Scnd. Elec. Heat & Env.,(R) Ref. Case Secondary Electric Heating,equipment
+(R) Ref. Case Scnd. Fossil Heat FS & Env.+,(R) Electric FS (Secondary Fossil Heating),equipment
+(R) Ref. Case Scnd. Elec. Heat & Env.+,(R) Ref. Case Secondary Electric Heating,equipment
+(R) Ref. Case Scnd. Fossil Heat FS & Env.++,(R) Electric FS (Secondary Fossil Heating),equipment
+(R) Ref. Case Scnd. Elec. Heat & Env.++,(R) Ref. Case Secondary Electric Heating,equipment
+(R) Ref. Case Scnd. Fossil Heat FS & Env.,(R) Ref. Case Scnd. Fossil Heat FS & Env.,equipment + env
+(R) Ref. Case Scnd. Elec. Heat & Env.,(R) Ref. Case Scnd. Elec. Heat & Env.,equipment + env
+(R) Ref. Case Scnd. Fossil Heat FS & Env.+,(R) Ref. Case Scnd. Fossil Heat FS & Env.+,equipment + env
+(R) Ref. Case Scnd. Elec. Heat & Env.+,(R) Ref. Case Scnd. Elec. Heat & Env.+,equipment + env
+(R) Ref. Case Scnd. Fossil Heat FS & Env.++,(R) Ref. Case Scnd. Fossil Heat FS & Env.++,equipment + env
+(R) Ref. Case Scnd. Elec. Heat & Env.++,(R) Ref. Case Scnd. Elec. Heat & Env.++,equipment + env
+(R) Ref. Case Scnd. Elec. Heat  & Env.+,(R) Ref. Case Secondary Electric Heating,equipment
+(R) Ref. Case Scnd. Elec. Heat  & Env.++,(R) Ref. Case Secondary Electric Heating,equipment
+(R) Ref. Case Scnd. Elec. Heat  & Env.+,(R) Ref. Case Scnd. Elec. Heat  & Env.+,equipment + env
+(R) Ref. Case Scnd. Elec. Heat  & Env.++,(R) Ref. Case Scnd. Elec. Heat  & Env.++,equipment + env
+(R) ES HP LFL & Env.,(R) ESTAR HP LFL,equipment
+(R) ES HP LFL & Env.,(R) ES HP LFL & Env.,equipment + env

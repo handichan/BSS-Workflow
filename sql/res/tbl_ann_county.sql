@@ -1,6 +1,7 @@
 -- to hold results from Scout runs that have been disaggregated to annual, county
 CREATE EXTERNAL TABLE county_annual_res_YEARID_TURNOVERID (
     `in.county` string,
+    `in.weather_file_city` string,
     fuel string,
     meas string,
     tech_stage string,
@@ -15,5 +16,5 @@ CREATE EXTERNAL TABLE county_annual_res_YEARID_TURNOVERID (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://handibucket/county_annual_res_YEARID_TURNOVERID/'
+LOCATION 's3://BUCKETNAMEID/county_annual_res_YEARID_TURNOVERID/'
 ;

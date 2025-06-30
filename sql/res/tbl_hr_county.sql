@@ -11,4 +11,4 @@ CREATE EXTERNAL TABLE county_hourly_res_YEARID_TURNOVERID (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://handibucket/county_hourly_res_YEARID_TURNOVERID/'
+LOCATION 's3://BUCKETNAMEID/county_hourly_res_YEARID_TURNOVERID/'
