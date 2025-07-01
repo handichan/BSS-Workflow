@@ -1092,7 +1092,7 @@ def test_multipliers(athena_client):
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
     """,
     f"""
-        with re_agg as( SELECT shape_ts,sector,"in.weather_file_city",
+        with re_agg as( SELECT shape_ts,sector,"in.state","in.weather_file_city",
         end_use,sum(multiplier_hourly) as added 
         FROM res_hourly_disaggregation_multipliers_{versionid} GROUP BY shape_ts,
         sector,"in.weather_file_city",end_use) 
