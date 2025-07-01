@@ -10,5 +10,5 @@ CREATE EXTERNAL TABLE com_hourly_hvac_temp_VERSIONID(
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://BUCKETNAMEID/com_hourly_multipliers_VERSIONID/'
+LOCATION 's3://BUCKETNAMEID/com_hourly_hvac_temp_VERSIONID/'
 ;
