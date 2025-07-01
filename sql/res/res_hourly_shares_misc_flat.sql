@@ -76,7 +76,7 @@ SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
 	misc as kwh,
-	misc / sum(misc) OVER (PARTITION BY "in.weather_file_city", shape_ts) as multiplier_hourly,
+	misc / sum(misc) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
 	'Other' as end_use
