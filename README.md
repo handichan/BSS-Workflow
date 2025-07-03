@@ -7,7 +7,7 @@ This guide outlines the steps to generate cost analysis tables and visualization
 ## Step 1: Prepare Input Data
 
 - Download the latest **Scout results** into the `scout_results/` directory.
-- Place them in a subfolder named by date in the format `ddmmyy` (e.g., `240625`).
+- Place them in a subfolder named by date in the format `mmddyy` (e.g., `062725`).
 
 ---
 
@@ -16,12 +16,12 @@ This guide outlines the steps to generate cost analysis tables and visualization
 Run the following command from the terminal:
 
 ```bash
-python bss_workflow_cost.py --gen_scoutdata_cost --folder ddmmyy
+python bss_workflow_cost.py --gen_scoutdata_cost --folder mmddyy
 ```
 
-- This command will convert JSON files (`ineff.json`, `mid.json`, `high.json`, etc.) in `scout_results/ddmmyy/` into CSV format.
+- This command will convert JSON files (`ineff.json`, `mid.json`, `high.json`, etc.) in `scout_results/mmddyy/` into CSV format.
 - Output files will be saved in the `cost_table_for_viz/` folder.
-- Depending on the size of the JSON file, each conversion takes approximately 1–2 minutes.
+- Depending on the size of the JSON file, each conversion takes approximately 1–2 minutes. In testing, converting six scenario files took around 7–8 minutes.
 
 ---
 
