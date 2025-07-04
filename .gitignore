@@ -3,5 +3,3 @@ cost_table_for_viz/
 scout_results/
 mseg_res_com_state/
 .ipynb_checkpoints/
-*.png
-*.pptx
