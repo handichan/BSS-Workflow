@@ -90,7 +90,7 @@ wide %>% filter(fuel!="Electric") %>%
   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
   scale_fill_manual(name="",labels=eu,values=colors)+
   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-ggsave("graphs/tnational_annual_sector_scenario_fossil.jpeg",device = "jpeg",width = width, height =4,units = "in")
+ggsave("graphs/national_annual_sector_scenario_fossil.jpeg",device = "jpeg",width = width, height =4,units = "in")
 
 
 print("printing 2")
@@ -150,6 +150,7 @@ for (s in c("com","res")){
 print("printing 5")
 #non HVAC, non-WH
 for (s in c("com","res")){
+  w<-if_else(s=="res",(2+length(unique(wide$turnover)))*1.8,width)
   with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
     filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
@@ -159,7 +160,7 @@ for (s in c("com","res")){
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-  ggsave(paste0("graphs/national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
+  ggsave(paste0("graphs/national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = w, height =4/1.15,units = "in")
 }
 
 
