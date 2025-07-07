@@ -10,15 +10,16 @@ library(tidyverse)
 library(scales)
 theme_set(theme_bw())
 
+# scenario to get the baseline (AEO 2023) data from
+scenario_for_baseline <- "aeo"
+
 # Scout results - output of calc_annual 
 wide<-data.frame()
-for (file in list.files("../scout_results")){
-  if (nrow(wide)==0) {
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)))
-  } else if(nrow(wide %>% filter(turnover=="baseline"))==0){
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)))
-  }else{
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_results/",file)) %>% filter(turnover!="baseline"))
+for (file in list.files("../agg_results")){
+  if (file == paste0("scout_annual_state_",scenario_for_baseline,".tsv")){
+    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)))
+  } else{
+    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)) %>% filter(turnover!="baseline"))
   }
 }
 
@@ -62,7 +63,7 @@ states<-c("WA","CA","MA","FL")
 state_height<-length(states)*1.4
 
 # order the scenarios for plotting
-wide<-wide %>% mutate(turnover=factor(turnover,levels=to,ordered=T))
+wide<-wide %>% mutate(turnover=factor(turnover,levels=names(to),ordered=T))
 
 # annual, national --------------------------------------------------------
 
