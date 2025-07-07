@@ -38,22 +38,20 @@ to<-c(baseline="AEO 2023",aeo="AEO 2025",ref="Stated Policies",stated_policies="
       state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
       fossil="High Fuel Demand",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
 # sector
-s<-c(com="Commercial",res="Residential",all="All Buildings")
+sec<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
 eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",`Cooling (Equip.)`="Cooling",`Heating (Equip.)`="Heating",
       Lighting="Lighting",Other="Other",Refrigeration="Refrigeration",Ventilation="Ventilation",`Water Heating`="Water Heating")
 
 #fill colors
-colors<-c("#e41a1c","#fbb4ae",
-"#377eb8","#b3cde3",
-"#4daf4a","#ccebc5",
-"#984ea3","#decbe4",
-"#ff7f00","#fed9a6",
-          "#ffee33","#ffffcc",
-          "#a65628","#e5d8bd",
-          "#f781bf","#fddaec",
-          "#999999","#f2f2f2",
-          "#5b92e5","#d4a017", "#8fbc8f","#ff69b4")
+colors<-c("#1e4c71",	"#377eb8","#b3cde3",
+          "#8d0c0d",	"#e41a1c","#fbb4ae",
+          "#be9829",	"#ffce3b","#fef488",
+          "#5c2d63",	"#984ea3","#decbe4",
+          "#be5d00",	"#ff7f00","#fed9a6",
+          "#2c6b2a",	"#4daf4a","#ccebc5",
+          "#653215",	"#a65628","#cc997f",
+          "#5d5d5d",	"#999999","gray80")
 #width changeable based on number of scenarios
 width<-(1+length(unique(wide$turnover)))*1.8
 
@@ -74,12 +72,25 @@ wide %>% filter(fuel=="Electric") %>%
   summarize(kwh=sum(state_ann_kwh)/10^9) %>%
   ggplot(aes(x=year,y=kwh,fill=end_use))+
   geom_area() + 
-  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s))+
+  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=sec))+
   scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
   scale_fill_manual(name="",labels=eu,values=colors)+
-  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
 ggsave("graphs/national_annual_sector_scenario.jpeg",device = "jpeg",width = width, height =3,units = "in")
+
+print("printing 1b")
+wide %>% filter(fuel!="Electric") %>% 
+  group_by(year,sector,end_use,turnover) %>% 
+  summarize(kwh=sum(state_ann_kwh)/10^9) %>%
+  ggplot(aes(x=year,y=kwh,fill=end_use))+
+  geom_area() + 
+  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=sec))+
+  scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
+  scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+  scale_fill_manual(name="",labels=eu,values=colors)+
+  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
+ggsave("graphs/tnational_annual_sector_scenario_fossil.jpeg",device = "jpeg",width = width, height =4,units = "in")
 
 
 print("printing 2")
@@ -106,6 +117,8 @@ with_shapes_agg <-with_shapes  %>% group_by(year,end_use,turnover,sector,descrip
 print("printing 3")
 #HVAC
 for (s in c("com","res")){
+  h<-if_else(s=="res",4,5)
+
   with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
     filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
@@ -114,8 +127,8 @@ for (s in c("com","res")){
     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0("graphs/national_annual_",s,"_hvac.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
+  ggsave(paste0("graphs/national_annual_",s,"_hvac.jpeg"),device = "jpeg",width = width, height = h,units = "in")
 }
 
 
@@ -130,7 +143,7 @@ for (s in c("com","res")){
     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
   ggsave(paste0("graphs/national_annual_",s,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
 }
 
@@ -145,7 +158,7 @@ for (s in c("com","res")){
     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
   ggsave(paste0("graphs/national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
 }
 
@@ -170,7 +183,7 @@ for(s in c("res","com")){
       scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)))+ 
       scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
       scale_fill_manual(values=colors,name="")+
-      theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+      theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
     ggsave(paste0("graphs/state_annual_",s,"_",eu[u],".jpeg"),device = "jpeg",width = width, height =state_height,units = "in")
   }
 }
