@@ -34,9 +34,9 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 # for nice labeling
 # Scout scenarios -- every value of "turnover" should be here
 # this is the order they'll be shown in facet plots, etc
-to<-c(baseline="AEO 2023",aeo="AEO 2025",ref="Stated Policies",stated_policies="Stated Policies",
+to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",ref="Reference",stated_policies="Stated Policies",
       state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
-      fossil="High Fuel Demand",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
+      fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
 # sector
 sec<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
@@ -158,6 +158,7 @@ for (s in c("com","res")){
     facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+    guides(fill = guide_legend(nrow = 12))+
     scale_fill_manual(values=colors,name="")+
     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
   ggsave(paste0("graphs/national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = w, height =4/1.15,units = "in")
