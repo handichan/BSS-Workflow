@@ -9,7 +9,7 @@ GROUP BY "in.county"
 ),
 county_totals as(
 SELECT "in.county",turnover,"in.state","year",sum(county_hourly_kwh) as county_total_ann_kwh 
-FROM long_county_hourly_TURNOVERID_amy -- variable?
+FROM long_county_hourly_TURNOVERID_amy 
 WHERE turnover!='baseline'
 AND "year" IN (2024,2050)
 AND "in.county" IN (SELECT "in.county" FROM ns WHERE n>=50)
@@ -66,5 +66,5 @@ SELECT 'G1200310' as "in.county", CAST('High electric heat' AS varchar) as examp
 UNION ALL
 SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as example_type
 )
-SELECT long_county_hourly_TURNOVERID_amy.* FROM long_county_hourly_TURNOVERID_amy
+SELECT long_county_hourly_TURNOVERID_amy.*, example_counties.example_type FROM long_county_hourly_TURNOVERID_amy
 RIGHT JOIN example_counties ON long_county_hourly_TURNOVERID_amy."in.county" = example_counties."in.county";
