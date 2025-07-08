@@ -1,6 +1,6 @@
 # Cost Analysis from Scout Results
 
-This guide outlines the steps to generate cost analysis tables and visualizations from DOE Scout outputs.
+This guide outlines the steps to generate cost analysis tables and visualizations from Scout outputs.
 
 ---
 
