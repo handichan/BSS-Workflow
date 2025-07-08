@@ -1,11 +1,19 @@
 
 
 
-setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
+setwd("R")
+
+#install the packages if they're not already installed
+packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
+install.packages(setdiff(packages, rownames(installed.packages())))
 
 library(tidyverse)
 library(scales)
 library(cowplot)
+library(maps)
+library(mapdata)
+library(colorspace)
+
 theme_set(theme_bw())
 
 
@@ -13,7 +21,7 @@ theme_set(theme_bw())
 
 # the data frame names are analogous to the names of the SQL queries that created them
 
-input_dir <- "generated_csvs" #directory where the csvs are stored
+input_dir <- "../generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
@@ -47,9 +55,6 @@ state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage_fossil.csv")) %>% muta
 
 # map data ----------------------------------------------------------------
 
-library(maps)
-library(mapdata)
-library(colorspace)
 
 #shape files for counties 
 county_map<-map_data("county") %>% filter(region!="hawaii")
@@ -61,7 +66,9 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",stated="Stated Policies")
+to<-c(baseline="AEO 2023",aeo="AEO 2025",ref="Stated Policies",stated_policies="Stated Policies",
+      state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
+      fossil="High Fuel Demand",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
 # sector
 s_label<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
@@ -93,9 +100,7 @@ round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 
 
 #sample sizes and county names
-ns<-arrow::read_parquet("ResStock2024_2baseline_amy.parquet",col_select = c("bldg_id","in.county","in.county_name","in.state")) %>% group_by(in.county,in.county_name,in.state) %>% summarize(n=n()) %>%
-  mutate(county_name=paste0(in.state,", ", in.county_name)) %>% ungroup() %>%
-  select(in.county,n,county_name)
+ns<-read_csv("../map_meas/resstock_ns.csv")
 
 
 #width for annual graphs changeable based on number of scenarios
