@@ -597,7 +597,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query, table_name):
 
 def get_csvs_for_R(athena_client):
 
-    turnovers = ['breakthrough','ineff','mid','high','stated']
+    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
 
     sql_files = [
         'county_100_hrs.sql',
@@ -762,25 +762,25 @@ def gen_multipliers(s3_client, athena_client):
     sectors = ['com']
 
     tbl_res = [
-        # "tbl_ann_mult.sql",
-        # "res_ann_shares_cook.sql",
-        # "res_ann_shares_lighting.sql",
-        # "res_ann_shares_refrig.sql",
-        # "res_ann_shares_wh.sql",
-        # "res_ann_shares_hvac.sql",
-        # "res_ann_shares_deliveredheat.sql",
+        "tbl_ann_mult.sql",
+        "res_ann_shares_cook.sql",
+        "res_ann_shares_lighting.sql",
+        "res_ann_shares_refrig.sql",
+        "res_ann_shares_wh.sql",
+        "res_ann_shares_hvac.sql",
+        "res_ann_shares_deliveredheat.sql",
         "res_ann_shares_deliveredcool.sql",
         "res_ann_shares_deliveredwh.sql",
-        # "res_ann_shares_cw.sql",
-        # "res_ann_shares_dry.sql",
-        # "res_ann_shares_dw.sql",
-        # "res_ann_shares_fanspumps.sql",
-        # "res_ann_shares_misc.sql",
-        # "res_ann_shares_poolpump.sql",
+        "res_ann_shares_cw.sql",
+        "res_ann_shares_dry.sql",
+        "res_ann_shares_dw.sql",
+        "res_ann_shares_fanspumps.sql",
+        "res_ann_shares_misc.sql",
+        "res_ann_shares_poolpump.sql",
 
-        # "tbl_hr_mult.sql",
-        # "res_hourly_shares_cooling.sql",
-        # "res_hourly_shares_heating.sql",
+        "tbl_hr_mult.sql",
+        "res_hourly_shares_cooling.sql",
+        "res_hourly_shares_heating.sql",
         "res_hourly_shares_refrig.sql",
         "res_hourly_shares_lighting.sql",
         "res_hourly_shares_cook.sql",
@@ -796,31 +796,29 @@ def gen_multipliers(s3_client, athena_client):
     ]
 
     tbl_com = [
-        # "tbl_ann_mult.sql",
-        # "com_ann_shares_cook.sql",
+        "tbl_ann_mult.sql",
+        "com_ann_shares_cook.sql",
         "com_ann_shares_deliveredcool.sql",
         "com_ann_shares_electric_heat.sql",
-        # "com_ann_shares_hvac.sql",
-        # "com_ann_shares_lighting.sql",
-        # "com_ann_shares_refrig.sql",
-        # "com_ann_shares_ventilation_ref.sql",
-        # "com_ann_shares_wh.sql",
-        # "com_ann_shares_misc.sql",
-        "com_ann_shares_gap.sql",
-        # "com_ann_shares_fossil_heat.sql",
+        "com_ann_shares_hvac.sql",
+        "com_ann_shares_lighting.sql",
+        "com_ann_shares_refrig.sql",
+        "com_ann_shares_ventilation_ref.sql",
+        "com_ann_shares_wh.sql",
+        "com_ann_shares_misc.sql",
+        "com_ann_shares_fossil_heat.sql",
         
-        # "tbl_hr_mult.sql",
+        "tbl_hr_mult.sql",
         "tbl_hr_mult_hvac_temp.sql",
-        # "com_hourly_shares_cooling.sql",
-        # "com_hourly_shares_heating.sql",
-        # "com_hourly_shares_lighting.sql",
-        # "com_hourly_shares_refrig.sql",
+        "com_hourly_shares_cooling.sql",
+        "com_hourly_shares_heating.sql",
+        "com_hourly_shares_lighting.sql",
+        "com_hourly_shares_refrig.sql",
         "com_hourly_shares_ventilation.sql",
-        # "com_hourly_shares_ventilation_ref.sql",
-        # "com_hourly_shares_wh.sql",
-        # "com_hourly_shares_misc.sql",
-        "com_hourly_shares_gap.sql",
-        # "com_hourly_shares_cooking.sql",
+        "com_hourly_shares_ventilation_ref.sql",
+        "com_hourly_shares_wh.sql",
+        "com_hourly_shares_misc.sql",
+        "com_hourly_shares_cooking.sql",
         "com_hourly_hvac_norm.sql"
     ]
     for sectorid in sectors:
@@ -929,8 +927,7 @@ def gen_scoutdata(s3_client, athena_client):
         #"fossil.json"
         ]
 
-    #check before running -- comment out if the newest measure_map is already on AWS; else drop the table
-    #s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
+    s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
         print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
@@ -1471,10 +1468,10 @@ def main(base_dir):
 
         # gen_scoutdata(s3_client, athena_client)
         # gen_countydata(s3_client, athena_client)
-        combine_countydata(athena_client)
-        test_county(athena_client)
+        # combine_countydata(athena_client)
+        # test_county(athena_client)
         # run_r_script('annual_graphs.R')
-        # get_csvs_for_R(athena_client)
+        get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
         # convert_long_to_wide(athena_client)
 
@@ -1504,14 +1501,13 @@ def main(base_dir):
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
-
-        test_county(athena_client)
         # test_multipliers(athena_client)
-        test_compare_measures(athena_client)
+        # test_county(athena_client)
+        # test_compare_measures(athena_client)
         
         # run_r_script('annual_graphs.R')
 
-        # get_csvs_for_R(athena_client)
+        get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
 
         # athena --> AWS Glue ->  S3
