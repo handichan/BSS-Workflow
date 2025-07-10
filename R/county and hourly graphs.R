@@ -21,7 +21,7 @@ theme_set(theme_bw())
 
 # the data frame names are analogous to the names of the SQL queries that created them
 
-input_dir <- "../generated_csvs" #directory where the csvs are stored
+input_dir <- "generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
@@ -426,7 +426,6 @@ for (i in 1:length(county_hourly_examples_list)){
     mutate(day_label=paste(month,day,sep="/"),x=if_else(year==2024,3,13))
   psample<-with_ex_labels %>% 
     right_join(maxes %>% select(year, month, day, example_label, in.county),by=c("year", "month", "day", "example_label", "in.county")) %>%
-    mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
     ggplot(aes(color=factor(year)))+
     geom_line(aes(x=hour,y=county_total_hourly_kwh/1000,linetype=turnover))+
     xlab("EST")+
@@ -438,3 +437,275 @@ for (i in 1:length(county_hourly_examples_list)){
     ggtitle("Day with the Peak Hour")
   save_plot(paste0(graph_dir,"/example_peak_days_",names(county_hourly_examples_list)[i],".jpg"),psample,base_height = 18,base_width = 8,bg="white")
 }
+
+# compare state-level seasonal ratios to EIA ------------------------------
+
+eia<-read_csv("../map_meas/eia_gas_and_electricity_by_state_sector_year_month.csv")
+
+eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
+  mutate(month=(match(month, month.abb)),
+         season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
+         in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
+         sector=if_else(sector=="commercial","com","res")) %>%
+  group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
+  group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
+  pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
+  mutate(max_winter_to_max_summer=Winter/Summer)
+
+bss_ratios_sector<-state_monthly_2024 %>%
+  mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
+  group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
+  pivot_wider(names_from=season,values_from=monthly_max) %>%
+  mutate(max_winter_to_max_summer=Winter/Summer) %>%
+  arrange(max_winter_to_max_summer)
+
+eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
+  ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
+  geom_hline(yintercept = 1,color="grey30")+
+  geom_boxplot()+
+  geom_point(data=bss_ratios_sector ,color="red")+
+  scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
+  ylab("winter max / summer max")+
+  facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
+  ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
+save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
+
+
+
+# # annual, national --------------------------------------------------------
+# 
+# # area plot by year, scenario, end use, sector
+# 
+# #electric all scenarios
+# filename_prefix<-""
+# state_ann %>%
+#   filter(fuel=="Electric") %>%
+#   group_by(year,sector,end_use,turnover) %>% 
+#   summarize(twh=sum(state_ann_kwh)/10^9) %>%
+#   ggplot(aes(x=year,y=twh,fill=end_use))+
+#   geom_area() + 
+#   facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
+#   scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
+#   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#   scale_fill_manual(name="",labels=eu,values=colors)+
+#   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+# ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+# 
+# #electric no stated policies
+# filename_prefix<-"no_stated_"
+# state_ann %>%
+#   filter(turnover!="stated",fuel=="Electric") %>%
+#   group_by(year,sector,end_use,turnover) %>% 
+#   summarize(twh=sum(state_ann_kwh)/10^9) %>%
+#   ggplot(aes(x=year,y=twh,fill=end_use))+
+#   geom_area() + 
+#   facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
+#   scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
+#   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#   scale_fill_manual(name="",labels=eu,values=colors)+
+#   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+# ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+# 
+# 
+# #fossil all scenarios
+# filename_prefix<-""
+# state_ann %>%
+#   filter(fuel!="Electric") %>%
+#   group_by(year,sector,end_use,turnover) %>% 
+#   summarize(twh=sum(state_ann_kwh)/10^9) %>%
+#   ggplot(aes(x=year,y=twh,fill=end_use))+
+#   geom_area() + 
+#   facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
+#   scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
+#   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#   scale_fill_manual(name="",labels=eu,values=colors[c(2,3,4,6,9)])+
+#   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+# ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario_fossil.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+# 
+# 
+# #fossil no stated policies
+# filename_prefix<-"no_stated_"
+# state_ann %>%
+#   filter(turnover!="stated",fuel!="Electric") %>%
+#   group_by(year,sector,end_use,turnover) %>% 
+#   summarize(twh=sum(state_ann_kwh)/10^9) %>%
+#   ggplot(aes(x=year,y=twh,fill=end_use))+
+#   geom_area() + 
+#   facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
+#   scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
+#   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#   scale_fill_manual(name="",labels=eu,values=colors[c(2,3,4,6,9)])+
+#   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+# ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario_fossil.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+# 
+# 
+# # annual, national by tech type ------------------------------------------------------------
+# 
+# agg <-state_ann %>% filter(fuel=="Electric") %>% group_by(year,end_use,turnover,sector,description) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% ungroup() 
+# 
+# 
+# #all scenarios
+# filename_prefix<-""
+# #HVAC
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+#     filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),sector==sec,description!="fossil") %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(end_use~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_hvac.jpeg"),device = "jpeg",width = width, height =4,units = "in")
+# }
+# 
+# 
+# #water heating
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+#     filter((end_use %in% c("Water Heating")),sector==sec,description!="fossil") %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
+# }
+# 
+# 
+# #non HVAC, non-WH
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+#     filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),description!="fossil",sector==sec) %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
+# }
+# 
+# 
+# 
+# #no stated policies
+# filename_prefix<-"no_stated_"
+# #HVAC
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
+#     filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),description!="fossil",sector==sec) %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(end_use~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_hvac.jpeg"),device = "jpeg",width = width, height =5,units = "in")
+# }
+# 
+# 
+# #water heating
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
+#     filter(end_use %in% c("Water Heating"),sector==sec,description!="fossil") %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
+# }
+# 
+# 
+# #non HVAC, non-WH
+# for (sec in c("com","res")){
+#   agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
+#     filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),sector==sec) %>%
+#     ggplot(aes(x=year,y=TWh,fill=description)) +
+#     geom_area()+
+#     facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
+#     scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
+#     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#     scale_fill_manual(values=colors,name="")+
+#     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#   ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
+# }
+# 
+# 
+# # annual by state and tech type for heating and cooling  ------------------------------------------------------------
+# 
+# # states to show as examples for heating and cooling
+# states<-c("WA","CA","MA","FL")
+# 
+# agg_state <-state_ann %>% filter(reg %in% states,fuel=="Electric") %>% 
+#   group_by(year,reg,end_use,turnover,sector,description) %>% 
+#   summarize(TWh=sum(state_ann_kwh)/10^9) %>%
+#   ungroup()
+# 
+# #all scenarios
+# filename_prefix<-"all_"
+# for(sec in c("res","com")){
+#   for (u in c("Heating (Equip.)","Cooling (Equip.)")){
+#     agg_state%>% 
+#       group_by(description) %>% filter(sum(TWh)>0) %>%
+#       filter(end_use ==u,sector==sec) %>%
+#       ggplot(aes(x=year,y=TWh,fill=description)) +
+#       geom_area()+
+#       facet_grid(reg~turnover,labeller = labeller(turnover=to,end_use=eu),scales="free")+
+#       scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)))+ 
+#       scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#       scale_fill_manual(values=colors,name="")+
+#       theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#     ggsave(paste0(graph_dir,"/",filename_prefix,"state_annual_",sec,"_",eu[u],".jpeg"),device = "jpeg",width = width, height =width/8*length(states),units = "in",limitsize = FALSE)
+#   }
+# }
+# 
+# #no stated policies
+# filename_prefix<-"no_stated_sc_"
+# for(sec in c("res","com")){
+#   for (u in c("Heating (Equip.)","Cooling (Equip.)")){
+#     agg_state%>% 
+#       group_by(description) %>% filter(sum(TWh)>0,turnover!="stated") %>%
+#       filter(end_use ==u,sector==sec) %>%
+#       ggplot(aes(x=year,y=TWh,fill=description)) +
+#       geom_area()+
+#       facet_grid(reg~turnover,labeller = labeller(turnover=to,end_use=eu),scales="free")+
+#       scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)))+ 
+#       scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
+#       scale_fill_manual(values=colors[2:18],name="")+
+#       theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
+#     ggsave(paste0(graph_dir,"/",filename_prefix,"state_annual_",sec,"_",eu[u],".jpeg"),device = "jpeg",width = width*.7, height =width*.85/2,units = "in")
+#   }
+# }
+# 
+# 
+# # 2050 end use comparison -------------------------------------------------
+# 
+# #all buildings
+# state_ann %>% filter(year==2050,fuel=="Electric") %>% group_by(turnover,end_use) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% 
+#   ggplot(aes(x=turnover,y=TWh,fill=turnover))+
+#   geom_col(position="dodge")+
+#   scale_fill_brewer(name="",palette="Paired",labels=to)+scale_x_discrete(labels=eu,name="")+
+#   scale_y_continuous(expand=expansion(add=0,mult=c(0,.05)))+
+#   facet_grid(~end_use,labeller=labeller(end_use=eu))+
+#   theme(axis.text.x = element_blank(),axis.ticks.x=element_blank(),panel.grid.major.x = element_blank())
+# ggsave(paste0(graph_dir,"/national_annual_2050_by_eu.jpeg"),device = "jpeg",width = 10, height =2,units = "in")
+# 
+# 
+# #by sector
+# state_ann %>% filter(year==2050,fuel=="Electric") %>% group_by(turnover,end_use,sector) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% 
+#   ggplot(aes(x=turnover,y=TWh,fill=turnover))+
+#   geom_col(position="dodge")+
+#   scale_fill_brewer(name="",palette="Paired",labels=to)+scale_x_discrete(labels=eu,name="")+
+#   scale_y_continuous(expand=expansion(add=0,mult=c(0,.05)))+
+#   facet_grid(sector~end_use,labeller=labeller(sector=s_label,end_use=eu))+
+#   theme(axis.text.x = element_blank(),axis.ticks.x=element_blank(),panel.grid.major.x = element_blank())
+# ggsave(paste0(graph_dir,"/national_annual_2050_by_eu_sector.jpeg"),device = "jpeg",width = 10, height =3,units = "in")
+
