@@ -190,9 +190,16 @@ plot_map_hist<-function(data_list){
 
 
 # map with histogram - plot % changes! ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-scenarios
 
+#filename_prefix <- "base_state_fossil_brk_"
+#scen_filtered<-c("baseline","state","fossil","brk")
+
+# percent change in annual electricity
 # by turnover
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   group_by(turnover,in.state,in.county,year) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
 filename<-"county_map_ann_2050vs2024_all"
 plottitle<-"Change in Building Electricity: 2024 to 2050"
@@ -211,6 +218,7 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # by turnover, 50+ RS samples
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   right_join(ns %>% filter(n>=50),by="in.county") %>%
   group_by(turnover,in.state,in.county,year) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
 filename<-"county_map_ann_2050vs2024_all_50plus"
@@ -229,6 +237,7 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # by turnover and sector
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   group_by(turnover,in.state,in.county,year,sector) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
 filename<-"county_map_ann_2050vs2024_sector"
 plottitle<-"Change in Building Electricity: 2024 to 2050"
@@ -247,7 +256,8 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # res HVAC by turnover
 aggregated<-county_ann_eu %>%
-  filter(sector=="res",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"))
+  filter(sector=="res",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"),
+        turnover %in% scen_filtered)
 filename<-"county_map_ann_2050vs2024_res_hvac"
 plottitle<-"Change in Residential HVAC Electricity: 2024 to 2050"
 annual_county_change<- aggregated %>%
@@ -264,7 +274,8 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # com HVAC by turnover
 aggregated<-county_ann_eu %>%
-  filter(sector=="com",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"))
+  filter(sector=="com",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"),
+        turnover %in% scen_filtered)
 filename<-"county_map_ann_2050vs2024_com_hvac"
 plottitle<-"Change in Commercial Heating and Cooling Electricity: 2024 to 2050"
 annual_county_change<- aggregated %>%
@@ -280,6 +291,20 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
        width=length(scen_filtered)*4,height=7,units="in",bg = "white")
 
 
+# percent change in peak demand
+# by turnover
+peak_change<-county_100_hrs %>%
+  filter(turnover %in% scen_filtered, rank_num==1) %>%
+  pivot_wider(names_from=year,values_from=county_total_hourly_kwh,id_cols=c(in.county,turnover,in.state)) %>%
+  mutate(percent_change=`2050`/`2024`-1,
+         fill_color=color_interp(percent_change))
+filename<-"county_map_peak_2050vs2024_all"
+plottitle<-"Change in Building Peak Electricity: 2024 to 2050"
+datasets <- split(peak_change, list(droplevels(peak_change$turnover)))
+p<-plot_map_hist(datasets)
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=ceiling(length(scen_filtered)/2)*4,height=7,units="in",bg = "white")
 
 # top 100 hours - map and histogram of share in the winter -----------------------------------------------------------
 
