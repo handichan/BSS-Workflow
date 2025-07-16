@@ -177,7 +177,7 @@ plot_map_hist<-function(data_list){
     label <- nice_labels[.y] 
     ggdraw() +
       draw_plot(.x) +
-      draw_text(label, x = .5, y = .35, vjust = 1.5, hjust = 0.5, size = 12)
+      draw_text(label, x = .5, y = .3, vjust = 1.5, hjust = 0.5, size = 12)
   })
   
   nrows<-if_else(sum(str_detect(names(datasets),pattern = "."))>=1,2,1)
@@ -204,9 +204,9 @@ annual_county_change<- aggregated %>%
 datasets <- split(annual_county_change, list(annual_county_change$turnover))
 
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_height = 12,bg="white")
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=ceiling(length(scen_filtered)/2)*4,height=7,units="in",bg = "white")
 
 
 # by turnover, 50+ RS samples
@@ -223,10 +223,9 @@ annual_county_change<- aggregated %>%
 datasets <- split(annual_county_change, list(annual_county_change$turnover))
 
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_height = 12,bg="white")
-
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=ceiling(length(scen_filtered)/2)*4,height=7,units="in",bg = "white")
 
 # by turnover and sector
 aggregated<-county_ann_eu %>%
@@ -241,9 +240,9 @@ annual_county_change<- aggregated %>%
 datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$sector))
 
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=length(scen_filtered)*4,height=7,units="in",bg = "white")
 
 
 # res HVAC by turnover
@@ -259,9 +258,9 @@ annual_county_change<- aggregated %>%
 datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
 
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=length(scen_filtered)*4,height=7,units="in",bg = "white")
 
 # com HVAC by turnover
 aggregated<-county_ann_eu %>%
@@ -276,9 +275,9 @@ annual_county_change<- aggregated %>%
 datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
 
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=length(scen_filtered)*4,height=7,units="in",bg = "white")
 
 
 
