@@ -93,7 +93,7 @@ def scout_to_df(filename, myturnover):
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
-    save_to_folder = 'cost_table_for_viz'
+    save_to_folder = 'cost_table'
     os.makedirs(save_to_folder, exist_ok=True)
     df.to_csv(f'{save_to_folder}/{myturnover}.csv', index=False)
     print(f"Saved scout data to csv in {save_to_folder}/{myturnover}.csv") 
@@ -123,8 +123,58 @@ def gen_scoutdata_cost(subfolder=""):
         print(f">>>>>>>>>>>>>>>> FILE NAME = {scout_file}")
         # Join subfolder if provided
         scout_path = os.path.join("scout_results", subfolder, scout_file) if subfolder else os.path.join("scout_results", scout_file)
-        myturnover = scout_file.split('_')[0]
+        myturnover = scout_file.split('.')[0]
         scout_df = scout_to_df(scout_path, myturnover)
+
+def scout_to_df_CAPX_cost(filename, myturnover):
+    new_columns = [
+            'meas', 'adoption_scn', 'metric', 'year', 'value']
+    with open(f'{filename}', 'r') as fname:
+        json_df = json.load(fname)
+    meas = list(json_df.keys())[:-1]
+
+    all_df = pd.DataFrame()
+    for mea in meas:
+        json_data = json_df[mea]["Markets and Savings (Overall)"]
+
+        data_from_json = reshape_json(json_data)
+        
+        df_from_json = pd.DataFrame(
+                    data_from_json)
+        df_from_json['meas'] = mea
+        all_df = df_from_json if all_df.empty else pd.concat(
+            [all_df, df_from_json], ignore_index=True)
+        cols = ['meas'] + [col for col in all_df if col != 'meas']
+        all_df = all_df[cols]
+
+    all_df.columns = new_columns
+    all_df = all_df[all_df['metric'].isin([
+        'Total Measure Stock Cost (2024$)',
+        'Incremental Measure Stock Cost (2024$)'])]
+
+    save_to_folder = 'capital_cost_table'
+    os.makedirs(save_to_folder, exist_ok=True)
+    all_df.to_csv(f'{save_to_folder}/{myturnover}_annual_CAPX.csv', index=False)
+    print(f"Saved scout data to csv in {save_to_folder}/{myturnover}_annual_CAPX.csv") 
+    return(all_df)
+
+
+def gen_scoutdata_annual_capital_cost(subfolder=""):
+    scout_files = [
+        "aeo.json",
+        "ref.json",
+        "state.json",
+        "fossil.json",
+        "brk.json",
+        "accel.json"
+    ]
+    
+    for scout_file in scout_files:
+        print(f">>>>>>>>>>>>>>>> FILE NAME = {scout_file}")
+        # Join subfolder if provided
+        scout_path = os.path.join("scout_results", subfolder, scout_file) if subfolder else os.path.join("scout_results", scout_file)
+        myturnover = scout_file.split('_')[0]
+        scout_df = scout_to_df_CAPX_cost(scout_path, myturnover)
         
 def main(base_dir, subfolder):
     if opts.gen_scoutdata_cost:
@@ -132,6 +182,11 @@ def main(base_dir, subfolder):
         s3_client = session.client('s3')
         athena_client = session.client('athena')
         gen_scoutdata_cost(subfolder)
+    elif opts.gen_scoutdata_annual_capital_cost:
+        session = boto3.Session()
+        s3_client = session.client('s3')
+        athena_client = session.client('athena')
+        gen_scoutdata_annual_capital_cost(subfolder)
 
 
 
@@ -141,6 +196,8 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--gen_scoutdata_cost", action="store_true",
                         help="Generate Scout Data for Cost")
+    parser.add_argument("--gen_scoutdata_annual_capital_cost", action="store_true",
+                        help="Generate Scout Data for Annual Capital Cost")
     parser.add_argument("--folder", type=str, default="",
                         help="Subfolder under scout_results (e.g., 061425)")
 
