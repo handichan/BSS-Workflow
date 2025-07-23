@@ -13,7 +13,6 @@ WITH filtered_annual AS (
     end_use
     FROM county_annual_res_YEARID_TURNOVERID
     WHERE "year" = YEARID
-      AND county_ann_kwh > 0
       AND scout_run = 'SCOUTRUNDATE'
       AND end_use = 'ENDUSEID'
 ),
