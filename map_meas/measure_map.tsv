@@ -364,8 +364,6 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Resist. WH	Water Heating	res_wh_ann_3	res_wh_ann_3	res_wh_ts_2	res_wh_ts_2	res	Water heater, resistance	Water heater, resistance	Water heater, resistance	Water heater, resistance
 (R) Ref. Case Resist. WH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_2	res	Water heater, fossil	Water heater, resistance	Water heater, fossil	Water heater, resistance
 (R) Ref. Case Resist. WH TS	Water Heating	res_wh_ann_3	res_wh_ann_3	res_wh_ts_2	res_wh_ts_2	res	Water heater, resistance	Water heater, resistance	Water heater, resistance	Water heater, resistance
-(R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
-(R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
 (R) Ref. Case Scnd. Elec. Heat & Env.	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env	Secondary heating	Secondary heating
 (R) Ref. Case Scnd. Elec. Heat & Env.+	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env +	Secondary heating	Secondary heating
 (R) Ref. Case Scnd. Elec. Heat & Env.++	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_86	res_heating_ts_1	res_heating_ts_13	res	Secondary heating	Secondary heating with env ++	Secondary heating	Secondary heating
