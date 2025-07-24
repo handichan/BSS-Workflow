@@ -308,10 +308,14 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # top 100 hours - map and histogram of share in the winter -----------------------------------------------------------
 
-#county_100_hrs<-county_100_hrs %>% filter(turnover %in% c("baseline","breakthrough","high,"ineff"),year %in% c(2024,2030,2040,2050)) %>% droplevels()
-# filename_prefix<-"ref_high_brk_ineff_"
+filename_prefix <- ""
+scen_filtered<-scenarios
+
+#filename_prefix <- "base_state_fossil_brk_"
+#scen_filtered<-c("baseline","state","fossil","brk")
 
 county_100_hrs_share<-county_100_hrs %>%
+  filter(turnover %in% scen_filtered) %>%
   mutate(month=month(timestamp_hour),season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
   group_by(turnover,year,in.county) %>%
   mutate(share_winter=sum(season=="Winter")/100) %>%
@@ -338,6 +342,7 @@ p100<-county_map %>% ggplot()+
 save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share.jpg"),p100,base_height = 6,bg="white")
 
 p100_hist<-county_100_hrs_share %>%
+  filter(turnover %in% scen_filtered) %>%
   mutate(percent_binned=round_any(share_winter,.05),
          fill_color=diverg_interp(percent_binned))%>%
   ggplot(aes(x=percent_binned,y=after_stat(count/3107),fill=fill_color))+
@@ -356,6 +361,7 @@ save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share_hist.jpg"),
 
 
 peak_ratio<-county_monthly_maxes %>%
+  filter(turnover %in% scen_filtered) %>%
   mutate(month=month(timestamp_hour),season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
   group_by(in.county,turnover,year,season) %>% filter(county_total_hourly_kwh==max(county_total_hourly_kwh)) %>%
   select(in.county,turnover,in.state,year,season,county_total_hourly_kwh) %>%
