@@ -229,3 +229,5 @@ res_hvac_ann_41	HP heating	HP heating to ES ASHP existing backup + light env	Ele
 res_hvac_ann_42	HP heating	HP heating to GSHP + light env	Electricity	Ducted Heat Pump	10	res_cooling_ts_9	res_heating_ts_12	7/19/24
 res_hvac_ann_85	No heating + AC	No heating + AC	None	Central AC	0	res_cooling_ts_1	res_heating_ts_2	7/19/24
 res_hvac_ann_85	No heating + AC	No heating + AC	None	Room AC	0	res_cooling_ts_1	res_heating_ts_2	7/19/24
+res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Central AC	0	res_cooling_ts_1	res_heating_ts_2	7/19/24
+res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Room AC	0	res_cooling_ts_1	res_heating_ts_2	7/19/24

@@ -5,7 +5,7 @@
    - Scout results should be stored within `\scout_results`.  
    - This flag also checks whether scout measures are already mapped in the measure mapping file, `map_meas\measure_map.tsv`. If not, please add them manually.
 
-<b>2. `--gen_countydata`</b>  
+<b>2. `--gen_county`</b>  
    - Query county annual and hourly data by building type, year, and scenario.  
    - Uses SQL templates under `sql/com/` and `sql/res/` to generate data.  
    - Outputs are stored in S3 and registered as external Athena tables.  
@@ -104,7 +104,7 @@ This table provides an overview of the structure and content of the dataset. The
 - This level may represent all US States.
 
 ### Data Files: Parquet Files
-- The Parquet files are stored within each `in.staate` directory.
+- The Parquet files are stored within each `in.state` directory.
 - **File Format**: Apache Parquet, optimized for efficient storage and retrieval.
 - **Content**:
   - Tabular data with columns and rows.

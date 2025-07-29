@@ -2,14 +2,17 @@
 -- hard-coded ones are chosen because of climate and equipment stock; 
 -- others are biggest increase and decrease in annual totals
 
-with
-ns as (
-SELECT "in.county",count("in.state") as n FROM "resstock_amy2018_release_2024.2_metadata"
-GROUP BY "in.county"
+WITH ns AS (
+  SELECT "in.county"
+  FROM "resstock_amy2018_release_2024.2_metadata"
+  WHERE upgrade = 0
+  GROUP BY "in.county"
+  HAVING COUNT("in.state") >= 50
 ),
 county_totals as(
-SELECT "in.county",turnover,"in.state","year",sum(county_hourly_kwh) as county_total_ann_kwh 
-FROM long_county_hourly_TURNOVERID_amy 
+SELECT lca."in.county",lca.turnover,lca."in.state",lca."year",sum(lca.county_ann_kwh) as county_total_ann_kwh 
+FROM long_county_annual_TURNOVERID_amy lca 
+JOIN ns ON lca."in.county" = ns."in.county"
 WHERE turnover!='baseline'
 AND "year" IN (2024,2050)
 AND "in.county" IN (SELECT "in.county" FROM ns WHERE n>=50)
@@ -66,5 +69,7 @@ SELECT 'G1200310' as "in.county", CAST('High electric heat' AS varchar) as examp
 UNION ALL
 SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as example_type
 )
-SELECT long_county_hourly_TURNOVERID_amy.*, example_counties.example_type FROM long_county_hourly_TURNOVERID_amy
-RIGHT JOIN example_counties ON long_county_hourly_TURNOVERID_amy."in.county" = example_counties."in.county";
+SELECT lch."in.county", lch.timestamp_hour, lch.turnover, lch.county_hourly_kwh, lch.end_use, lch.sector, lch.year, lch."in.state", example_counties.example_type 
+FROM long_county_hourly_TURNOVERID_amy lch
+INNER JOIN example_counties ON lch."in.county" = example_counties."in.county"
+WHERE "year" IN (2024,2050);

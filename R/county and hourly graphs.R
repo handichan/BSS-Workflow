@@ -45,7 +45,7 @@ for (scen in scenarios){
     county_ann_eu<-bind_rows(county_ann_eu,read_csv(paste0(input_dir,"/",scen,"_county_ann_eu.csv"))%>% filter(turnover!="baseline"))
     county_100_hrs<-bind_rows(county_100_hrs,read_csv(paste0(input_dir,"/",scen,"_county_100_hrs.csv"))%>% filter(turnover!="baseline"))
     county_monthly_maxes<-bind_rows(county_monthly_maxes,read_csv(paste0(input_dir,"/",scen,"_county_monthly_maxes.csv"))%>% filter(turnover!="baseline"))
-    county_hourly_examples_list2[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples.csv"))
+    county_hourly_examples_list[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples.csv"))
   }
 }
 
@@ -428,6 +428,7 @@ for (i in 1:length(county_hourly_examples_list)){
     mutate(day_label=paste(month,day,sep="/"),x=if_else(year==2024,3,13))
   psample<-with_ex_labels %>% 
     right_join(maxes %>% select(year, month, day, example_label, in.county),by=c("year", "month", "day", "example_label", "in.county")) %>%
+    mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
     ggplot(aes(color=factor(year)))+
     geom_line(aes(x=hour,y=county_total_hourly_kwh/1000,linetype=turnover))+
     xlab("EST")+

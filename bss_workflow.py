@@ -8,9 +8,9 @@ from argparse import ArgumentParser
 from io import StringIO
 import math
 import sys
-os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
-os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
-import rpy2.robjects as robjects
+#os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
+#os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
+#import rpy2.robjects as robjects
 
 pd.set_option('display.max_columns', None)
 JSON_PATH = 'json/input.json'
@@ -20,12 +20,14 @@ CSV_DIR = "csv"
 OUTPUT_DIR = "agg_results"
 EXTERNAL_S3_DIR = "datasets"
 DATABASE_NAME = "euss_oedi"
-BUCKET_NAME = 'handibucket'
+# check before running
+BUCKET_NAME = 'margaretbucket'
 
 EUGROUP_DIR = f"map_eu"
 
 # SCOUT_RUN_DATE = "2024-09-30"
-SCOUT_RUN_DATE = "2025-06-16"
+# check before running
+SCOUT_RUN_DATE = "2025-07-16"
 versionid = "20250616_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
@@ -928,14 +930,16 @@ def county_partition_multipliers(s3_client, athena_client):
             execute_athena_query(athena_client, query1, False)
 
 
+#check before running
 def gen_scoutdata(s3_client, athena_client):
     scout_files = [
-        "brk.json",
-        "accel.json",
-        "state.json",
-        "ref.json",
-        "aeo.json",
-        "fossil.json"
+#        "brk.json",
+ #       "accel.json",
+  #      "state.json",
+   #     "ref.json",
+#        "aeo.json"#,
+        "aeo25_20to50_byeu_indiv.json"
+        #"fossil.json"
         ]
 
 
@@ -946,7 +950,8 @@ def gen_scoutdata(s3_client, athena_client):
         SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
         myturnover = scout_file.split('.')[0]
 
-        if scout_file in ["aeo.json", "fossil.json"]:
+#check before running -- add scenario if it has no envelope measures
+        if scout_file in ["aeo.json", "fossil.json","aeo25_20to50_byeu_indiv.json"]:
             scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
         else:
@@ -961,8 +966,13 @@ def gen_scoutdata(s3_client, athena_client):
 
 def gen_countydata(s3_client, athena_client):
     sectors = ['res','com']
-    years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+#    years = ['2024','2025','2030','2035','2040','2045','2050']
+    sectors = ['res','com']
+    years = ['2030']
+
+#check before running
+#    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['aeo25_20to50_byeu_indiv']
 
     # years = ['2018','2019','2020','2021','2022','2023']
     # turnovers = ['ineffuncal']
@@ -979,10 +989,12 @@ def gen_countydata(s3_client, athena_client):
 def combine_countydata(athena_client):
     sql_dir = "data_conversion"
     sql_files = [
-        # "combine_annual_2024_2050.sql",
+        "combine_annual_2024_2050.sql",
         "combine_hourly_2024_2050.sql"
     ]
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    #check before running
+    #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['aeo25_20to50_byeu_indiv']
     for sql_file in sql_files:
         print(f"Querying for {sql_file}")
         for my_turnover in turnovers:
@@ -1004,7 +1016,9 @@ def test_county(athena_client):
     ]
 
     years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    #check before running
+    #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['aeo25_20to50_byeu_indiv']
 
     # years = [2018,2019,2020,2021,2022,2023]
     # turnovers = ['ineffuncal']
@@ -1030,7 +1044,7 @@ def test_county(athena_client):
                 df = execute_athena_query_to_df(athena_client, query)
 
                 df['year'] = my_year
-                print(query)
+                #print(query)
 
                 if "enduse" in sql_file:
                     df['diff_commercial'] = (1 - df['commercial_sum'] / df['scout_commercial_sum']).round(2)
@@ -1142,7 +1156,7 @@ def test_compare_measures(athena_client):
         SELECT DISTINCT meas FROM scout_annual_state_TURNOVERID WHERE fuel = 'Electric'
     """
     query_measure_map = f"""
-        SELECT DISTINCT meas FROM measure_map_20240927
+        SELECT DISTINCT meas FROM measure_map
     """
     with open(out, 'w') as file:
         sys.stdout = file
@@ -1464,7 +1478,7 @@ def main(base_dir):
 
         # gen_scoutdata(s3_client, athena_client)
         # gen_countydata(s3_client, athena_client)
-        # combine_countydata(athena_client)
+        combine_countydata(athena_client)
         test_county(athena_client)
         # run_r_script('annual_graphs.R')
         # get_csvs_for_R(athena_client)
@@ -1498,11 +1512,11 @@ def main(base_dir):
         s3_client = session.client('s3')
         athena_client = session.client('athena')
 
-        # test_county(athena_client)
+        test_county(athena_client)
         # test_multipliers(athena_client)
-        # test_compare_measures(athena_client)
+        test_compare_measures(athena_client)
         
-        run_r_script('annual_graphs.R')
+        # run_r_script('annual_graphs.R')
 
         # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
