@@ -83,7 +83,7 @@ Open `capital cost analysis.ipynb` and run the cells to generate the following p
 
 #### Stack Plot
 - Shows incremental years (default: **2030**, **2040**, **2050**)
-<img src="example/Capital_Cost_Stack.png" alt="Example" width="250"/>
+<img src="example/Capital_Cost_stack.png" alt="Example" width="250"/>
 
 
 ---
