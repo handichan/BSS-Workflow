@@ -130,7 +130,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
 (C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_heating_ts_9	com_heating_ts_4	com	Other fossil boiler + RTAC or chiller	Boiler, electric	fossil	Boiler, electric
 (C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Ventilation	com_hvac_ann_22	com_hvac_ann_22	com_ventilation_4	com_ventilation_4	com	Other fossil boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
-(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
+(C) Ref. Case Electric Other	Other	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	EIA error	EIA error	Other	Other
 (C) Ref. Case Electric Range	Cooking	com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
 (C) Ref. Case Electric Range FS	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, fossil	Range, electric	Range, fossil	Range, electric
 (C) Ref. Case Fossil Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other, fossil	Other, fossil	Other, fossil
@@ -324,7 +324,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_2	res_heating_ts_1	res	fossil	Boiler, electric	fossil	Boiler, electric
 (R) Ref. Case Electric Dryer	Other	res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Dryer, resistance	Dryer, resistance	Dryer, resistance	Dryer, resistance
-(R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_2	res_misc_ts_2	res	Other	Other	Other	Other
+(R) Ref. Case Electric Other	Other	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	res	EIA error	EIA error	Other	Other
 (R) Ref. Case Electric Range	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Range, electric	Range, electric	Range, electric	Range, electric
 (R) Ref. Case Electric Range FS	Cooking	res_cook_ann_1	res_cook_ann_2	res_cook_ts_1	res_cook_ts_2	res	Range, fossil	Range, electric	Range, fossil	Range, electric
 (R) Ref. Case Electronics	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics	Computers and electronics	Computers and electronics
@@ -436,3 +436,4 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_heating_ts_2	res_heating_ts_11	res	fossil	ASHP, best with fossil backup and env +	fossil	ASHP, best with fossil backup
 (R) Ref. NG Furnace & AC & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env +	AC	AC
 (R) Ref. NG Furnace & AC & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil with env +	fossil	fossil
+Gap	Gap	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Gap	Gap	Gap	Gap
