@@ -125,15 +125,15 @@ def reshape_json(data, path=[]):
     return rows
 
 
-def compute_no_package_energy(wide_df):
-    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
-        df = wide_df.copy()
-    else:
-        df = wide_df[wide_df['efficient_measure_env_mmbtu'].isna()].copy()
+# def compute_no_package_energy(wide_df):
+#     if 'efficient_measure_env_mmbtu' not in wide_df.columns:
+#         df = wide_df.copy()
+#     else:
+#         df = wide_df[wide_df['efficient_measure_env_mmbtu'].isna()].copy()
     
-    df['original_ann'] = (df['efficient_mmbtu'] - df['efficient_measure_mmbtu']) / 3412 * 1e6
-    df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
-    return df
+#     df['original_ann'] = (df['efficient_mmbtu'] - df['efficient_measure_mmbtu']) / 3412 * 1e6
+#     df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
+#     return df
 
 
 def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
@@ -174,12 +174,9 @@ def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
     return df
 
 
-def compute_with_package_energy_noenv(wide_df, include_bldg_type, envelope_map):
+def compute_no_package_energy(wide_df, include_bldg_type):
     if 'efficient_measure_env_mmbtu' not in wide_df.columns:
         return pd.DataFrame(columns=wide_df.columns)
-
-    # df = wide_df[~pd.isna(wide_df['efficient_measure_env_mmbtu'])].copy()
-    # df = df.merge(envelope_map, on='meas', how='left')
 
     def calc_measure(row):
         if row['component'] == 'equipment':
@@ -201,7 +198,6 @@ def compute_with_package_energy_noenv(wide_df, include_bldg_type, envelope_map):
     # Select and rename
     keep_cols = ['meas_separated', 'reg', 'end_use', 'fuel', 'year',
                     'efficient_mmbtu', 'efficient_measure_mmbtu',
-                    # 'efficient_measure_env_mmbtu',
                     'original_ann', 'measure_ann']
     if include_bldg_type:
         keep_cols.insert(2, 'bldg_type')
@@ -216,12 +212,9 @@ def compute_with_package_energy_noenv(wide_df, include_bldg_type, envelope_map):
 def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
     envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
-    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
-    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
-    if include_bldg_type:
-        grouping_cols.insert(3, 'bldg_type')
-        pivot_index.insert(2, 'bldg_type')
-    keep_cols = pivot_index + ['original_ann', 'measure_ann']
+    grouping_cols = ['meas', 'metric', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
+    keep_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['original_ann', 'measure_ann']
 
     efficient_metrics = [
         'Efficient Energy Use (MMBtu)',
@@ -239,7 +232,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure (MMBtu)': 'efficient_measure_mmbtu'
     }
     wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
-    wide = compute_no_package_energy(wide)[keep_cols]
+    wide = compute_no_package_energy(wide, include_bldg_type)[keep_cols]
 
     long = wide.melt(
         id_vars=pivot_index,
@@ -260,7 +253,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         grouped_base['tech_stage'] = 'original_ann'
         grouped_base['turnover'] = 'baseline'
 
-        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        final_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['tech_stage', 'state_ann_kwh', 'turnover']
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
@@ -315,12 +308,9 @@ def scout_to_df_noenv(filename):
 def calc_annual(df, include_baseline, turnover, include_bldg_type):
     envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
-    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
-    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
-    if include_bldg_type:
-        grouping_cols.insert(3, 'bldg_type')
-        pivot_index.insert(2, 'bldg_type')
-    keep_cols = pivot_index + ['original_ann', 'measure_ann']
+    grouping_cols = ['meas', 'metric', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
+    keep_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['original_ann', 'measure_ann']
 
     efficient_metrics = [
         'Efficient Energy Use (MMBtu)',
@@ -341,7 +331,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
     }
     wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
 
-    no_pkg = compute_no_package_energy(wide)[keep_cols]
+    no_pkg = compute_no_package_energy(wide, include_bldg_type)[keep_cols]
     with_pkg = compute_with_package_energy(wide, include_bldg_type, envelope_map)[keep_cols]
 
     long = pd.concat([no_pkg, with_pkg], ignore_index=True).melt(
@@ -376,7 +366,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
             axis=1
         )
 
-        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        final_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['tech_stage', 'state_ann_kwh', 'turnover']
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
