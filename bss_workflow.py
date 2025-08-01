@@ -29,7 +29,7 @@ EUGROUP_DIR = f"map_eu"
 # check before running
 SCOUT_RUN_DATE = "2025-07-30"
 # version of multipliers
-versionid = "20250616_amy"
+versionid = "20250801_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
 MEAS_MAP_FILE = os.path.join("map_meas", f"measure_map.tsv")
@@ -791,7 +791,8 @@ def gen_multipliers(s3_client, athena_client):
         "res_hourly_shares_cw.sql",
         "res_hourly_shares_poolpump.sql",
         "res_hourly_shares_misc.sql",
-        "res_hourly_shares_misc_flat.sql"
+        "res_hourly_shares_misc_flat.sql",
+        "res_hourly_shares_gap.sql"
     ]
 
     tbl_com = [
@@ -805,6 +806,7 @@ def gen_multipliers(s3_client, athena_client):
         # "com_ann_shares_ventilation_ref.sql",
         # "com_ann_shares_wh.sql",
         # "com_ann_shares_misc.sql",
+        "com_ann_shares_gap.sql",
         # "com_ann_shares_fossil_heat.sql",
         
         # "tbl_hr_mult.sql",
@@ -817,6 +819,7 @@ def gen_multipliers(s3_client, athena_client):
         # "com_hourly_shares_ventilation_ref.sql",
         # "com_hourly_shares_wh.sql",
         # "com_hourly_shares_misc.sql",
+        "com_hourly_shares_gap.sql",
         # "com_hourly_shares_cooking.sql",
         "com_hourly_hvac_norm.sql"
     ]
@@ -915,26 +918,26 @@ def county_partition_multipliers(s3_client, athena_client):
 #check before running
 def gen_scoutdata(s3_client, athena_client):
     scout_files = [
-#        "brk.json",
- #       "accel.json",
-  #      "state.json",
-   #     "ref.json",
-#        "aeo.json"#,
+        #"brk.json",
+        #"accel.json",
+        #"state.json",
+        #"ref.json",
+        #"aeo.json"#,
         "aeo25_20to50_bytech_indiv.json",
         "aeo25_20to50_bytech_gap_indiv.json"
-#        "aeo25_20to50_bytech_indiv.json"
+        #"aeo25_20to50_bytech_indiv.json"
         #"fossil.json"
         ]
 
-
-    # s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
+    #check before running -- comment out if the newest measure_map is already on AWS; else drop the table
+    s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
         print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
         SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
         myturnover = scout_file.split('.')[0]
 
-#check before running -- add scenario if it has no envelope measures
+        #check before running -- add scenario if it has no envelope measures
         if scout_file in ["aeo.json", "fossil.json","aeo25_20to50_byeu_indiv.json","aeo25_20to50_bytech_gap_indiv.json","aeo25_20to50_bytech_indiv.json"]:
             scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
@@ -944,20 +947,19 @@ def gen_scoutdata(s3_client, athena_client):
         
         check_missing_meas(scout_df)
 
-        #s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
+        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
         print(f"Finished adding scout data {scout_file}")
 
 
 def gen_countydata(s3_client, athena_client):
     #check before running
+    #years = ['2024','2025','2030','2035','2040','2045','2050']
     sectors = ['res','com']
-#    years = ['2024','2025','2030','2035','2040','2045','2050']
-    sectors = ['res','com']
-    years = ['2030']
+    years = ['2020','2021','2022','2023','2024','2050']
 
-#check before running
-#    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
-#    turnovers = ['aeo25_20to50_byeu_indiv']
+    #check before running
+    # turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    # turnovers = ['aeo25_20to50_byeu_indiv']
     turnovers = ["aeo25_20to50_bytech_indiv", "aeo25_20to50_bytech_gap_indiv"]
     # years = ['2018','2019','2020','2021','2022','2023']
     # turnovers = ['ineffuncal']
@@ -979,7 +981,7 @@ def combine_countydata(athena_client):
     ]
     #check before running
     #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
-    turnovers = ['aeo25_20to50_byeu_indiv']
+    turnovers = ['aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
     for sql_file in sql_files:
         print(f"Querying for {sql_file}")
         for my_turnover in turnovers:
@@ -1000,8 +1002,9 @@ def test_county(athena_client):
         "test_county_hourly_enduse.sql"
     ]
 
-    years = ['2024','2025','2030','2035','2040','2045','2050']
     #check before running
+    #years = ['2024','2025','2030','2035','2040','2045','2050']
+    years = ['2020','2021','2022','2023','2024','2050']
     #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
     #turnovers = ['aeo25_20to50_byeu_indiv']
     turnovers = ["aeo25_20to50_bytech_gap_indiv","aeo25_20to50_bytech_indiv"]
