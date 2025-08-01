@@ -437,3 +437,12 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. NG Furnace & AC & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env +	AC	AC
 (R) Ref. NG Furnace & AC & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_2	res_heating_ts_2	res	fossil	fossil with env +	fossil	fossil
 Gap	Gap	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Gap	Gap	Gap	Gap
+Gap	Cooling (Equip.)	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooling, gap	Cooling, gap	Cooling, gap	Cooling, gap
+Gap	Heating (Equip.)	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Heating, gap	Heating, gap	Heating, gap	Heating, gap
+Gap	Ventilation	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Ventilation, gap	Ventilation, gap	Ventilation, gap	Ventilation, gap
+Gap	Water Heating	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Water heater, gap	Water heater, gap	Water heater, gap	Water heater, gap
+Gap	Computers and Electronics	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Computers and electronics, gap	Computers and electronics, gap	Computers and electronics, gap	Computers and electronics, gap
+Gap	Lighting	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Lighting, gap	Lighting, gap	Lighting, gap	Lighting, gap
+Gap	Other	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Other, gap	Other, gap	Other, gap	Other, gap
+Gap	Refrigeration	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Refrigeration, gap	Refrigeration, gap	Refrigeration, gap	Refrigeration, gap
+Gap	Cooking	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooking, gap	Cooking, gap	Cooking, gap	Cooking, gap
