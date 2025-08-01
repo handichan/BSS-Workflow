@@ -57,16 +57,16 @@ Open `operational cost analysis.ipynb` and run the cells to generate the followi
 #### Annual-Level Plots
 - Total annual cost by scenario
 - Annual cost savings by scenario
-<img src="example/operational_cost_line.png" alt="Example" width="300"/>
+<img src="example/Operational_Cost_Line.png" alt="Example" width="300"/>
 
 #### Normalized Sector-End Use Cost (for a selected year, default: **2050**)
 - **Commercial**: normalized by square footage
 - **Residential**: normalized by number of homes
-<img src="example/operational_map.png" alt="Example" width="600"/>
+<img src="example/Operational_Map.png" alt="Example" width="600"/>
 
 #### State-Specific Stack Plot
 - Shows incremental years (default: **2030**, **2040**, **2050**)
-<img src="example/operational_cost_stack.png" alt="Example" width="250"/>
+<img src="example/Operational_Cost_Stack.png" alt="Example" width="250"/>
 
 ### Capital Cost Analysis
 Generates plots related to capital expenditure (CAPX) at the national level. 
@@ -75,7 +75,7 @@ Open `capital cost analysis.ipynb` and run the cells to generate the following p
 #### Annual-Level Capital Investment (2024-2050)
 - Total measure stock cost (2024$)
 - Incremental measure stock cost (2024$)
-<img src="example/capital_cost_line.png" alt="Example" width="500"/>
+<img src="example/Capital_Cost_Line.png" alt="Example" width="500"/>
 
 #### Annual-Level Capital Investment break down by Residential and Commercial Sector (2024-2050)
 - Side-by-side comparison of CAPX trends across scenarios
