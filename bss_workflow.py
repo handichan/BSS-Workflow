@@ -189,7 +189,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use (MMBtu)',
         'Efficient Energy Use, Measure (MMBtu)'
     ]
-    df[['meas', 'end_use']] = df.apply(mark_gap, axis=1, result_type='expand')
+    df['meas'] = df.apply(mark_gap, axis=1)
 
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -270,7 +270,7 @@ def scout_to_df_noenv(filename):
     to_shift.loc[:, 'fuel'] = 'Electric'
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
-    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state{filename}_df.tsv")
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{filename.split('/')[1]}_df.tsv")
     df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
@@ -292,7 +292,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure-Envelope (MMBtu)'
     ]
 
-    df[['meas', 'end_use']] = df.apply(mark_gap, axis=1, result_type='expand')
+    df['meas'] = df.apply(mark_gap, axis=1)
     
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -393,7 +393,7 @@ def scout_to_df(filename):
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
-    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state{filename}_df.tsv")
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{filename.split('/')[1]}_df.tsv")
     df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
@@ -420,9 +420,9 @@ def mark_gap(row):
         return None
     else:
         if row['bldg_type'] == 'Unspecified':
-            return ['Gap', 'Gap']
+            return 'Gap'
         else:
-            return [row['meas'], row['end_use']]
+            return row['meas']
 
 def file_to_df(file_path):
     # Check the file extension
@@ -920,7 +920,7 @@ def gen_scoutdata(s3_client, athena_client):
   #      "state.json",
    #     "ref.json",
 #        "aeo.json"#,
-        "aeo25_20to50_byeu_indiv.json",
+        "aeo25_20to50_bytech_indiv.json",
         "aeo25_20to50_bytech_gap_indiv.json"
 #        "aeo25_20to50_bytech_indiv.json"
         #"fossil.json"
