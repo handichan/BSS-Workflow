@@ -27,7 +27,8 @@ EUGROUP_DIR = f"map_eu"
 
 # SCOUT_RUN_DATE = "2024-09-30"
 # check before running
-SCOUT_RUN_DATE = "2025-07-16"
+SCOUT_RUN_DATE = "2025-07-30"
+# version of multipliers
 versionid = "20250616_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
@@ -125,15 +126,15 @@ def reshape_json(data, path=[]):
     return rows
 
 
-# def compute_no_package_energy(wide_df):
-#     if 'efficient_measure_env_mmbtu' not in wide_df.columns:
-#         df = wide_df.copy()
-#     else:
-#         df = wide_df[wide_df['efficient_measure_env_mmbtu'].isna()].copy()
+def compute_no_package_energy(wide_df):
+    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
+        df = wide_df.copy()
+    else:
+        df = wide_df[wide_df['efficient_measure_env_mmbtu'].isna()].copy()
     
-#     df['original_ann'] = (df['efficient_mmbtu'] - df['efficient_measure_mmbtu']) / 3412 * 1e6
-#     df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
-#     return df
+    df['original_ann'] = (df['efficient_mmbtu'] - df['efficient_measure_mmbtu']) / 3412 * 1e6
+    df['measure_ann'] = df['efficient_measure_mmbtu'] / 3412 * 1e6
+    return df
 
 
 def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
@@ -174,54 +175,21 @@ def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
     return df
 
 
-def compute_no_package_energy(wide_df, include_bldg_type):
-    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
-        return pd.DataFrame(columns=wide_df.columns)
-
-    def calc_measure(row):
-        if row['component'] == 'equipment':
-            return (row['efficient_measure_mmbtu'] - row['efficient_measure_env_mmbtu']) / 3412 * 1e6
-        elif row['component'] == 'equipment + env':
-            return row['efficient_measure_env_mmbtu'] / 3412 * 1e6
-        return None
-
-    def calc_original(row):
-        if row['component'] == 'equipment':
-            return (row['efficient_mmbtu'] - row['efficient_measure_mmbtu']) / 3412 * 1e6
-        elif row['component'] == 'equipment + env':
-            return 0
-        return None
-
-    df['measure_ann'] = df.apply(calc_measure, axis=1)
-    df['original_ann'] = df.apply(calc_original, axis=1)
-
-    # Select and rename
-    keep_cols = ['meas_separated', 'reg', 'end_use', 'fuel', 'year',
-                    'efficient_mmbtu', 'efficient_measure_mmbtu',
-                    'original_ann', 'measure_ann']
-    if include_bldg_type:
-        keep_cols.insert(2, 'bldg_type')
-
-    # Ensure all expected columns exist
-    keep_cols = [col for col in keep_cols if col in df.columns]
-
-    df = df[keep_cols].rename(columns={'meas_separated': 'meas'})
-    return df
-
-
 def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
     envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
-    grouping_cols = ['meas', 'metric', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
-    pivot_index = ['meas', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
-    keep_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['original_ann', 'measure_ann']
+    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
+    if include_bldg_type:
+        grouping_cols.insert(3, 'bldg_type')
+        pivot_index.insert(2, 'bldg_type')
+    keep_cols = pivot_index + ['original_ann', 'measure_ann']
 
     efficient_metrics = [
         'Efficient Energy Use (MMBtu)',
         'Efficient Energy Use, Measure (MMBtu)'
     ]
-    
-    df['meas', 'end_use'] = df.apply(mark_gap, axis=1)
+    df[['meas', 'end_use']] = df.apply(mark_gap, axis=1, result_type='expand')
 
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -232,7 +200,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure (MMBtu)': 'efficient_measure_mmbtu'
     }
     wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
-    wide = compute_no_package_energy(wide, include_bldg_type)[keep_cols]
+    wide = compute_no_package_energy(wide)[keep_cols]
 
     long = wide.melt(
         id_vars=pivot_index,
@@ -253,7 +221,8 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         grouped_base['tech_stage'] = 'original_ann'
         grouped_base['turnover'] = 'baseline'
 
-        final_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['tech_stage', 'state_ann_kwh', 'turnover']
+        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
@@ -295,12 +264,14 @@ def scout_to_df_noenv(filename):
         'Baseline Energy Use (MMBtu)'])]
     
     # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])]
+    to_shift = all_df[pd.isna(all_df['value'])].copy()
     to_shift.loc[:, 'value'] = to_shift['year']
     to_shift.loc[:, 'year'] = to_shift['fuel']
     to_shift.loc[:, 'fuel'] = 'Electric'
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state{filename}_df.tsv")
+    df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
 
@@ -308,9 +279,12 @@ def scout_to_df_noenv(filename):
 def calc_annual(df, include_baseline, turnover, include_bldg_type):
     envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
-    grouping_cols = ['meas', 'metric', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
-    pivot_index = ['meas', 'reg', 'bldg_type', 'end_use', 'fuel', 'year']
-    keep_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['original_ann', 'measure_ann']
+    grouping_cols = ['meas', 'metric', 'reg', 'end_use', 'fuel', 'year']
+    pivot_index = ['meas', 'reg', 'end_use', 'fuel', 'year']
+    if include_bldg_type:
+        grouping_cols.insert(3, 'bldg_type')
+        pivot_index.insert(2, 'bldg_type')
+    keep_cols = pivot_index + ['original_ann', 'measure_ann']
 
     efficient_metrics = [
         'Efficient Energy Use (MMBtu)',
@@ -318,7 +292,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure-Envelope (MMBtu)'
     ]
 
-    df['meas','end_use'] = df.apply(mark_gap, axis=1)
+    df[['meas', 'end_use']] = df.apply(mark_gap, axis=1, result_type='expand')
     
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -366,7 +340,9 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
             axis=1
         )
 
-        final_cols = pivot_index[True, True, include_bldg_type, True, True, True] + ['tech_stage', 'state_ann_kwh', 'turnover']
+        final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        if not include_bldg_type:
+            final_cols.remove('bldg_type')
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
@@ -410,13 +386,15 @@ def scout_to_df(filename):
         'Baseline Energy Use (MMBtu)'])]
     
     # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])]
+    to_shift = all_df[pd.isna(all_df['value'])].copy()
     to_shift.loc[:, 'value'] = to_shift['year']
     to_shift.loc[:, 'year'] = to_shift['fuel']
     to_shift.loc[:, 'fuel'] = 'Electric'
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state{filename}_df.tsv")
+    df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
 
@@ -432,15 +410,13 @@ def add_sector(row):
             return 'com'
         elif '(R)' in sec:
             return 'res'
+        elif 'Gap' in sec:
+            return 'com'
         else:
             return None
 
 def mark_gap(row):
     if pd.isna(row['bldg_type']):
-        # Uncomment the following lines if you need to print debug info
-        # print(row['meas'])
-        # print(row)
-        # print(row.index)
         return None
     else:
         if row['bldg_type'] == 'Unspecified':
@@ -944,7 +920,9 @@ def gen_scoutdata(s3_client, athena_client):
   #      "state.json",
    #     "ref.json",
 #        "aeo.json"#,
-        "aeo25_20to50_byeu_indiv.json"
+        "aeo25_20to50_byeu_indiv.json",
+        "aeo25_20to50_bytech_gap_indiv.json"
+#        "aeo25_20to50_bytech_indiv.json"
         #"fossil.json"
         ]
 
@@ -957,7 +935,7 @@ def gen_scoutdata(s3_client, athena_client):
         myturnover = scout_file.split('.')[0]
 
 #check before running -- add scenario if it has no envelope measures
-        if scout_file in ["aeo.json", "fossil.json","aeo25_20to50_byeu_indiv.json"]:
+        if scout_file in ["aeo.json", "fossil.json","aeo25_20to50_byeu_indiv.json","aeo25_20to50_bytech_gap_indiv.json","aeo25_20to50_bytech_indiv.json"]:
             scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
         else:
@@ -966,11 +944,12 @@ def gen_scoutdata(s3_client, athena_client):
         
         check_missing_meas(scout_df)
 
-        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
+        #s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
         print(f"Finished adding scout data {scout_file}")
 
 
 def gen_countydata(s3_client, athena_client):
+    #check before running
     sectors = ['res','com']
 #    years = ['2024','2025','2030','2035','2040','2045','2050']
     sectors = ['res','com']
@@ -978,8 +957,8 @@ def gen_countydata(s3_client, athena_client):
 
 #check before running
 #    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
-    turnovers = ['aeo25_20to50_byeu_indiv']
-
+#    turnovers = ['aeo25_20to50_byeu_indiv']
+    turnovers = ["aeo25_20to50_bytech_indiv", "aeo25_20to50_bytech_gap_indiv"]
     # years = ['2018','2019','2020','2021','2022','2023']
     # turnovers = ['ineffuncal']
 
@@ -1024,7 +1003,8 @@ def test_county(athena_client):
     years = ['2024','2025','2030','2035','2040','2045','2050']
     #check before running
     #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
-    turnovers = ['aeo25_20to50_byeu_indiv']
+    #turnovers = ['aeo25_20to50_byeu_indiv']
+    turnovers = ["aeo25_20to50_bytech_gap_indiv","aeo25_20to50_bytech_indiv"]
 
     # years = [2018,2019,2020,2021,2022,2023]
     # turnovers = ['ineffuncal']
@@ -1442,6 +1422,7 @@ def main(base_dir):
     if opts.create_json is True:
         convert_csv_folder_to_json('csv_raw', 'json/input.json')
 
+    # generate hourly and county disaggregation multipliers
     if opts.gen_mults is True:
         session = boto3.Session()
         s3_client = session.client('s3')
@@ -1449,6 +1430,7 @@ def main(base_dir):
         # s3_create_tables_from_csvdir(s3_client, athena_client)
         gen_multipliers(s3_client, athena_client)
 
+    # convert Scout jsons into AWS tables
     if opts.gen_scoutdata is True:
         session = boto3.Session()
         s3_client = session.client('s3')
