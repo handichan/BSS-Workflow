@@ -1,43 +1,18 @@
 # this function 
-# 1. translates JSON file to csv file
-# 2. generate plots (as Margaret's R code)
+# 1. translates JSON file to csv file for capital cost and maintenance cost
 
-import boto3
 import time
-import pandas as pd
 import os
-import json
 from os import getcwd
+import json
+import pandas as pd
 from argparse import ArgumentParser
-from io import StringIO
-import math
-import sys
-import boto3
-from botocore.exceptions import ClientError
+
 # os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.2"
 # os.environ["R_Home"] = "C:/Program Files/R/R-4.4.2"
 # import rpy2.robjects as robjects
 
 pd.set_option('display.max_columns', 30)
-JSON_PATH = 'json/input.json'
-
-
-CSV_DIR = "csv"
-OUTPUT_DIR = "agg_results_cost"
-EXTERNAL_S3_DIR = "datasets"
-DATABASE_NAME = "euss_oedi"
-BUCKET_NAME = 'xinweiz'
-
-EUGROUP_DIR = f"map_eu"
-
-
-SCOUT_RUN_DATE = "2025-01-28"
-versionid = "20240923_amy"
-
-ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
-MEAS_MAP_FILE = os.path.join("map_meas", f"measure_map.tsv")
-SQL_DIR = f"sql"
-
 
 US_STATES = [
     'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
@@ -80,6 +55,8 @@ def scout_to_df(filename, myturnover):
         all_df = all_df[cols]
 
     all_df.columns = new_columns
+
+    # CHANGE HERE if metrics to plot changes
     all_df = all_df[all_df['metric'].isin([
         'Efficient Energy Cost (USD)',
         'Baseline Energy Cost (USD)',
@@ -93,7 +70,7 @@ def scout_to_df(filename, myturnover):
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
-    save_to_folder = 'cost_table'
+    save_to_folder = 'cost_table_operational'
     os.makedirs(save_to_folder, exist_ok=True)
     df.to_csv(f'{save_to_folder}/{myturnover}.csv', index=False)
     print(f"Saved scout data to csv in {save_to_folder}/{myturnover}.csv") 
@@ -110,6 +87,7 @@ def file_to_df(file_path):
     return df
 
 def gen_scoutdata_cost(subfolder=""):
+    # CHANGE HERE if scenario file name changes
     scout_files = [
         "aeo.json",
         "ref.json",
@@ -148,11 +126,13 @@ def scout_to_df_CAPX_cost(filename, myturnover):
         all_df = all_df[cols]
 
     all_df.columns = new_columns
+
+    # CHANGE HERE if metrics to plot changes
     all_df = all_df[all_df['metric'].isin([
         'Total Measure Stock Cost (2024$)',
         'Incremental Measure Stock Cost (2024$)'])]
 
-    save_to_folder = 'capital_cost_table'
+    save_to_folder = 'cost_table_capital'
     os.makedirs(save_to_folder, exist_ok=True)
     all_df.to_csv(f'{save_to_folder}/{myturnover}_annual_CAPX.csv', index=False)
     print(f"Saved scout data to csv in {save_to_folder}/{myturnover}_annual_CAPX.csv") 
@@ -160,6 +140,7 @@ def scout_to_df_CAPX_cost(filename, myturnover):
 
 
 def gen_scoutdata_annual_capital_cost(subfolder=""):
+    # CHANGE HERE if scenario file name changes
     scout_files = [
         "aeo.json",
         "ref.json",
@@ -178,14 +159,8 @@ def gen_scoutdata_annual_capital_cost(subfolder=""):
         
 def main(base_dir, subfolder):
     if opts.gen_scoutdata_cost:
-        session = boto3.Session()
-        s3_client = session.client('s3')
-        athena_client = session.client('athena')
         gen_scoutdata_cost(subfolder)
     elif opts.gen_scoutdata_annual_capital_cost:
-        session = boto3.Session()
-        s3_client = session.client('s3')
-        athena_client = session.client('athena')
         gen_scoutdata_annual_capital_cost(subfolder)
 
 

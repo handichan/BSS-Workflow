@@ -1,8 +1,7 @@
 R/generated_csvs/
-cost_table_for_viz/
-cost_table/
 cost_table_capital/
-capital_cost_table/
+cost_table_operational/
 scout_results/
+archive/
 mseg_res_com_state/
 .ipynb_checkpoints/
