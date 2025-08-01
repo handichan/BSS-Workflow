@@ -221,7 +221,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure (MMBtu)'
     ]
     
-    df['meas'] = df.apply(mark_gap, axis=1)
+    df['meas', 'end_use'] = df.apply(mark_gap, axis=1)
 
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -318,7 +318,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure-Envelope (MMBtu)'
     ]
 
-    df['meas'] = df.apply(mark_gap, axis=1)
+    df['meas','end_use'] = df.apply(mark_gap, axis=1)
     
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -444,9 +444,9 @@ def mark_gap(row):
         return None
     else:
         if row['bldg_type'] == 'Unspecified':
-            return 'Gap'
+            return ['Gap', 'Gap']
         else:
-            return row['meas']
+            return [row['meas'], row['end_use']]
 
 def file_to_df(file_path):
     # Check the file extension
