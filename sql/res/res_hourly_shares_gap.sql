@@ -1,21 +1,32 @@
 INSERT INTO res_hourly_disaggregation_multipliers_VERSIONID
-WITH states as(
-    SELECT "in.state", "in.county"
+WITH weather as(
+    SELECT "in.weather_file_city", "in.state", "in.county"
   FROM "resstock_amy2018_release_2024.2_metadata"
   WHERE upgrade = 0
-  GROUP BY "in.state", "in.county"
-)
+  GROUP BY "in.weather_file_city", "in.state", "in.county"
+),
 
-SELECT g."in.county",
+unformatted as (SELECT "in.weather_file_city",
 	'res_gap_ts_1' shape_ts,
-	"timestamp" as timestamp_hour,
+	CAST("timestamp" AS timestamp(3)) as ts,
 	"out.electricity.total.energy_consumption..kwh" as kwh,
-	"out.electricity.total.energy_consumption..kwh" / sum("out.electricity.total.energy_consumption..kwh") OVER (PARTITION BY g."in.county") as multiplier_hourly,
+	"out.electricity.total.energy_consumption..kwh" / sum("out.electricity.total.energy_consumption..kwh") OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Gap' as end_use
+	'Other' as end_use
 
--- gap model
 FROM "comstock_2025.1_upgrade_0" g 
-LEFT JOIN states ON states."in.county" = g."in.county"
-;
+LEFT JOIN weather ON weather."in.county" = g."in.county"
+)
+
+SELECT 
+"in.weather_file_city",
+shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour,
+kwh,
+sector,
+"in.state",
+end_use
+FROM unformatted;
