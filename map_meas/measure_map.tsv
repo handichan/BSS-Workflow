@@ -404,8 +404,8 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Building Performance Standards	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other, BPS	Other	Other, codes and BPS
 (R) Building Codes	Refrigeration	res_refrig_ann_1	res_refrig_ann_1	res_refrig_ts_1	res_refrig_ts_1	res	Refrigeration	Refrigeration, codes	Refrigeration	Refrigeration, codes and BPS
 (R) Building Performance Standards	Refrigeration	res_refrig_ann_1	res_refrig_ann_1	res_refrig_ts_1	res_refrig_ts_1	res	Refrigeration	Refrigeration, BPS	Refrigeration	Refrigeration, codes and BPS
-(R) Building Codes	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, codes	Ventilation	Ventilation, codes and BPS
-(R) Building Performance Standards	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspump_ts_1	res_fanspump_ts_1	res	Ventilation	Ventilation, BPS	Ventilation	Ventilation, codes and BPS
+(R) Building Codes	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspumps_ts_1	res_fanspumps_ts_1	res	Ventilation	Ventilation, codes	Ventilation	Ventilation, codes and BPS
+(R) Building Performance Standards	Ventilation	res_fanspumps_ann_1	res_fanspumps_ann_1	res_fanspumps_ts_1	res_fanspumps_ts_1	res	Ventilation	Ventilation, BPS	Ventilation	Ventilation, codes and BPS
 (R) Building Codes	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, codes	Water heater	Water heater, codes and BPS
 (R) Building Performance Standards	Water Heating	res_wh_ann_6	res_wh_ann_6	res_wh_ts_3	res_wh_ts_3	res	Water heater	Water heater, BPS	Water heater	Water heater, codes and BPS
 (R) Building Codes	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Cooking	Cooking, codes	Cooking	Cooking, codes and BPS
