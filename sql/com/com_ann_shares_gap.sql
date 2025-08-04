@@ -21,4 +21,14 @@ gap / sum(gap) OVER (PARTITION BY "in.state") as multiplier_annual,
 "in.state",
 'Gap' AS end_use
 FROM annual
+
+UNION ALL
+SELECT 
+"in.county",
+'com_gap_ann_1' as group_ann,
+gap / sum(gap) OVER (PARTITION BY "in.state") as multiplier_annual,
+'com' AS sector,
+"in.state",
+'Other' AS end_use
+FROM annual
 ;
