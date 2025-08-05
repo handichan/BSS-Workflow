@@ -27,6 +27,7 @@ com_heating_ts_6	GSHP heating	NaturalGas	Furnace	TRUE	22	heating	4/24/25
 com_heating_ts_6	GSHP heating	Propane	Furnace	TRUE	22	heating	4/24/25
 com_heating_ts_6	GSHP heating	Propane	Boiler 	TRUE	22	heating	4/24/25
 com_heating_ts_7	Electric resistance	Electricity	Electric Resistance	TRUE	0	heating	4/24/25
+com_heating_ts_7	Electric resistance	Electricity	Furnace	TRUE	0	heating	4/24/25
 com_heating_ts_8	Fossil furnace	FuelOil	Furnace	TRUE	0	heating	4/24/25
 com_heating_ts_8	Fossil furnace	NaturalGas	Furnace	TRUE	0	heating	4/24/25
 com_heating_ts_8	Fossil furnace	Propane	Furnace	TRUE	0	heating	4/24/25
