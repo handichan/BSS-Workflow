@@ -1,5 +1,6 @@
 shape_ts	description	in.heating_fuel	in.hvac_heat_type	applicability	upgrade	shape_end_use	version
 com_heating_ts_1	Variable Speed HP RTU, Electric Backup	Electricity	Electric Resistance	TRUE	1	heating	4/24/25
+com_heating_ts_1	Variable Speed HP RTU, Electric Backup	Electricity	Furnace	TRUE	1	heating	4/24/25
 com_heating_ts_1	Variable Speed HP RTU, Electric Backup	FuelOil	Furnace	TRUE	1	heating	4/24/25
 com_heating_ts_1	Variable Speed HP RTU, Electric Backup	NaturalGas	Furnace	TRUE	1	heating	4/24/25
 com_heating_ts_1	Variable Speed HP RTU, Electric Backup	Propane	Furnace	TRUE	1	heating	4/24/25
