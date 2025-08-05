@@ -43,4 +43,123 @@ multiplier_hourly,
 	CAST('Other' AS varchar) as end_use
 FROM unformatted
 
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Lighting' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Heating (Equip.)' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Cooling (Equip.)' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Ventilation' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Computers and Electronics' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Water Heating' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Refrigeration' AS varchar) as end_use
+FROM unformatted
+
+UNION ALL
+
+SELECT 
+"in.county",
+	CAST('com_gap_ts_1' AS varchar) AS shape_ts,
+  CASE
+		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
+		ELSE ts END as timestamp_hour
+kwh,
+multiplier_hourly,
+   CAST('com' AS varchar) AS sector,
+    CAST("in.state" AS varchar) AS "in.state",
+	CAST('Cooking' AS varchar) as end_use
+FROM unformatted
 ;
