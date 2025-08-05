@@ -14,6 +14,7 @@ WITH filtered_annual AS (
     WHERE "year" = YEARID
       AND scout_run = 'SCOUTRUNDATE'
       AND end_use = 'ENDUSEID'
+      AND county_ann_kwh = county_ann_kwh
 ),
 
 measure_map_ts_long AS (
