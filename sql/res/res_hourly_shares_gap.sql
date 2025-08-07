@@ -26,6 +26,7 @@ shape_ts,
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
 		ELSE ts END as timestamp_hour,
 kwh,
+multiplier_hourly,
 sector,
 "in.state",
 end_use
