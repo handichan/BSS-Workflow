@@ -19,143 +19,150 @@ LEFT JOIN states ON states."in.county" = g."in.county"
 )
 
 SELECT 
-"in.county",
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Gap' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
-"in.county",
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Other' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
-
+	
 SELECT 
-"in.county",
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Lighting' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Heating (Equip.)' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Cooling (Equip.)' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Ventilation' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Computers and Electronics' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Water Heating' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Refrigeration' AS varchar) as end_use
 FROM unformatted
 
 UNION ALL
 
 SELECT 
+	"in.county",
 	shape_ts,
-  CASE
+	CASE
 		WHEN extract(YEAR FROM ts) = 2019 THEN ts - INTERVAL '1' YEAR
-		ELSE ts END as timestamp_hour
+		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-   	sector,
-    "in.state",
+		sector,
+	 "in.state",
 	CAST('Cooking' AS varchar) as end_use
 FROM unformatted
 ;
