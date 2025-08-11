@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO com_hourly_hvac_temp_VERSIONID
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses
@@ -31,12 +31,11 @@ ts_agg AS(
         "in.county",
 		shape_ts
 )
--- normalize the shapes
+-- don't normalize the shapes
 SELECT "in.county",
 	shape_ts,
 	timestamp_hour,
 	ventilation as kwh,
-	ventilation / sum(ventilation) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
 	'Ventilation' as end_use

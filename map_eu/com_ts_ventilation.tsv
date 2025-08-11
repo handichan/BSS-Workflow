@@ -48,7 +48,36 @@ com_ventilation_7	Resistance heat + rtac&chiller	ACC	Zone-by-Zone	Electric Resis
 com_ventilation_7	Resistance heat + rtac&chiller	District	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	4/24/25
 com_ventilation_7	Resistance heat + rtac&chiller	DX	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	4/24/25
 com_ventilation_7	Resistance heat + rtac&chiller	WCC	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Small Packaged Unit	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Residential Style Central Systems	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	None	Other HVAC	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	None	Residential Style Central Systems	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	None	Zone-by-Zone	Furnace	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ASHP	Zone-by-Zone	ASHP	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ASHP	Small Packaged Unit	ASHP	TRUE	22	ventilation	4/24/25
 com_ventilation_8	GSHP	GSHP	Zone-by-Zone	GSHP	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	District	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	Boiler 	TRUE	22	ventilation	4/24/25
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation	4/24/25
 com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Boiler 	TRUE	37	ventilation	4/24/25
 com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	District	TRUE	37	ventilation	4/24/25
 com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Electric Resistance	TRUE	37	ventilation	4/24/25

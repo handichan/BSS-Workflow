@@ -53,7 +53,7 @@ SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
 	heating as kwh,
-	heating / sum(heating) OVER (PARTITION BY "in.weather_file_city", shape_ts) as multiplier_hourly,
+	heating / sum(heating) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
 	'Heating (Equip.)' as end_use

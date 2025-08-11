@@ -1,6 +1,8 @@
 INSERT INTO county_annual_com_YEARID_TURNOVERID
 WITH electric_df AS (
-    SELECT *
+    SELECT 
+    CASE WHEN meas='Gap' THEN 'Gap' ELSE meas END as meas,
+    reg, end_use, fuel, "year", tech_stage, state_ann_kwh, turnover, scout_run
     FROM scout_annual_state_TURNOVERID
     WHERE scout_run = 'SCOUTRUNDATE'
     AND fuel = 'Electric'

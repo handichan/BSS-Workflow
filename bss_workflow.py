@@ -20,13 +20,16 @@ CSV_DIR = "csv"
 OUTPUT_DIR = "agg_results"
 EXTERNAL_S3_DIR = "datasets"
 DATABASE_NAME = "euss_oedi"
+# check before running
 BUCKET_NAME = 'handibucket'
 
 EUGROUP_DIR = f"map_eu"
 
 # SCOUT_RUN_DATE = "2024-09-30"
+# check before running
 SCOUT_RUN_DATE = "2025-06-16"
-versionid = "20250616_amy"
+# version of multipliers
+versionid = "20250806_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
 MEAS_MAP_FILE = os.path.join("map_meas", f"measure_map.tsv")
@@ -172,45 +175,6 @@ def compute_with_package_energy(wide_df, include_bldg_type, envelope_map):
     return df
 
 
-def compute_with_package_energy_noenv(wide_df, include_bldg_type, envelope_map):
-    if 'efficient_measure_env_mmbtu' not in wide_df.columns:
-        return pd.DataFrame(columns=wide_df.columns)
-
-    # df = wide_df[~pd.isna(wide_df['efficient_measure_env_mmbtu'])].copy()
-    # df = df.merge(envelope_map, on='meas', how='left')
-
-    def calc_measure(row):
-        if row['component'] == 'equipment':
-            return (row['efficient_measure_mmbtu'] - row['efficient_measure_env_mmbtu']) / 3412 * 1e6
-        elif row['component'] == 'equipment + env':
-            return row['efficient_measure_env_mmbtu'] / 3412 * 1e6
-        return None
-
-    def calc_original(row):
-        if row['component'] == 'equipment':
-            return (row['efficient_mmbtu'] - row['efficient_measure_mmbtu']) / 3412 * 1e6
-        elif row['component'] == 'equipment + env':
-            return 0
-        return None
-
-    df['measure_ann'] = df.apply(calc_measure, axis=1)
-    df['original_ann'] = df.apply(calc_original, axis=1)
-
-    # Select and rename
-    keep_cols = ['meas_separated', 'reg', 'end_use', 'fuel', 'year',
-                    'efficient_mmbtu', 'efficient_measure_mmbtu',
-                    # 'efficient_measure_env_mmbtu',
-                    'original_ann', 'measure_ann']
-    if include_bldg_type:
-        keep_cols.insert(2, 'bldg_type')
-
-    # Ensure all expected columns exist
-    keep_cols = [col for col in keep_cols if col in df.columns]
-
-    df = df[keep_cols].rename(columns={'meas_separated': 'meas'})
-    return df
-
-
 def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
     envelope_map = file_to_df(ENVELOPE_MAP_FILE)
 
@@ -225,6 +189,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use (MMBtu)',
         'Efficient Energy Use, Measure (MMBtu)'
     ]
+    df['meas'] = df.apply(mark_gap, axis=1)
 
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
@@ -257,6 +222,7 @@ def calc_annual_noenv(df, include_baseline, turnover, include_bldg_type):
         grouped_base['turnover'] = 'baseline'
 
         final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
@@ -296,16 +262,16 @@ def scout_to_df_noenv(filename):
     all_df = all_df[all_df['metric'].isin(['Efficient Energy Use (MMBtu)',
         'Efficient Energy Use, Measure (MMBtu)',
         'Baseline Energy Use (MMBtu)'])]
-    print('Removing (R) Electric FS (Secondary Fossil Heating)')
-    all_df = all_df[all_df['meas'] != '(R) Electric FS (Secondary Fossil Heating)']
     
     # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])]
-    to_shift['value'] = to_shift['year']
-    to_shift['year'] = to_shift['fuel']
-    to_shift['fuel'] = 'Electric'
+    to_shift = all_df[pd.isna(all_df['value'])].copy()
+    to_shift.loc[:, 'value'] = to_shift['year']
+    to_shift.loc[:, 'year'] = to_shift['fuel']
+    to_shift.loc[:, 'fuel'] = 'Electric'
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{filename.split('/')[1]}_df.tsv")
+    df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
 
@@ -326,6 +292,8 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
         'Efficient Energy Use, Measure-Envelope (MMBtu)'
     ]
 
+    df['meas'] = df.apply(mark_gap, axis=1)
+    
     efficient = df[df['metric'].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols)['value'].sum().reset_index()
     wide = grouped.pivot(index=pivot_index, columns='metric', values='value').reset_index()
@@ -337,7 +305,7 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
     }
     wide = wide.rename(columns={k: v for k, v in metric_rename_map.items() if k in wide.columns})
 
-    no_pkg = compute_no_package_energy(wide)[keep_cols]
+    no_pkg = compute_no_package_energy(wide, include_bldg_type)[keep_cols]
     with_pkg = compute_with_package_energy(wide, include_bldg_type, envelope_map)[keep_cols]
 
     long = pd.concat([no_pkg, with_pkg], ignore_index=True).melt(
@@ -373,6 +341,8 @@ def calc_annual(df, include_baseline, turnover, include_bldg_type):
         )
 
         final_cols = pivot_index + ['tech_stage', 'state_ann_kwh', 'turnover']
+        if not include_bldg_type:
+            final_cols.remove('bldg_type')
         grouped_base = grouped_base[[col for col in final_cols if col in grouped_base.columns]]
         to_return = pd.concat([to_return, grouped_base], ignore_index=True)
 
@@ -416,13 +386,15 @@ def scout_to_df(filename):
         'Baseline Energy Use (MMBtu)'])]
     
     # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])]
+    to_shift = all_df[pd.isna(all_df['value'])].copy()
     to_shift.loc[:, 'value'] = to_shift['year']
     to_shift.loc[:, 'year'] = to_shift['fuel']
     to_shift.loc[:, 'fuel'] = 'Electric'
 
     df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
 
+    local_path = os.path.join(OUTPUT_DIR, f"scout_annual_state_{filename.split('/')[1]}_df.tsv")
+    df.to_csv(local_path, sep='\t', index = False)
 
     return(df)
 
@@ -438,9 +410,19 @@ def add_sector(row):
             return 'com'
         elif '(R)' in sec:
             return 'res'
+        elif 'Gap' in sec:
+            return 'com'
         else:
             return None
 
+def mark_gap(row):
+    if pd.isna(row['bldg_type']):
+        return None
+    else:
+        if row['bldg_type'] == 'Unspecified':
+            return 'Gap'
+        else:
+            return row['meas']
 
 def file_to_df(file_path):
     # Check the file extension
@@ -615,7 +597,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query, table_name):
 
 def get_csvs_for_R(athena_client):
 
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['breakthrough','ineff','mid','high','stated']
 
     sql_files = [
         'county_100_hrs.sql',
@@ -777,66 +759,69 @@ def list_all_objects(s3_client, bucket, prefix):
 
 
 def gen_multipliers(s3_client, athena_client):
-    sectors = ['com']
+    sectors = ['com','res']
 
     tbl_res = [
-        "tbl_ann_mult.sql",
-        "res_ann_shares_cook.sql",
-        "res_ann_shares_lighting.sql",
-        "res_ann_shares_refrig.sql",
-        "res_ann_shares_wh.sql",
-        "res_ann_shares_hvac.sql",
-        "res_ann_shares_deliveredheat.sql",
-        "res_ann_shares_deliveredcool.sql",
-        "res_ann_shares_deliveredwh.sql",
-        "res_ann_shares_cw.sql",
-        "res_ann_shares_dry.sql",
-        "res_ann_shares_dw.sql",
-        "res_ann_shares_fanspumps.sql",
-        "res_ann_shares_misc.sql",
-        "res_ann_shares_poolpump.sql",
+        # "tbl_ann_mult.sql",
+        # "res_ann_shares_cook.sql",
+        # "res_ann_shares_lighting.sql",
+        # "res_ann_shares_refrig.sql",
+        # "res_ann_shares_wh.sql",
+        # "res_ann_shares_hvac.sql",
+        # "res_ann_shares_deliveredheat.sql",
+        # "res_ann_shares_deliveredcool.sql",
+        # "res_ann_shares_deliveredwh.sql",
+        # "res_ann_shares_cw.sql",
+        # "res_ann_shares_dry.sql",
+        # "res_ann_shares_dw.sql",
+        # "res_ann_shares_fanspumps.sql",
+        # "res_ann_shares_misc.sql",
+        # "res_ann_shares_poolpump.sql",
 
-        "tbl_hr_mult.sql",
-        "res_hourly_shares_cooling.sql",
-        "res_hourly_shares_heating.sql",
-        "res_hourly_shares_refrig.sql",
-        "res_hourly_shares_lighting.sql",
-        "res_hourly_shares_cook.sql",
-        "res_hourly_shares_wh.sql",
-        "res_hourly_shares_fanspumps.sql",
-        "res_hourly_shares_dw.sql",
-        "res_hourly_shares_dry.sql",
-        "res_hourly_shares_cw.sql",
-        "res_hourly_shares_poolpump.sql",
-        "res_hourly_shares_misc.sql",
-        "res_hourly_shares_misc_flat.sql"
+        # "tbl_hr_mult.sql",
+        # "res_hourly_shares_cooling.sql",
+        # "res_hourly_shares_heating.sql",
+        # "res_hourly_shares_refrig.sql",
+        # "res_hourly_shares_lighting.sql",
+        # "res_hourly_shares_cook.sql",
+        # "res_hourly_shares_wh.sql",
+        # "res_hourly_shares_fanspumps.sql",
+        # "res_hourly_shares_dw.sql",
+        # "res_hourly_shares_dry.sql",
+        # "res_hourly_shares_cw.sql",
+        # "res_hourly_shares_poolpump.sql",
+        # "res_hourly_shares_misc.sql",
+        # "res_hourly_shares_misc_flat.sql",
+        "res_hourly_shares_gap.sql"
     ]
 
     tbl_com = [
-        "tbl_ann_mult.sql",
-        "com_ann_shares_cook.sql",
-        "com_ann_shares_deliveredcool.sql",
-        "com_ann_shares_electric_heat.sql",
-        "com_ann_shares_hvac.sql",
-        "com_ann_shares_lighting.sql",
-        "com_ann_shares_refrig.sql",
-        "com_ann_shares_ventilation_ref.sql",
-        "com_ann_shares_wh.sql",
-        "com_ann_shares_misc.sql",
-        "com_ann_shares_fossil_heat.sql",
+        # "tbl_ann_mult.sql",
+        # "com_ann_shares_cook.sql",
+        # "com_ann_shares_deliveredcool.sql",
+        # "com_ann_shares_electric_heat.sql",
+        # "com_ann_shares_hvac.sql",
+        # "com_ann_shares_lighting.sql",
+        # "com_ann_shares_refrig.sql",
+        # "com_ann_shares_ventilation_ref.sql",
+        # "com_ann_shares_wh.sql",
+        # "com_ann_shares_misc.sql",
+        # "com_ann_shares_gap.sql",
+        # "com_ann_shares_fossil_heat.sql",
         
-        "tbl_hr_mult.sql",
-        "tbl_hr_mult_hvac_temp.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
-        "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_cooking.sql",
-        "com_hourly_hvac_norm.sql"
+        # "tbl_hr_mult.sql",
+        # "tbl_hr_mult_hvac_temp.sql",
+        # "com_hourly_shares_cooling.sql",
+        # "com_hourly_shares_heating.sql",
+        # "com_hourly_shares_lighting.sql",
+        # "com_hourly_shares_refrig.sql",
+        # "com_hourly_shares_ventilation.sql",
+        # "com_hourly_shares_ventilation_ref.sql",
+        # "com_hourly_shares_wh.sql",
+        # "com_hourly_shares_misc.sql",
+        # "com_hourly_shares_gap.sql",
+        # "com_hourly_shares_cooking.sql",
+        # "com_hourly_hvac_norm.sql"
     ]
     for sectorid in sectors:
         if sectorid == 'res':
@@ -930,16 +915,21 @@ def county_partition_multipliers(s3_client, athena_client):
             execute_athena_query(athena_client, query1, False)
 
 
+#check before running
 def gen_scoutdata(s3_client, athena_client):
     scout_files = [
-        "brk.json",
-        "accel.json",
-        "state.json",
-        "ref.json",
-        "aeo.json",
-        "fossil.json"
+        #"brk.json",
+        #"accel.json",
+        #"state.json",
+        #"ref.json",
+        #"aeo.json"#,
+        "aeo25_20to50_bytech_indiv.json",
+        "aeo25_20to50_bytech_gap_indiv.json"
+        #"aeo25_20to50_bytech_indiv.json"
+        #"fossil.json"
         ]
 
+    #check before running -- comment out if the newest measure_map is already on AWS; else drop the table
     s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
@@ -947,7 +937,8 @@ def gen_scoutdata(s3_client, athena_client):
         SCOUT_RESULTS_FILEPATH = os.path.join("scout_results", scout_file)
         myturnover = scout_file.split('.')[0]
 
-        if scout_file in ["aeo.json", "fossil.json"]:
+        #check before running -- add scenario if it has no envelope measures
+        if scout_file in ["aeo.json", "fossil.json","aeo25_20to50_byeu_indiv.json","aeo25_20to50_bytech_gap_indiv.json","aeo25_20to50_bytech_indiv.json"]:
             scout_df = scout_to_df_noenv(SCOUT_RESULTS_FILEPATH)
             scout_ann_df, scout_ann_local_path = calc_annual_noenv(scout_df,include_baseline = True, turnover = myturnover, include_bldg_type = False)
         else:
@@ -961,13 +952,16 @@ def gen_scoutdata(s3_client, athena_client):
 
 
 def gen_countydata(s3_client, athena_client):
+    #check before running
+    # years = ['2024','2025','2030','2035','2040','2045','2050']
     sectors = ['res','com']
-    years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    # years = ['2020','2021','2022','2023','2024','2050']
+    years = ['2020','2021','2022','2023','2024','2050']
 
-    # years = ['2018','2019','2020','2021','2022','2023']
-    # turnovers = ['ineffuncal']
-
+    #check before running
+    # turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    # turnovers = ['brk','accel','ref','state','fossil', 'aeo','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
+    turnovers = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
     for sectorid in sectors:
         for yearid in years:
             for myturnover in turnovers:
@@ -981,15 +975,21 @@ def combine_countydata(athena_client):
     sql_dir = "data_conversion"
     sql_files = [
         # "combine_annual_2024_2050.sql",
-        "combine_hourly_2024_2050.sql"
+        # "combine_hourly_2024_2050.sql"
+        "combine_annual.sql",
+        "combine_hourly.sql"
     ]
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    #check before running
+    #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
     for sql_file in sql_files:
         print(f"Querying for {sql_file}")
         for my_turnover in turnovers:
             query = read_sql_file(f"{sql_dir}/{sql_file}")
             if "TURNOVERID" in query:
                 query = query.replace("TURNOVERID", f"{my_turnover}")
+            if "VERSIONID" in query:
+                query = query.replace("VERSIONID", f"{versionid}")            
             if "BUCKETNAMEID" in query:
                 query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
             execute_athena_query(athena_client, query, False)
@@ -1004,8 +1004,12 @@ def test_county(athena_client):
         "test_county_hourly_enduse.sql"
     ]
 
-    years = ['2024','2025','2030','2035','2040','2045','2050']
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    #check before running
+    # years = ['2024','2025','2030','2035','2040','2045','2050']
+    years = ['2020','2021','2022','2023','2024','2050']
+    #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    #turnovers = ['aeo25_20to50_byeu_indiv']
+    turnovers = ["brk", "aeo25_20to50_bytech_gap_indiv","aeo25_20to50_bytech_indiv"]
 
     # years = [2018,2019,2020,2021,2022,2023]
     # turnovers = ['ineffuncal']
@@ -1031,14 +1035,16 @@ def test_county(athena_client):
                 df = execute_athena_query_to_df(athena_client, query)
 
                 df['year'] = my_year
-                print(query)
+                #print(query)
 
                 if "enduse" in sql_file:
                     df['diff_commercial'] = (1 - df['commercial_sum'] / df['scout_commercial_sum']).round(2)
                     df['diff_residential'] = (1 - df['residential_sum'] / df['scout_residential_sum']).round(2)
                     df = df.sort_values(by=['end_use', 'turnover'], ascending=[True, True])
                 elif "total" in sql_file:
-                    df['diff'] = (1 - (df['commercial_sum'] + df['residential_sum']) / df['scout_sum']).round(2)
+                    # df['diff'] = (1 - (df['commercial_sum'] + df['residential_sum']) / df['scout_sum']).round(2)
+                    df['diff_commercial'] = (1 - df['commercial_sum'] / df['scout_commercial_sum']).round(2)
+                    df['diff_residential'] = (1 - df['residential_sum'] / df['scout_residential_sum']).round(2)
                     df = df.sort_values(by=['turnover'], ascending=[True])
 
                 final_df = pd.concat([final_df, df], ignore_index=True)
@@ -1132,8 +1138,10 @@ def test_compare_measures(athena_client):
     out = f"./diagnostics/{txt_out}"
 
     # years = [2024,2030,2040,2050]
-    turnovers = ['breakthrough','ineff','mid','high','stated']
-    years = [2024]
+    # turnovers = ['breakthrough','ineff','mid','high','stated']
+    # years = [2024]
+    years = ['2020','2021','2022','2023','2024','2050']
+    turnovers = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
     query_county_annual = f"""
         SELECT DISTINCT meas FROM county_annual_com_YEARID_TURNOVERID 
@@ -1143,7 +1151,7 @@ def test_compare_measures(athena_client):
         SELECT DISTINCT meas FROM scout_annual_state_TURNOVERID WHERE fuel = 'Electric'
     """
     query_measure_map = f"""
-        SELECT DISTINCT meas FROM measure_map_20240927
+        SELECT DISTINCT meas FROM measure_map
     """
     with open(out, 'w') as file:
         sys.stdout = file
@@ -1423,13 +1431,16 @@ def main(base_dir):
     if opts.create_json is True:
         convert_csv_folder_to_json('csv_raw', 'json/input.json')
 
+    # generate hourly and county disaggregation multipliers
     if opts.gen_mults is True:
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
         # s3_create_tables_from_csvdir(s3_client, athena_client)
-        gen_multipliers(s3_client, athena_client)
+        # gen_multipliers(s3_client, athena_client)
+        test_multipliers(athena_client)
 
+    # convert Scout jsons into AWS tables
     if opts.gen_scoutdata is True:
         session = boto3.Session()
         s3_client = session.client('s3')
@@ -1465,10 +1476,10 @@ def main(base_dir):
 
         # gen_scoutdata(s3_client, athena_client)
         # gen_countydata(s3_client, athena_client)
-        # combine_countydata(athena_client)
-        # test_county(athena_client)
+        combine_countydata(athena_client)
+        test_county(athena_client)
         # run_r_script('annual_graphs.R')
-        get_csvs_for_R(athena_client)
+        # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
         # convert_long_to_wide(athena_client)
 
@@ -1498,13 +1509,14 @@ def main(base_dir):
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
-        # test_multipliers(athena_client)
+
         # test_county(athena_client)
+        # test_multipliers(athena_client)
         # test_compare_measures(athena_client)
         
-        # run_r_script('annual_graphs.R')
+        run_r_script('annual_graphs.R')
 
-        get_csvs_for_R(athena_client)
+        # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
 
         # athena --> AWS Glue ->  S3

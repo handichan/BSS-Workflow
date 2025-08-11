@@ -203,3 +203,6 @@ res_heating_ts_9	high eff ASHP  + light env heating	Electricity	Ducted Heat Pump
 res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	Ducted Heat Pump	8	heating	7/19/24
 res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	Ducted Heat Pump	9	heating	7/19/24
 res_heating_ts_12	GSHP  + light env heating	Electricity	Ducted Heat Pump	10	heating	7/19/24
+res_heating_ts_13	ER heating + light env	Electricity	Central AC	16	heating	7/19/24
+res_heating_ts_13	ER heating + light env	Electricity	Room AC	16	heating	7/19/24
+res_heating_ts_13	ER heating + light env	Electricity	None	16	heating	7/19/24

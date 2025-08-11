@@ -12,9 +12,9 @@ WITH filtered_annual AS (
     end_use
     FROM county_annual_com_YEARID_TURNOVERID
     WHERE "year" = YEARID
-      AND county_ann_kwh > 0
       AND scout_run = 'SCOUTRUNDATE'
       AND end_use = 'ENDUSEID'
+      AND county_ann_kwh = county_ann_kwh
 ),
 
 measure_map_ts_long AS (
