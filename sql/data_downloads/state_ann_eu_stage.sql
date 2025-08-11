@@ -1,24 +1,20 @@
 WITH elec as(
-SELECT * FROM scout_annual_state_brk
+SELECT * FROM scout_annual_state_stated
 
 UNION all
-SELECT * FROM scout_annual_state_accel
+SELECT * FROM scout_annual_state_mid
 WHERE turnover !='baseline'
 
 UNION all
-SELECT * FROM scout_annual_state_state
+SELECT * FROM scout_annual_state_high
 WHERE turnover !='baseline'
 
 UNION all
-SELECT * FROM scout_annual_state_ref
+SELECT * FROM scout_annual_state_breakthrough
 WHERE turnover !='baseline'
 
 UNION all
-SELECT * FROM scout_annual_state_aeo
-WHERE turnover !='baseline'
-
-UNION all
-SELECT * FROM scout_annual_state_fossil
+SELECT * FROM scout_annual_state_ineff
 WHERE turnover !='baseline'
 ),
 

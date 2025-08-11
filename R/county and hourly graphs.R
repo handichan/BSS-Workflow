@@ -21,7 +21,7 @@ theme_set(theme_bw())
 
 # the data frame names are analogous to the names of the SQL queries that created them
 
-input_dir <- "generated_csvs" #directory where the csvs are stored
+input_dir <- "../generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
@@ -426,6 +426,7 @@ for (i in 1:length(county_hourly_examples_list)){
     mutate(day_label=paste(month,day,sep="/"),x=if_else(year==2024,3,13))
   psample<-with_ex_labels %>% 
     right_join(maxes %>% select(year, month, day, example_label, in.county),by=c("year", "month", "day", "example_label", "in.county")) %>%
+    mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
     ggplot(aes(color=factor(year)))+
     geom_line(aes(x=hour,y=county_total_hourly_kwh/1000,linetype=turnover))+
     xlab("EST")+

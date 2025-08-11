@@ -597,7 +597,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query, table_name):
 
 def get_csvs_for_R(athena_client):
 
-    turnovers = ['brk','accel','ref','state','fossil', 'aeo']
+    turnovers = ['breakthrough','ineff','mid','high','stated']
 
     sql_files = [
         'county_100_hrs.sql',
@@ -759,24 +759,24 @@ def list_all_objects(s3_client, bucket, prefix):
 
 
 def gen_multipliers(s3_client, athena_client):
-    sectors = ['com']
+    sectors = ['com','res']
 
     tbl_res = [
-        "tbl_ann_mult.sql",
-        "res_ann_shares_cook.sql",
-        "res_ann_shares_lighting.sql",
-        "res_ann_shares_refrig.sql",
-        "res_ann_shares_wh.sql",
-        "res_ann_shares_hvac.sql",
-        "res_ann_shares_deliveredheat.sql",
-        "res_ann_shares_deliveredcool.sql",
-        "res_ann_shares_deliveredwh.sql",
-        "res_ann_shares_cw.sql",
-        "res_ann_shares_dry.sql",
-        "res_ann_shares_dw.sql",
-        "res_ann_shares_fanspumps.sql",
-        "res_ann_shares_misc.sql",
-        "res_ann_shares_poolpump.sql",
+        # "tbl_ann_mult.sql",
+        # "res_ann_shares_cook.sql",
+        # "res_ann_shares_lighting.sql",
+        # "res_ann_shares_refrig.sql",
+        # "res_ann_shares_wh.sql",
+        # "res_ann_shares_hvac.sql",
+        # "res_ann_shares_deliveredheat.sql",
+        # "res_ann_shares_deliveredcool.sql",
+        # "res_ann_shares_deliveredwh.sql",
+        # "res_ann_shares_cw.sql",
+        # "res_ann_shares_dry.sql",
+        # "res_ann_shares_dw.sql",
+        # "res_ann_shares_fanspumps.sql",
+        # "res_ann_shares_misc.sql",
+        # "res_ann_shares_poolpump.sql",
 
         "tbl_hr_mult.sql",
         "res_hourly_shares_cooling.sql",
@@ -796,30 +796,32 @@ def gen_multipliers(s3_client, athena_client):
     ]
 
     tbl_com = [
-        "tbl_ann_mult.sql",
-        "com_ann_shares_cook.sql",
-        "com_ann_shares_deliveredcool.sql",
-        "com_ann_shares_electric_heat.sql",
-        "com_ann_shares_hvac.sql",
-        "com_ann_shares_lighting.sql",
-        "com_ann_shares_refrig.sql",
-        "com_ann_shares_ventilation_ref.sql",
-        "com_ann_shares_wh.sql",
-        "com_ann_shares_misc.sql",
-        "com_ann_shares_fossil_heat.sql",
+        # "tbl_ann_mult.sql",
+        # "com_ann_shares_cook.sql",
+        # "com_ann_shares_deliveredcool.sql",
+        # "com_ann_shares_electric_heat.sql",
+        # "com_ann_shares_hvac.sql",
+        # "com_ann_shares_lighting.sql",
+        # "com_ann_shares_refrig.sql",
+        # "com_ann_shares_ventilation_ref.sql",
+        # "com_ann_shares_wh.sql",
+        # "com_ann_shares_misc.sql",
+        # "com_ann_shares_gap.sql",
+        # "com_ann_shares_fossil_heat.sql",
         
-        "tbl_hr_mult.sql",
-        "tbl_hr_mult_hvac_temp.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
-        "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_cooking.sql",
-        "com_hourly_hvac_norm.sql"
+        # "tbl_hr_mult.sql",
+        # "tbl_hr_mult_hvac_temp.sql",
+        # "com_hourly_shares_cooling.sql",
+        # "com_hourly_shares_heating.sql",
+        # "com_hourly_shares_lighting.sql",
+        # "com_hourly_shares_refrig.sql",
+        # "com_hourly_shares_ventilation.sql",
+        # "com_hourly_shares_ventilation_ref.sql",
+        # "com_hourly_shares_wh.sql",
+        # "com_hourly_shares_misc.sql",
+        # "com_hourly_shares_gap.sql",
+        # "com_hourly_shares_cooking.sql",
+        # "com_hourly_hvac_norm.sql"
     ]
     for sectorid in sectors:
         if sectorid == 'res':
@@ -927,6 +929,7 @@ def gen_scoutdata(s3_client, athena_client):
         #"fossil.json"
         ]
 
+    #check before running -- comment out if the newest measure_map is already on AWS; else drop the table
     s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
@@ -973,18 +976,22 @@ def gen_countydata(s3_client, athena_client):
 def combine_countydata(athena_client):
     sql_dir = "data_conversion"
     sql_files = [
-        "combine_annual_2024_2050.sql",
-        "combine_hourly_2024_2050.sql"
+        # "combine_annual_2024_2050.sql",
+        # "combine_hourly_2024_2050.sql"
+        "combine_annual.sql",
+        "combine_hourly.sql"
     ]
     #check before running
     #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
-    turnovers = ['aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
+    turnovers = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
     for sql_file in sql_files:
         print(f"Querying for {sql_file}")
         for my_turnover in turnovers:
             query = read_sql_file(f"{sql_dir}/{sql_file}")
             if "TURNOVERID" in query:
                 query = query.replace("TURNOVERID", f"{my_turnover}")
+            if "VERSIONID" in query:
+                query = query.replace("VERSIONID", f"{versionid}")            
             if "BUCKETNAMEID" in query:
                 query = query.replace("BUCKETNAMEID", f"{BUCKET_NAME}")
             execute_athena_query(athena_client, query, False)
@@ -1001,11 +1008,11 @@ def test_county(athena_client):
     ]
 
     #check before running
-    #years = ['2024','2025','2030','2035','2040','2045','2050']
+    # years = ['2024','2025','2030','2035','2040','2045','2050']
     years = ['2020','2021','2022','2023','2024','2050']
     #turnovers = ['brk','accel','ref','state','fossil', 'aeo']
     #turnovers = ['aeo25_20to50_byeu_indiv']
-    turnovers = ["aeo25_20to50_bytech_gap_indiv","aeo25_20to50_bytech_indiv"]
+    turnovers = ["brk", "aeo25_20to50_bytech_gap_indiv","aeo25_20to50_bytech_indiv"]
 
     # years = [2018,2019,2020,2021,2022,2023]
     # turnovers = ['ineffuncal']
@@ -1133,8 +1140,10 @@ def test_compare_measures(athena_client):
     out = f"./diagnostics/{txt_out}"
 
     # years = [2024,2030,2040,2050]
-    turnovers = ['breakthrough','ineff','mid','high','stated']
-    years = [2024]
+    # turnovers = ['breakthrough','ineff','mid','high','stated']
+    # years = [2024]
+    years = ['2020','2021','2022','2023','2024','2050']
+    turnovers = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
     query_county_annual = f"""
         SELECT DISTINCT meas FROM county_annual_com_YEARID_TURNOVERID 
@@ -1430,7 +1439,8 @@ def main(base_dir):
         s3_client = session.client('s3')
         athena_client = session.client('athena')
         # s3_create_tables_from_csvdir(s3_client, athena_client)
-        gen_multipliers(s3_client, athena_client)
+        # gen_multipliers(s3_client, athena_client)
+        test_multipliers(athena_client)
 
     # convert Scout jsons into AWS tables
     if opts.gen_scoutdata is True:
@@ -1468,10 +1478,10 @@ def main(base_dir):
 
         # gen_scoutdata(s3_client, athena_client)
         # gen_countydata(s3_client, athena_client)
-        # combine_countydata(athena_client)
-        # test_county(athena_client)
+        combine_countydata(athena_client)
+        test_county(athena_client)
         # run_r_script('annual_graphs.R')
-        get_csvs_for_R(athena_client)
+        # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
         # convert_long_to_wide(athena_client)
 
@@ -1501,13 +1511,14 @@ def main(base_dir):
         session = boto3.Session()
         s3_client = session.client('s3')
         athena_client = session.client('athena')
-        # test_multipliers(athena_client)
+
         # test_county(athena_client)
+        # test_multipliers(athena_client)
         # test_compare_measures(athena_client)
         
-        # run_r_script('annual_graphs.R')
+        run_r_script('annual_graphs.R')
 
-        get_csvs_for_R(athena_client)
+        # get_csvs_for_R(athena_client)
         # run_r_script('county and hourly graphs.R')
 
         # athena --> AWS Glue ->  S3
