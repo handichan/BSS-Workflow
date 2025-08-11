@@ -26,7 +26,8 @@ filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
 # scenarios
-scenarios<-c("aeo","ref","state","accel","fossil","brk")
+# check before running
+scenarios<-c("aeo","ref","state","accel","fossil","brk","scout_annual_state_aeo25_20to50_bytech_indiv","scout_annual_state_aeo25_20to50_bytech_gap_indiv")
 # scenario to get the baseline (AEO 2023) data from
 scenario_for_baseline <- "aeo"
 
@@ -67,10 +68,11 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",ref="Reference",stated_policies="Stated Policies",
+# check before running
+to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",scout_annual_state_aeo25_20to50_bytech_indiv="AEO 2025",scout_annual_state_aeo25_20to50_bytech_gap_indiv="AEO 2025 with Gap",
+      ref="Reference",stated_policies="Stated Policies",
       state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
-      fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
-# sector
+      fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")# sector
 s_label<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
 eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",`Cooling (Equip.)`="Cooling",`Heating (Equip.)`="Heating",Lighting="Lighting",Other="Other",Refrigeration="Refrigeration",Ventilation="Ventilation",`Water Heating`="Water Heating")

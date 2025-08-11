@@ -32,9 +32,11 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 
 # for nice labeling
+# check before running
 # Scout scenarios -- every value of "turnover" should be here
 # this is the order they'll be shown in facet plots, etc
-to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",ref="Reference",stated_policies="Stated Policies",
+to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",scout_annual_state_aeo25_20to50_bytech_indiv="AEO 2025",scout_annual_state_aeo25_20to50_bytech_gap_indiv="AEO 2025 with Gap",
+      ref="Reference",stated_policies="Stated Policies",
       state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
       fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
 # sector
@@ -57,6 +59,7 @@ width<-(1+length(unique(wide$turnover)))*1.8
 
 
 # states to show as examples for heating and cooling
+# check before running
 states<-c("WA","CA","MA","FL")
 state_height<-length(states)*1.4
 
