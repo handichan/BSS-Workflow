@@ -29,7 +29,7 @@ EUGROUP_DIR = f"map_eu"
 # check before running
 SCOUT_RUN_DATE = "2025-07-30"
 # version of multipliers
-versionid = "20250801_amy"
+versionid = "20250806_amy"
 
 ENVELOPE_MAP_FILE = os.path.join("map_meas", "envelope_map.tsv")
 MEAS_MAP_FILE = os.path.join("map_meas", f"measure_map.tsv")
@@ -930,7 +930,7 @@ def gen_scoutdata(s3_client, athena_client):
         ]
 
     #check before running -- comment out if the newest measure_map is already on AWS; else drop the table
-    s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
+    #s3_create_table_from_tsv(s3_client, athena_client, MEAS_MAP_FILE)
 
     for scout_file in scout_files:
         print(f">>>>>>>>>>>>>>>>FILE NAME= {scout_file}")
@@ -947,7 +947,7 @@ def gen_scoutdata(s3_client, athena_client):
         
         check_missing_meas(scout_df)
 
-        s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
+        #s3_create_table_from_tsv(s3_client, athena_client, scout_ann_local_path)
         print(f"Finished adding scout data {scout_file}")
 
 
@@ -998,6 +998,7 @@ def test_county(athena_client):
     sql_files = [
         "test_county_annual_total.sql",
         "test_county_annual_enduse.sql",
+        "test_county_annual_meas.sql",
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql"
     ]
@@ -1037,10 +1038,11 @@ def test_county(athena_client):
 
                 if "enduse" in sql_file:
                     df['diff_commercial'] = (1 - df['commercial_sum'] / df['scout_commercial_sum']).round(2)
+                    df['diff_gap'] = (1 - df['gap_sum'] / df['scout_gap_sum']).round(2)
                     df['diff_residential'] = (1 - df['residential_sum'] / df['scout_residential_sum']).round(2)
                     df = df.sort_values(by=['end_use', 'turnover'], ascending=[True, True])
                 elif "total" in sql_file:
-                    df['diff'] = (1 - (df['commercial_sum'] + df['residential_sum']) / df['scout_sum']).round(2)
+                    df['diff'] = (1 - (df['commercial_sum'] + df['gap_sum'] + df['residential_sum']) / df['scout_sum']).round(2)
                     df = df.sort_values(by=['turnover'], ascending=[True])
 
                 final_df = pd.concat([final_df, df], ignore_index=True)
