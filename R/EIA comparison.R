@@ -1,5 +1,20 @@
+setwd("R")
 
-state_monthly_2024<-read_csv(paste0(input_dir,"/",filename_prefix,"aeo_state_monthly_2024.csv"))
+#install the packages if they're not already installed
+packages <- c("tidyverse", "scales", "cowplot")
+install.packages(setdiff(packages, rownames(installed.packages())))
+
+library(tidyverse)
+library(scales)
+library(cowplot)
+
+theme_set(theme_bw())
+
+input_dir <- "../generated_csvs" #directory where the csvs are stored
+filename_prefix <- ""
+graph_dir <- "graphs" #directory where the graphs will be written
+
+state_monthly<-read_csv(paste0(input_dir,"/",filename_prefix,"aeo_state_monthly.csv"))
 
 # compare state-level seasonal ratios to EIA ------------------------------
 
@@ -15,7 +30,7 @@ eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential
   pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
   mutate(max_winter_to_max_summer=Winter/Summer)
 
-bss_ratios_sector<-state_monthly_2024 %>%
+bss_ratios_sector<-state_monthly %>%
   mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
   group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
   pivot_wider(names_from=season,values_from=monthly_max) %>%
