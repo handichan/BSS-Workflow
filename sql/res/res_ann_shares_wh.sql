@@ -1,7 +1,7 @@
 -- rerun if there have been updates to res_ann_wh
 -- res_ann_wh defines the grouping characteristics for water heating (e.g. ER water heating HPWH, fossil water heating HPWH)
     
-INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO res_annual_disaggregation_multipliers_{version}
 
 WITH meta_filtered AS (
 	SELECT meta."in.county",

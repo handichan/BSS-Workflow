@@ -3,7 +3,7 @@
 -- we could also weight the different types of equipment or different building types separately
 -- the AEO technologies are range oven griddle, but this uses all the cooking equipment in ComStock
 
-INSERT INTO com_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO com_annual_disaggregation_multipliers_{version}
 WITH meta_processing as(
 SELECT "in.state", "in.nhgis_county_gisjoin" as "in.county",
 CASE WHEN "out.params.fryer_fuel_type" = 'Gas' then cast("out.params.num_fryers" as double) * weight else 0 end as gas_fryers,

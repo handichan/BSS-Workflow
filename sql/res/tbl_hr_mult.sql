@@ -1,5 +1,5 @@
 -- to hold hourly disaggregation multipliers calculated from BuildStock
-CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_VERSIONID(
+CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_{version}(
     `in.weather_file_city` string,
     shape_ts string,
     timestamp_hour timestamp,
@@ -10,5 +10,5 @@ CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_VERSIONID(
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://BUCKETNAMEID/res_hourly_multipliers_VERSIONID/'
+LOCATION 's3://{dest_bucket}/res_hourly_multipliers_{version}/'
 ;

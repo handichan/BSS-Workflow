@@ -5,7 +5,7 @@
     -- disaggregate by new characteristics (e.g. building type, LMI status)
 -- after making the new table, run 'res delivered heat.sql' to add the groups for secondary heating
     
-INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
     	meta."in.weather_file_city",

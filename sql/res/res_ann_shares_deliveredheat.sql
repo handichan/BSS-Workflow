@@ -1,7 +1,7 @@
 -- we're disaggregating secondary heating based on delivered heat, not energy consumption for heating
 -- rerun if another group_ann is added that's based on delivered heat
 
-INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO res_annual_disaggregation_multipliers_{version}
 
 WITH meta_filtered AS (
 	SELECT "in.county",

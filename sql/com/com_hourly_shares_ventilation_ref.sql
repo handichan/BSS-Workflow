@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_hvac_temp_VERSIONID
+INSERT INTO com_hourly_hvac_temp_{version}
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses

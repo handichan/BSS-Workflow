@@ -1,5 +1,5 @@
 -- to hold results from Scout runs that have been disaggregated to hourly, county
-CREATE EXTERNAL TABLE county_hourly_res_YEARID_TURNOVERID (
+CREATE EXTERNAL TABLE county_hourly_res_{year}_{turnover} (
     `in.county` string,
     timestamp_hour timestamp,
     turnover string,
@@ -11,4 +11,4 @@ CREATE EXTERNAL TABLE county_hourly_res_YEARID_TURNOVERID (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://BUCKETNAMEID/county_hourly_res_YEARID_TURNOVERID/'
+LOCATION 's3://{dest_bucket}/county_hourly_res_{year}_{turnover}/'

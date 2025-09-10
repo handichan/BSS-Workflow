@@ -1,5 +1,5 @@
 -- to hold annual geographic disaggregation multipliers calculated from BuildStock
-CREATE EXTERNAL TABLE com_annual_disaggregation_multipliers_VERSIONID(
+CREATE EXTERNAL TABLE com_annual_disaggregation_multipliers_{version}(
     `in.county` string,
     group_ann string,
     multiplier_annual double,
@@ -8,5 +8,5 @@ CREATE EXTERNAL TABLE com_annual_disaggregation_multipliers_VERSIONID(
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://BUCKETNAMEID/com_annual_multipliers_VERSIONID/'
+LOCATION 's3://{dest_bucket}/com_annual_multipliers_{version}/'
 ;

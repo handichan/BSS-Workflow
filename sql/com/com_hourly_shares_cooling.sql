@@ -4,7 +4,7 @@
     -- new ComStock upgrades
     -- disaggregate by new characteristics (e.g. building type, LMI status)
 
-INSERT INTO com_hourly_hvac_temp_VERSIONID
+INSERT INTO com_hourly_hvac_temp_{version}
 WITH meta_shapes AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT 
@@ -40,7 +40,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_cooling)
-	AND ts.state='STATEID'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by county, and shape
 ts_agg AS(

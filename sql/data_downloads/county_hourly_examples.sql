@@ -10,9 +10,9 @@ WITH ns AS (
   HAVING COUNT("in.state") >= 50
 ),
 county_totals as(
-SELECT lca."in.county",lca.turnover,lca."in.state",lca."year", sum(lca.county_ann_kwh) as county_total_ann_kwh 
-FROM ns
-LEFT JOIN long_county_annual_TURNOVERID_amy lca ON ns."in.county" = lca."in.county"
+SELECT lca."in.county",lca.turnover,lca."in.state",lca."year",sum(lca.county_ann_kwh) as county_total_ann_kwh 
+FROM long_county_annual_{turnover}_amy lca 
+JOIN ns ON lca."in.county" = ns."in.county"
 WHERE turnover!='baseline'
 AND lca.county_ann_kwh = lca.county_ann_kwh
 AND "year" IN (2024, 2050)
@@ -70,6 +70,6 @@ UNION ALL
 SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as example_type
 )
 SELECT lch."in.county", lch.timestamp_hour, lch.turnover, lch.county_hourly_kwh, lch.end_use, lch.sector, lch.year, lch."in.state", example_counties.example_type 
-FROM long_county_hourly_TURNOVERID_amy lch
+FROM long_county_hourly_{turnover}_amy lch
 INNER JOIN example_counties ON lch."in.county" = example_counties."in.county"
 WHERE "year" IN (2024,2050);

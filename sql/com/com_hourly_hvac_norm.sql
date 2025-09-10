@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO com_hourly_disaggregation_multipliers_{version}
 "in.county",
 	shape_ts,
 	timestamp_hour,
@@ -7,5 +7,5 @@ INSERT INTO com_hourly_disaggregation_multipliers_VERSIONID
     sector,
     "in.state",
 	end_use
-FROM com_hourly_hvac_temp_VERSIONID
+FROM com_hourly_hvac_temp_{version}
 ;

@@ -1,4 +1,4 @@
-INSERT INTO com_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO com_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.nhgis_county_gisjoin",
 	    meta."in.state",

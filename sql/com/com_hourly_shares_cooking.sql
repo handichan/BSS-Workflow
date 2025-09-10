@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO com_hourly_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT 

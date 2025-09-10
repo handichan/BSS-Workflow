@@ -1,6 +1,6 @@
 CREATE TABLE wide_scout_annual_state
 WITH (
-    external_location = 's3://BUCKETNAMEID/20250411/wide/scout_annual_state/',
+    external_location = 's3://{dest_bucket}/20250411/wide/scout_annual_state/',
     format = 'Parquet'
     -- partitioned_by = ARRAY['scenario', 'year', 'state']
 ) AS

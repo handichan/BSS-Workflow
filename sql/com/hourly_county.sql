@@ -1,4 +1,4 @@
-INSERT INTO county_hourly_com_YEARID_TURNOVERID
+INSERT INTO county_hourly_com_{year}_{turnover}
 WITH filtered_annual AS (
     SELECT "in.county",
     meas,
@@ -10,10 +10,10 @@ WITH filtered_annual AS (
     "in.state",
     "year",
     end_use
-    FROM county_annual_com_YEARID_TURNOVERID
-    WHERE "year" = YEARID
-      AND scout_run = 'SCOUTRUNDATE'
-      AND end_use = 'ENDUSEID'
+    FROM county_annual_com_{year}_{turnover}
+    WHERE "year" = {year}
+      AND scout_run = '{scout_version}'
+      AND end_use = '{enduse}'
       AND county_ann_kwh = county_ann_kwh
 ),
 
@@ -87,9 +87,9 @@ hourly_ungrouped AS (
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
     "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
-    FROM com_hourly_disaggregation_multipliers_VERSIONID
+    FROM com_hourly_disaggregation_multipliers_{version}
     WHERE multiplier_hourly >= 0
-    AND end_use = 'ENDUSEID') AS h
+    AND end_use = '{enduse}') AS h
     ON gd."in.county" = h."in.county"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts

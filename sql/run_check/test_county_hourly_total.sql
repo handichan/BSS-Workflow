@@ -7,28 +7,28 @@ SELECT turnover,
       SUM(CASE WHEN source = 'scout_gap_sum' THEN kwh ELSE 0 END) AS scout_gap_sum
 FROM (
     SELECT 'commercial' AS source, turnover, county_hourly_kwh AS kwh
-    FROM long_county_hourly_TURNOVERID_amy
-    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = YEARID AND sector = 'com'
+    FROM long_county_hourly_{turnover}_amy
+    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = {year} AND sector = 'com'
     UNION ALL
     SELECT 'residential' AS source, turnover,county_hourly_kwh AS kwh
-    FROM long_county_hourly_TURNOVERID_amy
-    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = YEARID AND sector = 'res'
+    FROM long_county_hourly_{turnover}_amy
+    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = {year} AND sector = 'res'
     UNION ALL
     SELECT 'gap' AS source, turnover,county_hourly_kwh AS kwh
-    FROM long_county_hourly_TURNOVERID_amy
-    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = YEARID AND sector = 'gap'
+    FROM long_county_hourly_{turnover}_amy
+    WHERE county_hourly_kwh = county_hourly_kwh AND "year" = {year} AND sector = 'gap'
     UNION ALL
     SELECT 'scout_commercial_sum' AS source, turnover,state_ann_kwh  AS kwh
-    FROM scout_annual_state_TURNOVERID
-    WHERE "year" = YEARID AND fuel = 'Electric' AND sector = 'com'
+    FROM scout_annual_state_{turnover}
+    WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'com'
     UNION ALL
     SELECT 'scout_residential_sum' AS source, turnover,state_ann_kwh  AS kwh
-    FROM scout_annual_state_TURNOVERID
-    WHERE "year" = YEARID AND fuel = 'Electric' AND sector = 'res'
+    FROM scout_annual_state_{turnover}
+    WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'res'
     UNION ALL
     SELECT 'scout_gap_sum' AS source, turnover,state_ann_kwh  AS kwh
-    FROM scout_annual_state_TURNOVERID
-    WHERE "year" = YEARID AND fuel = 'Electric' AND sector = 'gap'
+    FROM scout_annual_state_{turnover}
+    WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'gap'
     
 ) combined_results
 GROUP BY turnover;

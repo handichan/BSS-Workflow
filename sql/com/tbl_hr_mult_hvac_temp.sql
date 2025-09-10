@@ -1,6 +1,6 @@
 -- to hold hourly consumption by county and shape calculated from BuildStock
 -- will be used to normalize HVAC shapes
-CREATE EXTERNAL TABLE com_hourly_hvac_temp_VERSIONID(
+CREATE EXTERNAL TABLE com_hourly_hvac_temp_{version}(
     `in.county` string,
     shape_ts string,
     timestamp_hour timestamp,
@@ -10,5 +10,5 @@ CREATE EXTERNAL TABLE com_hourly_hvac_temp_VERSIONID(
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://BUCKETNAMEID/com_hourly_hvac_temp_VERSIONID/'
+LOCATION 's3://{dest_bucket}/com_hourly_hvac_temp_{version}/'
 ;
