@@ -1,13 +1,13 @@
-INSERT INTO county_annual_com_YEARID_TURNOVERID
+INSERT INTO county_annual_com_{year}_{turnover}
 WITH electric_df AS (
     SELECT 
     CASE WHEN meas='Gap' THEN 'Gap' ELSE meas END as meas,
     reg, end_use, fuel, "year", tech_stage, state_ann_kwh, turnover, scout_run
-    FROM scout_annual_state_TURNOVERID
-    WHERE scout_run = 'SCOUTRUNDATE'
+    FROM scout_annual_state_{turnover}
+    WHERE scout_run = '{scout_version}'
     AND fuel = 'Electric'
-    AND end_use = 'ENDUSEID'
-    AND year = YEARID
+    AND end_use = '{enduse}'
+    AND year = {year}
 ),
 measure_map_ann_long AS
 (SELECT 
@@ -65,8 +65,8 @@ SELECT
 FROM scout_meas
 JOIN (
     SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use 
-    FROM com_annual_disaggregation_multipliers_VERSIONID
-    WHERE end_use = 'ENDUSEID'
+    FROM com_annual_disaggregation_multipliers_{version}
+    WHERE end_use = '{enduse}'
 ) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"

@@ -1,37 +1,37 @@
 end_use,n_counties,test_name,n_weatherfile_city
-Computers and Electronics,3107.0,test_multipliers_annual_res,
-Other,3107.0,test_multipliers_annual_res,
-Cooking,3107.0,test_multipliers_annual_res,
 Refrigeration,3107.0,test_multipliers_annual_res,
 Water Heating,3107.0,test_multipliers_annual_res,
 Heating (Equip.),3107.0,test_multipliers_annual_res,
+Computers and Electronics,3107.0,test_multipliers_annual_res,
+Other,3107.0,test_multipliers_annual_res,
+Cooking,3107.0,test_multipliers_annual_res,
 Lighting,3107.0,test_multipliers_annual_res,
 Cooling (Equip.),3107.0,test_multipliers_annual_res,
-Water Heating,3132.0,test_multipliers_annual_com,
-Refrigeration,3132.0,test_multipliers_annual_com,
 Heating (Equip.),3132.0,test_multipliers_annual_com,
 Ventilation,3132.0,test_multipliers_annual_com,
-Gap,3063.0,test_multipliers_annual_com,
-Cooling (Equip.),3132.0,test_multipliers_annual_com,
 Lighting,3132.0,test_multipliers_annual_com,
-Cooking,3132.0,test_multipliers_annual_com,
-Other,3132.0,test_multipliers_annual_com,
+Cooling (Equip.),3132.0,test_multipliers_annual_com,
+Gap,3063.0,test_multipliers_annual_com,
 Computers and Electronics,3132.0,test_multipliers_annual_com,
+Other,3132.0,test_multipliers_annual_com,
+Cooking,3132.0,test_multipliers_annual_com,
+Water Heating,3132.0,test_multipliers_annual_com,
+Refrigeration,3132.0,test_multipliers_annual_com,
+Heating (Equip.),3102.0,test_multipliers_hourly_com_com,
 Computers and Electronics,3132.0,test_multipliers_hourly_com_com,
+Cooling (Equip.),3102.0,test_multipliers_hourly_com_com,
+Other,3132.0,test_multipliers_hourly_com_com,
+Ventilation,3132.0,test_multipliers_hourly_com_com,
+Cooking,3107.0,test_multipliers_hourly_com_com,
 Water Heating,3131.0,test_multipliers_hourly_com_com,
+Refrigeration,3128.0,test_multipliers_hourly_com_com,
 Gap,3063.0,test_multipliers_hourly_com_com,
 Lighting,3132.0,test_multipliers_hourly_com_com,
-Other,3132.0,test_multipliers_hourly_com_com,
-Cooking,3107.0,test_multipliers_hourly_com_com,
-Refrigeration,3128.0,test_multipliers_hourly_com_com,
-Cooling (Equip.),3102.0,test_multipliers_hourly_com_com,
-Heating (Equip.),3102.0,test_multipliers_hourly_com_com,
-Ventilation,3132.0,test_multipliers_hourly_com_com,
-Refrigeration,,test_multipliers_hourly_res_res,1215.0
-Heating (Equip.),,test_multipliers_hourly_res_res,1215.0
-Lighting,,test_multipliers_hourly_res_res,1215.0
-Water Heating,,test_multipliers_hourly_res_res,1215.0
-Cooking,,test_multipliers_hourly_res_res,1215.0
 Other,,test_multipliers_hourly_res_res,1215.0
-Computers and Electronics,,test_multipliers_hourly_res_res,1215.0
 Cooling (Equip.),,test_multipliers_hourly_res_res,1215.0
+Heating (Equip.),,test_multipliers_hourly_res_res,1215.0
+Refrigeration,,test_multipliers_hourly_res_res,1215.0
+Computers and Electronics,,test_multipliers_hourly_res_res,1215.0
+Lighting,,test_multipliers_hourly_res_res,1215.0
+Cooking,,test_multipliers_hourly_res_res,1215.0
+Water Heating,,test_multipliers_hourly_res_res,1215.0

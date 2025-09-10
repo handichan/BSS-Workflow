@@ -1,4 +1,4 @@
-INSERT INTO com_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO com_annual_disaggregation_multipliers_{version}
 
 WITH states as(
     SELECT "in.state", "in.county"

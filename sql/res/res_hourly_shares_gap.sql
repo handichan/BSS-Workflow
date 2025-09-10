@@ -1,4 +1,4 @@
-INSERT INTO res_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH weather as(
     SELECT "in.weather_file_city", "in.state", "in.county"
   FROM "resstock_amy2018_release_2024.2_metadata"

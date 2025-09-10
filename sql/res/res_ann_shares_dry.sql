@@ -1,7 +1,7 @@
 -- rerun if there have been updates to res_ann_dry
 -- res_ann_dry defines the grouping characteristics for clothes drying
     
-INSERT INTO res_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO res_annual_disaggregation_multipliers_{version}
 
 WITH meta_filtered AS (
 	SELECT meta."in.county",

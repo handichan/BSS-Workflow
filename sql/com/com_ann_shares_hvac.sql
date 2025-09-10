@@ -1,7 +1,7 @@
 -- rerun if there have been updates to com_ann_hvac
 -- com_ann_hvac defines the grouping characteristics for hvac
     
-INSERT INTO com_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO com_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
     SELECT meta."in.nhgis_county_gisjoin",
         meta."in.state",

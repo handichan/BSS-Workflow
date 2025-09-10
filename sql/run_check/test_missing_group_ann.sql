@@ -2,7 +2,7 @@
 
 WITH electric_df AS (
     SELECT *
-    FROM scout_annual_state_TURNOVERID
+    FROM scout_annual_state_{turnover}
     WHERE state_ann_kwh > 0
     AND fuel = 'Electric'
 ),
@@ -37,14 +37,14 @@ AND elec.tech_stage = mm.tech_stage),
 
 good_group_ann as(
 SELECT group_ann,"in.state",end_use, 1 as present
-FROM com_annual_disaggregation_multipliers_VERSIONID 
+FROM com_annual_disaggregation_multipliers_{version} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY group_ann,"in.state",end_use
 
 UNION ALL
 
 SELECT group_ann,"in.state",end_use, 1 as present
-FROM res_annual_disaggregation_multipliers_VERSIONID 
+FROM res_annual_disaggregation_multipliers_{version} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY group_ann,"in.state",end_use
 )

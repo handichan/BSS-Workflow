@@ -1,41 +1,41 @@
-CREATE TABLE long_county_hourly_TURNOVERID_amy
+CREATE TABLE long_county_hourly_{turnover}_amy
 WITH (
-    external_location = 's3://BUCKETNAMEID/VERSIONID/long/county_hourly_TURNOVERID_amy/',
+    external_location = 's3://{dest_bucket}/{version}/long/county_hourly_{turnover}_amy/',
     format = 'Parquet',
     partitioned_by = ARRAY['sector', 'year', 'in.state']
 ) AS
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2020_TURNOVERID
+FROM county_hourly_com_2020_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2021_TURNOVERID
+FROM county_hourly_com_2021_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2022_TURNOVERID
+FROM county_hourly_com_2022_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2023_TURNOVERID
+FROM county_hourly_com_2023_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2024_TURNOVERID
+FROM county_hourly_com_2024_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_com_2050_TURNOVERID
+FROM county_hourly_com_2050_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2020_TURNOVERID
+FROM county_hourly_res_2020_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2021_TURNOVERID
+FROM county_hourly_res_2021_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2022_TURNOVERID
+FROM county_hourly_res_2022_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2023_TURNOVERID
+FROM county_hourly_res_2023_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2024_TURNOVERID
+FROM county_hourly_res_2024_{turnover}
 UNION ALL
 SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, scout_run, end_use, sector, year, "in.state"
-FROM county_hourly_res_2050_TURNOVERID;
+FROM county_hourly_res_2050_{turnover};

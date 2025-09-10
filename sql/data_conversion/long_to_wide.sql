@@ -1,6 +1,6 @@
-CREATE TABLE wide_county_hourly_TURNOVERID_amy
+CREATE TABLE wide_county_hourly_{turnover}_amy
 WITH (
-    external_location = 's3://BUCKETNAMEID/20250411/wide/county_hourly_TURNOVERID_amy/',
+    external_location = 's3://{dest_bucket}/20250411/wide/county_hourly_{turnover}_amy/',
     format = 'Parquet'
     -- partitioned_by = ARRAY['sector', 'year', 'state']
 ) AS
@@ -26,7 +26,7 @@ WITH (
         end_use,
         county_hourly_kwh
         -- convert to variable
-        FROM long_county_hourly_TURNOVERID_amy
+        FROM long_county_hourly_{turnover}_amy
         -- we need the baseline from one table not all of them
         WHERE turnover != 'baseline'
     )

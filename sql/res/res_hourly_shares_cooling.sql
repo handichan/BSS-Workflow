@@ -4,7 +4,7 @@
     -- new ResStock upgrades
     -- disaggregate by new characteristics (e.g. building type, LMI status)
 
-INSERT INTO res_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH meta_shapes AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
@@ -33,7 +33,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cooling)
-	AND ts.state='STATEID'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by weather file, and shape
 ts_agg AS(

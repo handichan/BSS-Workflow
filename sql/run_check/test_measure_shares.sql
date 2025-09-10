@@ -1,6 +1,6 @@
 -- to understand which measures are the most impactful
 WITH totals as (
-SELECT meas, end_use, "year", turnover, sector, sum(state_ann_kwh) as ann_kwh FROM scout_annual_state_TURNOVERID
+SELECT meas, end_use, "year", turnover, sector, sum(state_ann_kwh) as ann_kwh FROM scout_annual_state_{turnover}
 WHERE fuel = 'Electric' 
 GROUP BY meas, end_use, "year", turnover, sector)
 

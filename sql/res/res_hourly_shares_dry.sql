@@ -4,7 +4,7 @@
     -- new ResStock upgrades
     -- disaggregate by new characteristics (e.g. building type, LMI status)
 
-INSERT INTO res_hourly_disaggregation_multipliers_VERSIONID
+INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH meta_shapes AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
