@@ -43,10 +43,14 @@ class Config:
     DEST_BUCKET = "bss-workflow"
     BUCKET_NAME = "handibucket" 
     SCOUT_RUN_DATE = "2025-06-16"
-    VERSION_ID = "20250806_amy"
+    # VERSION_ID = "20250806_amy"
+    VERSION_ID = "20250910"
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
-    TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
+    # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
+
+    TURNOVERS = ["brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"]
+
     YEARS = ['2024','2025','2030','2035','2040','2045','2050']
 
     # TURNOVERS = ['brk']
@@ -334,7 +338,7 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
     else:
         df = all_df
 
-    out_path = os.path.join(cfg.SCOUT_OUT_TSV,
+    out_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}_df",
         f"scout_annual_state_{os.path.basename(filename).split('/')[0]}_df.tsv")
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     df.to_csv(out_path, sep="\t", index=False)
@@ -743,15 +747,17 @@ def county_partition_multipliers(athena_client, cfg: Config):
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
     scout_files = [
         # Examples kept; you can uncomment the ones you need.
-        "brk.json", 
+        # "brk.json", 
         # "accel.json", "state.json", "ref.json", "aeo.json",
-        "aeo25_20to50_bytech_indiv.json",
-        "aeo25_20to50_bytech_gap_indiv.json",
+        # "dual_switch.json", "high_switch.json"
+        "min_switch.json"
+        # "aeo25_20to50_bytech_indiv.json",
+        # "aeo25_20to50_bytech_gap_indiv.json",
         # "fossil.json"
     ]
 
     # Ensure measure_map exists in Athena
-    s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
+    # s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
 
     for scout_file in scout_files:
         print(f">>> SCOUT FILE: {scout_file}")
@@ -765,6 +771,8 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
             "aeo25_20to50_byeu_indiv.json",
             "aeo25_20to50_bytech_gap_indiv.json",
             "aeo25_20to50_bytech_indiv.json",
+            "min_switch",
+            "dual_switch"
         }:
             sdf = scout_to_df_noenv(fp, cfg)
             ann_df, out_path = calc_annual_noenv(
@@ -1256,12 +1264,12 @@ def main(opts):
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
         # gen_scoutdata(s3, athena, cfg)
+        # gen_countydata(athena, cfg)
 
-        gen_countydata(athena, cfg)
-        combine_countydata(athena, cfg)
-        test_county(s3, athena, cfg)
+        # combine_countydata(athena, cfg)
+        # test_county(s3, athena, cfg)
 
-        # run_r_script("annual_graphs.R")
+        run_r_script("annual_graphs.R")
         # get_csvs_for_R(s3, athena, cfg)
         # run_r_script("county and hourly graphs.R")
         # convert_long_to_wide(athena, cfg)
