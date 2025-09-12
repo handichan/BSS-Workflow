@@ -10,13 +10,13 @@ WITH ns AS (
   HAVING COUNT("in.state") >= 50
 ),
 county_totals as(
-SELECT lca."in.county",lca.turnover,lca."in.state",lca."year",sum(lca.county_ann_kwh) as county_total_ann_kwh 
-FROM long_county_annual_TURNOVERID_amy lca 
-JOIN ns ON lca."in.county" = ns."in.county"
+SELECT lca."in.county",lca.turnover,lca."in.state",lca."year", sum(lca.county_ann_kwh) as county_total_ann_kwh 
+FROM ns
+LEFT JOIN long_county_annual_TURNOVERID_amy lca ON ns."in.county" = lca."in.county"
 WHERE turnover!='baseline'
-AND "year" IN (2024,2050)
-AND "in.county" IN (SELECT "in.county" FROM ns WHERE n>=50)
-GROUP BY "in.county",turnover,"in.state","year"
+AND lca.county_ann_kwh = lca.county_ann_kwh
+AND "year" IN (2024, 2050)
+GROUP BY lca."in.county",turnover,"in.state","year"
 ),
 
 county_differences AS (
