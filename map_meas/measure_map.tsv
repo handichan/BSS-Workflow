@@ -324,7 +324,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_2	res_heating_ts_1	res	fossil	Boiler, electric	fossil	Boiler, electric
 (R) Ref. Case Electric Dryer	Other	res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Dryer, resistance	Dryer, resistance	Dryer, resistance	Dryer, resistance
-(R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_gap_ts_1	res_gap_ts_1	res	Other	Other	Other	Other
+(R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other	Other	Other
 (R) Ref. Case Electric Range	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Range, electric	Range, electric	Range, electric	Range, electric
 (R) Ref. Case Electric Range FS	Cooking	res_cook_ann_1	res_cook_ann_2	res_cook_ts_1	res_cook_ts_2	res	Range, fossil	Range, electric	Range, fossil	Range, electric
 (R) Ref. Case Electronics	Computers and Electronics	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Computers and electronics	Computers and electronics	Computers and electronics	Computers and electronics
@@ -446,3 +446,10 @@ Gap	Lighting	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Lighting,
 Gap	Other	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Other, gap	Other, gap	Other, gap	Other, gap
 Gap	Refrigeration	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Refrigeration, gap	Refrigeration, gap	Refrigeration, gap	Refrigeration, gap
 Gap	Cooking	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooking, gap	Cooking, gap	Cooking, gap	Cooking, gap
+(R) Ref. Case Electric Other TS Other   res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other	Other	Other
+(C) Ref. Case Electric Range TS Cooking com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
+(C) Ref. Case Fossil Other FS   Other   com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other, fossil	Other, fossil	Other, fossil
+(R) Ref. Case Electric Dryer TS Other   res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Dryer, resistance	Dryer, ESTAR	Dryer, resistance	Dryer, ESTAR
+(C) Ref. Case Electric Other TS Other   com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Other	Other	Other	Other
+(R) Ref. Case Electric Range TS Cooking res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Range, electric	Range, electric	Range, electric	Range, electric
+(R) Ref. Case Fossil Other FS   Other   res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other, fossil	Other	Other, fossil	Other
