@@ -21,13 +21,12 @@ theme_set(theme_bw())
 
 # the data frame names are analogous to the names of the SQL queries that created them
 
-input_dir <- "../generated_csvs" #directory where the csvs are stored
+input_dir <- "generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
 # scenarios
-# check before running
-scenarios<-c("aeo","ref","state","accel","fossil","brk","scout_annual_state_aeo25_20to50_bytech_indiv","scout_annual_state_aeo25_20to50_bytech_gap_indiv")
+scenarios<-c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch")
 # scenario to get the baseline (AEO 2023) data from
 scenario_for_baseline <- "aeo"
 
@@ -64,11 +63,23 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
-# check before running
-to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",scout_annual_state_aeo25_20to50_bytech_indiv="AEO 2025",scout_annual_state_aeo25_20to50_bytech_gap_indiv="AEO 2025 with Gap",
-      ref="Reference",stated_policies="Stated Policies",
-      state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
-      fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")# sector
+to<-c(baseline="AEO 2025",
+      aeo="AEO 2025\nBTB performance",
+      ref="Reference",
+      stated_policies="Stated Policies",
+      state="State and Local Action",
+      mid="Mid",
+      high="High",
+      accel="Accelerated Innovation",
+      fossil="Fossil Favorable",
+      breakthrough="Breakthrough",
+      brk="Breakthrough",
+      ineff="Inefficient",
+      dual_switch="Dual Switch",
+      high_switch="High Switch",
+      min_switch="Min Switch"
+      )
+# sector
 s_label<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
 eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",`Cooling (Equip.)`="Cooling",`Heating (Equip.)`="Heating",Lighting="Lighting",Other="Other",Refrigeration="Refrigeration",Ventilation="Ventilation",`Water Heating`="Water Heating")
@@ -387,22 +398,6 @@ ratio_map<-county_map %>% ggplot()+
 save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio.jpg"),ratio_map,base_height = 12,bg="white")
 
 
-ratio_hist<-peak_ratio %>% filter(turnover %in% c("baseline","high","breakthrough","ineff"),year %in% c(2024,2030,2040,2050)) %>% droplevels() %>%
-  mutate(log_ratio_binned=round_any(log_winter_to_summer,.02),
-         fill_color=diverg_ratio(log_ratio_binned))%>%
-  ggplot(aes(x=log_ratio_binned,y=after_stat(count/3107),fill=fill_color))+
-  geom_vline(xintercept=0,color="gray50")+
-  geom_bar(stat="count")+
-  scale_fill_identity() +
-  facet_grid(year~turnover,labeller = labeller(turnover=to))+
-  scale_x_continuous(labels= function(x) round(10^x, 2))+
-  coord_cartesian(xlim=c(log10(.25),log10(4)))+
-  scale_y_continuous(n.breaks=4,expand=expansion(add=0,mult=c(0,.05)),labels=percent_format())+
-  theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
-  ggtitle("Ratio of Winter Peak to Summer Peak")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio_hist.jpg"),ratio_hist,base_height = 6,base_width = 12,bg="white")
-
 
 
 # example counties - peak day line plots --------------------------------------------------------
@@ -470,6 +465,23 @@ eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
   facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
   ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
 save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
+
+
+ratio_hist<-peak_ratio %>% filter(turnover %in% c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"),year %in% c(2024,2025,2030,2035,2040,2045,2050)) %>% droplevels() %>%
+  mutate(log_ratio_binned=round_any(log_winter_to_summer,.02),
+         fill_color=diverg_ratio(log_ratio_binned))%>%
+  ggplot(aes(x=log_ratio_binned,y=after_stat(count/3107),fill=fill_color))+
+  geom_vline(xintercept=0,color="gray50")+
+  geom_bar(stat="count")+
+  scale_fill_identity() +
+  facet_grid(year~turnover,labeller = labeller(turnover=to))+
+  scale_x_continuous(labels= function(x) round(10^x, 2))+
+  coord_cartesian(xlim=c(log10(.25),log10(4)))+
+  scale_y_continuous(n.breaks=4,expand=expansion(add=0,mult=c(0,.05)),labels=percent_format())+
+  theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0),
+        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
+  ggtitle("Ratio of Winter Peak to Summer Peak")
+save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio_hist.jpg"),ratio_hist,base_height = 6,base_width = 12,bg="white")
 
 
 
