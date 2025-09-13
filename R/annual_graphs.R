@@ -15,11 +15,11 @@ scenario_for_baseline <- "aeo"
 
 # Scout results - output of calc_annual 
 wide<-data.frame()
-for (file in list.files("../agg_results")){
+for (file in list.files("../scout_tsv")){
   if (file == paste0("scout_annual_state_",scenario_for_baseline,".tsv")){
-    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)))
+    wide<-bind_rows(wide,read_tsv(paste0("../scout_tsv/",file)))
   } else{
-    wide<-bind_rows(wide,read_tsv(paste0("../agg_results/",file)) %>% filter(turnover!="baseline"))
+    wide<-bind_rows(wide,read_tsv(paste0("../scout_tsv/",file)) %>% filter(turnover!="baseline"))
   }
 }
 
@@ -34,9 +34,22 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 # for nice labeling
 # Scout scenarios -- every value of "turnover" should be here
 # this is the order they'll be shown in facet plots, etc
-to<-c(baseline="AEO 2023\nCalibrated",aeo="AEO 2023\nBTB performance",ref="Reference",stated_policies="Stated Policies",
-      state="State and Local Action",mid="Mid",high="High",accel="Accelerated Innovation",
-      fossil="Fossil Favorable",breakthrough="Breakthrough",brk="Breakthrough",ineff="Inefficient")
+to<-c(baseline="AEO 2025",
+      aeo="AEO 2025\nBTB performance",
+      ref="Reference",
+      stated_policies="Stated Policies",
+      state="State and Local Action",
+      mid="Mid",
+      high="High",
+      accel="Accelerated Innovation",
+      fossil="Fossil Favorable",
+      breakthrough="Breakthrough",
+      brk="Breakthrough",
+      ineff="Inefficient",
+      dual_switch="Dual Switch",
+      high_switch="High Switch",
+      min_switch="Min Switch"
+      )
 # sector
 sec<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses

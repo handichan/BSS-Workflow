@@ -42,9 +42,8 @@ class Config:
     # Runtime switches/identifiers
     DEST_BUCKET = "bss-workflow"
     BUCKET_NAME = "handibucket" 
-    SCOUT_RUN_DATE = "2025-06-16"
-    # VERSION_ID = "20250806_amy"
-    VERSION_ID = "20250910"
+    SCOUT_RUN_DATE = "2025-09-11"
+    VERSION_ID = "20250911"
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
@@ -747,9 +746,10 @@ def county_partition_multipliers(athena_client, cfg: Config):
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
     scout_files = [
         # Examples kept; you can uncomment the ones you need.
-        # "brk.json", 
-        # "accel.json", "state.json", "ref.json", "aeo.json",
-        # "dual_switch.json", "high_switch.json"
+        "brk.json", 
+        "accel.json", "state.json", "ref.json", "aeo.json",
+        "dual_switch.json", 
+        "high_switch.json",
         "min_switch.json"
         # "aeo25_20to50_bytech_indiv.json",
         # "aeo25_20to50_bytech_gap_indiv.json",
@@ -757,7 +757,7 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
     ]
 
     # Ensure measure_map exists in Athena
-    # s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
+    s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
 
     for scout_file in scout_files:
         print(f">>> SCOUT FILE: {scout_file}")
@@ -798,8 +798,7 @@ def gen_countydata(athena_client, cfg: Config):
     for s in sectors:
         for y in years:
             for t in turnovers:
-                for name in ["tbl_ann_county.sql", "annual_county.sql",
-                             "tbl_hr_county.sql", "hourly_county.sql"]:
+                for name in ["tbl_ann_county.sql", "annual_county.sql","tbl_hr_county.sql", "hourly_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
 
@@ -867,6 +866,7 @@ def combine_countydata(athena_client, cfg: Config):
         False)
 
     queries = [q_combined["annual"], q_combined["hourly"]]
+
     for query in queries:
         for t in turnovers:
             q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
@@ -1247,6 +1247,7 @@ def main(opts):
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
         gen_scoutdata(s3, athena, cfg)
+        run_r_script("annual_graphs.R")
 
     if opts.gen_county:
         _, athena = get_boto3_clients()
@@ -1263,14 +1264,12 @@ def main(opts):
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
         # gen_scoutdata(s3, athena, cfg)
-        # gen_countydata(athena, cfg)
 
+        # gen_countydata(athena, cfg)
         # combine_countydata(athena, cfg)
         # test_county(s3, athena, cfg)
-
-        run_r_script("annual_graphs.R")
         # get_csvs_for_R(s3, athena, cfg)
-        # run_r_script("county and hourly graphs.R")
+        run_r_script("county and hourly graphs.R")
         # convert_long_to_wide(athena, cfg)
 
     if opts.bssbucket_insert:
