@@ -101,7 +101,7 @@ This table provides an overview of the structure and content of the dataset. The
 - This level may represent 4 runs, including 2024, 2030, 2040, and 2050.
 
 ### Four Subdirectory Level: `in.state`
-- This level may represent all US States.
+- This level represents the contiguous US, i.e. 48 states and DC.
 
 ### Data Files: Parquet Files
 - The Parquet files are stored within each `in.state` directory.
@@ -152,4 +152,5 @@ Here is an example path to a Parquet file:
 - **Accessing Data**: The hierarchical organization facilitates efficient querying and navigation of the dataset.
 
 For questions or clarifications, please contact the dataset maintainer.
+
 
