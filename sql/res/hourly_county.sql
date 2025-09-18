@@ -121,6 +121,25 @@ hourly_grouped AS (
         turnover,
         scout_run,
         sector
+),
+
+hourly_calibrated AS(
+    SELECT
+        "in.state",
+        "in.county",
+        "year",
+        month(timestamp_hour) AS "month",
+        end_use,
+        timestamp_hour,
+        turnover,
+        sector,
+        county_hourly_kwh * calibration_multiplier AS county_hourly_kwh,
+        scout_run
+    FROM hourly_grouped
+    LEFT JOIN calibration_multipliers
+    WHERE sector = 'res'
+    ON calibration_multipliers."in.state" = hourly_grouped."in.state"
+    AND calibration_multipliers."month" = hourly_grouped."month"
 )
 
 SELECT 
@@ -133,6 +152,6 @@ SELECT
     "in.state",
     "year",
     end_use
-FROM hourly_grouped
+FROM hourly_calibrated
 WHERE timestamp_hour IS NOT NULL
 ;
