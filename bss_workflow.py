@@ -33,6 +33,7 @@ class Config:
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     SCOUT_OUT_TSV = "scout_tsv"
     SCOUT_IN_JSON = "scout_json"
     OUTPUT_DIR = "agg_results"
@@ -771,6 +772,9 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
 
     # Ensure measure_map exists in Athena
     s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
+
+    # Ensure the calibration multipliers exist in Athena
+    s3_create_table_from_tsv(s3_client, athena_client, cfg.CALIB_MULT_PATH, cfg)
 
     for scout_file in scout_files:
         print(f">>> SCOUT FILE: {scout_file}")
