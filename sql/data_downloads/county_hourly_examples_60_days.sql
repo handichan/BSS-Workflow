@@ -14,7 +14,7 @@ WITH ns AS (
 county_totals as(
 SELECT lca."in.county",lca.turnover,lca."in.state",lca."year", sum(lca.county_ann_kwh) as county_total_ann_kwh 
 FROM ns
-LEFT JOIN long_county_annual_TURNOVERID_amy lca ON ns."in.county" = lca."in.county"
+LEFT JOIN long_county_annual_{turnover}_amy lca ON ns."in.county" = lca."in.county"
 WHERE turnover!='baseline'
 AND lca.county_ann_kwh = lca.county_ann_kwh
 AND "year" IN (2024, 2050)
@@ -79,23 +79,28 @@ SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as examp
 hourly_data AS (
     SELECT
         lch."in.county",
+        ec.example_type,
         lch.turnover,
         lch.year,
         lch.timestamp_hour,
-        lch.county_hourly_kwh,
-        month(lch.timestamp_hour) AS month,
-        hour(lch.timestamp_hour) + 1 AS hour_of_day,
-        date_trunc('day', lch.timestamp_hour) AS day
-    FROM long_county_hourly_TURNOVERID_amy lch
+        sum(lch.county_hourly_kwh) as county_hourly_kwh
+    FROM long_county_hourly_{turnover}_amy lch
     INNER JOIN example_counties ec
         ON lch."in.county" = ec."in.county"
     WHERE lch.year IN (2024, 2050)
+    GROUP BY 
+        lch."in.county",
+        ec.example_type,
+        lch.turnover,
+        lch.year,
+        lch.timestamp_hour
 ),
 
 -- Find the days each month with the highest and lowest hourly peaks
-WITH monthly_peak_min_days AS (
+monthly_peak_min_days AS (
     SELECT DISTINCT
         h."in.county",
+        h.example_type,
         h.year,
         h.turnover as peak_source_turnover,
         month(h.timestamp_hour) AS month,
@@ -112,14 +117,15 @@ WITH monthly_peak_min_days AS (
 monthly_peak_profiles AS (
     SELECT
         h."in.county",
-        h.year,
+        h.example_type,
+        h."year",
         h.turnover,
-        h.peak_source_turnover,
+        md.peak_source_turnover,
         'monthly_peak_day' AS day_type,
         month(h.timestamp_hour) AS month,
         hour(h.timestamp_hour)+1 AS hour_of_day,
         h.county_hourly_kwh,
-        md.peak_day AS day
+        md.peak_day AS "date"
     FROM hourly_data h
     INNER JOIN monthly_peak_min_days md
         ON h."in.county" = md."in.county"
@@ -132,14 +138,15 @@ monthly_peak_profiles AS (
 monthly_min_profiles AS (
     SELECT
         h."in.county",
+        h.example_type,
         h.year,
         h.turnover,
-        h.peak_source_turnover,
+        md.peak_source_turnover,
         'monthly_min_peak_day' AS day_type,
         month(h.timestamp_hour) AS month,
         hour(h.timestamp_hour)+1 AS hour_of_day,
         h.county_hourly_kwh,
-        md.min_peak_day AS day
+        md.min_peak_day AS "date"
     FROM hourly_data h
     INNER JOIN monthly_peak_min_days md
         ON h."in.county" = md."in.county"
@@ -152,6 +159,7 @@ monthly_min_profiles AS (
 monthly_mean_profiles AS (
     SELECT
         h."in.county",
+        h.example_type,
         h.year,
         h.turnover,
         NULL AS peak_source_turnover,
@@ -159,9 +167,9 @@ monthly_mean_profiles AS (
         month(h.timestamp_hour) AS month,
         hour(h.timestamp_hour)+1 AS hour_of_day,
         AVG(h.county_hourly_kwh) AS county_hourly_kwh,
-        NULL AS day
+        NULL AS "date"
     FROM hourly_data h
-    GROUP BY h."in.county", h.year, h.turnover, month(h.timestamp_hour), hour(h.timestamp_hour)
+    GROUP BY h."in.county", h.example_type, h.year, h.turnover, month(h.timestamp_hour), hour(h.timestamp_hour)
 )
 
 -- Combine
