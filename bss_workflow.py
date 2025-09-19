@@ -431,6 +431,19 @@ def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str,
     long["sector"] = long.apply(add_sector, axis=1)
     long["scout_run"] = cfg.SCOUT_RUN_DATE
 
+### To implement ###
+# if the "ComStock Gap Weights" key is present in df
+# include_bldg_type = True 
+# extract the gap weights into its own dataframe gap_weights
+# make a subset of long that’s just electric and com
+# join that subset with gap_weights on meas reg end_use year bldg_type
+# output will be twice as long
+# - (1-weight) * state_ann_kwh
+# - weight * state_ann_kwh; all measures replaced with Gap
+# if there's no "ComStock Gap Weights" key don't do anything
+# can remove mark_gap
+
+
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     local_path = os.path.join(cfg.SCOUT_OUT_TSV, f"scout_annual_state_{turnover}.tsv")
     long.to_csv(local_path, sep="\t", index=False)
