@@ -401,29 +401,25 @@ save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio.jpg"),ratio_map,bas
 
 
 # example counties - peak day line plots --------------------------------------------------------
-#peak day is selected based on the scenario (not the baseline)
-
 
 for (i in 1:length(county_hourly_examples_list)){
   with_ex_labels<-county_hourly_examples_list[[i]]%>% 
-    filter(year %in% c(2024,2050)) %>%
+    filter(peak_source_turnover!="baseline",day_type=="monthly_peak_day") %>%
     left_join(ns %>% select(in.county,county_name),by="in.county") %>%
     mutate(example_label=paste0(example_type,": ",county_name),
-           month=month(timestamp_hour),day=day(timestamp_hour),hour=hour(timestamp_hour)) %>%
-    group_by(year,month,day,hour,turnover,example_label,in.county) %>%
-    summarize(county_total_hourly_kwh=sum(county_hourly_kwh),.groups="drop") %>% ungroup()
+           day_of_month=day(date))
   maxes<-with_ex_labels %>% filter(turnover!="baseline") %>%
     group_by(year,in.county,example_label) %>%
-    filter(county_total_hourly_kwh==max(county_total_hourly_kwh)) %>% ungroup()
+    filter(county_hourly_kwh==max(county_hourly_kwh)) %>% ungroup()
   day_labels<-with_ex_labels %>% 
-    right_join(maxes %>% select(year, month, day, example_label, in.county),by=c("year", "month", "day", "example_label", "in.county")) %>%
-    select(in.county,year,month,day,example_label,turnover) %>% unique() %>%
-    mutate(day_label=paste(month,day,sep="/"),x=if_else(year==2024,3,13))
+    right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
+    select(in.county,year,month,day_of_month,example_label,turnover) %>% unique() %>%
+    mutate(day_label=paste(month,day_of_month,sep="/"),x=if_else(year==2024,3,13))
   psample<-with_ex_labels %>% 
-    right_join(maxes %>% select(year, month, day, example_label, in.county),by=c("year", "month", "day", "example_label", "in.county")) %>%
+    right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
     mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
     ggplot(aes(color=factor(year)))+
-    geom_line(aes(x=hour,y=county_total_hourly_kwh/1000,linetype=turnover))+
+    geom_line(aes(x=hour_of_day,y=county_hourly_kwh/1000,linetype=turnover))+
     xlab("EST")+
     geom_text(data=day_labels,y=-Inf,vjust=-.5,aes(x=x,label=day_label),show.legend = F,size=8) +
     scale_y_continuous(name="MWh",labels=comma_format(),limits=c(0,NA))+
@@ -434,6 +430,33 @@ for (i in 1:length(county_hourly_examples_list)){
   save_plot(paste0(graph_dir,"/example_peak_days_",names(county_hourly_examples_list)[i],".jpg"),psample,base_height = 18,base_width = 8,bg="white")
 }
 
+# example counties - monthly line plots --------------------------------------------------------
+
+example_labels<-county_hourly_examples_list[[i]]%>% select(in.county,example_type) %>% unique() %>%
+  left_join(ns %>% select(in.county,county_name),by="in.county") %>%
+  mutate(example_label=paste0(example_type,": ",county_name))
+
+for (i in 1:length(county_hourly_examples_list)){
+  for (cty in unique(county_hourly_examples_list[[i]]$in.county)){
+  # for (cty in "G0400130"){
+    
+    monthly_examples<-county_hourly_examples_list[[i]] %>%
+      filter(in.county==cty, (peak_source_turnover!="baseline" | is.na(peak_source_turnover)), turnover!="baseline") %>%
+      pivot_wider(names_from="day_type",values_from="county_hourly_kwh",id_cols=c("year","month","hour_of_day","turnover")) %>%
+      ggplot(aes(x=hour_of_day))+
+      geom_ribbon(aes(ymin=monthly_min_peak_day/1000,ymax=monthly_peak_day/1000,fill=factor(year)),alpha=.4)+
+      geom_line(aes(y=monthly_mean/1000,color=factor(year)))+
+      xlab("EST")+
+      scale_y_continuous(name="MWh",labels=comma_format(),limits=c(0,NA))+
+      scale_color_brewer(name="",palette = "Dark2")+
+      scale_fill_brewer(name="",palette = "Dark2")+
+      facet_wrap(~month)+
+      ggtitle(paste0(to[names(county_hourly_examples_list)[[i]]],": Mean, Day with Highest Peak, Day with Lowest Peak by Month"),
+              subtitle = (example_labels %>% filter(in.county==cty))$example_label)
+    save_plot(paste0(graph_dir,"/example_by_month_",names(county_hourly_examples_list)[i],"_",(example_labels %>% filter(in.county==cty))$county_name,".jpg"),
+              monthly_examples,base_height = 7,base_width = 8,bg="white")
+  }
+}
 # compare state-level seasonal ratios to EIA ------------------------------
 
 eia<-read_csv("../map_meas/eia_gas_and_electricity_by_state_sector_year_month.csv")
