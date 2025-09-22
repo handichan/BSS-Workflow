@@ -1,4 +1,4 @@
-INSERT INTO county_annual_com_{year}_{turnover}
+INSERT INTO county_annual_com_{year}_{turnover}_{weather}
 WITH electric_df AS (
     SELECT 
     CASE WHEN meas='Gap' THEN 'Gap' ELSE meas END as meas,
@@ -65,7 +65,7 @@ SELECT
 FROM scout_meas
 JOIN (
     SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use 
-    FROM com_annual_disaggregation_multipliers
+    FROM com_annual_disaggregation_multipliers_{weather}
     WHERE end_use = '{enduse}'
 ) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
