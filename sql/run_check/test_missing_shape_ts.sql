@@ -2,7 +2,7 @@
 
 WITH electric_df AS (
     SELECT *
-    FROM long_county_annual_brk_amy
+    FROM long_county_annual_{turnover}_{weather}
     WHERE county_ann_kwh > 0
     AND fuel = 'Electric'
 ),
@@ -40,14 +40,14 @@ AND elec.tech_stage = mm.tech_stage),
 
 good_shape_ts as(
 SELECT shape_ts,"in.county","in.state",end_use, 1 as present
-FROM com_annual_disaggregation_multipliers_20250616_amy 
+FROM com_annual_disaggregation_multipliers_{version} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY shape_ts,"in.county","in.state",end_use
 
 UNION ALL
 
 SELECT shape_ts,"in.county","in.state",end_use, 1 as present
-FROM res_annual_disaggregation_multipliers_20250616_amy 
+FROM res_annual_disaggregation_multipliers_{version} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY shape_ts,"in.county","in.state",end_use
 )

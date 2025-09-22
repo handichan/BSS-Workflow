@@ -6,12 +6,12 @@ WITH ranked AS (
         turnover,
         "year",
         timestamp_hour,
-        SUM(county_hourly_kwh) AS county_total_hourly_kwh,
+        SUM(county_hourly_cal_kwh) AS county_total_hourly_kwh,
         ROW_NUMBER() OVER (
             PARTITION BY "in.county", turnover, "year"
-            ORDER BY SUM(county_hourly_kwh) DESC
+            ORDER BY SUM(county_hourly_cal_kwh) DESC
         ) AS rank_num
-    FROM long_county_hourly_TURNOVERID_amy
+    FROM long_county_hourly_{turnover}_{weather}
     GROUP BY "in.county", turnover, "year", timestamp_hour
 ),
 max_hours AS (

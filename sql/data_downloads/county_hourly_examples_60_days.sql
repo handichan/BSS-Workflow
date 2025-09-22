@@ -14,7 +14,7 @@ WITH ns AS (
 county_totals as(
 SELECT lca."in.county",lca.turnover,lca."in.state",lca."year", sum(lca.county_ann_kwh) as county_total_ann_kwh 
 FROM ns
-LEFT JOIN long_county_annual_{turnover}_amy lca ON ns."in.county" = lca."in.county"
+LEFT JOIN long_county_annual_{turnover}_{weather} lca ON ns."in.county" = lca."in.county"
 WHERE turnover!='baseline'
 AND lca.county_ann_kwh = lca.county_ann_kwh
 AND "year" IN (2024, 2050)
@@ -83,8 +83,8 @@ hourly_data AS (
         lch.turnover,
         lch.year,
         lch.timestamp_hour,
-        sum(lch.county_hourly_kwh) as county_hourly_kwh
-    FROM long_county_hourly_{turnover}_amy lch
+        sum(lch.county_hourly_cal_kwh) as county_hourly_kwh
+    FROM long_county_hourly_{turnover}_{weather} lch
     INNER JOIN example_counties ec
         ON lch."in.county" = ec."in.county"
     WHERE lch.year IN (2024, 2050)

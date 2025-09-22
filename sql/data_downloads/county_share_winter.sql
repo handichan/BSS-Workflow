@@ -8,10 +8,9 @@ WITH ranked AS (
         timestamp_hour,
         RANK() OVER (
             PARTITION BY "in.county", turnover, "year"
-            ORDER BY SUM(county_hourly_kwh) DESC
+            ORDER BY SUM(county_hourly_cal_kwh) DESC
         ) AS rank_num
-    FROM long_county_hourly_brk_amy
-    WHERE "in.state" = 'WY'
+    FROM long_county_hourly_{turnover}_{weather}
     GROUP BY "in.county", turnover, "year", timestamp_hour
 ),
 top100 AS (

@@ -24,7 +24,7 @@ WITH (
             '%Y-%m-%d %H:%i:%s.%f'
         ) AS date_time,
         end_use,
-        county_hourly_kwh
+        county_hourly_cal_kwh
         -- convert to variable
         FROM long_county_hourly_{turnover}_amy
         -- we need the baseline from one table not all of them
@@ -36,15 +36,15 @@ WITH (
         county,
         date_time,
         -- not sure why you have to use an aggregate expression here, but since there's only one value min, max, avg will all give the same result
-        MAX(CASE WHEN end_use = 'Computers and Electronics' THEN county_hourly_kwh END) AS computers_electronics,
-        MAX(CASE WHEN end_use = 'Cooking' THEN county_hourly_kwh END) AS cooking,
-        MAX(CASE WHEN end_use = 'Cooling (Equip.)' THEN county_hourly_kwh END) AS cooling,
-        MAX(CASE WHEN end_use = 'Heating (Equip.)' THEN county_hourly_kwh END) AS heating,
-        MAX(CASE WHEN end_use = 'Lighting' THEN county_hourly_kwh END) AS lighting,
-        MAX(CASE WHEN end_use = 'Other' THEN county_hourly_kwh END) AS other,
-        MAX(CASE WHEN end_use = 'Refrigeration' THEN county_hourly_kwh END) AS refrigeration,
-        MAX(CASE WHEN end_use = 'Ventilation' THEN county_hourly_kwh END) AS ventilation,
-        MAX(CASE WHEN end_use = 'Water Heating' THEN county_hourly_kwh END) AS water_heating,
+        MAX(CASE WHEN end_use = 'Computers and Electronics' THEN county_hourly_cal_kwh END) AS computers_electronics,
+        MAX(CASE WHEN end_use = 'Cooking' THEN county_hourly_cal_kwh END) AS cooking,
+        MAX(CASE WHEN end_use = 'Cooling (Equip.)' THEN county_hourly_cal_kwh END) AS cooling,
+        MAX(CASE WHEN end_use = 'Heating (Equip.)' THEN county_hourly_cal_kwh END) AS heating,
+        MAX(CASE WHEN end_use = 'Lighting' THEN county_hourly_cal_kwh END) AS lighting,
+        MAX(CASE WHEN end_use = 'Other' THEN county_hourly_cal_kwh END) AS other,
+        MAX(CASE WHEN end_use = 'Refrigeration' THEN county_hourly_cal_kwh END) AS refrigeration,
+        MAX(CASE WHEN end_use = 'Ventilation' THEN county_hourly_cal_kwh END) AS ventilation,
+        MAX(CASE WHEN end_use = 'Water Heating' THEN county_hourly_cal_kwh END) AS water_heating,
         sector,
         "year",
         state

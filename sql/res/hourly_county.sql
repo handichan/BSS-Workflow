@@ -109,7 +109,7 @@ hourly_grouped AS (
         timestamp_hour,
         turnover,
         sector,
-        SUM(county_hourly_kwh) AS county_hourly_kwh,
+        SUM(county_hourly_kwh) AS county_hourly_uncal_kwh,
         scout_run
     FROM hourly_ungrouped
     GROUP BY
@@ -133,7 +133,8 @@ hourly_calibrated AS (
         hg.timestamp_hour,
         hg.turnover,
         hg.sector,
-        county_hourly_kwh * calibration_multiplier AS county_hourly_kwh,
+        county_hourly_uncal_kwh,
+        county_hourly_uncal_kwh * calibration_multiplier AS county_hourly_cal_kwh,
         hg.scout_run
     FROM hourly_grouped AS hg
     LEFT JOIN calibration_multipliers AS cm
@@ -147,7 +148,8 @@ SELECT
     "in.county",
     timestamp_hour,
     turnover,
-    county_hourly_kwh,
+    county_hourly_uncal_kwh,
+    county_hourly_cal_kwh,
     scout_run,
     sector,
     "in.state",
