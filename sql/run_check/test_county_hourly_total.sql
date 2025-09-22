@@ -7,11 +7,11 @@ SELECT turnover,
       SUM(CASE WHEN source = 'scout_gap_sum' THEN kwh ELSE 0 END) AS scout_gap_sum
 FROM (
     SELECT 'commercial' AS source, turnover, county_hourly_kwh AS kwh
-    FROM long_county_hourly_{turnover}_amy
+    FROM long_county_hourly_{turnover}_{weather}
     WHERE county_hourly_kwh = county_hourly_kwh AND "year" = {year} AND sector = 'com'
     UNION ALL
     SELECT 'residential' AS source, turnover,county_hourly_kwh AS kwh
-    FROM long_county_hourly_{turnover}_amy
+    FROM long_county_hourly_{turnover}_{weather}
     WHERE county_hourly_kwh = county_hourly_kwh AND "year" = {year} AND sector = 'res'
     UNION ALL
     SELECT 'gap' AS source, turnover,county_hourly_kwh AS kwh

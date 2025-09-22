@@ -33,6 +33,7 @@ class Config:
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
     SCOUT_OUT_TSV = "scout_tsv"
     SCOUT_IN_JSON = "scout_json"
     OUTPUT_DIR = "agg_results"
@@ -44,16 +45,17 @@ class Config:
     BUCKET_NAME = "handibucket" 
     SCOUT_RUN_DATE = "2025-09-11"
     VERSION_ID = "20250911"
+    WEATHER = "amy"
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
-    TURNOVERS = ["brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"]
+    # TURNOVERS = ["brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"]
+    # YEARS = ['2024','2025','2030','2035','2040','2045','2050']
 
-    YEARS = ['2024','2025','2030','2035','2040','2045','2050']
-
-    # TURNOVERS = ['brk']
-    # YEARS = ['2030']
+    TURNOVERS = ["aeo","brk"]
+    YEARS = ["2030"]
+    # YEARS = ["2020","2021","2022","2023",'2024','2025','2030','2035','2040','2045','2050']
 
     # Auxiliary constants
     US_STATES = [
@@ -396,13 +398,13 @@ def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str,
         with_pkg = with_pkg[keep_cols] if set(keep_cols).issubset(with_pkg.columns) else with_pkg
         frames.append(with_pkg)
 
-    long = pd.concat(frames, ignore_index=True).melt(
+    dflong = pd.concat(frames, ignore_index=True).melt(
         id_vars=pivot_index,
         value_vars=["original_ann", "measure_ann"],
         var_name="tech_stage",
         value_name="state_ann_kwh",
     )
-    long["turnover"] = turnover
+    dflong["turnover"] = turnover
 
     # Optional baseline
     if include_baseline:
@@ -426,15 +428,15 @@ def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str,
 
         final_cols = pivot_index + ["tech_stage", "state_ann_kwh", "turnover"]
         final_cols = [c for c in final_cols if c in grouped_base.columns]
-        long = pd.concat([long, grouped_base[final_cols]], ignore_index=True)
+        dflong = pd.concat([dflong, grouped_base[final_cols]], ignore_index=True)
 
-    long["sector"] = long.apply(add_sector, axis=1)
-    long["scout_run"] = cfg.SCOUT_RUN_DATE
+    dflong["sector"] = dflong.apply(add_sector, axis=1)
+    dflong["scout_run"] = cfg.SCOUT_RUN_DATE
 
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     local_path = os.path.join(cfg.SCOUT_OUT_TSV, f"scout_annual_state_{turnover}.tsv")
-    long.to_csv(local_path, sep="\t", index=False)
-    return long, local_path
+    dflong.to_csv(local_path, sep="\t", index=False)
+    return dflong, local_path
 
 
 def calc_annual(df: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config):
@@ -557,6 +559,7 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         dest_bucket=cfg.BUCKET_NAME,
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
+        weather=cfg.WEATHER
     )
 
     contains_state = "{state}" in template_raw
@@ -746,11 +749,14 @@ def county_partition_multipliers(athena_client, cfg: Config):
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
     scout_files = [
         # Examples kept; you can uncomment the ones you need.
-        "brk.json", 
-        "accel.json", "state.json", "ref.json", "aeo.json",
-        "dual_switch.json", 
-        "high_switch.json",
-        "min_switch.json"
+        "aeo.json",
+        # "brk.json", 
+        # "accel.json",
+        # "state.json",
+        # "ref.json", 
+        # "dual_switch.json", 
+        # "high_switch.json",
+        # "min_switch.json"
         # "aeo25_20to50_bytech_indiv.json",
         # "aeo25_20to50_bytech_gap_indiv.json",
         # "fossil.json"
@@ -758,6 +764,10 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
 
     # Ensure measure_map exists in Athena
     s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
+
+    # Ensure the calibration multipliers exist in Athena
+    s3_create_table_from_tsv(s3_client, athena_client, cfg.CALIB_MULT_PATH, cfg)
+
 
     for scout_file in scout_files:
         print(f">>> SCOUT FILE: {scout_file}")
@@ -798,7 +808,7 @@ def gen_countydata(athena_client, cfg: Config):
     for s in sectors:
         for y in years:
             for t in turnovers:
-                for name in ["tbl_ann_county.sql", "annual_county.sql","tbl_hr_county.sql", "hourly_county.sql"]:
+                for name in ["tbl_hr_county.sql", "hourly_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
 
@@ -809,9 +819,9 @@ def _combine_countydata(
 ):
 
     # ---- HOURLY ----
-    hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_amy
+    hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{weather}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_hourly_{{turnover}}_amy/',
+            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_hourly_{{turnover}}_{{weather}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -819,20 +829,20 @@ def _combine_countydata(
     hourly_select_tpl = (
         'SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, '
         'scout_run, end_use, sector, year, "in.state"\n'
-        "FROM county_hourly_{sector}_{year}_{turnover}"
+        "FROM county_hourly_{sector}_{year}_{turnover}_{weather}"
     )
     hourly_parts = []
     for sector in sectors:
         for yr in years:
             hourly_parts.append(
-                hourly_select_tpl.format(sector=sector, year=yr, turnover="{turnover}")
+                hourly_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", weather="{weather}")
             )
     hourly_sql = hourly_header + "\nUNION ALL\n".join(hourly_parts) + ";"
 
     # ---- ANNUAL ----
-    annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_amy
+    annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{weather}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_annual_{{turnover}}_amy/',
+            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_annual_{{turnover}}_{{weather}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -841,13 +851,13 @@ def _combine_countydata(
         'SELECT "in.county", fuel, meas, tech_stage, multiplier_annual, '
         'state_ann_kwh, turnover, county_ann_kwh, scout_run, end_use, '
         'sector, year, "in.state"\n'
-        "FROM county_annual_{sector}_{year}_{turnover}"
+        "FROM county_annual_{sector}_{year}_{turnover}_{weather}"
     )
     annual_parts = []
     for sector in sectors:
         for yr in years:
             annual_parts.append(
-                annual_select_tpl.format(sector=sector, year=yr, turnover="{turnover}")
+                annual_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", weather="{weather}")
             )
     annual_sql = annual_header + "\nUNION ALL\n".join(annual_parts) + ";"
 
@@ -861,7 +871,7 @@ def combine_countydata(athena_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
     q_combined = _combine_countydata(
-        ("com", "res"), 
+        ["res"],#,"com"], 
         years,
         False)
 
@@ -869,7 +879,7 @@ def combine_countydata(athena_client, cfg: Config):
 
     for query in queries:
         for t in turnovers:
-            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
@@ -883,6 +893,7 @@ def test_county(s3_client, athena_client, cfg: Config):
     ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
+    weather = cfg.WEATHER
 
     os.makedirs("diagnostics", exist_ok=True)
 
@@ -893,7 +904,7 @@ def test_county(s3_client, athena_client, cfg: Config):
 
         for t in turnovers:
             for y in years:
-                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y)
+                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER)
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 df["year"] = y
                 if "enduse" in sql_file:
@@ -1267,9 +1278,9 @@ def main(opts):
 
         # gen_countydata(athena, cfg)
         # combine_countydata(athena, cfg)
-        # test_county(s3, athena, cfg)
+        test_county(s3, athena, cfg)
         # get_csvs_for_R(s3, athena, cfg)
-        run_r_script("county and hourly graphs.R")
+        # run_r_script("county and hourly graphs.R")
         # convert_long_to_wide(athena, cfg)
 
     if opts.bssbucket_insert:

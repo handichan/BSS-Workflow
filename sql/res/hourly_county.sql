@@ -1,4 +1,4 @@
-INSERT INTO  county_hourly_res_{year}_{turnover}
+INSERT INTO  county_hourly_res_{year}_{turnover}_{weather}
 WITH filtered_annual AS (
     SELECT "in.county",
     "in.weather_file_city",
@@ -11,7 +11,7 @@ WITH filtered_annual AS (
     "in.state",
     "year",
     end_use
-    FROM county_annual_res_{year}_{turnover}
+    FROM county_annual_res_{year}_{turnover}_{weather}
     WHERE "year" = {year}
       AND scout_run = '{scout_version}'
       AND end_use = '{enduse}'
@@ -91,7 +91,7 @@ hourly_ungrouped AS (
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
     "in.weather_file_city", "in.state", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
-    FROM res_hourly_disaggregation_multipliers
+    FROM res_hourly_disaggregation_multipliers_{weather}
     WHERE multiplier_hourly >= 0
     AND end_use = '{enduse}') AS h
     ON gd."in.weather_file_city" = h."in.weather_file_city"
@@ -121,6 +121,26 @@ hourly_grouped AS (
         turnover,
         scout_run,
         sector
+),
+
+hourly_calibrated AS (
+    SELECT
+        hg."in.state",
+        hg."in.county",
+        hg."year",
+        month(hg.timestamp_hour) AS "month",
+        hg.end_use,
+        hg.timestamp_hour,
+        hg.turnover,
+        hg.sector,
+        county_hourly_kwh * calibration_multiplier AS county_hourly_kwh,
+        hg.scout_run
+    FROM hourly_grouped AS hg
+    LEFT JOIN calibration_multipliers AS cm
+      ON cm."in.state" = hg."in.state"
+     AND cm."month"    = CAST(month(hg.timestamp_hour) AS INTEGER)
+     AND cm.sector     = hg.sector
+    WHERE hg.sector = 'res'
 )
 
 SELECT 
@@ -133,6 +153,6 @@ SELECT
     "in.state",
     "year",
     end_use
-FROM hourly_grouped
+FROM hourly_calibrated
 WHERE timestamp_hour IS NOT NULL
 ;
