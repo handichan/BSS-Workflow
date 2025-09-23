@@ -1,4 +1,5 @@
-SELECT turnover, 
+WITH comparison AS(
+    SELECT turnover, 
       SUM(CASE WHEN source = 'commercial' THEN kwh ELSE 0 END) AS commercial_sum,
       SUM(CASE WHEN source = 'residential' THEN kwh ELSE 0 END) AS residential_sum,
       SUM(CASE WHEN source = 'scout_commercial_sum' THEN kwh ELSE 0 END) AS scout_commercial_sum,
@@ -21,4 +22,11 @@ FROM (
     WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'res'
     
 ) combined_results
-GROUP BY turnover;
+GROUP BY turnover
+)
+
+SELECT turnover, commercial_sum, residential_sum, scout_commercial_sum, scout_residential_sum,
+1 - commercial_sum / scout_commercial_sum AS diff_commercial,
+1 - residential_sum / scout_residential_sum AS diff_residential
+FROM comparison
+;

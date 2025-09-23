@@ -1,3 +1,5 @@
+WITH comparison AS(
+
 SELECT turnover, end_use,
        SUM(CASE WHEN source = 'commercial' THEN kwh_uncal ELSE 0 END) AS commercial_uncal_sum,
        SUM(CASE WHEN source = 'residential' THEN kwh_uncal ELSE 0 END) AS residential_uncal_sum,
@@ -29,4 +31,11 @@ FROM (
     FROM scout_annual_state_{turnover}
     WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'res'
 ) combined_results
-GROUP BY turnover, end_use;
+GROUP BY turnover, end_use
+)
+
+SELECT turnover, end_use, commercial_uncal_sum, residential_uncal_sum, scout_commercial_sum, scout_residential_sum, commercial_cal_sum, residential_cal_sum,
+1 - commercial_uncal_sum / scout_commercial_sum AS diff_commercial_uncal,
+1 - residential_uncal_sum / scout_residential_sum AS diff_residential_uncal
+FROM comparison
+;

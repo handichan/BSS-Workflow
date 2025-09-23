@@ -29,7 +29,9 @@ kwh_uncal,
 kwh_cal,
 kwh_scout,
 multiplier_avg,
-kwh_cal / kwh_uncal as multiplier_derived
+kwh_cal / kwh_uncal as multiplier_derived,
+1 - kwh_cal / kwh_scout as diff_energy,
+1 - kwh_cal / kwh_uncal / multiplier_avg as diff_multiplier
 FROM combined_results
 FULL OUTER JOIN average_multipliers
 ON combined_results."in.state" = average_multipliers."in.state" AND combined_results.sector = average_multipliers.sector
