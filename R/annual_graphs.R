@@ -10,7 +10,7 @@ library(scales)
 theme_set(theme_bw())
 
 # scenarios
-scenarios<-c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch")
+scenarios<-c("aeo", "ref", "fossil", "state", "accel", "brk", "dual_switch", "high_switch", "min_switch")
 # scenario to get the baseline (AEO 2023) data from
 scenario_for_baseline <- "aeo"
 
@@ -36,18 +36,17 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 
 # for nice labeling
-# check before running
 # Scout scenarios -- every value of "turnover" should be here
-# this is the order they'll be shown in facet plots, etc
+# this is the order they'll be shown in the plots
 to<-c(baseline="AEO 2025",
       aeo="AEO 2025 BTB performance",
       ref="Reference",
+      fossil="Fossil Favorable",
       stated_policies="Stated Policies",
-      state="State and Local Action",
       mid="Mid",
       high="High",
+      state="State and Local Action",
       accel="Accelerated Innovation",
-      fossil="Fossil Favorable",
       breakthrough="Breakthrough",
       brk="Breakthrough",
       ineff="Inefficient",
@@ -82,11 +81,21 @@ state_height<-length(states)*1.4
 # order the scenarios for plotting
 wide<-wide %>% mutate(turnover=factor(turnover,levels=names(to),ordered=T))
 
+# choose scenarios to plot ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-c("baseline", scenarios)
+
+#filename_prefix <- "aeo_ref_fossil_state_accel_brk"
+#scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+
+#filename_prefix <- "aeo_min_dual_high"
+#scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
 # annual, national --------------------------------------------------------
 
 print("printing 1")
 # area plot by year, scenario, end use, sector
-wide %>% filter(fuel=="Electric") %>% 
+wide %>% filter(fuel=="Electric", turnover %in% scen_filtered) %>% 
   group_by(year,sector,end_use,turnover) %>% 
   summarize(kwh=sum(state_ann_kwh)/10^9) %>%
   ggplot(aes(x=year,y=kwh,fill=end_use))+
@@ -99,7 +108,7 @@ wide %>% filter(fuel=="Electric") %>%
 ggsave("graphs/national_annual_sector_scenario.jpeg",device = "jpeg",width = width, height =3,units = "in")
 
 print("printing 1b")
-wide %>% filter(fuel!="Electric") %>% 
+wide %>% filter(fuel!="Electric", turnover %in% scen_filtered) %>% 
   group_by(year,sector,end_use,turnover) %>% 
   summarize(kwh=sum(state_ann_kwh)/10^9) %>%
   ggplot(aes(x=year,y=kwh,fill=end_use))+
@@ -114,7 +123,7 @@ ggsave("graphs/national_annual_sector_scenario_fossil.jpeg",device = "jpeg",widt
 
 print("printing 2")
 # line plot comparing the scenario totals
-wide %>% filter(fuel=="Electric") %>%
+wide %>% filter(fuel=="Electric", turnover %in% scen_filtered) %>%
   group_by(turnover,year) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>%
   ggplot(aes(x=year,y=TWh,color=turnover))+
   geom_line()+
@@ -127,7 +136,7 @@ ggsave("graphs/national_annual_lines.jpeg",device = "jpeg",width = 4.5, height =
 
 # annual, national by tech type ------------------------------------------------------------
 
-with_shapes<-wide %>% filter(fuel=="Electric") %>% 
+with_shapes<-wide %>% filter(fuel=="Electric", turnover %in% scen_filtered) %>% 
   left_join(mm_long, by=c("meas","end_use"="Scout_end_use","tech_stage","sector"))
 
 with_shapes_agg <-with_shapes  %>% group_by(year,end_use,turnover,sector,description) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% ungroup() 

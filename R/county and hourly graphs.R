@@ -26,7 +26,7 @@ filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
 # scenarios
-scenarios<-c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch")
+scenarios<-c("aeo", "ref", "fossil", "state", "accel", "brk", "dual_switch", "high_switch", "min_switch")
 # scenario to get the baseline (AEO 2023) data from
 scenario_for_baseline <- "aeo"
 
@@ -66,15 +66,16 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
+# this is the order they'll be shown in the plots
 to<-c(baseline="AEO 2025",
       aeo="AEO 2025 BTB performance",
       ref="Reference",
+      fossil="Fossil Favorable",
       stated_policies="Stated Policies",
-      state="State and Local Action",
       mid="Mid",
       high="High",
+      state="State and Local Action",
       accel="Accelerated Innovation",
-      fossil="Fossil Favorable",
       breakthrough="Breakthrough",
       brk="Breakthrough",
       ineff="Inefficient",
@@ -184,14 +185,18 @@ plot_map_hist<-function(data_list){
   return(plot_grid(plotlist = combined_plots, nrow = nrows))
 }
 
+# choose scenarios to plot ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-c("baseline", scenarios)
+
+#filename_prefix <- "aeo_ref_fossil_state_accel_brk"
+#scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+
+#filename_prefix <- "aeo_min_dual_high"
+#scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
 
 
 # map with histogram - plot % changes! ----------------------------------------------
-filename_prefix <- ""
-scen_filtered<-c(scenarios,"baseline")
-
-#filename_prefix <- "base_state_fossil_brk_"
-#scen_filtered<-c("baseline","state","fossil","brk")
 
 # percent change in annual electricity
 # by turnover
@@ -315,11 +320,6 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 
 # top 100 hours - map and histogram of share in the winter -----------------------------------------------------------
 
-filename_prefix <- ""
-scen_filtered<-c(scenarios,"baseline")
-
-#filename_prefix <- "base_state_fossil_brk_"
-#scen_filtered<-c("baseline","state","fossil","brk")
 
 top100_map<- county_share_winter %>% 
   left_join(geo_counties %>% select(stock.county,subregion,region,population),by=c("in.county"="stock.county"),relationship="many-to-many") %>%
@@ -384,7 +384,7 @@ ratio_map<-county_map %>% ggplot()+
         panel.background = element_blank(),
         legend.position="bottom",legend.key.width = unit(1,"in"),
         panel.spacing = unit(0, "in"),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
+        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))+
   facet_grid(year~turnover,labeller = labeller(turnover=to))+
   ggtitle("Ratio of Winter Peak to Summer Peak")
 save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio.jpg"),ratio_map,base_height = 12,bg="white")
