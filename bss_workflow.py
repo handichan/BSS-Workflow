@@ -43,19 +43,16 @@ class Config:
     # Runtime switches/identifiers
     DEST_BUCKET = "bss-workflow"
     BUCKET_NAME = "handibucket" 
-    SCOUT_RUN_DATE = "2025-09-11"
-    VERSION_ID = "20250911"
+    SCOUT_RUN_DATE = "2025-09-24"
+    VERSION_ID = "20250924"
     WEATHER = "amy"
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
-    # TURNOVERS = ["brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"]
-    # YEARS = ['2024','2025','2030','2035','2040','2045','2050']
+    TURNOVERS = ["brk", "accel", "aeo", "ref", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    YEARS = ['2024','2025','2030','2035','2040','2045','2050']
 
-    TURNOVERS = ["aeo","brk"]
-    YEARS = ["2030"]
-    # YEARS = ["2020","2021","2022","2023",'2024','2025','2030','2035','2040','2045','2050']
 
     # Auxiliary constants
     US_STATES = [
@@ -239,14 +236,6 @@ def add_sector(row: pd.Series):
         return "res"
     return None
 
-
-def mark_gap(row: pd.Series):
-    b = row.get("bldg_type")
-    if pd.isna(b):
-        return None
-    return "Gap" if b == "Unspecified" else row.get("meas")
-
-
 def compute_no_package_energy(wide_df: pd.DataFrame) -> pd.DataFrame:
     """
     From efficient_* columns (MMBtu), compute annual kWh columns.
@@ -302,12 +291,15 @@ def compute_with_package_energy(wide_df: pd.DataFrame, include_bldg_type: bool, 
 def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataFrame:
     new_columns = [
         "meas", "adoption_scn", "metric", "reg",
-        "bldg_type", "end_use", "fuel", "year", "value"]
+        "bldg_type", "end_use", "fuel", "year", "value"
+    ]
     with open(filename, "r") as f:
         json_df = json.load(f)
     meas_keys = list(json_df.keys())[:-1]
 
     all_df = pd.DataFrame()
+    weights_df_all = pd.DataFrame() 
+
     for mea in meas_keys:
         json_data = json_df[mea]["Markets and Savings (by Category)"]
         data_from_json = reshape_json(json_data)
@@ -317,17 +309,27 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
         cols = ["meas"] + [c for c in all_df.columns if c != "meas"]
         all_df = all_df[cols]
 
+        # ---- ComStock Gap Weights ----
+        if "ComStock Gap Weights" in json_df[mea]:
+            w_data = reshape_json(json_df[mea]["ComStock Gap Weights"])
+            wdf = pd.DataFrame(w_data)
+            wdf["meas"] = mea
+            wdf = wdf[["meas",0,1,2]]
+            wdf.columns = ["meas", "bldg_type", "year", "gap_weight"]
+            weights_df_all = wdf if weights_df_all.empty else pd.concat([weights_df_all, wdf], ignore_index=True)
+
+    # Name Markets & Savings columns and keep only energy-use metrics there
     all_df.columns = new_columns
 
     metrics = [
         "Efficient Energy Use (MMBtu)",
         "Efficient Energy Use, Measure (MMBtu)",
-        "Baseline Energy Use (MMBtu)",
+        "Baseline Energy Use (MMBtu)"
     ]
     if include_env:
         metrics.append("Efficient Energy Use, Measure-Envelope (MMBtu)")
-
-    all_df = all_df[all_df["metric"].isin(metrics)]
+        
+    all_df = all_df[all_df["metric"].isin(metrics)].copy()
 
     # Fix measures without a fuel key
     to_shift = all_df[pd.isna(all_df["value"])].copy()
@@ -343,7 +345,13 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
         f"scout_annual_state_{os.path.basename(filename).split('/')[0]}_df.tsv")
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     df.to_csv(out_path, sep="\t", index=False)
-    return df
+
+    out_weight_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}_df",
+        f"scout_annual_state_{os.path.basename(filename).split('/')[0]}_weights_df.tsv")
+    weights_df_all.to_csv(out_weight_path, sep="\t", index=False)
+
+    return df, weights_df_all
+
 
 
 def scout_to_df(filename: str, cfg: Config) -> pd.DataFrame:
@@ -354,11 +362,13 @@ def scout_to_df_noenv(filename: str, cfg: Config) -> pd.DataFrame:
     return _scout_json_to_df(filename, include_env=False, cfg=cfg)
 
 
-def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config, include_env: bool):
+def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config, include_env: bool): 
     envelope_map = file_to_df(cfg.ENVELOPE_MAP_PATH)
 
     grouping_cols = ["meas", "metric", "reg", "end_use", "fuel", "year"]
     pivot_index = ["meas", "reg", "end_use", "fuel", "year"]
+
+
     if include_bldg_type:
         if "bldg_type" in df.columns:
             grouping_cols.insert(3, "bldg_type")
@@ -372,7 +382,6 @@ def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str,
         efficient_metrics.append("Efficient Energy Use, Measure-Envelope (MMBtu)")
 
     df = df.copy()
-    df["meas"] = df.apply(mark_gap, axis=1)
 
     efficient = df[df["metric"].isin(efficient_metrics)].copy()
     grouped = efficient.groupby(grouping_cols, dropna=False)["value"].sum().reset_index()
@@ -433,18 +442,127 @@ def _calc_annual_common(df: pd.DataFrame, include_baseline: bool, turnover: str,
     dflong["sector"] = dflong.apply(add_sector, axis=1)
     dflong["scout_run"] = cfg.SCOUT_RUN_DATE
 
+    dflong_before_split = dflong.copy()
+    # dflong_before_split = dflong.copy()
+    # --- GAP SPLIT: commercial-electric only, using mirrored gap_weights ---
+    if not gap_weights.empty:
+        subset_mask = (dflong.get("sector") == "com") & (dflong.get("fuel") == "Electric")
+        long_subset = dflong.loc[subset_mask].copy()
+
+        # Join keys mirror baseline key set (present in dflong)
+        join_keys = ["meas", "bldg_type", "year"]  
+
+        if not long_subset.empty and all(k in long_subset.columns for k in join_keys):
+            merged = long_subset.merge(
+                gap_weights, on=join_keys, how="left", validate="m:1"
+            )
+            merged["gap_weight"] = merged["gap_weight"].fillna(0.0).astype(float)
+
+            cols = list(merged.columns)
+            # portion modeled in ComStock
+            part1 = merged.copy()
+            part1["state_ann_kwh"] = (1.0 - part1["gap_weight"]) * part1["state_ann_kwh"]
+
+            # gap portion
+            part2 = merged.copy()
+            part2["state_ann_kwh"] = part2["gap_weight"] * part2["state_ann_kwh"]
+            part2["meas"] = "Gap"
+
+            expanded = pd.concat([part1[cols], part2[cols]], ignore_index=True)
+            dflong = pd.concat([dflong.loc[~subset_mask], expanded], ignore_index=True)
+
+
+            # --- conservation check: state_ann_kwh before vs after applying gap split ---
+            os.makedirs("diagnostics", exist_ok=True)
+
+            # group-by keys that should remain identical across the split (exclude 'meas')
+            group_keys = [k for k in [
+                "reg", "bldg_type", "end_use", "fuel", "year",
+                "tech_stage", "turnover", "sector", "scout_run"
+            ] if k in dflong.columns]
+
+            # OVERALL (all rows, excluding 'meas')
+            pre_all = (
+                dflong_before_split
+                .groupby(group_keys, dropna=False)["state_ann_kwh"].sum()
+                .reset_index()
+                .rename(columns={"state_ann_kwh": "kwh_before"})
+            )
+            post_all = (
+                dflong
+                .groupby(group_keys, dropna=False)["state_ann_kwh"].sum()
+                .reset_index()
+                .rename(columns={"state_ann_kwh": "kwh_after"})
+            )
+            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer") \
+                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+            cmp_all["delta"] = cmp_all["kwh_after"] - cmp_all["kwh_before"]
+            cmp_all["pct_delta"] = cmp_all.apply(
+                lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
+                axis=1
+            )
+            cmp_all["scope"] = "ALL_ROWS"
+
+            # COM + ELECTRIC subset (the only rows we modify)
+            mask_pre = (dflong_before_split.get("sector") == "com") & (dflong_before_split.get("fuel") == "Electric")
+            mask_post = (dflong.get("sector") == "com") & (dflong.get("fuel") == "Electric")
+
+            pre_sub = (
+                dflong_before_split.loc[mask_pre, group_keys + ["state_ann_kwh"]]
+                .groupby(group_keys, dropna=False)["state_ann_kwh"].sum()
+                .reset_index()
+                .rename(columns={"state_ann_kwh": "kwh_before"})
+            )
+            post_sub = (
+                dflong.loc[mask_post, group_keys + ["state_ann_kwh"]]
+                .groupby(group_keys, dropna=False)["state_ann_kwh"].sum()
+                .reset_index()
+                .rename(columns={"state_ann_kwh": "kwh_after"})
+            )
+            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer") \
+                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+            cmp_sub["delta"] = cmp_sub["kwh_after"] - cmp_sub["kwh_before"]
+            cmp_sub["pct_delta"] = cmp_sub.apply(
+                lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
+                axis=1
+            )
+            cmp_sub["scope"] = "COM_ELECTRIC_ONLY"
+
+            # Totals rows at the top for quick glance
+            def _totals_row(scope, df):
+                tot_before = df["kwh_before"].sum()
+                tot_after = df["kwh_after"].sum()
+                row = {k: "ALL" for k in group_keys}
+                row.update({
+                    "kwh_before": tot_before,
+                    "kwh_after": tot_after,
+                    "delta": tot_after - tot_before,
+                    "pct_delta": ((tot_after - tot_before) / tot_before) if tot_before else (0.0 if tot_after == 0 else float("inf")),
+                    "scope": scope + "_TOTAL"
+                })
+                return pd.DataFrame([row])
+
+            cmp_all = pd.concat([_totals_row("ALL_ROWS", cmp_all), cmp_all], ignore_index=True)
+            cmp_sub = pd.concat([_totals_row("COM_ELECTRIC_ONLY", cmp_sub), cmp_sub], ignore_index=True)
+
+            diagnostics_df = pd.concat([cmp_all, cmp_sub], ignore_index=True)
+            out_csv = os.path.join("diagnostics", f"gap_kwh_conservation_{turnover}.csv")
+            diagnostics_df.to_csv(out_csv, index=False)
+            print(f"[Gap conservation check] Wrote {out_csv}")
+
+
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     local_path = os.path.join(cfg.SCOUT_OUT_TSV, f"scout_annual_state_{turnover}.tsv")
     dflong.to_csv(local_path, sep="\t", index=False)
     return dflong, local_path
 
 
-def calc_annual(df: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config):
-    return _calc_annual_common(df, include_baseline, turnover, include_bldg_type, cfg, include_env=True)
+def calc_annual(df: pd.DataFrame, gap_weights: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config):
+    return _calc_annual_common(df, gap_weights, include_baseline, turnover, include_bldg_type, cfg, include_env=True)
 
 
-def calc_annual_noenv(df: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config):
-    return _calc_annual_common(df, include_baseline, turnover, include_bldg_type, cfg, include_env=False)
+def calc_annual_noenv(df: pd.DataFrame, gap_weights: pd.DataFrame, include_baseline: bool, turnover: str, include_bldg_type: bool, cfg: Config):
+    return _calc_annual_common(df, gap_weights, include_baseline, turnover, include_bldg_type, cfg, include_env=False)
 
 
 # ----------------------------
@@ -683,6 +801,10 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         "county_hourly_examples.sql",
         "county_monthly_maxes.sql",
         "state_monthly_2024.sql",
+        "state_monthly.sql",
+        "county_hourly_examples_60_days.sql",
+        "county_peak_hour.sql",
+        "county_share_winter.sql"
     ]
     out_dir = "R/generated_csvs"
     os.makedirs(out_dir, exist_ok=True)
@@ -691,7 +813,7 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         for sql_file in sql_files:
             sql_path = f"data_downloads/{sql_file}"
             template = read_sql_file(sql_path, cfg)
-            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME)
+            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, weather=cfg.WEATHER)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
             out = os.path.join(out_dir, f"{t}_{os.path.basename(sql_file).replace('.sql', '.csv')}")
             df.to_csv(out, index=False)
@@ -747,20 +869,6 @@ def county_partition_multipliers(athena_client, cfg: Config):
 
 
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
-    scout_files = [
-        # Examples kept; you can uncomment the ones you need.
-        "aeo.json",
-        # "brk.json", 
-        # "accel.json",
-        # "state.json",
-        # "ref.json", 
-        # "dual_switch.json", 
-        # "high_switch.json",
-        # "min_switch.json"
-        # "aeo25_20to50_bytech_indiv.json",
-        # "aeo25_20to50_bytech_gap_indiv.json",
-        # "fossil.json"
-    ]
 
     # Ensure measure_map exists in Athena
     s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
@@ -769,7 +877,8 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
     s3_create_table_from_tsv(s3_client, athena_client, cfg.CALIB_MULT_PATH, cfg)
 
 
-    for scout_file in scout_files:
+    for turnover in cfg.TURNOVERS:
+        scout_file = f"{turnover}.json"
         print(f">>> SCOUT FILE: {scout_file}")
         fp = os.path.join(cfg.SCOUT_IN_JSON, scout_file)
         turnover = scout_file.split(".")[0]
@@ -784,14 +893,30 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
             "min_switch",
             "dual_switch"
         }:
-            sdf = scout_to_df_noenv(fp, cfg)
-            ann_df, out_path = calc_annual_noenv(
-                sdf, include_baseline=True, turnover=turnover, include_bldg_type=False, cfg=cfg)
-        else:
-            sdf = scout_to_df(fp, cfg)
-            ann_df, out_path = calc_annual(
-                sdf, include_baseline=True, turnover=turnover, include_bldg_type=False, cfg=cfg)
+            sdf, gap_weights = scout_to_df_noenv(fp, cfg)
+            use_gap_model = not gap_weights.empty 
 
+            ann_df, out_path = calc_annual_noenv(
+                sdf,
+                gap_weights,
+                include_baseline=True,
+                turnover=turnover,
+                include_bldg_type=use_gap_model,
+                cfg=cfg,
+            )
+
+        else:
+            sdf, gap_weights = scout_to_df(fp, cfg) 
+            use_gap_model = not gap_weights.empty
+
+            ann_df, out_path = calc_annual(
+                sdf,
+                gap_weights,
+                include_baseline=True,
+                turnover=turnover,
+                include_bldg_type=use_gap_model,
+                cfg=cfg,
+            )
         # check measures coverage
         check_missing_meas_path = sdf  # same as original intent—compare against maps
         check_missing_meas(check_missing_meas_path, cfg)
@@ -808,7 +933,8 @@ def gen_countydata(athena_client, cfg: Config):
     for s in sectors:
         for y in years:
             for t in turnovers:
-                for name in ["tbl_hr_county.sql", "hourly_county.sql"]:
+                for name in ["tbl_ann_county.sql", "annual_county.sql", 
+                             "tbl_hr_county.sql", "hourly_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
 
@@ -827,7 +953,7 @@ def _combine_countydata(
         ) AS
         """
     hourly_select_tpl = (
-        'SELECT "in.county", timestamp_hour, turnover, county_hourly_kwh, '
+        'SELECT "in.county", timestamp_hour, turnover, county_hourly_uncal_kwh, county_hourly_cal_kwh, '
         'scout_run, end_use, sector, year, "in.state"\n'
         "FROM county_hourly_{sector}_{year}_{turnover}_{weather}"
     )
@@ -871,12 +997,11 @@ def combine_countydata(athena_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
     q_combined = _combine_countydata(
-        ["res"],#,"com"], 
+        ["res","com"], 
         years,
         False)
 
     queries = [q_combined["annual"], q_combined["hourly"]]
-
     for query in queries:
         for t in turnovers:
             q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
@@ -886,10 +1011,12 @@ def combine_countydata(athena_client, cfg: Config):
 def test_county(s3_client, athena_client, cfg: Config):
     sql_dir = "run_check"
     sql_files = [
-        "test_county_annual_total.sql",
-        "test_county_annual_enduse.sql",
+        # "test_county_annual_total.sql",
+        # "test_county_annual_enduse.sql",
+        # "test_county_annual_meas.sql",
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql",
+        "test_county_hourly_state.sql",
     ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
@@ -1257,7 +1384,7 @@ def main(opts):
 
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
-        gen_scoutdata(s3, athena, cfg)
+        # gen_scoutdata(s3, athena, cfg)
         run_r_script("annual_graphs.R")
 
     if opts.gen_county:
@@ -1275,10 +1402,11 @@ def main(opts):
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
         # gen_scoutdata(s3, athena, cfg)
-
+        run_r_script("annual_graphs.R")
         # gen_countydata(athena, cfg)
+
         # combine_countydata(athena, cfg)
-        test_county(s3, athena, cfg)
+        # test_county(s3, athena, cfg)
         # get_csvs_for_R(s3, athena, cfg)
         # run_r_script("county and hourly graphs.R")
         # convert_long_to_wide(athena, cfg)

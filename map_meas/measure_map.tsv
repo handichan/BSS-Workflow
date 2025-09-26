@@ -448,7 +448,7 @@ Gap	Refrigeration	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Refr
 Gap	Cooking	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooking, gap	Cooking, gap	Cooking, gap	Cooking, gap
 (R) Ref. Case Electric Other TS	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_1	res_misc_ts_1	res	Other	Other	Other	Other
 (C) Ref. Case Electric Range TS	Cooking	com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
-(C) Ref. Case Fossil Other FS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other, fossil	Other, fossil	Other, fossil
+(C) Ref. Case Fossil Other FS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other	Other, fossil	Other
 (R) Ref. Case Electric Dryer TS	Other	res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Dryer, resistance	Dryer, ESTAR	Dryer, resistance	Dryer, ESTAR
 (C) Ref. Case Electric Other TS	Other	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Other	Other	Other	Other
 (R) Ref. Case Electric Range TS	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Range, electric	Range, electric	Range, electric	Range, electric
