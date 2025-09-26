@@ -1,4 +1,3 @@
-# initialize ---------------------------------------------------------------------
 setwd("R")
 
 #install the packages if they're not already installed
@@ -10,19 +9,24 @@ library(tidyverse)
 library(scales)
 theme_set(theme_bw())
 
+# scenarios
+scenarios<-c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch")
 # scenario to get the baseline (AEO 2023) data from
 scenario_for_baseline <- "aeo"
 
-# Scout results - output of calc_annual 
+input_dir <- "../scout_tsv" #directory where the tsvs are stored
+filename_prefix <- ""
+graph_dir <- "graphs" #directory where the graphs will be written
+
 wide<-data.frame()
-for (file in list.files("../scout_tsv")){
-  if (file == paste0("scout_annual_state_",scenario_for_baseline,".tsv")){
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_tsv/",file)))
+# Scout results - output of calc_annual 
+for (scen in scenarios){
+  if (scen==scenario_for_baseline){
+    wide<-bind_rows(wide,read_tsv(paste0(input_dir,"/scout_annual_state_",scen,".tsv")))
   } else{
-    wide<-bind_rows(wide,read_tsv(paste0("../scout_tsv/",file)) %>% filter(turnover!="baseline"))
+    wide<-bind_rows(wide,read_tsv(paste0(input_dir,"/scout_annual_state_",scen,".tsv")) %>% filter(turnover!="baseline"))
   }
 }
-
 
 # nice names for the Scout measures
 mm<-read_tsv("../map_meas/measure_map.tsv")
@@ -36,7 +40,7 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 # Scout scenarios -- every value of "turnover" should be here
 # this is the order they'll be shown in facet plots, etc
 to<-c(baseline="AEO 2025",
-      aeo="AEO 2025\nBTB performance",
+      aeo="AEO 2025 BTB performance",
       ref="Reference",
       stated_policies="Stated Policies",
       state="State and Local Action",
@@ -50,7 +54,7 @@ to<-c(baseline="AEO 2025",
       dual_switch="Dual Switch",
       high_switch="High Switch",
       min_switch="Min Switch"
-      )
+)
 # sector
 sec<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
@@ -133,8 +137,8 @@ print("printing 3")
 #HVAC
 for (s in c("com","res")){
   h<-if_else(s=="res",4,5)
-
-  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+  
+  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>1) %>% 
     filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
     geom_area()+
@@ -150,7 +154,7 @@ for (s in c("com","res")){
 print("printing 4")
 #water heating
 for (s in c("com","res")){
-  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>1) %>% 
     filter((end_use %in% c("Water Heating")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
     geom_area()+
@@ -166,7 +170,7 @@ print("printing 5")
 #non HVAC, non-WH
 for (s in c("com","res")){
   w<-if_else(s=="res",(2+length(unique(wide$turnover)))*1.8,width)
-  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
+  with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>1) %>% 
     filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
     geom_area()+
@@ -192,7 +196,7 @@ with_shapes_agg_state <-with_shapes %>% filter(reg %in% states) %>%
 for(s in c("res","com")){
   for (u in c("Heating (Equip.)","Cooling (Equip.)")){
     with_shapes_agg_state%>% 
-      group_by(description) %>% filter(sum(TWh)>0) %>%
+      group_by(description) %>% filter(sum(TWh)>1) %>%
       filter(end_use ==u,sector==s) %>%
       ggplot(aes(x=year,y=TWh,fill=description)) +
       geom_area()+
