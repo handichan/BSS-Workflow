@@ -1,6 +1,3 @@
-
-
-
 setwd("R")
 
 #install the packages if they're not already installed
@@ -67,8 +64,8 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 
 # Scout scenarios -- every value of "turnover" should be here
 # this is the order they'll be shown in the plots
-to<-c(baseline="AEO 2025",
-      aeo="AEO 2025 BTB performance",
+to<-c(baseline="baseline",
+      aeo="AEO 2025",
       ref="Reference",
       fossil="Fossil Favorable",
       stated_policies="Stated Policies",
@@ -108,9 +105,6 @@ round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 #sample sizes and county names
 ns<-read_csv("../map_meas/resstock_ns.csv")
 
-
-#width for annual graphs changeable based on number of scenarios
-width<-(1+length(scenarios))*1.8
 
 #order the scenarios
 county_ann_eu<-county_ann_eu %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
@@ -189,12 +183,14 @@ plot_map_hist<-function(data_list){
 filename_prefix <- ""
 scen_filtered<-c("baseline", scenarios)
 
-#filename_prefix <- "aeo_ref_fossil_state_accel_brk"
-#scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# filename_prefix <- "aeo_fossil_state_accel_brk_"
+# scen_filtered<-c("aeo","fossil","state","accel","brk")
 
-#filename_prefix <- "aeo_min_dual_high"
+#filename_prefix <- "aeo_min_dual_high_"
 #scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
 
+#width for annual graphs changes based on number of scenarios
+width<-(1+length(scenarios))*1.8
 
 # map with histogram - plot % changes! ----------------------------------------------
 
@@ -211,7 +207,7 @@ if(nrow(aggregated > 0)){
     pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
     mutate(percent_change=`2050`/`2024`-1,
            fill_color=color_interp(percent_change))
-  datasets <- split(annual_county_change, list(annual_county_change$turnover))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover), drop=T)
   
   p<-plot_map_hist(datasets)
   ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
@@ -234,13 +230,13 @@ if(nrow(aggregated > 0)){
     pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
     mutate(percent_change=`2050`/`2024`-1,
            fill_color=color_interp(percent_change))
-  datasets <- split(annual_county_change, list(annual_county_change$turnover))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover), drop=T)
   
   p<-plot_map_hist(datasets)
   ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.3,1)),
          width=length(scen_filtered)*4,height=4,units="in",bg = "white")
-  }
+}
 
 
 # by turnover and sector
@@ -255,7 +251,7 @@ if(nrow(aggregated > 0)){
     pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
     mutate(percent_change=`2050`/`2024`-1,
            fill_color=color_interp(percent_change))
-  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$sector))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$sector), drop=T)
   
   p<-plot_map_hist(datasets)
   ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
@@ -276,7 +272,7 @@ if(nrow(aggregated > 0)){
     pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
     mutate(percent_change=`2050`/`2024`-1,
            fill_color=color_interp(percent_change))
-  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use), drop=T)
   
   p<-plot_map_hist(datasets)
   ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
@@ -297,7 +293,7 @@ if(nrow(aggregated > 0)){
     pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
     mutate(percent_change=`2050`/`2024`-1,
            fill_color=color_interp(percent_change))
-  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use), drop=T)
   
   p<-plot_map_hist(datasets)
   ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
@@ -312,7 +308,7 @@ peak_change<-county_peak_hr %>%
   mutate(fill_color=color_interp(percent_change))
 filename<-"county_map_peak_2050vs2024_all"
 plottitle<-"Change in Building Peak Electricity: 2024 to 2050"
-datasets <- split(peak_change, list(droplevels(peak_change$turnover)))
+datasets <- split(peak_change, list(droplevels(peak_change$turnover)), drop=T)
 p<-plot_map_hist(datasets)
 ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
        plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
@@ -321,7 +317,8 @@ ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
 # top 100 hours - map and histogram of share in the winter -----------------------------------------------------------
 
 
-top100_map<- county_share_winter %>% 
+top100_map<- county_share_winter %>%
+  filter(turnover %in% scen_filtered) %>%
   left_join(geo_counties %>% select(stock.county,subregion,region,population),by=c("in.county"="stock.county"),relationship="many-to-many") %>%
   full_join(county_map,by=c("region","subregion"),relationship="many-to-many") %>%
   filter(!is.na(turnover),!is.na(year))
@@ -447,51 +444,3 @@ for (i in 1:length(county_hourly_examples_list)){
               monthly_examples,base_height = 7,base_width = 8,bg="white")
   }
 }
-# compare state-level seasonal ratios to EIA ------------------------------
-
-eia<-read_csv("../map_meas/eia_gas_and_electricity_by_state_sector_year_month.csv")
-
-eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
-  mutate(month=(match(month, month.abb)),
-         season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
-         in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
-         sector=if_else(sector=="commercial","com","res")) %>%
-  group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
-  group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
-  pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer)
-
-bss_ratios_sector<-state_monthly_2024 %>%
-  mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
-  pivot_wider(names_from=season,values_from=monthly_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer) %>%
-  arrange(max_winter_to_max_summer)
-
-eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
-  ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
-  geom_hline(yintercept = 1,color="grey30")+
-  geom_boxplot()+
-  geom_point(data=bss_ratios_sector ,color="red")+
-  scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
-  ylab("winter max / summer max")+
-  facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
-  ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
-save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
-
-
-ratio_hist<-peak_ratio %>% filter(turnover %in% c("brk", "accel", "aeo", "ref", "state","dual_switch", "high_switch", "min_switch"),year %in% c(2024,2025,2030,2035,2040,2045,2050)) %>% droplevels() %>%
-  mutate(log_ratio_binned=round_any(log_winter_to_summer,.02),
-         fill_color=diverg_ratio(log_ratio_binned))%>%
-  ggplot(aes(x=log_ratio_binned,y=after_stat(count/3107),fill=fill_color))+
-  geom_vline(xintercept=0,color="gray50")+
-  geom_bar(stat="count")+
-  scale_fill_identity() +
-  facet_grid(year~turnover,labeller = labeller(turnover=to))+
-  scale_x_continuous(labels= function(x) round(10^x, 2))+
-  coord_cartesian(xlim=c(log10(.25),log10(4)))+
-  scale_y_continuous(n.breaks=4,expand=expansion(add=0,mult=c(0,.05)),labels=percent_format())+
-  theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
-  ggtitle("Ratio of Winter Peak to Summer Peak")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio_hist.jpg"),ratio_hist,base_height = 6,base_width = 12,bg="white")

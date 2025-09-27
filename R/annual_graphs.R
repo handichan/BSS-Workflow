@@ -1,3 +1,4 @@
+# initialize ---------------------------------------------------------------------
 setwd("R")
 
 #install the packages if they're not already installed
@@ -11,11 +12,10 @@ theme_set(theme_bw())
 
 # scenarios
 scenarios<-c("aeo", "ref", "fossil", "state", "accel", "brk", "dual_switch", "high_switch", "min_switch")
-# scenario to get the baseline (AEO 2023) data from
+# scenario to get the baseline data from
 scenario_for_baseline <- "aeo"
 
 input_dir <- "../scout_tsv" #directory where the tsvs are stored
-filename_prefix <- ""
 graph_dir <- "graphs" #directory where the graphs will be written
 
 wide<-data.frame()
@@ -36,10 +36,11 @@ mm_long<-pivot_longer(mm %>% select(-c(original_ann:measure_ts)) %>% rename(meas
 
 
 # for nice labeling
+# check before running
 # Scout scenarios -- every value of "turnover" should be here
-# this is the order they'll be shown in the plots
-to<-c(baseline="AEO 2025",
-      aeo="AEO 2025 BTB performance",
+# this is the order they'll be shown in facet plots, etc
+to<-c(baseline="baseline",
+      aeo="AEO 2025",
       ref="Reference",
       fossil="Fossil Favorable",
       stated_policies="Stated Policies",
@@ -69,14 +70,16 @@ colors<-c("#1e4c71",	"#377eb8","#b3cde3",
           "#2c6b2a",	"#4daf4a","#ccebc5",
           "#653215",	"#a65628","#cc997f",
           "#5d5d5d",	"#999999","gray80")
-#width changeable based on number of scenarios
-width<-(1+length(unique(wide$turnover)))*1.8
+h_1<-3.4 #height for one row
+h_2<-6 #height for two rows
+h_3<-8.6 #height for three rows
 
 
 # states to show as examples for heating and cooling
 # check before running
 states<-c("WA","CA","MA","FL")
-state_height<-length(states)*1.4
+state_height<-length(states)*1.8
+
 
 # order the scenarios for plotting
 wide<-wide %>% mutate(turnover=factor(turnover,levels=names(to),ordered=T))
@@ -85,11 +88,14 @@ wide<-wide %>% mutate(turnover=factor(turnover,levels=names(to),ordered=T))
 filename_prefix <- ""
 scen_filtered<-c("baseline", scenarios)
 
-#filename_prefix <- "aeo_ref_fossil_state_accel_brk"
-#scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# filename_prefix <- "aeo_fossil_state_accel_brk_"
+# scen_filtered<-c("aeo","fossil","state","accel","brk")
 
-#filename_prefix <- "aeo_min_dual_high"
-#scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+# filename_prefix <- "aeo_min_dual_high_"
+# scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
+#width changeable based on number of scenarios
+width<-(1+length(scen_filtered))*2
 
 # annual, national --------------------------------------------------------
 
@@ -105,7 +111,7 @@ wide %>% filter(fuel=="Electric", turnover %in% scen_filtered) %>%
   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
   scale_fill_manual(name="",labels=eu,values=colors)+
   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-ggsave("graphs/national_annual_sector_scenario.jpeg",device = "jpeg",width = width, height =3,units = "in")
+ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario.jpg"),device = "jpeg",width = width, height =h_2,units = "in")
 
 print("printing 1b")
 wide %>% filter(fuel!="Electric", turnover %in% scen_filtered) %>% 
@@ -118,7 +124,7 @@ wide %>% filter(fuel!="Electric", turnover %in% scen_filtered) %>%
   scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
   scale_fill_manual(name="",labels=eu,values=colors)+
   theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-ggsave("graphs/national_annual_sector_scenario_fossil.jpeg",device = "jpeg",width = width, height =4,units = "in")
+ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario_fossil.jpg"),device = "jpeg",width = width, height =h_2,units = "in")
 
 
 print("printing 2")
@@ -130,7 +136,7 @@ wide %>% filter(fuel=="Electric", turnover %in% scen_filtered) %>%
   scale_y_continuous(limits=c(0,NA),labels=comma_format())+
   scale_color_manual(values =colors,name="",labels=to)+
   xlab("")
-ggsave("graphs/national_annual_lines.jpeg",device = "jpeg",width = 4.5, height =3,units = "in")
+ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_lines.jpeg"),device = "jpeg",width = 4.5, height =h_1,units = "in")
 
 
 
@@ -145,7 +151,7 @@ with_shapes_agg <-with_shapes  %>% group_by(year,end_use,turnover,sector,descrip
 print("printing 3")
 #HVAC
 for (s in c("com","res")){
-  h<-if_else(s=="res",4,5)
+  h<-if_else(s=="res",h_2,h_3)
   
   with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>1) %>% 
     filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),sector==s) %>%
@@ -156,7 +162,7 @@ for (s in c("com","res")){
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-  ggsave(paste0("graphs/national_annual_",s,"_hvac.jpeg"),device = "jpeg",width = width, height = h,units = "in")
+  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",s,"_hvac.jpeg"),device = "jpeg",width = width, height = h,units = "in")
 }
 
 
@@ -172,13 +178,12 @@ for (s in c("com","res")){
     scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
     scale_fill_manual(values=colors,name="")+
     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-  ggsave(paste0("graphs/national_annual_",s,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
+  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",s,"_wh.jpeg"),device = "jpeg",width = width, height =h_1,units = "in")
 }
 
 print("printing 5")
 #non HVAC, non-WH
 for (s in c("com","res")){
-  w<-if_else(s=="res",(2+length(unique(wide$turnover)))*1.8,width)
   with_shapes_agg%>%  group_by(description) %>% filter(sum(TWh)>1) %>% 
     filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),sector==s) %>%
     ggplot(aes(x=year,y=TWh,fill=description)) +
@@ -189,7 +194,7 @@ for (s in c("com","res")){
     guides(fill = guide_legend(nrow = 12))+
     scale_fill_manual(values=colors,name="")+
     theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-  ggsave(paste0("graphs/national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = w, height =4/1.15,units = "in")
+  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",s,"_non-mech.jpeg"),device = "jpeg",width = width+2, height =h_1,units = "in")
 }
 
 
@@ -214,7 +219,7 @@ for(s in c("res","com")){
       scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
       scale_fill_manual(values=colors,name="")+
       theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))
-    ggsave(paste0("graphs/state_annual_",s,"_",eu[u],".jpeg"),device = "jpeg",width = width, height =state_height,units = "in")
+    ggsave(paste0(graph_dir,"/",filename_prefix,"state_annual_",s,"_",eu[u],".jpeg"),device = "jpeg",width = width, height =state_height,units = "in")
   }
 }
 
