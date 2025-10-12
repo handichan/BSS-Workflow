@@ -50,9 +50,10 @@ class Config:
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
-    TURNOVERS = ["brk", "accel", "aeo", "ref", "fossil", "state","dual_switch", "high_switch", "min_switch"]
-    YEARS = ['2024','2025','2030','2035','2040','2045','2050']
-
+    TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
+    # YEARS = ['2020','2021','2022','2023','2024']
+    BASE_YEAR = '2026'
 
     # Auxiliary constants
     US_STATES = [
@@ -144,6 +145,28 @@ def execute_athena_query_to_df(s3_client, athena_client, query: str, cfg: Config
     qexec = wait_for_query_completion(athena_client, qid)
     results_uri = qexec["QueryExecution"]["ResultConfiguration"]["OutputLocation"]
     return fetch_athena_results_csv_to_df(s3_client, results_uri)
+
+def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name, cfg: Config) -> pd.DataFrame:
+    """
+    Execute a SELECT and return a DataFrame.
+    """
+
+    s3_bucket_target = "bss-workflow"
+    s3_folder = "v2/annual/"
+    s3_output_prefix = "athena_results/"
+    output_location = f"s3://{cfg.BUCKET_NAME}/{s3_output_prefix}/"
+    qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
+    qexec = wait_for_query_completion(athena_client, qid)
+    results_uri = qexec["QueryExecution"]["ResultConfiguration"]["OutputLocation"]
+    df = fetch_athena_results_csv_to_df(s3_client, results_uri)
+
+    local_parquet_file = f"{table_name}.parquet"
+    df.to_csv(f"{table_name}.csv", index=False)
+    df.to_parquet(local_parquet_file, engine="pyarrow")
+    print(f"Results saved as {local_parquet_file}")
+    
+    s3_client.upload_file(local_parquet_file, s3_bucket_target, f"{s3_folder}{local_parquet_file}")
+    print(f"{local_parquet_file} is uploaded to {s3_bucket_target}/{s3_folder}")   
 
 
 def upload_file_to_s3(s3_client, local_path: str, bucket: str, s3_path: str):
@@ -636,34 +659,6 @@ def s3_insert_to_table_from_tsv(s3_client, athena_client, local_path: str, dest_
     execute_athena_query(athena_client, sql, cfg, is_create=True, wait=True)
 
 
-# ----------------------------
-# Athena data conversions (long<->wide, county aggregation, etc.)
-# ----------------------------
-
-def convert_long_to_wide(athena_client, cfg: Config):
-    sql_dir = "data_conversion"
-    sql_files = ["long_to_wide.sql"]
-    turnovers = cfg.TURNOVERS
-    for sql_file in sql_files:
-        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-        for t in turnovers:
-            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME)
-            execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
-    # baseline
-    template = read_sql_file(f"{sql_dir}/long_to_wide_baseline.sql", cfg)
-    q = template.format(dest_bucket=cfg.BUCKET_NAME)
-    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
-
-def convert_long_to_wide_scout(athena_client, cfg: Config):
-    sql_dir = "data_conversion"
-    for sql_file in ["long_to_wide_ann.sql", "long_to_wide_ann_baseline.sql"]:
-        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-        q = template.format(dest_bucket=cfg.BUCKET_NAME)
-        execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
-
 def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yearid: str, turnover: str):
     sql_rel = f"{sectorid}/{sql_file}"
     template_raw = read_sql_file(sql_rel, cfg)
@@ -677,7 +672,8 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         dest_bucket=cfg.BUCKET_NAME,
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
-        weather=cfg.WEATHER
+        weather=cfg.WEATHER,
+        baseyear=cfg.BASE_YEAR
     )
 
     contains_state = "{state}" in template_raw
@@ -796,13 +792,14 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
 def get_csvs_for_R(s3_client, athena_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     sql_files = [
-        "county_100_hrs.sql",
+        # "county_100_hrs.sql",
         "county_ann_eu.sql",
         "county_hourly_examples.sql",
         "county_monthly_maxes.sql",
-        "state_monthly_2024.sql",
+        "state_monthly_baseline.sql",
         "state_monthly.sql",
         "county_hourly_examples_60_days.sql",
+        "annual_calibration_factors.sql"
         "county_peak_hour.sql",
         "county_share_winter.sql"
     ]
@@ -813,7 +810,7 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         for sql_file in sql_files:
             sql_path = f"data_downloads/{sql_file}"
             template = read_sql_file(sql_path, cfg)
-            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, weather=cfg.WEATHER)
+            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, weather=cfg.WEATHER, baseyear=cfg.BASE_YEAR)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
             out = os.path.join(out_dir, f"{t}_{os.path.basename(sql_file).replace('.sql', '.csv')}")
             df.to_csv(out, index=False)
@@ -936,6 +933,127 @@ def gen_countydata(athena_client, cfg: Config):
                 for name in ["tbl_ann_county.sql", "annual_county.sql", 
                              "tbl_hr_county.sql", "hourly_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
+
+
+
+# ----------------------------
+# Athena data conversions (long<->wide, county aggregation, etc.)
+# ----------------------------
+
+def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
+    sql_dir = "data_conversion"
+    turnovers = cfg.TURNOVERS
+
+    # # baseline
+    # template = read_sql_file(f"{sql_dir}/long_to_wide_baseline.sql", cfg)
+    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+    # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+
+    # scenarios
+    template = read_sql_file(f"{sql_dir}/long_to_wide.sql", cfg)
+    for t in turnovers:
+        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+        execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+
+
+
+
+def convert_scout_long_to_wide(athena_client, cfg: Config):
+    sql_dir = "data_conversion"
+    turnovers = cfg.TURNOVERS
+    
+    # baseline
+    template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
+    q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+
+    # scenarios
+    scout_header = f"""CREATE TABLE wide_scout_annual_state
+        WITH (
+            external_location = 's3://{{dest_bucket}}/{{version}}/wide/scout_annual_state/',
+            format = 'Parquet'
+        ) AS
+        WITH scout_agg AS(
+        """
+    scout_select_tpl = (
+        'SELECT "year", reg, turnover, fuel, sector, end_use,sum(state_ann_kwh) AS state_ann_kwh '
+        "FROM scout_annual_state_{turnover} "
+        "WHERE turnover != 'baseline' "
+        'GROUP BY "year", reg, turnover, fuel, sector, end_use '
+    )
+    scout_footer = f"""
+        scout_formatted AS(
+            SELECT turnover AS scenario, "year", reg AS state, fuel, sector, end_use, state_ann_kwh
+            FROM scout_agg
+        ),
+
+        scout_annual_state AS(
+            SELECT 
+                MAX(CASE WHEN fuel = 'Electric' THEN state_ann_kwh END) AS uncal_elec,
+                MAX(CASE WHEN fuel = 'Propane' THEN state_ann_kwh END) AS propane,
+                MAX(CASE WHEN fuel = 'Distillate/Other' THEN state_ann_kwh END) AS other,
+                MAX(CASE WHEN fuel = 'Natural Gas' THEN state_ann_kwh END) AS natural_gas,
+                MAX(CASE WHEN fuel = 'Biomass' THEN state_ann_kwh END) AS biomass,
+                sector,
+                end_use,
+                scenario,
+                "year",
+                state
+            FROM 
+             scout_formatted
+             GROUP BY sector, end_use, scenario, "year", state
+        ),
+        """
+
+    county_hourly_header = "long_hourly AS("
+
+    county_hourly_select_tpl = (
+        'SELECT "year", "in.state" AS state, turnover AS scenario, sector, end_use, sum(county_hourly_cal_kwh) AS cal_elec, sum(county_hourly_uncal_kwh) AS uncal_elec1 '
+        "FROM long_county_hourly_{turnover}_amy "
+        "WHERE turnover != 'baseline' "
+        'GROUP BY "year", "in.state", turnover, sector, end_use '
+    )
+    
+    combined_footer = f"""
+        combined AS(
+            SELECT 
+                sc.state, sc.sector, sc.scenario, sc."year", sc.end_use,
+                sc.propane, sc.other, sc.natural_gas, sc.biomass,
+                sc.uncal_elec, hr.uncal_elec1, hr.cal_elec
+            FROM scout_annual_state AS sc
+            LEFT JOIN long_hourly AS hr
+                ON sc.sector = hr.sector
+                AND sc.end_use = hr.end_use
+                AND sc.scenario = hr.scenario
+                AND sc.state = hr.state
+                AND sc."year" = hr."year"
+        )
+
+        SELECT
+            state, sector, scenario, "year", end_use,
+            propane, other, natural_gas, biomass,
+            uncal_elec, uncal_elec1, cal_elec
+        FROM combined
+        WHERE "year" IN (2026,2030,2035,2040,2045,2050)
+        ;
+    """
+    scout_parts = []
+    county_hourly_parts = []
+    for turnover in turnovers:
+        scout_parts.append(
+            scout_select_tpl.format(turnover=turnover)
+        )
+        county_hourly_parts.append(
+            county_hourly_select_tpl.format(turnover=turnover)
+        )
+    all_sql = scout_header + "\nUNION ALL\n".join(scout_parts) + "),\n" + scout_footer + \
+                county_hourly_header + "\nUNION ALL\n".join(county_hourly_parts) + "),\n" + combined_footer
+
+    q = all_sql.format(turnover=turnover, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+
+    # print(q)
+    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+
 
 
 def _combine_countydata(
@@ -1230,8 +1348,6 @@ def bssiefbucket_parquetmerge(s3_client, cfg: Config):
             _merge_parquet_folders(s3_client, top, s3_bucket)
 
 
-
-
 def _merge_parquet_folders(s3_client, top_level_prefix: str, s3_bucket: str):
     files = list_all_objects(s3_client, s3_bucket, top_level_prefix)
     if not files:
@@ -1298,17 +1414,16 @@ def _merge_parquet_folders(s3_client, top_level_prefix: str, s3_bucket: str):
             pass
 
 
-
 def bssbucket_insert(athena_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
-    dest_bucket = cfg.DEST_BUCKET
+    dest_bucket = 'bss-workflow'
 
     sectors = ["res", "com"]
     query_template = """
         CREATE TABLE bss_county_hourly_{turnover}_amy_{sector}_{year}
         WITH (
-            external_location = 's3://{dest_bucket}/county_hourly/{turnover}/sector={sector}/year={year}/',
+            external_location = 's3://{dest_bucket}/v2/county_hourly/{turnover}/sector={sector}/year={year}/',
             format = 'PARQUET',
             write_compression = 'SNAPPY',
             partitioned_by = ARRAY['state']
@@ -1332,16 +1447,22 @@ def bssbucket_insert(athena_client, cfg: Config):
 def bssbucket_parquetmerge(s3_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
-    dest_bucket = cfg.DEST_BUCKET
-
-    sectors = sectors or ["com", "res"]
+    dest_bucket = 'bss-workflow'
+    sectors = ["com", "res"]
 
     for t in turnovers:
         for s in sectors:
             for y in years:
-                top = f"county_hourly/{t}/sector={s}/year={y}/"
+                top = f"v2/county_hourly/{t}/sector={s}/year={y}/"
                 print(f"Merging BSS bucket for {t} {s} {y}")
-                _merge_parquet_folders(s3_client, top, s3_bucket)
+                _merge_parquet_folders(s3_client, top, dest_bucket)
+
+
+def bssbucket_parquet_scout(s3_client, athena_client, cfg:Config):
+    tables = ["wide_scout_annual_state", "wide_scout_annual_state_baseline"]
+    for tname in tables:
+        q = f"SELECT * FROM {tname};"
+        execute_athena_query_to_df2(s3_client, athena_client, q, tname, cfg)
 
 
 # ----------------------------
@@ -1384,32 +1505,28 @@ def main(opts):
 
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
-        # gen_scoutdata(s3, athena, cfg)
+        gen_scoutdata(s3, athena, cfg)
         run_r_script("annual_graphs.R")
 
     if opts.gen_county:
         _, athena = get_boto3_clients()
         gen_countydata(athena, cfg)
 
-    if opts.convert_long_to_wide:
+    if opts.convert_wide:
         _, athena = get_boto3_clients()
-        convert_long_to_wide(athena, cfg)
-
-    if opts.convert_scout:
-        _, athena = get_boto3_clients()
-        convert_long_to_wide_scout(athena, cfg)
+        convert_countyhourly_long_to_wide(athena, cfg)
+        convert_scout_long_to_wide(athena, cfg)
 
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
-        # gen_scoutdata(s3, athena, cfg)
+        gen_scoutdata(s3, athena, cfg)
         run_r_script("annual_graphs.R")
-        # gen_countydata(athena, cfg)
-
-        # combine_countydata(athena, cfg)
-        # test_county(s3, athena, cfg)
-        # get_csvs_for_R(s3, athena, cfg)
-        # run_r_script("county and hourly graphs.R")
-        # convert_long_to_wide(athena, cfg)
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        test_county(s3, athena, cfg)
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
+        run_r_script("calibration.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
@@ -1424,6 +1541,7 @@ def main(opts):
         # Insert and merge (IEF)
         bssiefbucket_insert(athena, cfg)
         bssiefbucket_parquetmerge(s3, cfg)
+        bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
@@ -1445,8 +1563,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_county", action="store_true", help="Generate County Data")
     parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
     parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
-    parser.add_argument("--convert_long_to_wide", action="store_true", help="Convert datasets as necessary")
-    parser.add_argument("--convert_scout", action="store_true", help="Convert Scout annual as necessary")
+    parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")

@@ -12,13 +12,13 @@ WITH ns AS (
   HAVING COUNT("in.state") >= 50
 ),
 county_totals as(
-SELECT lca."in.county",lca.turnover,lca."in.state",lca."year", sum(lca.county_ann_kwh) as county_total_ann_kwh 
+SELECT lch."in.county",lch.turnover,lch."in.state",lch."year", sum(lch.county_hourly_cal_kwh) as county_total_ann_kwh 
 FROM ns
-LEFT JOIN long_county_annual_{turnover}_{weather} lca ON ns."in.county" = lca."in.county"
+LEFT JOIN long_county_hourly_{turnover}_{weather} lch ON ns."in.county" = lch."in.county"
 WHERE turnover!='baseline'
-AND lca.county_ann_kwh = lca.county_ann_kwh
+AND lch.county_hourly_cal_kwh = lch.county_hourly_cal_kwh
 AND "year" IN (2024, 2050)
-GROUP BY lca."in.county",turnover,"in.state","year"
+GROUP BY lch."in.county",turnover,"in.state","year"
 ),
 
 county_differences AS (

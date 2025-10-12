@@ -55,8 +55,8 @@ mm_long <- pivot_longer(
 # ---- labellers & colors (unchanged) -------------------------------------------
 # labels for turnover (scenario) facets — keep as-is
 to <- c(
-  baseline      = "AEO 2025",
-  aeo           = "AEO 2025 BTB performance",
+  baseline      = "Baseline",
+  aeo           = "AEO 2025",
   ref           = "Reference",
   stated_policies = "Stated Policies",
   state         = "State and Local Action",
@@ -100,6 +100,10 @@ colors <- c(
   "#5d5d5d", "#999999", "gray80"
 )
 
+h_1<-3.4 #height for one row
+h_2<-6 #height for two rows
+h_3<-8.6 #height for three rows
+
 # ---- states to show (unchanged) -----------------------------------------------
 # example states for heating/cooling state panels
 states <- c("WA","CA","MA","FL")
@@ -109,10 +113,9 @@ states <- c("WA","CA","MA","FL")
 #   S1: AEO 2025, Fossil Favorable, State and Local Action, Breakthrough
 #   S2: AEO 2025, Reference, Accelerated Innovation
 #   S3: AEO 2025, Dual Switch, High Switch, Min Switch
-set1_codes <- c("baseline","fossil","state","brk")
-set2_codes <- c("baseline","ref","accel")
-set3_codes <- c("baseline","dual_switch","high_switch","min_switch")
-setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch","high_switch","min_switch")
+set1_codes <- c("aeo","ref","fossil","state","accel","brk")
+set2_codes <- c("aeo","min_switch","dual_switch","high_switch")
+setall_codes <- c("aeo","ref","state","accel","brk","min_switch","dual_switch","high_switch")
 
 # factor & filter to a given set while preserving desired order
 .make_factor <- function(df, codes) {
@@ -140,7 +143,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
     scale_color_manual(values = colors_vec, name="", labels = to_lab) +
     xlab("")
   ggsave(paste0(graph_dir,"/national_annual_lines", suffix_tag, ".jpeg"),
-         device="jpeg", width=4.5, height=3, units="in")
+         device="jpeg", width=4.5, height=h_1, units="in")
 }
 
 
@@ -170,7 +173,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
   ggsave(paste0(graph_dir,"/national_annual_sector_scenario", suffix_tag, ".jpeg"),
-         device="jpeg", width=width_set, height=5, units="in")
+         device="jpeg", width=width_set, height=h_2, units="in")
 
   # ----- 1b) national, non-Electric -------------------------------------------
   message(paste0("printing national non-electric ", suffix_tag))
@@ -189,7 +192,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
   ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil", suffix_tag, ".jpeg"),
-         device="jpeg", width=width_set, height=5, units="in")
+         device="jpeg", width=width_set, height=h_2, units="in")
 
 
   # ----- 3) national by tech type ---------------------------------------------
@@ -232,6 +235,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
   # 3b) Water Heating
   message(paste0("printing water heating ", suffix_tag))
   for (s in c("com","res")) {
+    h<-if_else(s=="res",h_2,h_3)
     with_shapes_agg %>%
       group_by(description) %>% filter(sum(TWh) > 1) %>% ungroup() %>%
       filter(end_use == "Water Heating", sector == s) %>%
@@ -247,7 +251,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
             strip.text.y = element_text(angle=-90, size=10),
             strip.text.x = element_text(size=10))
     ggsave(paste0(graph_dir,"/national_annual_", s, "_wh", suffix_tag, ".jpeg"),
-           device="jpeg", width=width_set, height=4/1.5, units="in")
+           device="jpeg", width=width_set, height=h_1, units="in")
   }
 
   # 3c) Non-HVAC, non-WH
@@ -271,7 +275,7 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
             strip.text.y = element_text(angle=-90, size=10),
             strip.text.x = element_text(size=10))
     ggsave(paste0(graph_dir,"/national_annual_", s, "_non-mech", suffix_tag, ".jpeg"),
-           device="jpeg", width=w_nonmech, height=4/1.15, units="in")
+           device="jpeg", width=w_nonmech, height=h_1, units="in")
   }
 
   # ----- 4) state x tech type: Heating & Cooling (facets by turnover, example you shared) ---
@@ -309,11 +313,9 @@ setall_codes <- c("baseline","fossil","state","brk","ref","accel","dual_switch",
 # ---- run all three sets -------------------------------------------------------
 wide_S1 <- .make_factor(wide, set1_codes)
 wide_S2 <- .make_factor(wide, set2_codes)
-wide_S3 <- .make_factor(wide, set3_codes)
 
-.make_split_plots_for(wide_S1, "_S1", mm_long, states, to, sec, eu, colors)   # AEO + Fossil + State + Breakthrough
-.make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)   # AEO + Reference + Accelerated Innovation
-.make_split_plots_for(wide_S3, "_S3", mm_long, states, to, sec, eu, colors)   # AEO + Dual + High + Min Switch
+.make_split_plots_for(wide_S1, "_S1", mm_long, states, to, sec, eu, colors)
+.make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)
 
 
 

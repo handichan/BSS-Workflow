@@ -15,7 +15,7 @@ FROM ns
 LEFT JOIN long_county_annual_{turnover}_{weather} lca ON ns."in.county" = lca."in.county"
 WHERE turnover!='baseline'
 AND lca.county_ann_kwh = lca.county_ann_kwh
-AND "year" IN (2024, 2050)
+AND "year" IN ({baseyear}, 2050)
 GROUP BY lca."in.county",turnover,"in.state","year"
 ),
 
@@ -23,8 +23,8 @@ county_differences AS (
     SELECT 
     "in.county",turnover,"in.state",
     (MAX(CASE WHEN year = 2050 THEN county_total_ann_kwh END) - 
-     MAX(CASE WHEN year = 2024 THEN county_total_ann_kwh END)) 
-    / NULLIF(MAX(CASE WHEN year = 2024 THEN county_total_ann_kwh END), 0) AS percent_difference
+     MAX(CASE WHEN year = {baseyear} THEN county_total_ann_kwh END)) 
+    / NULLIF(MAX(CASE WHEN year = {baseyear} THEN county_total_ann_kwh END), 0) AS percent_difference
 FROM 
     county_totals
 GROUP BY 
@@ -72,4 +72,4 @@ SELECT 'G4500510' as "in.county", CAST('High electric heat' AS varchar) as examp
 SELECT lch."in.county", lch.timestamp_hour, lch.turnover, lch.county_hourly_cal_kwh as county_hourly_kwh, lch.end_use, lch.sector, lch.year, lch."in.state", example_counties.example_type 
 FROM long_county_hourly_{turnover}_{weather} lch
 INNER JOIN example_counties ON lch."in.county" = example_counties."in.county"
-WHERE "year" IN (2024,2050);
+WHERE "year" IN ({baseyear},2050);
