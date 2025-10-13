@@ -115,11 +115,21 @@ county_share_winter<-county_share_winter %>% mutate(turnover=factor(turnover,lev
 county_peak_hr<-county_peak_hr %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
 county_monthly_maxes<-county_monthly_maxes %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
 
+# choose scenarios to plot ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-c("baseline", scenarios)
+
+# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# scen_filtered<-c("aeo","ref","state","brk","min_switch","dual_switch")
+# scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
+# filename_prefix <- paste(c(scen_filtered,"_"),collapse="_")
+
+#width for annual graphs changes based on number of scenarios
+width<-(1+length(scen_filtered))*1.8
 
 
 # map with histogram - functions -----------------------------------------------------------------
-
-
 
 # Function to create main and inset plots
 create_plot_pair <- function(data,label) {
@@ -182,18 +192,6 @@ plot_map_hist<-function(data_list){
   return(plot_grid(plotlist = combined_plots, nrow = nrows))
 }
 
-# choose scenarios to plot ----------------------------------------------
-filename_prefix <- ""
-scen_filtered<-c("baseline", scenarios)
-
-# filename_prefix <- "aeo_ref_fossil_state_accel_brk_"
-# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
-
-#filename_prefix <- "aeo_min_dual_high_"
-#scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
-
-#width for annual graphs changes based on number of scenarios
-width<-(1+length(scen_filtered))*1.8
 
 # map with histogram - plot % changes! ----------------------------------------------
 

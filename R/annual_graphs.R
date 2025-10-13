@@ -88,11 +88,11 @@ wide<-wide %>% mutate(turnover=factor(turnover,levels=names(to),ordered=T))
 filename_prefix <- ""
 scen_filtered<-c("baseline", scenarios)
 
-# filename_prefix <- "aeo_fossil_state_accel_brk_"
-# scen_filtered<-c("aeo","fossil","state","accel","brk")
-
-# filename_prefix <- "aeo_min_dual_high_"
+# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# scen_filtered<-c("aeo","ref","state","brk","min_switch","dual_switch")
 # scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
+# filename_prefix <- paste(c(scen_filtered,"_"),collapse="_")
 
 #width changeable based on number of scenarios
 width<-(1+length(scen_filtered))*2
