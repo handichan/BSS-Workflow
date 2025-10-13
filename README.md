@@ -11,10 +11,11 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 ```
 v2/
 ├── county_<annual/hourly>_<scenario>_<weather>/
-│   ├── sector/
-│   │   ├── year/
-│   │   │   ├── in.state/
-│   │   │   │   ├── <Parquet files>
+│   ├── scenario/
+│   │   ├── sector/
+│   │   │   ├── year/
+|   |   |   |   ├─- state/
+│   │   │   │   |   ├── <Parquet files>
 ```
 
 ### Directory Structure Breakdown
@@ -110,8 +111,8 @@ v2/
 
 ### File Path Example
 ```
-122024/county_annual_breakthrough_amy/sector=res/year=2024/in.state=AL/
-20241210_001636_00026_qagnk_bbbb508c-91aa-43c1-b826-ecca479bb9bd.parquet
+v2/county_hourly/accel//sector=res/year=2026/in.state=AL/
+20250930_210719_00007_78mm5_06cbe0d8-8aba-41f1-af07-7e9a94a7b8df.parquet
 ```
 
 ### Query Example (using AWS Athena)
