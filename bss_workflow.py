@@ -51,8 +51,8 @@ class Config:
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
     TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
-    YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
-    # YEARS = ['2020','2021','2022','2023','2024']
+    # YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
+    YEARS = ['2026','2030','2040','2050','2060']
     BASE_YEAR = '2026'
 
     # Auxiliary constants
@@ -956,16 +956,14 @@ def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
         execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
-
-
 def convert_scout_long_to_wide(athena_client, cfg: Config):
     sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     
-    # baseline
-    template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
-    q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
-    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+    # # baseline
+    # template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
+    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+    # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
     # scenarios
     scout_header = f"""CREATE TABLE wide_scout_annual_state
@@ -982,58 +980,132 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
         'GROUP BY "year", reg, turnover, fuel, sector, end_use '
     )
     scout_footer = f"""
-        scout_formatted AS(
-            SELECT turnover AS scenario, "year", reg AS state, fuel, sector, end_use, state_ann_kwh
-            FROM scout_agg
-        ),
-
-        scout_annual_state AS(
-            SELECT 
-                MAX(CASE WHEN fuel = 'Electric' THEN state_ann_kwh END) AS uncal_elec,
-                MAX(CASE WHEN fuel = 'Propane' THEN state_ann_kwh END) AS propane,
-                MAX(CASE WHEN fuel = 'Distillate/Other' THEN state_ann_kwh END) AS other,
-                MAX(CASE WHEN fuel = 'Natural Gas' THEN state_ann_kwh END) AS natural_gas,
-                MAX(CASE WHEN fuel = 'Biomass' THEN state_ann_kwh END) AS biomass,
-                sector,
-                end_use,
-                scenario,
+        scout_formatted AS (
+            SELECT
+                turnover AS scenario,
                 "year",
-                state
-            FROM 
-             scout_formatted
-             GROUP BY sector, end_use, scenario, "year", state
+                reg AS state,
+                LOWER(REGEXP_REPLACE(end_use, '[^A-Za-z0-9]+', '_')) AS eu,
+                CASE fuel
+                    WHEN 'Electric' THEN 'uncal_elec'
+                    WHEN 'Propane' THEN 'propane'
+                    WHEN 'Natural Gas' THEN 'natural_gas'
+                    WHEN 'Biomass' THEN 'biomass'
+                    WHEN 'Distillate/Other'THEN 'other'
+                    ELSE 'other'
+                END AS fuel_alias,
+                sector,
+                state_ann_kwh
+            FROM scout_agg
         ),
         """
 
     county_hourly_header = "long_hourly AS("
 
     county_hourly_select_tpl = (
-        'SELECT "year", "in.state" AS state, turnover AS scenario, sector, end_use, sum(county_hourly_cal_kwh) AS cal_elec, sum(county_hourly_uncal_kwh) AS uncal_elec1 '
+        'SELECT "year", "in.state" AS state, turnover AS scenario, sector, '
+        "LOWER(REGEXP_REPLACE(end_use, '[^A-Za-z0-9]+', '_')) AS eu, "
+        'sum(county_hourly_cal_kwh) AS cal_elec, sum(county_hourly_uncal_kwh) AS uncal_elec1 '
         "FROM long_county_hourly_{turnover}_amy "
         "WHERE turnover != 'baseline' "
         'GROUP BY "year", "in.state", turnover, sector, end_use '
     )
     
     combined_footer = f"""
-        combined AS(
-            SELECT 
-                sc.state, sc.sector, sc.scenario, sc."year", sc.end_use,
-                sc.propane, sc.other, sc.natural_gas, sc.biomass,
-                sc.uncal_elec, hr.uncal_elec1, hr.cal_elec
-            FROM scout_annual_state AS sc
-            LEFT JOIN long_hourly AS hr
-                ON sc.sector = hr.sector
-                AND sc.end_use = hr.end_use
-                AND sc.scenario = hr.scenario
-                AND sc.state = hr.state
-                AND sc."year" = hr."year"
+        combined AS (
+            SELECT
+                coalesce(sc.state, hr.state)    AS state,
+                coalesce(sc.sector, hr.sector)  AS sector,
+                coalesce(sc.scenario, hr.scenario) AS scenario,
+                coalesce(sc."year", hr."year")  AS "year",
+                coalesce(sc.eu, hr.eu)          AS eu,
+
+                MAX(CASE WHEN sc.fuel_alias = 'propane'      THEN sc.state_ann_kwh END)     AS propane_val,
+                MAX(CASE WHEN sc.fuel_alias = 'natural_gas'  THEN sc.state_ann_kwh END)     AS natural_gas_val,
+                MAX(CASE WHEN sc.fuel_alias = 'biomass'      THEN sc.state_ann_kwh END)     AS biomass_val,
+                MAX(CASE WHEN sc.fuel_alias = 'other'        THEN sc.state_ann_kwh END)     AS other_val,
+                MAX(CASE WHEN sc.fuel_alias = 'uncal_elec'        THEN sc.state_ann_kwh END)     AS uncal_elec_val,
+                -- MAX(CASE WHEN sc.fuel_alias = 'uncal_elec'   THEN sc.state_ann_kwh END)     AS uncal_elec_scout_val,
+                MAX(hr.uncal_elec1) AS uncal_elec1_val,
+                MAX(hr.cal_elec)   AS cal_elec_val
+            FROM scout_formatted sc
+            FULL OUTER JOIN long_hourly hr
+              ON sc.state   = hr.state
+             AND sc.sector  = hr.sector
+             AND sc.scenario= hr.scenario
+             AND sc."year"  = hr."year"
+             AND sc.eu      = hr.eu
+            GROUP BY
+                coalesce(sc.state, hr.state),
+                coalesce(sc.sector, hr.sector),
+                coalesce(sc.scenario, hr.scenario),
+                coalesce(sc."year", hr."year"),
+                coalesce(sc.eu, hr.eu)
+        ),
+
+        -- Pivot to wide
+        wide AS (
+            SELECT
+                state,
+                sector,
+                scenario,
+                "year",
+
+
+                -- === COOLING ===
+                MAX(CASE WHEN eu = 'cooling_equip_' THEN natural_gas_val END) AS "natural_gas.cooling.kwh",
+                MAX(CASE WHEN eu = 'cooling_equip_' THEN uncal_elec_val  END) AS "electricity_uncalibrated.cooling.kwh",
+                MAX(CASE WHEN eu = 'cooling_equip_' THEN cal_elec_val    END) AS "electricity_calibrated.cooling.kwh",
+
+                -- === HEATING ===
+                MAX(CASE WHEN eu = 'heating_equip_' THEN propane_val     END) AS "propane.heating.kwh",
+                MAX(CASE WHEN eu = 'heating_equip_' THEN natural_gas_val END) AS "natural_gas.heating.kwh",
+                MAX(CASE WHEN eu = 'heating_equip_' THEN biomass_val     END) AS "biomass.heating.kwh",
+                MAX(CASE WHEN eu = 'heating_equip_' THEN other_val       END) AS "other.heating.kwh",
+                MAX(CASE WHEN eu = 'heating_equip_' THEN uncal_elec_val  END) AS "electricity_uncalibrated.heating.kwh",
+                MAX(CASE WHEN eu = 'heating_equip_' THEN cal_elec_val    END) AS "electricity_calibrated.heating.kwh",
+
+                -- === WATER HEATING ===
+                MAX(CASE WHEN eu = 'water_heating' THEN propane_val     END) AS "propane.water_heating.kwh",
+                MAX(CASE WHEN eu = 'water_heating' THEN natural_gas_val END) AS "natural_gas.water_heating.kwh",
+                MAX(CASE WHEN eu = 'water_heating' THEN other_val       END) AS "other.water_heating.kwh",
+                MAX(CASE WHEN eu = 'water_heating' THEN uncal_elec_val  END) AS "electricity_uncalibrated.water_heating.kwh",
+                MAX(CASE WHEN eu = 'water_heating' THEN cal_elec_val    END) AS "electricity_calibrated.water_heating.kwh",
+
+                -- === LIGHTING ===
+                MAX(CASE WHEN eu = 'lighting' THEN uncal_elec_val  END) AS "electricity_uncalibrated.lighting.kwh",
+                MAX(CASE WHEN eu = 'lighting' THEN cal_elec_val    END) AS "electricity_calibrated.lighting.kwh",
+
+                -- === VENTILATION ===
+                MAX(CASE WHEN eu = 'ventilation' THEN uncal_elec_val  END) AS "electricity_uncalibrated.ventilation.kwh",
+                MAX(CASE WHEN eu = 'ventilation' THEN cal_elec_val    END) AS "electricity_calibrated.ventilation.kwh",
+
+                -- === REFRIGERATION ===
+                MAX(CASE WHEN eu = 'refrigeration' THEN uncal_elec_val  END) AS "electricity_uncalibrated.refrigeration.kwh",
+                MAX(CASE WHEN eu = 'refrigeration' THEN cal_elec_val    END) AS "electricity_calibrated.refrigeration.kwh",
+
+                -- === COOKING ===
+                MAX(CASE WHEN eu = 'cooking' THEN propane_val     END) AS "propane.cooking.kwh",
+                MAX(CASE WHEN eu = 'cooking' THEN natural_gas_val END) AS "natural_gas.cooking.kwh",
+                MAX(CASE WHEN eu = 'cooking' THEN uncal_elec_val  END) AS "electricity_uncalibrated.cooking.kwh",
+                MAX(CASE WHEN eu = 'cooking' THEN cal_elec_val    END) AS "electricity_calibrated.cooking.kwh",
+
+                -- === OTHER ===
+                MAX(CASE WHEN eu = 'computers_and_electronics' THEN uncal_elec_val  END) AS "electricity_uncalibrated.computers_and_electronics.kwh",
+                MAX(CASE WHEN eu = 'computers_and_electronics' THEN cal_elec_val    END) AS "electricity_calibrated.computers_and_electronics.kwh",
+
+                -- === OTHER ===
+                MAX(CASE WHEN eu = 'other' THEN natural_gas_val END) AS "natural_gas.other.kwh",
+                MAX(CASE WHEN eu = 'other' THEN other_val       END) AS "other.other.kwh",
+                MAX(CASE WHEN eu = 'other' THEN uncal_elec_val  END) AS "electricity_uncalibrated.other.kwh",
+                MAX(CASE WHEN eu = 'other' THEN cal_elec_val    END) AS "electricity_calibrated.other.kwh"
+
+            FROM combined
+            GROUP BY state, sector, scenario, "year"
         )
 
-        SELECT
-            state, sector, scenario, "year", end_use,
-            propane, other, natural_gas, biomass,
-            uncal_elec, uncal_elec1, cal_elec
-        FROM combined
+        SELECT *
+        FROM wide
         WHERE "year" IN (2026,2030,2035,2040,2045,2050)
         ;
     """
@@ -1514,7 +1586,7 @@ def main(opts):
 
     if opts.convert_wide:
         _, athena = get_boto3_clients()
-        convert_countyhourly_long_to_wide(athena, cfg)
+        # convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
     if opts.gen_countyall:
@@ -1536,12 +1608,12 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        bssbucket_insert(athena, cfg)
+        # bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
-        # Insert and merge (IEF)
-        bssiefbucket_insert(athena, cfg)
-        bssiefbucket_parquetmerge(s3, cfg)
-        bssbucket_parquet_scout(s3, athena, cfg)
+        # # Insert and merge (IEF)
+        # bssiefbucket_insert(athena, cfg)
+        # bssiefbucket_parquetmerge(s3, cfg)
+        # bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
