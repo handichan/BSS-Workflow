@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 setwd("R")
 #install the packages if they're not already installed
@@ -13,6 +14,8 @@ library(colorspace)
 
 theme_set(theme_bw())
 
+=======
+>>>>>>> 7538764818adf826b977c473280da6473d312944
 # uncalibrated BSS monthly results
 # use a version of long_county_hourly_ that has 2020-2024 to run the following query state_monthly.sql)
 # save the result to diagnostics/state_monthly_for_cal.csv

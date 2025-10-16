@@ -53,17 +53,19 @@ mm_long <- pivot_longer(
 )
 
 # ---- labellers & colors (unchanged) -------------------------------------------
-# labels for turnover (scenario) facets — keep as-is
+# labels for turnover (scenario) facets
+# Scout scenarios -- every value of "turnover" should be here
+# this is the order they'll be shown in facet plots, etc
 to <- c(
   baseline      = "Baseline",
   aeo           = "AEO 2025",
   ref           = "Reference",
+  fossil        = "Fossil Favorable",
   stated_policies = "Stated Policies",
-  state         = "State and Local Action",
   mid           = "Mid",
   high          = "High",
-  accel         = "Accelerated\nInnovation",
-  fossil        = "Fossil Favorable",
+  state         = "State and Local Action",
+  accel         = "Accelerated Innovation",
   breakthrough  = "Breakthrough",
   brk           = "Breakthrough",
   ineff         = "Inefficient",
@@ -107,6 +109,7 @@ h_3<-8.6 #height for three rows
 # ---- states to show (unchanged) -----------------------------------------------
 # example states for heating/cooling state panels
 states <- c("WA","CA","MA","FL")
+state_height<-length(states)*1.8
 
 # ---- scenario-set helper & plotting -------------------------------------------
 # Three sets (ALWAYS start with "AEO 2025" = turnover "baseline"):
@@ -115,7 +118,7 @@ states <- c("WA","CA","MA","FL")
 #   S3: AEO 2025, Dual Switch, High Switch, Min Switch
 set1_codes <- c("aeo","ref","fossil","state","accel","brk")
 set2_codes <- c("aeo","min_switch","dual_switch","high_switch")
-setall_codes <- c("aeo","ref","state","accel","brk","min_switch","dual_switch","high_switch")
+setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_switch","high_switch")
 
 # factor & filter to a given set while preserving desired order
 .make_factor <- function(df, codes) {
@@ -124,27 +127,6 @@ setall_codes <- c("aeo","ref","state","accel","brk","min_switch","dual_switch","
     mutate(turnover = factor(turnover, levels = codes, ordered = TRUE))
 }
 
-
-.make_all_plots_for <- function(df_in, suffix_tag, mm_long_ref, state_vec, to_lab, sec_lab, eu_lab, colors_vec) {
-  # dynamic sizes for the set
-  scen_levels <- levels(df_in$turnover)
-  nscen <- length(scen_levels)
-  width_set <- (1 + nscen) * 1.8
-  state_height <- length(state_vec) * 1.4
-
-  # ----- 2) national totals lines ---------------------------------------------
-  message(paste0("printing national lines ", suffix_tag))
-  df_in %>% filter(fuel=="Electric") %>%
-    group_by(turnover, year) %>%
-    summarize(TWh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
-    ggplot(aes(x=year, y=TWh, color=turnover)) +
-    geom_line() +
-    scale_y_continuous(limits=c(0, NA), labels=comma_format()) +
-    scale_color_manual(values = colors_vec, name="", labels = to_lab) +
-    xlab("")
-  ggsave(paste0(graph_dir,"/national_annual_lines", suffix_tag, ".jpeg"),
-         device="jpeg", width=4.5, height=h_1, units="in")
-}
 
 
 # master plotting function for a single set (adds filename suffix)
@@ -313,11 +295,8 @@ setall_codes <- c("aeo","ref","state","accel","brk","min_switch","dual_switch","
 # ---- run all three sets -------------------------------------------------------
 wide_S1 <- .make_factor(wide, set1_codes)
 wide_S2 <- .make_factor(wide, set2_codes)
+wide_all <- .make_factor(wide, setall_codes)
 
 .make_split_plots_for(wide_S1, "_S1", mm_long, states, to, sec, eu, colors)
 .make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)
-
-
-
-wide_all <- .make_factor(wide, setall_codes)
-.make_all_plots_for(wide_all, "_all", mm_long, states, to, sec, eu, colors)
+.make_split_plots_for(wide_all, "", mm_long, states, to, sec, eu, colors)

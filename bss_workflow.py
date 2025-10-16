@@ -1206,7 +1206,7 @@ def test_county(s3_client, athena_client, cfg: Config):
         # "test_county_annual_meas.sql",
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql",
-        "test_county_hourly_state.sql",
+        "test_county_hourly_state.sql"
     ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
@@ -1224,20 +1224,8 @@ def test_county(s3_client, athena_client, cfg: Config):
                 q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER)
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 df["year"] = y
-                if "enduse" in sql_file:
-                    if set({"commercial_sum", "scout_commercial_sum"}).issubset(df.columns):
-                        df["diff_commercial"] = (1 - df["commercial_sum"] / df["scout_commercial_sum"]).round(2)
-                    if set({"residential_sum", "scout_residential_sum"}).issubset(df.columns):
-                        df["diff_residential"] = (1 - df["residential_sum"] / df["scout_residential_sum"]).round(2)
-                    df = df.sort_values(by=["end_use", "turnover"], ascending=[True, True])
-                elif "total" in sql_file:
-                    if set({"commercial_sum", "scout_commercial_sum"}).issubset(df.columns):
-                        df["diff_commercial"] = (1 - df["commercial_sum"] / df["scout_commercial_sum"]).round(2)
-                    if set({"residential_sum", "scout_residential_sum"}).issubset(df.columns):
-                        df["diff_residential"] = (1 - df["residential_sum"] / df["scout_residential_sum"]).round(2)
-                    df = df.sort_values(by=["turnover"], ascending=[True])
 
-                final = pd.concat([final, df], ignore_index=True)
+                final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
 
         if os.path.exists(out_csv):
             os.remove(out_csv)

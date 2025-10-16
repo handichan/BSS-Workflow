@@ -40,16 +40,15 @@ for (scen in scenarios){
     county_share_winter<-bind_rows(county_share_winter,read_csv(paste0(input_dir,"/",scen,"_county_share_winter.csv")))
     county_monthly_maxes<-bind_rows(county_monthly_maxes,read_csv(paste0(input_dir,"/",scen,"_county_monthly_maxes.csv")))
     county_hourly_examples_list[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples_60_days.csv"))
-    state_monthly_baseline<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_state_monthly_baseline.csv"))
   } else{
     county_ann_eu<-bind_rows(county_ann_eu,read_csv(paste0(input_dir,"/",scen,"_county_ann_eu.csv"))%>% filter(turnover!="baseline"))
     county_peak_hr<-bind_rows(county_peak_hr,read_csv(paste0(input_dir,"/",scen,"_county_peak_hour.csv"))%>% filter(turnover!="baseline"))
     county_share_winter<-bind_rows(county_share_winter,read_csv(paste0(input_dir,"/",scen,"_county_share_winter.csv"))%>% filter(turnover!="baseline"))
     county_monthly_maxes<-bind_rows(county_monthly_maxes,read_csv(paste0(input_dir,"/",scen,"_county_monthly_maxes.csv"))%>% filter(turnover!="baseline"))
     county_hourly_examples_list[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples_60_days.csv"))
-    state_monthly_baseline<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_state_monthly_baseline.csv"))
   }
 }
+
 
 # map data ----------------------------------------------------------------
 
@@ -89,15 +88,18 @@ eu<-c(`Computers and Electronics`="Computers and Electronics",Cooking="Cooking",
 
 #fill colors for end use annual graphs
 colors<-c("#e41a1c","#fbb4ae","#377eb8","#b3cde3","#4daf4a","#ccebc5","#984ea3","#decbe4","#ff7f00","#fed9a6","#ffee33","#ffffcc","#a65628","#e5d8bd","#f781bf","#fddaec","#999999","#f2f2f2")
-#for % change maps
+#for % change in energy and peak
 color_interp <- gradient_n_pal(colours = c("#2A7062","#80cdc1", "#f5f5f5", "#dfc27d", "#bf812d", "#8c510a","#583A17", "black"), 
                                values = c(-1, -.25, 0, .25, .5, 1,3,20), space = "Lab")
+
+#for top hrs and winter/summer ratio 
+diverg<-c("#9e3d22","#e36621","#fcad52","#ffffff","#95c5e1","#5b8fbc","#2b5c8a")
 #for top 100 hrs maps
-diverg_interp<-gradient_n_pal(colours=c("#FDAB31","#E5E8C1","#3F7DDE"),
-                              values=c(0,0.5,1),space="Lab")
+diverg_tophours_interp<-gradient_n_pal(colours=diverg,
+                              values=seq(0,1,length.out = 7),space="Lab")
 #for winter/summer ratio
-diverg_ratio <- gradient_n_pal(colours = c("#FA9C26","#F7AF50","#E5E8C1","#7186CE","#3166D7"), 
-                               values = c(-1.1,-.5,0,.5,1.1), space = "Lab")
+diverg_ratio <- gradient_n_pal(colours = diverg, 
+                               values = seq(-.9,.9,length.out = 7), space = "Lab")
 
 #function to round a number to the closest __
 round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
@@ -113,11 +115,21 @@ county_share_winter<-county_share_winter %>% mutate(turnover=factor(turnover,lev
 county_peak_hr<-county_peak_hr %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
 county_monthly_maxes<-county_monthly_maxes %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
 
+# choose scenarios to plot ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-c("baseline", scenarios)
+
+# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# scen_filtered<-c("aeo","ref","state","brk","min_switch","dual_switch")
+# scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
+# filename_prefix <- paste(c(scen_filtered,"_"),collapse="_")
+
+#width for annual graphs changes based on number of scenarios
+width<-(1+length(scen_filtered))*1.8
 
 
 # map with histogram - functions -----------------------------------------------------------------
-
-
 
 # Function to create main and inset plots
 create_plot_pair <- function(data,label) {
@@ -180,18 +192,6 @@ plot_map_hist<-function(data_list){
   return(plot_grid(plotlist = combined_plots, nrow = nrows))
 }
 
-# choose scenarios to plot ----------------------------------------------
-filename_prefix <- ""
-scen_filtered<-c("baseline", scenarios)
-
-# filename_prefix <- "aeo_ref_fossil_state_accel_brk_"
-# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
-
-#filename_prefix <- "aeo_min_dual_high_"
-#scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
-
-#width for annual graphs changes based on number of scenarios
-width<-(1+length(scen_filtered))*1.8
 
 # map with histogram - plot % changes! ----------------------------------------------
 
@@ -323,14 +323,14 @@ top100_map<- county_share_winter %>%
   filter(turnover %in% scen_filtered) %>%
   left_join(geo_counties %>% select(stock.county,subregion,region,population),by=c("in.county"="stock.county"),relationship="many-to-many") %>%
   full_join(county_map,by=c("region","subregion"),relationship="many-to-many") %>%
-  filter(!is.na(turnover),!is.na(year))
+  filter(!is.na(turnover),!is.na(year)) 
 
 
 p100<-county_map %>% ggplot()+
   geom_polygon(data = top100_map , 
                mapping = aes(x = long, y = lat, group = group,fill=share_winter),color=NA) +
   coord_map("conic", lat0 = 30)+
-  scale_fill_gradient2(low="#FDAB31",mid="#E5E8C1",midpoint=.5,high="#3F7DDE",name="",labels=percent_format())+
+  scale_fill_gradientn(colors=diverg,name="",labels=percent_format())+
   theme(panel.grid = element_blank(),axis.title = element_blank(),axis.line = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.border = element_blank(),
         panel.background = element_blank(),
         legend.position="bottom",legend.key.width = unit(1,"in"),
@@ -378,7 +378,7 @@ ratio_map<-county_map %>% ggplot()+
   geom_polygon(data = peak_ratio_map , 
                mapping = aes(x = long, y = lat, group = group,fill=log_winter_to_summer),color=NA) +
   coord_map("conic", lat0 = 30)+
-  scale_fill_gradient2(low="#FA9C26",mid="#E5E8C1",midpoint=0,high="#3166D7",name="",labels = function(x) round(10^x, 2),breaks=c(-1,-.6,-.3,0,.3,.6,1))+
+  scale_fill_gradientn(colors=diverg,name="",labels=function(x) round(10^x, 2),limits=c(-.9,.9),breaks=c(-1,-.6,-.3,0,.3,.6,1))+
   theme(panel.grid = element_blank(),axis.title = element_blank(),axis.line = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.border = element_blank(),
         panel.background = element_blank(),
         legend.position="bottom",legend.key.width = unit(1,"in"),
