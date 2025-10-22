@@ -52,7 +52,8 @@ class Config:
 
     TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
     # YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
-    YEARS = ['2026','2030','2040','2050','2060']
+    YEARS = ['2026','2030','2040','2050']
+    
     BASE_YEAR = '2026'
 
     # Auxiliary constants
@@ -1596,8 +1597,15 @@ def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
             return
 
         env_metric = "Efficient Energy Use, Measure-Envelope (MMBtu)"
+        # Only require mapping for measures that actually include the envelope metric
+        # with a defined positive value
         scout_env_meas = set(
-            scout_df.loc[scout_df["metric"] == env_metric, "meas"].dropna().astype(str)
+            scout_df.loc[
+                (scout_df["metric"] == env_metric)
+                & (scout_df["value"].notna())
+                & (pd.to_numeric(scout_df["value"], errors="coerce").fillna(0) != 0),
+                "meas"
+            ].dropna().astype(str)
         )
         if not scout_env_meas:
             print("No envelope-package measures detected in Scout; nothing to validate.")
@@ -1606,6 +1614,9 @@ def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
         # Measures listed in envelope_map
         envelope_map_df = file_to_df(cfg.ENVELOPE_MAP_PATH)
         env_map_meas = set(envelope_map_df.get("meas", pd.Series(dtype=str)).dropna().astype(str))
+        # Also accept matches against 'meas_separated' to avoid false positives
+        if "meas_separated" in envelope_map_df.columns:
+            env_map_meas |= set(envelope_map_df.get("meas_separated", pd.Series(dtype=str)).dropna().astype(str))
 
         missing = scout_env_meas - env_map_meas
         if missing:
