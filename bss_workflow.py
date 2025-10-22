@@ -914,9 +914,10 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
                 include_bldg_type=use_gap_model,
                 cfg=cfg,
             )
-        # check measures coverage
-        check_missing_meas_path = sdf  # same as original intent—compare against maps
+        # checks: measure map coverage and envelope packages coverage
+        check_missing_meas_path = sdf
         check_missing_meas(check_missing_meas_path, cfg)
+        check_missing_packages(sdf, cfg)
 
         # register TSV to Athena
         s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
@@ -1573,6 +1574,49 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
         except Exception as e:
             print(f"Error processing {mfile}: {e}")
 
+
+# ----------------------------
+# Envelope packages check
+# ----------------------------
+
+def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
+    """
+    Ensure all envelope package measures present in Scout are defined in envelope_map.tsv.
+
+    Logic:
+    - Detect envelope-capable measures in Scout by presence of the metric
+      "Efficient Energy Use, Measure-Envelope (MMBtu)".
+    - Validate that each such 'meas' exists in envelope_map.tsv's 'meas' column.
+    - Report any missing measures.
+    """
+    try:
+        # Measures in Scout that require envelope mapping
+        if "metric" not in scout_df.columns or "meas" not in scout_df.columns:
+            print("Scout dataframe missing required columns for envelope check; skipping.")
+            return
+
+        env_metric = "Efficient Energy Use, Measure-Envelope (MMBtu)"
+        scout_env_meas = set(
+            scout_df.loc[scout_df["metric"] == env_metric, "meas"].dropna().astype(str)
+        )
+        if not scout_env_meas:
+            print("No envelope-package measures detected in Scout; nothing to validate.")
+            return
+
+        # Measures listed in envelope_map
+        envelope_map_df = file_to_df(cfg.ENVELOPE_MAP_PATH)
+        env_map_meas = set(envelope_map_df.get("meas", pd.Series(dtype=str)).dropna().astype(str))
+
+        missing = scout_env_meas - env_map_meas
+        if missing:
+            print("Missing envelope package measures in envelope_map.tsv:")
+            for m in sorted(missing):
+                print(f"  Measure: '{m}'")
+            print("Warning: Some envelope package measures from Scout are missing in envelope_map.tsv.")
+        else:
+            print("All envelope package measures in Scout are present in envelope_map.tsv.")
+    except Exception as e:
+        print(f"Error during envelope packages check: {e}")
 
 # ----------------------------
 # CLI & main entry
