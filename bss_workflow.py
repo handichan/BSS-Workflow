@@ -1534,15 +1534,42 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
     for mfile in meas_files:
         try:
             measures = file_to_df(mfile)
-            meas_in_map = set(measures.get("meas", pd.Series(dtype=str)))
-            meas_in_scout = set(annual_state_scout_df.get("meas", pd.Series(dtype=str)))
-            missing = meas_in_scout - meas_in_map
-            if missing:
-                for m in missing:
-                    print(f"Measure in scout but NOT in {mfile}: {m}")
-                print(f"Warning: Some measures from scout are missing in {mfile}.")
+            
+            # Create sets of measure-end_use combinations from both sources
+            if "Scout_end_use" in measures.columns:
+                # For measure_map.tsv, use meas and Scout_end_use columns
+                meas_enduse_in_map = set(
+                    zip(measures.get("meas", pd.Series(dtype=str)), 
+                        measures.get("Scout_end_use", pd.Series(dtype=str)))
+                )
             else:
-                print(f"All measures in scout are present in {mfile}.")
+                # For envelope_map.tsv or other files, fall back to just meas
+                meas_enduse_in_map = set(measures.get("meas", pd.Series(dtype=str)))
+            
+            # Create combinations from Scout data
+            if "end_use" in annual_state_scout_df.columns:
+                meas_enduse_in_scout = set(
+                    zip(annual_state_scout_df.get("meas", pd.Series(dtype=str)), 
+                        annual_state_scout_df.get("end_use", pd.Series(dtype=str)))
+                )
+            else:
+                # Fallback to just meas if end_use column doesn't exist
+                meas_enduse_in_scout = set(annual_state_scout_df.get("meas", pd.Series(dtype=str)))
+            
+            # Find missing combinations
+            missing = meas_enduse_in_scout - meas_enduse_in_map
+            
+            if missing:
+                print(f"Missing measure-end_use combinations in {mfile}:")
+                for combo in missing:
+                    if isinstance(combo, tuple):
+                        print(f"  Measure: '{combo[0]}', End Use: '{combo[1]}'")
+                    else:
+                        print(f"  Measure: '{combo}'")
+                print(f"Warning: Some measure-end_use combinations from scout are missing in {mfile}.")
+            else:
+                print(f"All measure-end_use combinations in scout are present in {mfile}.")
+                
         except Exception as e:
             print(f"Error processing {mfile}: {e}")
 
