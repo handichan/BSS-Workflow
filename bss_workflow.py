@@ -1208,7 +1208,8 @@ def test_county(s3_client, athena_client, cfg: Config):
         # "test_county_annual_meas.sql",
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql",
-        "test_county_hourly_state.sql"
+        "test_county_hourly_state.sql",
+        "test_missing_shape_ts_hourly.sql"
     ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
@@ -1223,7 +1224,7 @@ def test_county(s3_client, athena_client, cfg: Config):
 
         for t in turnovers:
             for y in years:
-                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER)
+                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER, version=cfg.VERSION_ID)
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 df["year"] = y
 
