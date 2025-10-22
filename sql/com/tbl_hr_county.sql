@@ -1,9 +1,10 @@
 -- to hold results from Scout runs that have been disaggregated to hourly, county
-CREATE EXTERNAL TABLE county_hourly_com_YEARID_TURNOVERID (
+CREATE EXTERNAL TABLE county_hourly_com_{year}_{turnover}_{weather} (
     `in.county` string,
     timestamp_hour timestamp,
     turnover string,
-    county_hourly_kwh double,
+    county_hourly_uncal_kwh double,
+    county_hourly_cal_kwh double,
     scout_run string,
     sector string,
     `in.state` string,
@@ -11,4 +12,4 @@ CREATE EXTERNAL TABLE county_hourly_com_YEARID_TURNOVERID (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://handibucket/county_hourly_com_YEARID_TURNOVERID/'
+LOCATION 's3://{dest_bucket}/{version}/county_runs/county_hourly_com_{year}_{turnover}_{weather}/'

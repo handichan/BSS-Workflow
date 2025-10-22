@@ -1,0 +1,9 @@
+shape_ts	description	in.clothes_dryer	upgrade
+res_dry_ts_1	fossil clothes dryer	Gas	0
+res_dry_ts_1	fossil clothes dryer	Propane	0
+res_dry_ts_1	fossil clothes dryer	None	0
+res_dry_ts_2	ER clothes dryer	Electric	0
+res_dry_ts_3	HP clothes dryer	Gas	11
+res_dry_ts_3	HP clothes dryer	Propane	11
+res_dry_ts_3	HP clothes dryer	None	11
+res_dry_ts_3	HP clothes dryer	Electric	11

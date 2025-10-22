@@ -1,19 +1,32 @@
-SELECT turnover, 
+WITH comparison AS(
+    SELECT turnover, 
       SUM(CASE WHEN source = 'commercial' THEN kwh ELSE 0 END) AS commercial_sum,
       SUM(CASE WHEN source = 'residential' THEN kwh ELSE 0 END) AS residential_sum,
-      SUM(CASE WHEN source = 'scout_sum' THEN kwh ELSE 0 END) AS scout_sum
+      SUM(CASE WHEN source = 'scout_commercial_sum' THEN kwh ELSE 0 END) AS scout_commercial_sum,
+      SUM(CASE WHEN source = 'scout_residential_sum' THEN kwh ELSE 0 END) AS scout_residential_sum
 FROM (
     SELECT 'commercial' AS source, turnover, county_ann_kwh AS kwh
-    FROM long_county_annual_TURNOVERID_amy
-    WHERE county_ann_kwh = county_ann_kwh AND "year" = YEARID AND sector = 'com'
+    FROM long_county_annual_{turnover}_{weather}
+    WHERE county_ann_kwh = county_ann_kwh AND "year" = {year} AND sector = 'com'
     UNION ALL
     SELECT 'residential' AS source, turnover,county_ann_kwh AS kwh
-    FROM long_county_annual_TURNOVERID_amy
-    WHERE county_ann_kwh = county_ann_kwh AND "year" = YEARID AND sector = 'res'
+    FROM long_county_annual_{turnover}_{weather}
+    WHERE county_ann_kwh = county_ann_kwh AND "year" = {year} AND sector = 'res'
     UNION ALL
-    SELECT 'scout_sum' AS source, turnover,state_ann_kwh AS kwh
-    FROM scout_annual_state_TURNOVERID
-    WHERE "year" = YEARID AND fuel = 'Electric'
+    SELECT 'scout_commercial_sum' AS source, turnover,state_ann_kwh AS kwh
+    FROM scout_annual_state_{turnover}
+    WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'com'
+    UNION ALL
+    SELECT 'scout_residential_sum' AS source, turnover,state_ann_kwh AS kwh
+    FROM scout_annual_state_{turnover}
+    WHERE "year" = {year} AND fuel = 'Electric' AND sector = 'res'
     
 ) combined_results
-GROUP BY turnover;
+GROUP BY turnover
+)
+
+SELECT turnover, commercial_sum, residential_sum, scout_commercial_sum, scout_residential_sum,
+1 - commercial_sum / scout_commercial_sum AS diff_commercial,
+1 - residential_sum / scout_residential_sum AS diff_residential
+FROM comparison
+;

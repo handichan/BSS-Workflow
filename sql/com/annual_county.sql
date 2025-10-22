@@ -1,14 +1,13 @@
-INSERT INTO county_annual_com_YEARID_TURNOVERID
+INSERT INTO county_annual_com_{year}_{turnover}_{weather}
 WITH electric_df AS (
-    SELECT *
-    FROM scout_annual_state_TURNOVERID
-    -- convert to variable
-    WHERE scout_run = 'SCOUTRUNDATE'
+    SELECT 
+    CASE WHEN meas='Gap' THEN 'Gap' ELSE meas END as meas,
+    reg, end_use, fuel, "year", tech_stage, state_ann_kwh, turnover, scout_run
+    FROM scout_annual_state_{turnover}
+    WHERE scout_run = '{scout_version}'
     AND fuel = 'Electric'
-    -- convert to variable
-    AND end_use = 'ENDUSEID'
-    -- convert to variable
-    AND year = YEARID
+    AND end_use = '{enduse}'
+    AND year = {year}
 ),
 measure_map_ann_long AS
 (SELECT 
@@ -64,11 +63,11 @@ SELECT
     scout_meas."year",
     scout_meas.end_use
 FROM scout_meas
-JOIN (SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use FROM com_annual_disaggregation_multipliers_VERSIONID
--- convert to variable
-WHERE group_version = '2024-07-19' 
--- convert to variable
-AND end_use = 'ENDUSEID') as ann_disag
+JOIN (
+    SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use 
+    FROM com_annual_disaggregation_multipliers_{weather}
+    WHERE end_use = '{enduse}'
+) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"
 AND scout_meas.end_use = ann_disag.end_use
