@@ -276,3 +276,54 @@ The calibration process includes built-in validation to ensure:
 ## Support and Contact
 
 For technical questions, data access issues, or analysis support, please contact the dataset maintainer or refer to the main project documentation in the root directory.
+
+## When to use each CLI argument
+
+Use these to run just the parts of the workflow you need. Typical runs don’t require every step.
+
+- `--gen_mults`
+  - Use when you changed multiplier SQL/templates under `sql/res` or `sql/com`, or updated files in `map_eu/` or other mapping sources that affect multipliers.
+  - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
+
+- `--gen_scoutdata`
+  - Use whenever you have new Scout JSONs or want to refresh Scout-derived state annuals (e.g., different turnovers, updated runs).
+  - Converts Scout JSON → TSV, validates measures, registers Scout annuals in Athena.
+
+- `--gen_county`
+  - Use when you need to (re)materialize the per-year/per-sector county tables (inputs to the combined long tables).
+  - Typically needed if you changed multipliers, changed county SQL templates, or are adding years/turnovers that don’t already exist in S3/Athena.
+  - If county tables already exist and you only want to rebuild combined/derived tables, you can skip this.
+
+- `--combine_countydata`
+  - Use after county tables exist to build the consolidated long tables for annual and hourly across sectors/years.
+  - Run this when you want fresh combined county results for new turnovers/years, or after regenerating county tables.
+
+- `--convert_wide`
+  - Use to build wide-format tables for publication/analysis from the long tables (and to build wide Scout views).
+  - Run after `--combine_countydata` (and after `--gen_scoutdata` for Scout-wide outputs).
+
+- `--gen_countyall`
+  - One-shot pipeline: runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
+  - Use for a full refresh when inputs changed broadly.
+
+- `--run_test`
+  - Runs diagnostics: multipliers checks, county annual/hourly checks, measure coverage tests.
+  - Use after changes to multipliers or county generation templates.
+
+- `--bssbucket_insert`
+  - Creates published tables in the `bss-workflow` bucket from wide county hourly results.
+  - Use when you want to publish or republish outputs to the target bucket.
+
+- `--bssbucket_parquetmerge`
+  - Publishes and merges parquet folders in both BSS and IEF buckets; also exports wide Scout parquet.
+  - Use when you want fully merged state-level parquet deliverables.
+
+- `--county_partition_mults`
+  - Partitions multipliers by county via UNLOAD; use for county-scoped multiplier exports.
+
+- `--create_json`
+  - Utility to build `json/input.json` from CSVs in `csv_raw/`; use only if you’re regenerating that JSON config from CSV parts.
+
+Guidance for common tasks:
+- Need new county hourly results with new Scout runs (but same multipliers): run `--gen_scoutdata`, then `--combine_countydata`, then `--convert_wide` if you want wide outputs. Run `--gen_county` only if the per-year county tables don’t already exist or templates changed.
+- Updated multipliers or mapping/templates: run `--gen_mults`, then `--gen_county`, then `--combine_countydata`, and optionally `--convert_wide`/publishing.
