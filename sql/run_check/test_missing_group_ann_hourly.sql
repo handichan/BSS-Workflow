@@ -72,3 +72,5 @@ LEFT JOIN good_group_ann AS g
  AND c.end_use    = g.end_use
 WHERE g.present IS NULL
 ORDER BY c."in.state", c.group_ann, c.end_use;
+
+
