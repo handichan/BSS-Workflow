@@ -1658,7 +1658,7 @@ def main(opts):
 
     if opts.convert_wide:
         _, athena = get_boto3_clients()
-        # convert_countyhourly_long_to_wide(athena, cfg)
+        convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
     if opts.gen_countyall:
@@ -1680,7 +1680,7 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        # bssbucket_insert(athena, cfg)
+        bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
         # # Insert and merge (IEF)
         # bssiefbucket_insert(athena, cfg)
