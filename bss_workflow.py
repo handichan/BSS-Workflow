@@ -34,8 +34,8 @@ class Config:
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
-    SCOUT_OUT_TSV = "scout_tsv"
-    SCOUT_IN_JSON = "scout_json"
+    SCOUT_OUT_TSV = "scout/scout_tsv"
+    SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
     EXTERNAL_S3_DIR = "datasets"
     DATABASE_NAME = "euss_oedi"
