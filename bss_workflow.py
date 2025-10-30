@@ -34,8 +34,8 @@ class Config:
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
-    SCOUT_OUT_TSV = "scout_tsv"
-    SCOUT_IN_JSON = "scout_json"
+    SCOUT_OUT_TSV = "scout/scout_tsv"
+    SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
     EXTERNAL_S3_DIR = "datasets"
     DATABASE_NAME = "euss_oedi"
@@ -52,7 +52,8 @@ class Config:
 
     TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
     # YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
-    YEARS = ['2026','2030','2040','2050','2060']
+    YEARS = ['2026','2030','2040','2050']
+    
     BASE_YEAR = '2026'
 
     # Auxiliary constants
@@ -914,9 +915,10 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
                 include_bldg_type=use_gap_model,
                 cfg=cfg,
             )
-        # check measures coverage
-        check_missing_meas_path = sdf  # same as original intent—compare against maps
+        # checks: measure map coverage and envelope packages coverage
+        check_missing_meas_path = sdf
         check_missing_meas(check_missing_meas_path, cfg)
+        check_missing_packages(sdf, cfg)
 
         # register TSV to Athena
         s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
@@ -1206,7 +1208,9 @@ def test_county(s3_client, athena_client, cfg: Config):
         # "test_county_annual_meas.sql",
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql",
-        "test_county_hourly_state.sql"
+        "test_county_hourly_state.sql",
+        "test_missing_shape_ts_hourly.sql",
+        "test_missing_group_ann_hourly.sql"
     ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
@@ -1221,7 +1225,7 @@ def test_county(s3_client, athena_client, cfg: Config):
 
         for t in turnovers:
             for y in years:
-                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER)
+                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER, version=cfg.VERSION_ID)
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 df["year"] = y
 
@@ -1534,18 +1538,98 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
     for mfile in meas_files:
         try:
             measures = file_to_df(mfile)
-            meas_in_map = set(measures.get("meas", pd.Series(dtype=str)))
-            meas_in_scout = set(annual_state_scout_df.get("meas", pd.Series(dtype=str)))
-            missing = meas_in_scout - meas_in_map
-            if missing:
-                for m in missing:
-                    print(f"Measure in scout but NOT in {mfile}: {m}")
-                print(f"Warning: Some measures from scout are missing in {mfile}.")
+            
+            # Create sets of measure-end_use combinations from both sources
+            if "Scout_end_use" in measures.columns:
+                # For measure_map.tsv, use meas and Scout_end_use columns
+                meas_enduse_in_map = set(
+                    zip(measures.get("meas", pd.Series(dtype=str)), 
+                        measures.get("Scout_end_use", pd.Series(dtype=str)))
+                )
             else:
-                print(f"All measures in scout are present in {mfile}.")
+                # For envelope_map.tsv or other files, fall back to just meas
+                meas_enduse_in_map = set(measures.get("meas", pd.Series(dtype=str)))
+            
+            # Create combinations from Scout data
+            if "end_use" in annual_state_scout_df.columns:
+                meas_enduse_in_scout = set(
+                    zip(annual_state_scout_df.get("meas", pd.Series(dtype=str)), 
+                        annual_state_scout_df.get("end_use", pd.Series(dtype=str)))
+                )
+            else:
+                # Fallback to just meas if end_use column doesn't exist
+                meas_enduse_in_scout = set(annual_state_scout_df.get("meas", pd.Series(dtype=str)))
+            
+            # Find missing combinations
+            missing = meas_enduse_in_scout - meas_enduse_in_map
+            
+            if missing:
+                print(f"Missing measure-end_use combinations in {mfile}:")
+                for combo in missing:
+                    if isinstance(combo, tuple):
+                        print(f"  Measure: '{combo[0]}', End Use: '{combo[1]}'")
+                    else:
+                        print(f"  Measure: '{combo}'")
+                print(f"Warning: Some measure-end_use combinations from scout are missing in {mfile}.")
+            else:
+                print(f"All measure-end_use combinations in scout are present in {mfile}.")
+                
         except Exception as e:
             print(f"Error processing {mfile}: {e}")
 
+
+# ----------------------------
+# Envelope packages check
+# ----------------------------
+
+def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
+    """
+    Ensure all envelope package measures present in Scout are defined in envelope_map.tsv.
+
+    Logic:
+    - Detect envelope-capable measures in Scout by presence of the metric
+      "Efficient Energy Use, Measure-Envelope (MMBtu)".
+    - Validate that each such 'meas' exists in envelope_map.tsv's 'meas' column.
+    - Report any missing measures.
+    """
+    try:
+        # Measures in Scout that require envelope mapping
+        if "metric" not in scout_df.columns or "meas" not in scout_df.columns:
+            print("Scout dataframe missing required columns for envelope check; skipping.")
+            return
+
+        env_metric = "Efficient Energy Use, Measure-Envelope (MMBtu)"
+        # Only require mapping for measures that actually include the envelope metric
+        # with a defined positive value
+        scout_env_meas = set(
+            scout_df.loc[
+                (scout_df["metric"] == env_metric)
+                & (scout_df["value"].notna())
+                & (pd.to_numeric(scout_df["value"], errors="coerce").fillna(0) != 0),
+                "meas"
+            ].dropna().astype(str)
+        )
+        if not scout_env_meas:
+            print("No envelope-package measures detected in Scout; nothing to validate.")
+            return
+
+        # Measures listed in envelope_map
+        envelope_map_df = file_to_df(cfg.ENVELOPE_MAP_PATH)
+        env_map_meas = set(envelope_map_df.get("meas", pd.Series(dtype=str)).dropna().astype(str))
+        # Also accept matches against 'meas_separated' to avoid false positives
+        if "meas_separated" in envelope_map_df.columns:
+            env_map_meas |= set(envelope_map_df.get("meas_separated", pd.Series(dtype=str)).dropna().astype(str))
+
+        missing = scout_env_meas - env_map_meas
+        if missing:
+            print("Missing envelope package measures in envelope_map.tsv:")
+            for m in sorted(missing):
+                print(f"  Measure: '{m}'")
+            print("Warning: Some envelope package measures from Scout are missing in envelope_map.tsv.")
+        else:
+            print("All envelope package measures in Scout are present in envelope_map.tsv.")
+    except Exception as e:
+        print(f"Error during envelope packages check: {e}")
 
 # ----------------------------
 # CLI & main entry
@@ -1574,7 +1658,7 @@ def main(opts):
 
     if opts.convert_wide:
         _, athena = get_boto3_clients()
-        # convert_countyhourly_long_to_wide(athena, cfg)
+        convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
     if opts.gen_countyall:
@@ -1596,7 +1680,7 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        # bssbucket_insert(athena, cfg)
+        bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
         # # Insert and merge (IEF)
         # bssiefbucket_insert(athena, cfg)
