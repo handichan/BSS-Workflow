@@ -165,36 +165,51 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 
 ### Data Schema
 
-#### Annual County Data Columns
-| Column | Type | Description |
-|--------|------|-------------|
-| `in.county` | String | County FIPS code |
-| `fuel` | String | Fuel type (Electric, Natural Gas, Propane, etc.) |
-| `meas` | String | Energy efficiency measure identifier |
-| `tech_stage` | String | Technology stage (original_ann, measure_ann) |
-| `multiplier_annual` | Float | Annual disaggregation multiplier |
-| `state_ann_kwh` | Float | State-level annual energy (kWh) |
-| `turnover` | String | Scenario identifier |
-| `county_ann_kwh` | Float | County-level annual energy (kWh) |
-| `scout_run` | String | Scout model run identifier |
-| `end_use` | String | Energy end-use category |
-| `sector` | String | Building sector (res/com) |
-| `year` | Integer | Analysis year |
-| `in.state` | String | State abbreviation |
+#### Annual State-Level Dataset (`annual_resuls/`)
 
-#### Hourly County Data Columns
-| Column | Type | Description |
-|--------|------|-------------|
-| `in.county` | String | County FIPS code |
-| `timestamp_hour` | Timestamp | Hourly timestamp |
-| `turnover` | String | Scenario identifier |
-| `tech_stage` | String | Technology stage |
-| `county_hourly_kwh` | Float | County-level hourly energy (kWh) |
-| `scout_run` | String | Scout model run identifier |
-| `end_use` | String | Energy end-use category |
-| `sector` | String | Building sector (res/com) |
-| `year` | Integer | Analysis year |
-| `in.state` | String | State abbreviation |
+The annual results dataset contains state-level annual energy consumption estimates derived from the Scout building energy model and processed via the BSS-Workflow pipeline. It represents a wide-format transformation of longitudinal Scout outputs, providing comprehensive consumption patterns across geographic location, building sector, energy transition scenarios, temporal periods, fuel types, and end-use categories.
+
+Each row is a unique combination of geographic, sectoral, and temporal identifiers; energy values are disaggregated by fuel type and end-use across multiple columns. Energy variables follow `{fuel_type}.{end_use}.kwh` or `{fuel_type}_{calibration_status}.{end_use}.kwh` (all kWh; floats).
+
+**Fuel Types**: Natural gas, electricity (uncalibrated and calibrated), propane (present in 40% of observations), biomass (40%), and other.
+
+**End-Uses**: cooling, heating, water_heating, lighting, ventilation (commercial only; ~60% availability), refrigeration, cooking, computers_electronics, and other.
+
+| Variable Name | Description | Data Type |
+|---------------|-------------|-----------|
+| `state` | Two-letter state code; coverage includes AL, IA, MO, MT, ND, OR, PA, WA, WY (9 unique). | String |
+| `sector` | Building sector: `res` (residential), `com` (commercial) (2 unique). | String |
+| `scenario` | Scenario: `accel`, `brk`, `dual_switch`, `fossil`, `min_switch` (5 unique). | String |
+| `year` | Projection year: 2026, 2030, 2040 (3 unique). | Integer |
+| `natural_gas.{end_use}.kwh` | Annual natural gas for the specified end-use. | Float (kWh) |
+| `electricity_uncal.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use. | Float (kWh) |
+| `electricity_cal.{end_use}.kwh` | Annual electricity (calibrated to EIA patterns) for the specified end-use. | Float (kWh) |
+| `propane.{end_use}.kwh` | Annual propane for the specified end-use. | Float (kWh) |
+| `biomass.{end_use}.kwh` | Annual biomass for the specified end-use. | Float (kWh) |
+| `other.{end_use}.kwh` | Annual consumption of other fuels for the specified end-use. | Float (kWh) |
+| `{end_use}` tokens | Allowed end-uses: `cooling`, `heating`, `water_heating`, `lighting`, `ventilation`, `refrigeration`, `cooking`, `computers_electronics`, `other`. | String (enum) |
+
+#### Hourly County-Level Dataset (`hourly_county_demand/`)
+
+The hourly county demand dataset contains county-level hourly energy consumption estimates derived from the Scout model and produced by the BSS-Workflow's county generation and aggregation stages. It is a wide-format view of longitudinal county-hourly consumption, enabling granular temporal and spatial analyses of residential building energy use at the county scale.
+
+Each row corresponds to a unique combination of geographic, temporal, and sectoral identifiers; hourly energy values are disaggregated by end-use and calibration status. Variables follow `electricity_{calibration_status}.{end_use}.kwh` (kWh/h; floats).
+
+**Calibration Status**: `uncalibrated` (raw outputs) and `calibrated` (matched to EIA patterns).
+
+**End-Uses**: computers_electronics (17.4–3,408 kWh/h), cooking (0.002–2,883), cooling (1.6–37,956), heating (0–11,206), lighting (2.8–2,821), other (344–59,235), refrigeration (115–9,086), ventilation (100% missing; consistent with residential focus), and water_heating (36–5,521).
+
+| Variable Name | Description | Data Type |
+|---------------|-------------|-----------|
+| `scenario` | Scenario identifier; fixed to `accel` (accelerated deployment). | String |
+| `county` | County identifier (FIPS-like codes, e.g., `G0400270`, `G5300010`, `G5300050`); 10 unique. | String |
+| `date_time` | Hourly timestamp (ISO 8601 with ms); spans 2030-06-05 01:00:00 to 2050-11-12 00:00:00. | String |
+| `sector` | Building sector; fixed to `Residential`. | String |
+| `year` | Projection year: 2030, 2040, 2050. | Integer |
+| `state` | Two-letter state code (AZ, AR, TX, WA). | String |
+| `electricity_uncal.{end_use}.kwh` | Hourly electricity (uncalibrated) for the specified end-use. | Float (kWh/h) |
+| `electricity_cal.{end_use}.kwh` | Hourly electricity (calibrated to EIA patterns) for the specified end-use. | Float (kWh/h) |
+| `{end_use}` tokens | Allowed end-uses: `computers_electronics`, `cooking`, `cooling`, `heating`, `lighting`, `other`, `refrigeration`, `ventilation` (missing), `water_heating`. | String (enum) |
 
 ## End-Use Categories
 
