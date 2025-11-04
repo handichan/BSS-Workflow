@@ -9,18 +9,20 @@ The BSS-Workflow generates comprehensive county-level energy consumption dataset
 The dataset is organized hierarchically to facilitate efficient data access and analysis:
 
 ```
-v2/
-├── county_<annual/hourly>_<scenario>_<weather>/
+20251031/
+├── annual_results/
+│   ├── scout_annual_state_baseline.parquet
+│   ├── scout_annual_state.parquet
+├── hourly_county_demand/
 │   ├── scenario/
 │   │   ├── sector/
 │   │   │   ├── year/
-|   |   |   |   ├─- state/
-│   │   │   │   |   ├── <Parquet files>
+|   |   |   |   ├─- <state>.parquet
 ```
 
 ### Directory Structure Breakdown
 
-#### Root Level: `v2`
+#### Root Level: `20251031`
 - **Purpose**: Indicates the dataset version
 - **Content**: Contains the entire processed dataset
 - **Access Point**: Primary entry for all data files and subdirectories
