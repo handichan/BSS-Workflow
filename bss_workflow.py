@@ -11,12 +11,26 @@ from io import StringIO
 from os import getcwd
 from argparse import ArgumentParser
 
-# Optional R support (kept as in your original)
-os.environ["PATH"] += os.pathsep + "C:/Program Files/R/R-4.4.3"
-os.environ["R_Home"] = "C:/Program Files/R/R-4.4.3"
+# Optional R support (platform-specific setup)
+import platform
+import sys
+from contextlib import redirect_stderr
+
+# Try to import rpy2, but fail gracefully if R is not available
+# First, try to set R_HOME if using conda environment
+robjects = None
+if "CONDA_PREFIX" in os.environ:
+    conda_env = os.environ["CONDA_PREFIX"]
+    potential_r = os.path.join(conda_env, "lib", "R")
+    if os.path.exists(potential_r):
+        os.environ["R_HOME"] = potential_r
+
 try:
-    import rpy2.robjects as robjects
+    # Suppress stderr to hide rpy2 initialization errors
+    with redirect_stderr(open(os.devnull, 'w')):
+        import rpy2.robjects as robjects
 except Exception:
+    # Silently fail - R support is optional
     robjects = None
 
 pd.set_option("display.max_columns", None)
@@ -800,7 +814,7 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         "state_monthly_baseline.sql",
         "state_monthly.sql",
         "county_hourly_examples_60_days.sql",
-        "annual_calibration_factors.sql"
+        "annual_calibration_factors.sql",
         "county_peak_hour.sql",
         "county_share_winter.sql"
     ]
@@ -1412,70 +1426,70 @@ def bssiefbucket_parquetmerge(s3_client, cfg: Config):
             _merge_parquet_folders(s3_client, top, s3_bucket)
 
 
-def _merge_parquet_folders(s3_client, top_level_prefix: str, s3_bucket: str):
-    files = list_all_objects(s3_client, s3_bucket, top_level_prefix)
-    if not files:
-        print(f"No files found under s3://{s3_bucket}/{top_level_prefix}")
-        return
+# def _merge_parquet_folders(s3_client, top_level_prefix: str, s3_bucket: str):
+#     files = list_all_objects(s3_client, s3_bucket, top_level_prefix)
+#     if not files:
+#         print(f"No files found under s3://{s3_bucket}/{top_level_prefix}")
+#         return
 
-    state_folders = set()
-    for f in files:
-        key = f["Key"]
-        rel = key[len(top_level_prefix):]
-        if "/" in rel:
-            state_folders.add(rel.split("/")[0])
+#     state_folders = set()
+#     for f in files:
+#         key = f["Key"]
+#         rel = key[len(top_level_prefix):]
+#         if "/" in rel:
+#             state_folders.add(rel.split("/")[0])
 
-    print(f"Found state folders: {state_folders}")
+#     print(f"Found state folders: {state_folders}")
 
-    for state in state_folders:
-        print(f"Processing state: {state}")
-        state_prefix = f"{top_level_prefix}{state}/"
-        page = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix=state_prefix)
-        state_files = page.get("Contents", [])
-        os.makedirs(os.path.join("temp_files", state), exist_ok=True)
-        local_files = []
+#     for state in state_folders:
+#         print(f"Processing state: {state}")
+#         state_prefix = f"{top_level_prefix}{state}/"
+#         page = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix=state_prefix)
+#         state_files = page.get("Contents", [])
+#         os.makedirs(os.path.join("temp_files", state), exist_ok=True)
+#         local_files = []
 
-        for obj in state_files:
-            k = obj["Key"]
-            if k.endswith("/"):
-                continue
-            local = os.path.join("temp_files", state, os.path.basename(k))
-            s3_client.download_file(s3_bucket, k, local)
-            local_files.append(local)
+#         for obj in state_files:
+#             k = obj["Key"]
+#             if k.endswith("/"):
+#                 continue
+#             local = os.path.join("temp_files", state, os.path.basename(k))
+#             s3_client.download_file(s3_bucket, k, local)
+#             local_files.append(local)
 
-        df_list = []
-        for lf in local_files:
-            try:
-                df = pd.read_parquet(lf)
-            except Exception:
-                try:
-                    df = pd.read_csv(lf)
-                except Exception:
-                    print(f"Skipping unreadable file: {lf}")
-                    continue
-            df_list.append(df)
+#         df_list = []
+#         for lf in local_files:
+#             try:
+#                 df = pd.read_parquet(lf)
+#             except Exception:
+#                 try:
+#                     df = pd.read_csv(lf)
+#                 except Exception:
+#                     print(f"Skipping unreadable file: {lf}")
+#                     continue
+#             df_list.append(df)
 
-        if df_list:
-            combined = pd.concat(df_list, ignore_index=True)
-            combined_path = f"{state}.parquet"
-            combined.to_parquet(combined_path, engine="pyarrow", index=False)
-            s3_client.upload_file(combined_path, s3_bucket, f"{top_level_prefix}US states/{combined_path}")
-            print(f"Uploaded combined {combined_path} to s3://{s3_bucket}/{top_level_prefix}US states/")
+#         if df_list:
+#             combined = pd.concat(df_list, ignore_index=True)
+#             combined_path = f"{state}.parquet"
+#             combined.to_parquet(combined_path, engine="pyarrow", index=False)
+#             s3_client.upload_file(combined_path, s3_bucket, f"{top_level_prefix}US states/{combined_path}")
+#             print(f"Uploaded combined {combined_path} to s3://{s3_bucket}/{top_level_prefix}US states/")
 
-        for lf in local_files:
-            try:
-                os.remove(lf)
-            except Exception:
-                pass
-        try:
-            os.rmdir(os.path.join("temp_files", state))
-        except Exception:
-            pass
-        try:
-            if df_list:
-                os.remove(combined_path)
-        except Exception:
-            pass
+#         for lf in local_files:
+#             try:
+#                 os.remove(lf)
+#             except Exception:
+#                 pass
+#         try:
+#             os.rmdir(os.path.join("temp_files", state))
+#         except Exception:
+#             pass
+#         try:
+#             if df_list:
+#                 os.remove(combined_path)
+#         except Exception:
+#             pass
 
 
 def bssbucket_insert(athena_client, cfg: Config):
@@ -1519,7 +1533,7 @@ def bssbucket_parquetmerge(s3_client, cfg: Config):
             for y in years:
                 top = f"v2/county_hourly/{t}/sector={s}/year={y}/"
                 print(f"Merging BSS bucket for {t} {s} {y}")
-                _merge_parquet_folders(s3_client, top, dest_bucket)
+                merge_and_replace_folders(s3_client, dest_bucket, top)
 
 
 def bssbucket_parquet_scout(s3_client, athena_client, cfg:Config):
@@ -1527,6 +1541,143 @@ def bssbucket_parquet_scout(s3_client, athena_client, cfg:Config):
     for tname in tables:
         q = f"SELECT * FROM {tname};"
         execute_athena_query_to_df2(s3_client, athena_client, q, tname, cfg)
+
+
+def merge_and_replace_folders(s3_client, bucket_name: str, prefix: str):
+    """
+    Merge folders into parquet files and replace the original folders.
+    
+    Args:
+        s3_client: Boto3 S3 client
+        bucket_name: S3 bucket name (e.g., 'handibucket')
+        prefix: S3 prefix path (e.g., 'multipliers/')
+    
+    Example:
+        merge_and_replace_folders(s3_client, 'handibucket', 'multipliers/')
+        This will merge folders a/, b/, c/, d/ into a.parquet, b.parquet, c.parquet, d.parquet
+        and delete the original folders.
+    """
+    # List all objects under the prefix
+    files = list_all_objects(s3_client, bucket_name, prefix)
+    if not files:
+        print(f"No files found under s3://{bucket_name}/{prefix}")
+        return
+
+    # Find all folder names (first level subdirectories)
+    folder_names = set()
+    for f in files:
+        key = f["Key"]
+        rel = key[len(prefix):]
+        if "/" in rel:
+            folder_name = rel.split("/")[0]
+            folder_names.add(folder_name)
+
+    print(f"Found folders to merge: {folder_names}")
+
+    for folder_name in folder_names:
+        print(f"Processing folder: {folder_name}")
+        folder_prefix = f"{prefix}{folder_name}/"
+        
+        # List all files in this folder
+        page = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=folder_prefix)
+        folder_files = page.get("Contents", [])
+        
+        if not folder_files:
+            print(f"No files found in folder {folder_name}")
+            continue
+        
+        # Create temporary directory for this folder
+        temp_dir = os.path.join("temp_files", folder_name)
+        os.makedirs(temp_dir, exist_ok=True)
+        local_files = []
+
+        # Download all files from the folder
+        for obj in folder_files:
+            k = obj["Key"]
+            if k.endswith("/"):
+                continue
+            local_file = os.path.join(temp_dir, os.path.basename(k))
+            s3_client.download_file(bucket_name, k, local_file)
+            local_files.append(local_file)
+
+        # Read and combine all files
+        df_list = []
+        for lf in local_files:
+            try:
+                df = pd.read_parquet(lf)
+            except Exception:
+                try:
+                    df = pd.read_csv(lf)
+                except Exception:
+                    print(f"Skipping unreadable file: {lf}")
+                    continue
+            df_list.append(df)
+
+        if df_list:
+            # Combine all dataframes
+            combined = pd.concat(df_list, ignore_index=True)
+            
+            # Create parquet file
+            parquet_filename = f"{folder_name}.parquet"
+            combined.to_parquet(parquet_filename, engine="pyarrow", index=False)
+            
+            # Upload the parquet file to the same location as the original folder
+            parquet_key = f"{prefix}{parquet_filename}"
+            s3_client.upload_file(parquet_filename, bucket_name, parquet_key)
+            print(f"Uploaded {parquet_filename} to s3://{bucket_name}/{parquet_key}")
+            
+            # Delete the original folder
+            delete_folder_from_s3(s3_client, bucket_name, folder_prefix)
+            print(f"Deleted original folder: s3://{bucket_name}/{folder_prefix}")
+            
+            # Clean up local parquet file
+            try:
+                os.remove(parquet_filename)
+            except Exception:
+                pass
+
+        # Clean up local temporary files
+        for lf in local_files:
+            try:
+                os.remove(lf)
+            except Exception:
+                pass
+        try:
+            os.rmdir(temp_dir)
+        except Exception:
+            pass
+
+
+def delete_folder_from_s3(s3_client, bucket_name: str, folder_prefix: str):
+    """
+    Delete all objects in a folder from S3.
+    
+    Args:
+        s3_client: Boto3 S3 client
+        bucket_name: S3 bucket name
+        folder_prefix: S3 prefix for the folder to delete (should end with '/')
+    """
+    # List all objects with the folder prefix
+    paginator = s3_client.get_paginator('list_objects_v2')
+    pages = paginator.paginate(Bucket=bucket_name, Prefix=folder_prefix)
+    
+    objects_to_delete = []
+    for page in pages:
+        if 'Contents' in page:
+            for obj in page['Contents']:
+                objects_to_delete.append({'Key': obj['Key']})
+    
+    if objects_to_delete:
+        # Delete all objects in batches
+        for i in range(0, len(objects_to_delete), 1000):
+            batch = objects_to_delete[i:i+1000]
+            s3_client.delete_objects(
+                Bucket=bucket_name,
+                Delete={'Objects': batch}
+            )
+        print(f"Deleted {len(objects_to_delete)} objects from s3://{bucket_name}/{folder_prefix}")
+    else:
+        print(f"No objects found to delete in s3://{bucket_name}/{folder_prefix}")
 
 
 # ----------------------------
@@ -1631,6 +1782,14 @@ def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
     except Exception as e:
         print(f"Error during envelope packages check: {e}")
 
+
+def test(s3_client, athena_client, cfg: Config):
+
+    fp_gap = os.path.join("helper", "gap_complete_modified.csv")
+    s3_create_table_from_tsv(s3_client, athena_client, fp_gap, cfg)
+
+
+
 # ----------------------------
 # CLI & main entry
 # ----------------------------
@@ -1680,8 +1839,9 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        bssbucket_insert(athena, cfg)
-        bssbucket_parquetmerge(s3, cfg)
+        # bssbucket_insert(athena, cfg)
+        # bssbucket_parquetmerge(s3, cfg)
+        merge_and_replace_folders(s3, 'bss-workflow', 'v2/annual_results/')
         # # Insert and merge (IEF)
         # bssiefbucket_insert(athena, cfg)
         # bssiefbucket_parquetmerge(s3, cfg)
@@ -1689,9 +1849,11 @@ def main(opts):
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
-        test_county(s3, athena, cfg)
-        test_multipliers(s3, athena, cfg)
-        test_compare_measures(s3, athena, cfg)
+        # test_county(s3, athena, cfg)
+        # test_multipliers(s3, athena, cfg)
+        # test_compare_measures(s3, athena, cfg)
+
+        test(s3, athena, cfg)
 
     if opts.county_partition_mults:
         _, athena = get_boto3_clients()
@@ -1712,7 +1874,7 @@ if __name__ == "__main__":
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
-
+    
     opts = parser.parse_args()
     main(opts)
 
