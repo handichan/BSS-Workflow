@@ -4,6 +4,35 @@
 
 The BSS-Workflow generates comprehensive county-level energy consumption datasets for building efficiency scenarios across the United States. This dataset provides both annual and hourly energy consumption patterns by building sector, end-use, fuel type, and geographic location, supporting energy policy analysis and building efficiency modeling.
 
+The Building Sector Scenario (BSS) Workflow provides a structured pipeline to process, aggregate, and visualize U.S. building-energy efficiency scenarios. It orchestrates ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots.
+
+## Configuration
+
+The `Config` class centralizes all constants and runtime switches that control how to generate the county annual and hourly datasets — file paths, S3 settings, versioning, scenarios, and analysis. This ensures reproducibility and makes it easy to adapt runs without editing multiple functions.
+
+### Configuration Parameters
+
+| Parameter | Purpose in Workflow | Used By / Consumed In |
+|-----------|---------------------|----------------------|
+| `JSON_PATH` | Path to initial input JSON for scenario setup and conversions. | Conversion utilities. |
+| `SQL_DIR` | Root directory for Athena SQL templates. | All disaggregation steps. |
+| `MAP_EU_DIR` | Directory of end-use mapping CSV/TSV files. | Annual/hourly disaggregation SQL. |
+| `MAP_MEAS_DIR` | Directory of measure mapping files. | Used in annual/hourly share generation. |
+| `ENVELOPE_MAP_PATH` | Mapping of measures into equipment vs. envelope packages. | `compute_with_package_energy`. |
+| `MEAS_MAP_PATH` | Core measure map linking Scout measures to groupings and time-shapes. | `calc_annual`, county/hourly SQL joins. |
+| `SCOUT_OUT_TSV` | Directory for processed state-level TSVs. | Output of `gen_scoutdata`. |
+| `SCOUT_IN_JSON` | Directory for raw Scout JSON files. | Input to `scout_to_df`. |
+| `OUTPUT_DIR` | Aggregated results directory. | Downstream combination and QA. |
+| `EXTERNAL_S3_DIR` | S3 prefix for staging external tables. | `s3_create_table_from_tsv`, multipliers. |
+| `DATABASE_NAME` | Athena database name. | All Athena queries. |
+| `DEST_BUCKET` | S3 bucket for bulk workflow outputs. | County results, multipliers. |
+| `BUCKET_NAME` | Primary S3 bucket for configs and diagnostic CSVs. | Athena query outputs, staging. |
+| `SCOUT_RUN_DATE` | Tag of the Scout run date (YYYY-MM-DD). | Stamped in outputs as `scout_run`. |
+| `VERSION_ID` | Version identifier (e.g., 20250911). | S3 prefixes, table names. |
+| `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
+| `YEARS` | Analysis years to generate results. | Looped in county/hourly disaggregation. |
+| `US_STATES` | List of two-letter U.S. state abbreviations. | SQL templates with `{state}` placeholders. |
+
 ## Dataset Structure
 
 The dataset is organized hierarchically to facilitate efficient data access and analysis:
@@ -26,30 +55,27 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 - **Purpose**: Indicates the dataset version
 - **Content**: Contains the entire processed dataset
 - **Access Point**: Primary entry for all data files and subdirectories
+- **`hourly_county_demand`: Hourly energy consumption patterns
+- **`annual_results`: Annual energy consumption patterns
 
-#### First Level: `county_<annual/hourly>_<scenario>_<weather>`
-- **`annual/hourly`**: Data temporal resolution
-  - `annual`: Yearly energy consumption totals
-  - `hourly`: Hourly energy consumption patterns
-- **`scenario`**: Energy transition scenarios
-  - `aeo`: Annual Energy Outlook reference case
-  - `ref`: Reference case
-  - `brk`: Breakthrough technology scenario
-  - `accel`: Accelerated deployment scenario
-  - `fossil`: Fossil fuel focused scenario
-  - `state`: State policies scenario
-  - `dual_switch`, `high_switch`, `min_switch`: Technology switching scenarios
-- **`weather`**: Weather data variant (typically `amy`)
+#### First Level: `hourly_county_demand/scenario`
+- **`aeo`: Annual Energy Outlook reference case
+- **`ref`: Reference case
+- **`brk`: Breakthrough technology scenario
+- **`accel`: Accelerated deployment scenario
+- **`fossil`: Fossil fuel focused scenario
+- **`state`: State policies scenario
+- **`dual_switch`, `high_switch`, `min_switch`: Technology switching scenarios
 
 #### Second Level: `sector`
 - **`res`**: Residential buildings
 - **`com`**: Commercial buildings
 
-#### Third Level: `year`
+#### Fourth Level: `year`
 - **Available Years**: 2026, 2030, 2035, 2040, 2045, 2050
 - **Purpose**: Enables temporal analysis and scenario comparison
 
-#### Fourth Level: `in.state`
+#### Fifth Level: `<state>.parquet`
 - **Coverage**: All 50 US states plus DC
 - **Format**: Two-letter state abbreviations (AL, CA, NY, etc.)
 
@@ -156,6 +182,108 @@ ORDER BY total_kwh DESC
 - Query specific partitions (state/year/sector) when possible
 - Use appropriate data types for filtering operations
 - Consider data caching for repeated analyses
+
+## Workflow Steps
+
+### One-Command End-to-End Run (`--gen_countyall`)
+
+**Recommended**: The `--gen_countyall` flag orchestrates the complete workflow in a single command. It performs ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots. This is the simplest way to run a full workflow refresh when inputs have changed broadly.
+
+### Granular Workflow Steps
+
+For more control over the workflow, you can run individual steps:
+
+#### Step 1: Generation of Scout-Formatted Data (`--gen_scoutdata`)
+
+The workflow first transforms raw Scout JSON outputs into analysis-ready tabular format. This step:
+
+- Parses "Market and Savings (by Category)" data into flat annual and state-level tables
+- Harmonizes energy metrics (MMBtu → kWh)
+- Applies scenario identifiers
+- Produces baseline and efficiency cases, including both envelope and equipment packages
+- Generates annualized electricity consumption estimates by sector, end use, and fuel
+
+The tables are saved locally as TSV files and AWS tables. These tables provide the foundation for subsequent aggregation.
+
+#### Step 2: County-Level Disaggregation (`--gen_countydata`)
+
+Scenario outputs are disaggregated from state to county resolution via parameterized Athena SQL templates. For each sector (residential, commercial), scenario case, and analysis year:
+
+- SQL queries are executed via AWS Athena to produce county-level datasets of annual and hourly consumption
+- These datasets are then stored on S3 for downstream integration
+
+This step converts:
+```
+state totals → county annual → county hourly
+```
+
+#### Step 3: Consolidation of County Data (`--combine_countydata`)
+
+To produce coherent scenario files, all county-level extractions are combined into consolidated long-format tables. This step:
+
+- Ensures alignment of schema across years, end uses, and scenarios
+- Facilitates unified multi-scenario comparisons
+- Maintains outputs both in S3 and locally
+
+#### Step 4: Generating Multipliers (`--gen_multipliers`)
+
+The `--gen_multipliers` flag builds disaggregation scaffolding used later to generate county-level data. It executes a library of SQL files — first for annual geographic shares and then for hourly load shape shares.
+
+The multiplier tables are materialized in Athena/S3:
+
+- **Annual county shares**: Defined by state × county × end use, these specify how state-level annual kWh are apportioned across counties
+- **Hourly county shares**: Defined by county × shape_ts × hour × end use, these specify how a county's annual kWh is time-distributed across hours
+
+The resulting multiplier tables are subsequently joined in `annual_county.sql` and `hourly_county.sql` to perform the disaggregation process.
+
+## Quality Assurance and Visualization
+
+### Automated Quality Checks
+
+Automated checks are embedded in critical workflow steps to verify data integrity:
+
+- **Consistency tests**: Verify scenario coverage and non-negativity of energy consumptions
+- **Multiplier validation**: Ensure multipliers sum to 1.0 within each group
+- **Coverage validation**: Confirm all counties and states are included in each scenario
+- These safeguards reduce propagation of errors across large batch queries
+
+### County-Level Data Checks
+
+The `test_county` function performs quality checks that verify data integrity before further diagnostics via visualization. Tests include:
+
+- Consistency of column types
+- Scenario coverage validation
+- SQL queries executed per scenario to extract analysis-ready datasets (CSVs)
+
+The resulting files summarize:
+- Annual county electricity consumption
+- Peak-hour distributions
+- Representative hourly load shapes
+
+These are saved locally for use in graphical routines.
+
+### Annual Graphs (`annual_graphs.R`)
+
+This script aggregates national and sectoral electricity consumption by end use and scenario. It produces:
+
+1. **Area plots** of sectoral end-uses across scenarios
+2. **Line charts** comparing scenario totals
+3. **Detailed disaggregation** by technology type (e.g., HVAC, water heating, other end uses)
+
+Outputs include both national totals and state-level comparisons.
+
+### County and Hourly Graphs (`county_and_hourly_graphs.R`)
+
+This script provides comprehensive county-level visualizations:
+
+- **Maps**: County-level electricity change between year to year across scenarios
+- **Histograms**: Percent changes in consumption
+- **Peak load comparisons**: Winter vs. summer peak loads
+- **Top-100 peak hours**: Visualization of highest demand periods
+- **Seasonal ratios**: Analysis of seasonal consumption patterns
+- **Representative peak-day hourly load shapes**: For selected counties
+
+Geographical layers from U.S. Census county boundaries are merged with modeled data to produce interpretable maps.
 
 ## Gap Modeling
 
@@ -281,9 +409,11 @@ For technical questions, data access issues, or analysis support, please contact
 
 ## When to use each CLI argument
 
-Use these to run just the parts of the workflow you need. Typical runs don’t require every step.
+Use these to run just the parts of the workflow you need. Typical runs don't require every step.
 
-- `--gen_mults`
+**Quick Start**: For a full workflow refresh when inputs have changed broadly, use `--gen_countyall` which runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps in one command.
+
+- `--gen_mults` (or `--gen_multipliers`)
   - Use when you changed multiplier SQL/templates under `sql/res` or `sql/com`, or updated files in `map_eu/` or other mapping sources that affect multipliers.
   - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
 
@@ -305,7 +435,8 @@ Use these to run just the parts of the workflow you need. Typical runs don’t r
   - Run after `--combine_countydata` (and after `--gen_scoutdata` for Scout-wide outputs).
 
 - `--gen_countyall`
-  - One-shot pipeline: runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
+  - **Recommended**: One-shot pipeline that orchestrates the complete workflow in a single command.
+  - Runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
   - Use for a full refresh when inputs changed broadly.
 
 - `--run_test`
