@@ -6,6 +6,82 @@ The BSS-Workflow generates comprehensive county-level energy consumption dataset
 
 The Building Sector Scenario (BSS) Workflow provides a structured pipeline to process, aggregate, and visualize U.S. building-energy efficiency scenarios. It orchestrates ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots.
 
+## Installation and Environment Setup
+
+### Prerequisites
+
+- **Anaconda** (recommended) - Download from [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
+- **Git** (for cloning the repository)
+- **AWS CLI** (optional, for accessing S3 data)
+
+### Step-by-Step Installation
+
+#### Step 1: Install Anaconda
+
+Download and install Anaconda from [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution) following the installation instructions for your operating system.
+
+#### Step 2: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd BSS-Workflow
+```
+
+#### Step 3: Create the Environment
+
+```bash
+# Create environment from environment.yml
+conda env create -f environment.yml
+
+# Activate the environment
+conda activate bss
+```
+
+#### Step 4: Verify Installation
+
+```bash
+# Verify Python version
+python --version  # Should show Python 3.10.13
+
+# Verify key packages
+python -c "import pandas; import boto3; import pyarrow; print('All packages imported successfully!')"
+```
+
+### Post-Installation Setup
+
+#### Configure AWS Credentials
+
+If you need to access AWS S3 resources, configure your credentials:
+
+```bash
+aws configure
+```
+
+See the [Accessing Pre-Defined Multipliers](#accessing-pre-defined-multipliers) section for detailed instructions.
+
+### Troubleshooting
+
+If environment creation fails:
+
+```bash
+# Update conda and retry
+conda update conda
+conda env create -f environment.yml
+```
+
+If you encounter package conflicts:
+
+```bash
+# Remove existing environment and recreate
+conda env remove -n bss
+conda env create -f environment.yml
+```
+
+### Environment Files
+
+- **`environment.yml`**: Conda environment file for recreating the exact environment
+- **`environment.toml`**: Human-readable documentation of all dependencies
+
 ## Configuration
 
 The `Config` class centralizes all constants and runtime switches that control how to generate the county annual and hourly datasets — file paths, S3 settings, versioning, scenarios, and analysis. This ensures reproducibility and makes it easy to adapt runs without editing multiple functions.
