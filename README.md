@@ -158,6 +158,82 @@ GROUP BY "in.county", end_use, fuel
 ORDER BY total_kwh DESC
 ```
 
+## Accessing Pre-Defined Multipliers
+
+Pre-defined multipliers are stored in AWS S3 and can be accessed using AWS credentials. These multipliers are used for disaggregating state-level data to county-level (annual multipliers) and annual data to hourly (hourly multipliers).
+
+### AWS Credentials Setup
+
+To access the pre-defined multipliers, you need to set up AWS credentials (access key ID and secret access key). Follow these steps based on your setup:
+
+#### Option 1: Using the AWS CLI (Recommended)
+
+If you have the AWS CLI installed, use the `aws configure` command:
+
+```bash
+aws configure
+```
+
+You will be prompted to enter:
+- **AWS Access Key ID**: Your access key ID
+- **AWS Secret Access Key**: Your secret access key
+- **Default region name**: (Optional, press Enter to skip)
+- **Default output format**: (Optional, press Enter to skip)
+
+For more information, see [Quickly Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) in the AWS Command Line Interface User Guide.
+
+#### Option 2: Credentials File (Without AWS CLI)
+
+If you don't have the AWS CLI installed, you can create a credentials file on your local system:
+
+**On Linux or macOS:**
+- Create or edit the file: `~/.aws/credentials`
+
+**On Windows:**
+- Create or edit the file: `C:\Users\USERNAME\.aws\credentials`
+
+The file should contain:
+
+```ini
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+#### Option 3: Environment Variables
+
+You can also set AWS credentials using environment variables:
+
+**On Linux or macOS:**
+```bash
+export AWS_ACCESS_KEY_ID=your_access_key_id
+export AWS_SECRET_ACCESS_KEY=your_secret_access_key
+```
+
+**On Windows:**
+```cmd
+set AWS_ACCESS_KEY_ID=your_access_key_id
+set AWS_SECRET_ACCESS_KEY=your_secret_access_key
+```
+
+### Getting Your Access Keys
+
+To obtain your AWS access key ID and secret access key:
+
+1. Contact the dataset maintainer or your AWS administrator to request access to the multipliers bucket
+2. Once you have IAM user credentials, you can create or view access keys in the AWS IAM console
+3. For more information on managing access keys, see [Managing Access Keys for IAM Users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in the IAM User Guide
+
+### Accessing Multipliers
+
+Once AWS credentials are configured, you can access the pre-defined multipliers stored in S3. The multipliers are organized by:
+- **Annual multipliers**: State-level to county-level disaggregation shares
+- **Hourly multipliers**: County-level annual to hourly load shape shares
+
+These multipliers are used automatically when running the workflow with `--gen_countydata` or `--gen_countyall`.
+
+For more detailed information on setting up AWS credentials, refer to the [AWS SAM documentation on setting up AWS credentials](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html).
+
 ## Data Quality and Validation
 
 - **Consistency Checks**: Built-in validation ensures data integrity across scenarios
