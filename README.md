@@ -203,7 +203,7 @@ Each row corresponds to a unique combination of geographic, temporal, and sector
 |---------------|-------------|-----------|
 | `scenario` | Scenario identifier; fixed to `accel` (accelerated deployment). | String |
 | `county` | County identifier (FIPS-like codes, e.g., `G0400270`, `G5300010`, `G5300050`); 10 unique. | String |
-| `date_time` | Hourly timestamp (ISO 8601 with ms); spans 2030-06-05 01:00:00 to 2050-11-12 00:00:00. | String |
+| `date_time` | Hourly timestamp (ISO 8601 with ms); spans 2030-06-05 01:00:00 to 2050-11-12 00:00:00. | Timestamp |
 | `sector` | Building sector; fixed to `Residential`. | String |
 | `year` | Projection year: 2030, 2040, 2050. | Integer |
 | `state` | Two-letter state code (AZ, AR, TX, WA). | String |
