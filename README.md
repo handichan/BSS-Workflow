@@ -230,24 +230,65 @@ Each row corresponds to a unique combination of geographic, temporal, and sector
 
 ### File Path Example
 ```
-v2/county_hourly/accel//sector=res/year=2026/in.state=AL/
-20250930_210719_00007_78mm5_06cbe0d8-8aba-41f1-af07-7e9a94a7b8df.parquet
+20251031/hourly_county_demand/aeo/sector=com/year=2026/state=CA.parquet
 ```
 
 ### Query Example (using AWS Athena)
+
 ```sql
-SELECT 
-    "in.county",
-    end_use,
-    fuel,
-    SUM(county_ann_kwh) as total_kwh
-FROM county_annual_breakthrough_amy
-WHERE sector = 'res' 
-    AND year = 2030 
-    AND "in.state" = 'CA'
-GROUP BY "in.county", end_use, fuel
-ORDER BY total_kwh DESC
+SELECT county, SUM(cal_heating) AS heating 
+FROM "euss_oedi"."county_hourly_aeo_amy" 
+WHERE state = 'CA' 
+GROUP BY county
+ORDER BY heating;
 ```
+
+#### Register S3 data as AWS Glue tables (so Athena can query)
+
+You can register Parquet/CSV in S3 as external tables that Athena can query via the AWS Glue Data Catalog:
+
+- Option 1 – Glue Crawler (no-code):
+  - In AWS Glue → Crawlers → Create crawler
+  - Source: your S3 prefixes (e.g., `s3://bucket/20251031/hourly_county_demand/...`)
+  - IAM role: grant read access to the bucket
+  - Target: Glue Data Catalog database (e.g., `euss_oedi`)
+  - Run the crawler to create/refresh tables; then query them from Athena
+
+- Option 2 – Glue Spark job (code):
+
+```python
+from awsglue.context import GlueContext
+from pyspark.context import SparkContext
+
+glueContext = GlueContext(SparkContext.getOrCreate())
+
+# Read S3 objects as a DynamicFrame
+dyf = glueContext.create_dynamic_frame_from_options(
+    connection_type="s3",
+    connection_options={
+        "paths": [
+            "s3://your-bucket/20251031/hourly_county_demand/accel/sector=res/year=2026/"
+        ],
+        "recurse": True
+    },
+    format="parquet",
+    format_options={}
+)
+
+# Write back to S3 and register/update the Glue Data Catalog table
+sink = glueContext.getSink(
+    path="s3://your-bucket/published/hourly/",
+    connection_type="s3",
+    enableUpdateCatalog=True,
+    updateBehavior="UPDATE_IN_DATABASE"
+)
+sink.setFormat("glueparquet")
+sink.setCatalogInfo(catalogDatabase="euss_oedi", catalogTableName="county_hourly_accel")
+sink.setCatalogPartitioning(partitionKeys=["sector", "year", "state"])  # optional partitions
+sink.writeFrame(dyf)
+```
+
+For S3 connection options and format options, see the AWS Glue S3 connections docs: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-connect-s3-home.html
 
 ## Accessing Pre-Defined Multipliers
 
@@ -311,7 +352,7 @@ set AWS_SECRET_ACCESS_KEY=your_secret_access_key
 
 To obtain your AWS access key ID and secret access key:
 
-1. Contact the dataset maintainer or your AWS administrator to request access to the multipliers bucket
+1. Contact the authors to request access to the multipliers bucket
 2. Once you have IAM user credentials, you can create or view access keys in the AWS IAM console
 3. For more information on managing access keys, see [Managing Access Keys for IAM Users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in the IAM User Guide
 
@@ -508,4 +549,4 @@ Guidance for common tasks:
 
 ## Support and Contact
 
-For technical questions, data access issues, or analysis support, please contact the dataset maintainer or refer to the main project documentation in the root directory.
+For technical questions, data access issues, or analysis support, please contact the authors via emails mentioned in the journal article.
