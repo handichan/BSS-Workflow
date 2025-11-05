@@ -148,7 +148,7 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 - **`com`**: Commercial buildings
 
 #### Fourth Level: `year`
-- **Available Years**: 2026, 2030, 2035, 2040, 2045, 2050
+- **Available Years**: 2026, 2030, 2040, 2050
 - **Purpose**: Enables temporal analysis and scenario comparison
 
 #### Fifth Level: `<state>.parquet`
@@ -165,7 +165,7 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 
 ### Data Schema
 
-#### Annual State-Level Dataset (`annual_resuls/`)
+#### Annual State-Level Dataset (`annual_results/`)
 
 The annual results dataset contains state-level annual energy consumption estimates derived from the Scout building energy model and processed via the BSS-Workflow pipeline. It represents a wide-format transformation of longitudinal Scout outputs, providing comprehensive consumption patterns across geographic location, building sector, energy transition scenarios, temporal periods, fuel types, and end-use categories.
 
