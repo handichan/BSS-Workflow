@@ -1,3 +1,7 @@
+total_bldgs_cdiv = pd.read_csv('map_meas/com floor areas.csv')
+state_share_bldgs = pd.read_csv('map_meas/com state floor area shares.csv')
+scenarios = ['aeo','accel','fossil','state','brk','min_switch','high_switch','dual_switch','ref']
+
 def reshape_json(data, path=[]):
     rows = []
     if isinstance(data, dict):
@@ -9,9 +13,7 @@ def reshape_json(data, path=[]):
     return rows
 
 
-# convert the Scout json to a data frame
-# as of 4/23/25 the only difference between this function and the one in bss_workflow.py is that this one gives the option to keep all the json metrics
-def scout_to_df(filename, energy_metrics_only=False):
+def scout_to_df_stock(filename):
     new_columns = [
             'meas', 'adoption_scn', 'metric',
             'reg', 'bldg_type', 'end_use',
@@ -36,25 +38,85 @@ def scout_to_df(filename, energy_metrics_only=False):
 
 
     all_df.columns = new_columns
-    if energy_metrics_only:
-        all_df = all_df[all_df['metric'].isin(['Efficient Energy Use (MMBtu)',
-            'Efficient Energy Use, Measure (MMBtu)',
-            'Efficient Energy Use, Measure-Envelope (MMBtu)',
-            'Baseline Energy Use (MMBtu)'])]
     
     # fix measures that don't have a fuel key
-    to_shift = all_df[pd.isna(all_df['value'])].copy()
+    to_shift = all_df[pd.isna(all_df['value'])]
     to_shift.loc[:, 'value'] = to_shift['year']
     to_shift.loc[:, 'year'] = to_shift['fuel']
     to_shift.loc[:, 'fuel'] = 'Electric'
 
-    df = pd.concat([all_df[pd.notna(all_df['value'])],to_shift])
+    return(pd.concat([all_df[pd.notna(all_df['value'])],to_shift]))
 
 
-    return(df)
+# calculates the number of commercial buildings per state and the number of buildings with electric heating
+def calc_com_buildings(df):
+    fractions = (df
+        .query('end_use == "Heating (Equip.)" & metric.isin(["Measure Stock (TBtu heating served)", "Baseline Stock (TBtu heating served)"])')
+        .groupby(['reg', 'year', 'fuel', 'metric', 'meas', 'scenario'], as_index=False)['value']
+        .sum()
+        .rename(columns={'value': 'TBtu'})
+        .pivot_table(
+            index=['reg', 'year', 'meas', 'scenario'],
+            columns=['fuel', 'metric'],
+            values='TBtu',
+            fill_value=0
+        )
+        .reset_index()
+    )
+
+    # Flatten the multi-level column names from pivot
+    fractions.columns = ['_'.join(col).strip('_') if isinstance(col, tuple) else col 
+                   for col in fractions.columns.values]
+    
+    baseline_cols = [col for col in fractions.columns 
+                     if 'Baseline Stock (TBtu heating served)' in col]
+    
+    fractions['baseline_total'] = fractions[baseline_cols].sum(axis=1)
+
+
+    fractions['eff_elec'] = np.where(
+        fractions['Electric_Baseline Stock (TBtu heating served)'] > 0,
+        fractions['Electric_Baseline Stock (TBtu heating served)'] - 
+        fractions['Electric_Measure Stock (TBtu heating served)'],
+        0
+    )
+
+    fractions = (fractions
+        .groupby(['reg', 'year', 'scenario'], as_index=False)
+        .agg({
+            'eff_elec': 'sum',
+            'baseline_total': 'sum'
+        })
+        .assign(share_elec=lambda x: x['eff_elec'] / x['baseline_total'])
+    )
+
+    nbldgs = (total_bldgs_cdiv
+        .merge(state_share_bldgs, how='outer')
+        .assign(N_bldgs_state=lambda x: x['N_bldgs_CDIV'] * x['cdiv_share'])
+        .groupby(['year', 'in.state'], as_index=False)['N_bldgs_state']
+        .sum()
+        .assign(year=lambda x: x['year'].astype(int))  # Convert to int
+        .merge(
+            fractions.assign(year=lambda x: x['year'].astype(int)),  # Convert to int
+            how='right', 
+            left_on=['in.state', 'year'], 
+            right_on=['reg', 'year']
+        )
+        .assign(N_bldgs_state_elec=lambda x: x['N_bldgs_state'] * x['share_elec'])
+    )    
+    
+    nbldgs = nbldgs[['year', 'in.state', 'scenario', 'N_bldgs_state', 'N_bldgs_state_elec']].rename(
+        columns={
+            'in.state': 'state',
+            'N_bldgs_state': 'N_bldgs',
+            'N_bldgs_state_elec': 'N_bldgs_elec_heat'
+        }
+    )
+    
+    return(nbldgs)
+
 
 # calculates the number of households with electric heating, cooling, and total per year, assuming that each HH has one unit of heating equipment
-# works on the output of scout_to_df if energy_metrics_only == False
 def calc_hh_counts(df, turnover):
         
     # Filter metrics that contain "units equipment"; also filters to res
@@ -137,3 +199,14 @@ def calc_hh_counts(df, turnover):
 
     return(comb.rename(columns={'reg': 'state'}))
 
+
+
+
+for scen in scenarios:
+    print(scen)
+    df = scout_to_df_stock('scout_results' + scen+'.json')
+    df['scenario'] = scen
+    hh = calc_hh_counts(df,scen)
+    hh.to_csv('agg_results' + scen+'_hh_counts.tsv', sep='\t', index = False)
+    com_cust = calc_com_buildings(df)
+    com_cust.to_csv('agg_results' + scen+'_com_bldg_counts.tsv', sep='\t', index = False)
