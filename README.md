@@ -305,12 +305,12 @@ For each of the 6 resources (3 folders + 3 files), create a separate Glue Crawle
 **Resulting Athena Tables:**
 
 After running the crawlers, you will have 6 tables in the `default` database:
-- `com_hourly_multipliers_amy` (from folder)
-- `res_hourly_multipliers_amy` (from folder)
-- `res_hourly_multipliers_tmy` (from folder)
-- `com_annual_multipliers_amy` (from parquet file)
-- `res_annual_multipliers_amy` (from parquet file)
-- `res_annual_multipliers_tmy` (from parquet file)
+- `com_hourly_disaggregation_multipliers_amy` (from folder)
+- `res_hourly_disaggregation_multipliers_amy` (from folder)
+- `res_hourly_disaggregation_multipliers_tmy` (from folder)
+- `com_annual_disaggregation_multipliers_amy` (from parquet file)
+- `res_annual_disaggregation_multipliers_amy` (from parquet file)
+- `res_annual_disaggregation_multipliers_tmy` (from parquet file)
 
 **Query Example:**
 
