@@ -4,32 +4,137 @@
 
 The BSS-Workflow generates comprehensive county-level energy consumption datasets for building efficiency scenarios across the United States. This dataset provides both annual and hourly energy consumption patterns by building sector, end-use, fuel type, and geographic location, supporting energy policy analysis and building efficiency modeling.
 
+The Building Sector Scenario (BSS) Workflow provides a structured pipeline to process, aggregate, and visualize U.S. building-energy efficiency scenarios. It orchestrates ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots.
+
+## Installation and Environment Setup
+
+### Prerequisites
+
+- **Anaconda** (recommended) - Download from [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
+- **Git** (for cloning the repository)
+- **AWS CLI** (optional, for accessing S3 data)
+
+### Step-by-Step Installation
+
+#### Step 1: Install Anaconda
+
+Download and install Anaconda from [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution) following the installation instructions for your operating system.
+
+#### Step 2: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd BSS-Workflow
+```
+
+#### Step 3: Create the Environment
+
+```bash
+# Create environment from environment.yml
+conda env create -f environment.yml
+
+# Activate the environment
+conda activate bss
+```
+
+#### Step 4: Verify Installation
+
+```bash
+# Verify Python version
+python --version  # Should show Python 3.10.13
+
+# Verify key packages
+python -c "import pandas; import boto3; import pyarrow; print('All packages imported successfully!')"
+```
+
+### Post-Installation Setup
+
+#### Configure AWS Credentials
+
+If you need to access AWS S3 resources, configure your credentials:
+
+```bash
+aws configure
+```
+
+See the [Accessing Pre-Defined Multipliers](#accessing-pre-defined-multipliers) section for detailed instructions.
+
+### Troubleshooting
+
+If environment creation fails:
+
+```bash
+# Update conda and retry
+conda update conda
+conda env create -f environment.yml
+```
+
+If you encounter package conflicts:
+
+```bash
+# Remove existing environment and recreate
+conda env remove -n bss
+conda env create -f environment.yml
+```
+
+### Environment Files
+
+- **`environment.yml`**: Conda environment file for recreating the exact environment
+- **`environment.toml`**: Human-readable documentation of all dependencies
+
+## Configuration
+
+The `Config` class centralizes all constants and runtime switches that control how to generate the county annual and hourly datasets — file paths, S3 settings, versioning, scenarios, and analysis. This ensures reproducibility and makes it easy to adapt runs without editing multiple functions.
+
+### Configuration Parameters
+
+| Parameter | Purpose in Workflow | Used By / Consumed In |
+|-----------|---------------------|----------------------|
+| `JSON_PATH` | Path to initial input JSON for scenario setup and conversions. | Conversion utilities. |
+| `SQL_DIR` | Root directory for Athena SQL templates. | All disaggregation steps. |
+| `MAP_EU_DIR` | Directory of end-use mapping CSV/TSV files. | Annual/hourly disaggregation SQL. |
+| `MAP_MEAS_DIR` | Directory of measure mapping files. | Used in annual/hourly share generation. |
+| `ENVELOPE_MAP_PATH` | Mapping of measures into equipment vs. envelope packages. | `compute_with_package_energy`. |
+| `MEAS_MAP_PATH` | Core measure map linking Scout measures to groupings and time-shapes. | `calc_annual`, county/hourly SQL joins. |
+| `SCOUT_OUT_TSV` | Directory for processed state-level TSVs. | Output of `gen_scoutdata`. |
+| `SCOUT_IN_JSON` | Directory for raw Scout JSON files. | Input to `scout_to_df`. |
+| `OUTPUT_DIR` | Aggregated results directory. | Downstream combination and QA. |
+| `EXTERNAL_S3_DIR` | S3 prefix for staging external tables. | `s3_create_table_from_tsv`, multipliers. |
+| `DATABASE_NAME` | Athena database name. | All Athena queries. |
+| `DEST_BUCKET` | S3 bucket for bulk workflow outputs. | County results, multipliers. |
+| `BUCKET_NAME` | Primary S3 bucket for configs and diagnostic CSVs. | Athena query outputs, staging. |
+| `SCOUT_RUN_DATE` | Tag of the Scout run date (YYYY-MM-DD). | Stamped in outputs as `scout_run`. |
+| `VERSION_ID` | Version identifier (e.g., 20250911). | S3 prefixes, table names. |
+| `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
+| `YEARS` | Analysis years to generate results. | Looped in county/hourly disaggregation. |
+| `US_STATES` | List of two-letter U.S. state abbreviations. | SQL templates with `{state}` placeholders. |
+
 ## Dataset Structure
 
 The dataset is organized hierarchically to facilitate efficient data access and analysis:
 
 ```
-v2/
-├── county_<annual/hourly>_<scenario>_<weather>/
+20251031/
+├── annual_results/
+│   ├── scout_annual_state_baseline.parquet
+│   ├── scout_annual_state.parquet
+├── hourly_county_demand/
 │   ├── scenario/
 │   │   ├── sector/
 │   │   │   ├── year/
-|   |   |   |   ├─- state/
-│   │   │   │   |   ├── <Parquet files>
+|   |   |   |   ├─- <state>.parquet
 ```
 
 ### Directory Structure Breakdown
 
-#### Root Level: `v2`
+#### Root Level: `20251031`
 - **Purpose**: Indicates the dataset version
 - **Content**: Contains the entire processed dataset
 - **Access Point**: Primary entry for all data files and subdirectories
+  - `hourly_county_demand`: Hourly energy consumption patterns
+  - `annual_results`: Annual energy consumption patterns
 
-#### First Level: `county_<annual/hourly>_<scenario>_<weather>`
-- **`annual/hourly`**: Data temporal resolution
-  - `annual`: Yearly energy consumption totals
-  - `hourly`: Hourly energy consumption patterns
-- **`scenario`**: Energy transition scenarios
+#### First Level: `hourly_county_demand/scenario`
   - `aeo`: Annual Energy Outlook reference case
   - `ref`: Reference case
   - `brk`: Breakthrough technology scenario
@@ -37,17 +142,16 @@ v2/
   - `fossil`: Fossil fuel focused scenario
   - `state`: State policies scenario
   - `dual_switch`, `high_switch`, `min_switch`: Technology switching scenarios
-- **`weather`**: Weather data variant (typically `amy`)
 
 #### Second Level: `sector`
 - **`res`**: Residential buildings
 - **`com`**: Commercial buildings
 
-#### Third Level: `year`
-- **Available Years**: 2026, 2030, 2035, 2040, 2045, 2050
+#### Fourth Level: `year`
+- **Available Years**: 2026, 2030, 2040, 2050
 - **Purpose**: Enables temporal analysis and scenario comparison
 
-#### Fourth Level: `in.state`
+#### Fifth Level: `<state>.parquet`
 - **Coverage**: All 50 US states plus DC
 - **Format**: Two-letter state abbreviations (AL, CA, NY, etc.)
 
@@ -61,36 +165,51 @@ v2/
 
 ### Data Schema
 
-#### Annual County Data Columns
-| Column | Type | Description |
-|--------|------|-------------|
-| `in.county` | String | County FIPS code |
-| `fuel` | String | Fuel type (Electric, Natural Gas, Propane, etc.) |
-| `meas` | String | Energy efficiency measure identifier |
-| `tech_stage` | String | Technology stage (original_ann, measure_ann) |
-| `multiplier_annual` | Float | Annual disaggregation multiplier |
-| `state_ann_kwh` | Float | State-level annual energy (kWh) |
-| `turnover` | String | Scenario identifier |
-| `county_ann_kwh` | Float | County-level annual energy (kWh) |
-| `scout_run` | String | Scout model run identifier |
-| `end_use` | String | Energy end-use category |
-| `sector` | String | Building sector (res/com) |
-| `year` | Integer | Analysis year |
-| `in.state` | String | State abbreviation |
+#### Annual State-Level Dataset (`annual_results/`)
 
-#### Hourly County Data Columns
-| Column | Type | Description |
-|--------|------|-------------|
-| `in.county` | String | County FIPS code |
-| `timestamp_hour` | Timestamp | Hourly timestamp |
-| `turnover` | String | Scenario identifier |
-| `tech_stage` | String | Technology stage |
-| `county_hourly_kwh` | Float | County-level hourly energy (kWh) |
-| `scout_run` | String | Scout model run identifier |
-| `end_use` | String | Energy end-use category |
-| `sector` | String | Building sector (res/com) |
-| `year` | Integer | Analysis year |
-| `in.state` | String | State abbreviation |
+The annual results dataset contains state-level annual energy consumption estimates derived from the Scout building energy model and processed via the BSS-Workflow pipeline. It represents a wide-format transformation of longitudinal Scout outputs, providing comprehensive consumption patterns across geographic location, building sector, energy transition scenarios, temporal periods, fuel types, and end-use categories.
+
+Each row is a unique combination of geographic, sectoral, and temporal identifiers; energy values are disaggregated by fuel type and end-use across multiple columns. Energy variables follow `{fuel_type}.{end_use}.kwh` or `{fuel_type}_{calibration_status}.{end_use}.kwh` (all kWh; floats).
+
+**Fuel Types**: Natural gas, electricity (uncalibrated and calibrated), propane (present in 40% of observations), biomass (40%), and other.
+
+**End-Uses**: cooling, heating, water_heating, lighting, ventilation (commercial only; ~60% availability), refrigeration, cooking, computers_electronics, and other.
+
+| Variable Name | Description | Data Type |
+|---------------|-------------|-----------|
+| `state` | Two-letter state code; coverage includes AL, IA, MO, MT, ND, OR, PA, WA, WY (9 unique). | String |
+| `sector` | Building sector: `res` (residential), `com` (commercial) (2 unique). | String |
+| `scenario` | Scenario: `accel`, `brk`, `dual_switch`, `fossil`, `min_switch` (5 unique). | String |
+| `year` | Projection year: 2026, 2030, 2040 (3 unique). | Integer |
+| `natural_gas.{end_use}.kwh` | Annual natural gas for the specified end-use. | Float (kWh) |
+| `electricity_uncal.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use. | Float (kWh) |
+| `electricity_cal.{end_use}.kwh` | Annual electricity (calibrated to EIA patterns) for the specified end-use. | Float (kWh) |
+| `propane.{end_use}.kwh` | Annual propane for the specified end-use. | Float (kWh) |
+| `biomass.{end_use}.kwh` | Annual biomass for the specified end-use. | Float (kWh) |
+| `other.{end_use}.kwh` | Annual consumption of other fuels for the specified end-use. | Float (kWh) |
+| `{end_use}` tokens | Allowed end-uses: `cooling`, `heating`, `water_heating`, `lighting`, `ventilation`, `refrigeration`, `cooking`, `computers_electronics`, `other`. | String (enum) |
+
+#### Hourly County-Level Dataset (`hourly_county_demand/`)
+
+The hourly county demand dataset contains county-level hourly energy consumption estimates derived from the Scout model and produced by the BSS-Workflow's county generation and aggregation stages. It is a wide-format view of longitudinal county-hourly consumption, enabling granular temporal and spatial analyses of residential building energy use at the county scale.
+
+Each row corresponds to a unique combination of geographic, temporal, and sectoral identifiers; hourly energy values are disaggregated by end-use and calibration status. Variables follow `electricity_{calibration_status}.{end_use}.kwh` (kWh/h; floats).
+
+**Calibration Status**: `uncalibrated` (raw outputs) and `calibrated` (matched to EIA patterns).
+
+**End-Uses**: computers_electronics (17.4–3,408 kWh/h), cooking (0.002–2,883), cooling (1.6–37,956), heating (0–11,206), lighting (2.8–2,821), other (344–59,235), refrigeration (115–9,086), ventilation (100% missing; consistent with residential focus), and water_heating (36–5,521).
+
+| Variable Name | Description | Data Type |
+|---------------|-------------|-----------|
+| `scenario` | Scenario identifier; fixed to `accel` (accelerated deployment). | String |
+| `county` | County identifier (FIPS-like codes, e.g., `G0400270`, `G5300010`, `G5300050`); 10 unique. | String |
+| `date_time` | Hourly timestamp (ISO 8601 with ms); spans 2030-06-05 01:00:00 to 2050-11-12 00:00:00. | Timestamp |
+| `sector` | Building sector; fixed to `Residential`. | String |
+| `year` | Projection year: 2030, 2040, 2050. | Integer |
+| `state` | Two-letter state code (AZ, AR, TX, WA). | String |
+| `electricity_uncal.{end_use}.kwh` | Hourly electricity (uncalibrated) for the specified end-use. | Float (kWh/h) |
+| `electricity_cal.{end_use}.kwh` | Hourly electricity (calibrated to EIA patterns) for the specified end-use. | Float (kWh/h) |
+| `{end_use}` tokens | Allowed end-uses: `computers_electronics`, `cooking`, `cooling`, `heating`, `lighting`, `other`, `refrigeration`, `ventilation` (missing), `water_heating`. | String (enum) |
 
 ## End-Use Categories
 
@@ -111,24 +230,141 @@ v2/
 
 ### File Path Example
 ```
-v2/county_hourly/accel//sector=res/year=2026/in.state=AL/
-20250930_210719_00007_78mm5_06cbe0d8-8aba-41f1-af07-7e9a94a7b8df.parquet
+20251031/hourly_county_demand/aeo/sector=com/year=2026/state=CA.parquet
 ```
 
 ### Query Example (using AWS Athena)
+
 ```sql
-SELECT 
-    "in.county",
-    end_use,
-    fuel,
-    SUM(county_ann_kwh) as total_kwh
-FROM county_annual_breakthrough_amy
-WHERE sector = 'res' 
-    AND year = 2030 
-    AND "in.state" = 'CA'
-GROUP BY "in.county", end_use, fuel
-ORDER BY total_kwh DESC
+SELECT county, SUM(cal_heating) AS heating 
+FROM "euss_oedi"."county_hourly_aeo_amy" 
+WHERE state = 'CA' 
+GROUP BY county
+ORDER BY heating;
 ```
+
+#### Register S3 data as AWS Glue tables (so Athena can query)
+
+You can register Parquet/CSV in S3 as external tables that Athena can query via the AWS Glue Data Catalog:
+
+- Option 1 – Glue Crawler (no-code):
+  - In AWS Glue → Crawlers → Create crawler
+  - Source: your S3 prefixes (e.g., `s3://bucket/20251031/hourly_county_demand/...`)
+  - IAM role: grant read access to the bucket
+  - Target: Glue Data Catalog database (e.g., `euss_oedi`)
+  - Run the crawler to create/refresh tables; then query them from Athena
+
+- Option 2 – Glue Spark job (code):
+
+```python
+from awsglue.context import GlueContext
+from pyspark.context import SparkContext
+
+glueContext = GlueContext(SparkContext.getOrCreate())
+
+# Read S3 objects as a DynamicFrame
+dyf = glueContext.create_dynamic_frame_from_options(
+    connection_type="s3",
+    connection_options={
+        "paths": [
+            "s3://your-bucket/20251031/hourly_county_demand/accel/sector=res/year=2026/"
+        ],
+        "recurse": True
+    },
+    format="parquet",
+    format_options={}
+)
+
+# Write back to S3 and register/update the Glue Data Catalog table
+sink = glueContext.getSink(
+    path="s3://your-bucket/published/hourly/",
+    connection_type="s3",
+    enableUpdateCatalog=True,
+    updateBehavior="UPDATE_IN_DATABASE"
+)
+sink.setFormat("glueparquet")
+sink.setCatalogInfo(catalogDatabase="euss_oedi", catalogTableName="county_hourly_accel")
+sink.setCatalogPartitioning(partitionKeys=["sector", "year", "state"])  # optional partitions
+sink.writeFrame(dyf)
+```
+
+For S3 connection options and format options, see the AWS Glue S3 connections docs: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-connect-s3-home.html
+
+## Accessing Pre-Defined Multipliers
+
+Pre-defined multipliers are stored in AWS S3 and can be accessed using AWS credentials. These multipliers are used for disaggregating state-level data to county-level (annual multipliers) and annual data to hourly (hourly multipliers).
+
+### AWS Credentials Setup
+
+To access the pre-defined multipliers, you need to set up AWS credentials (access key ID and secret access key). Follow these steps based on your setup:
+
+#### Option 1: Using the AWS CLI (Recommended)
+
+If you have the AWS CLI installed, use the `aws configure` command:
+
+```bash
+aws configure
+```
+
+You will be prompted to enter:
+- **AWS Access Key ID**: Your access key ID
+- **AWS Secret Access Key**: Your secret access key
+- **Default region name**: (Optional, press Enter to skip)
+- **Default output format**: (Optional, press Enter to skip)
+
+For more information, see [Quickly Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) in the AWS Command Line Interface User Guide.
+
+#### Option 2: Credentials File (Without AWS CLI)
+
+If you don't have the AWS CLI installed, you can create a credentials file on your local system:
+
+**On Linux or macOS:**
+- Create or edit the file: `~/.aws/credentials`
+
+**On Windows:**
+- Create or edit the file: `C:\Users\USERNAME\.aws\credentials`
+
+The file should contain:
+
+```ini
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+#### Option 3: Environment Variables
+
+You can also set AWS credentials using environment variables:
+
+**On Linux or macOS:**
+```bash
+export AWS_ACCESS_KEY_ID=your_access_key_id
+export AWS_SECRET_ACCESS_KEY=your_secret_access_key
+```
+
+**On Windows:**
+```cmd
+set AWS_ACCESS_KEY_ID=your_access_key_id
+set AWS_SECRET_ACCESS_KEY=your_secret_access_key
+```
+
+### Getting Your Access Keys
+
+To obtain your AWS access key ID and secret access key:
+
+1. Contact the authors to request access to the multipliers bucket
+2. Once you have IAM user credentials, you can create or view access keys in the AWS IAM console
+3. For more information on managing access keys, see [Managing Access Keys for IAM Users](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) in the IAM User Guide
+
+### Accessing Multipliers
+
+Once AWS credentials are configured, you can access the pre-defined multipliers stored in S3. The multipliers are organized by:
+- **Annual multipliers**: State-level to county-level disaggregation shares
+- **Hourly multipliers**: County-level annual to hourly load shape shares
+
+These multipliers are used automatically when running the workflow with `--gen_countydata` or `--gen_countyall`.
+
+For more detailed information on setting up AWS credentials, refer to the [AWS SAM documentation on setting up AWS credentials](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html).
 
 ## Data Quality and Validation
 
@@ -155,133 +391,115 @@ ORDER BY total_kwh DESC
 - Use appropriate data types for filtering operations
 - Consider data caching for repeated analyses
 
-## Gap Modeling
+## Workflow Steps
 
-### Overview
+### One-Command End-to-End Run (`--gen_countyall`)
 
-Gap modeling accounts for energy consumption that exists in real buildings but is not explicitly modeled in the Scout building energy model. This approach ensures that total modeled energy consumption matches observed consumption patterns by identifying and accounting for the "gap" between detailed model outputs and real-world energy use.
+**Recommended**: The `--gen_countyall` flag orchestrates the complete workflow in a single command. It performs ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots. This is the simplest way to run a full workflow refresh when inputs have changed broadly.
 
-### How Gap Modeling Works
+### Granular Workflow Steps
 
-#### **1. ComStock Gap Weights**
-- **Source**: Gap weights are derived from ComStock (commercial building stock model) data
-- **Extraction**: When processing Scout JSON files, the system extracts `"ComStock Gap Weights"` sections
-- **Structure**: Gap weights contain building type, year, and weight information for each measure
+For more control over the workflow, you can run individual steps:
 
-#### **2. Energy Split Process**
-For commercial electric consumption, energy is split into two portions:
+#### Step 1: Generation of Scout-Formatted Data (`--gen_scoutdata`)
 
-- **Modeled Portion**: `(1.0 - gap_weight) × state_ann_kwh` - Energy explicitly modeled in Scout
-- **Gap Portion**: `gap_weight × state_ann_kwh` - Energy not captured in detailed modeling
+The workflow first transforms raw Scout JSON outputs into analysis-ready tabular format. This step:
 
-The gap portion is assigned to a special "Gap" measure and distributed across all commercial end-uses.
+- Parses "Market and Savings (by Category)" data into flat annual and state-level tables
+- Harmonizes energy metrics (MMBtu → kWh)
+- Applies scenario identifiers
+- Produces baseline and efficiency cases, including both envelope and equipment packages
+- Generates annualized electricity consumption estimates by sector, end use, and fuel
 
-#### **3. Scope and Application**
-- **Sector**: Applied only to commercial buildings (`com`)
-- **Fuel**: Applied only to electric consumption
-- **Conservation**: Total energy is conserved - the sum before and after gap splitting remains identical
-- **Validation**: Built-in conservation checks ensure energy balance is maintained
+The tables are saved locally as TSV files and AWS tables. These tables provide the foundation for subsequent aggregation.
 
-#### **4. Gap End-Use Distribution**
-Gap energy is distributed across all commercial end-uses:
-- Gap (primary category)
-- Other
-- Heating (Equipment)
-- Cooling (Equipment)
-- Ventilation
-- Water Heating
-- Lighting
-- Refrigeration
-- Cooking
+#### Step 2: County-Level Disaggregation (`--gen_countydata`)
 
-### Why Gap Modeling is Essential
+Scenario outputs are disaggregated from state to county resolution via parameterized Athena SQL templates. For each sector (residential, commercial), scenario case, and analysis year:
 
-1. **Model Completeness**: Ensures total modeled energy matches observed consumption patterns
-2. **Policy Accuracy**: Provides realistic baselines for energy efficiency policy analysis
-3. **Data Integrity**: Accounts for energy uses not captured in detailed building simulations
-4. **Regional Representation**: Maintains accuracy across diverse building stocks and usage patterns
+- SQL queries are executed via AWS Athena to produce county-level datasets of annual and hourly consumption
+- These datasets are then stored on S3 for downstream integration
 
----
-
-## Calibration
-
-### Overview
-
-Calibration adjusts modeled energy consumption to match observed consumption data from the Energy Information Administration (EIA). This process corrects systematic biases between model predictions and real-world consumption, ensuring the dataset provides accurate baselines for policy analysis.
-
-### How Calibration Works
-
-#### **1. Data Sources**
-- **Modeled Data**: Uncalibrated BSS-Workflow results (`state_monthly_uncal_kwh`)
-- **Observed Data**: EIA gross consumption data by state, sector, year, and month
-- **Comparison Period**: Typically uses 2018-2024 data for calibration factor calculation
-
-#### **2. Calibration Multiplier Calculation**
-Monthly calibration ratios are calculated as:
+This step converts:
 ```
-calibration_multiplier = EIA_gross_consumption / BSS_uncalibrated_consumption
+state totals → county annual → county hourly
 ```
 
-These ratios are averaged across years to create stable monthly calibration factors for each state and sector.
+#### Step 3: Consolidation of County Data (`--combine_countydata`)
 
-#### **3. Application Process**
-Calibration multipliers are applied at the hourly level during county data generation:
+To produce coherent scenario files, all county-level extractions are combined into consolidated long-format tables. This step:
 
-- **Hourly Application**: Each hourly consumption value is multiplied by the appropriate monthly calibration factor
-- **State-Specific**: Different calibration factors for each state
-- **Sector-Specific**: Separate calibration for residential and commercial sectors
-- **Monthly Granularity**: Different factors for each month (1-12)
+- Ensures alignment of schema across years, end uses, and scenarios
+- Facilitates unified multi-scenario comparisons
+- Maintains outputs both in S3 and locally
 
-#### **4. Calibration Multiplier Structure**
-Calibration factors are stored with the following dimensions:
-- **Sector**: `com` (commercial) or `res` (residential)
-- **State**: Two-letter state abbreviation
-- **Month**: Integer 1-12 representing January through December
-- **Calibration Multiplier**: Float value representing the adjustment factor
+#### Step 4: Generating Multipliers (`--gen_multipliers`)
 
-### Calibration Process Flow
+The `--gen_multipliers` flag builds disaggregation scaffolding used later to generate county-level data. It executes a library of SQL files — first for annual geographic shares and then for hourly load shape shares.
 
-1. **Generate Uncalibrated Data**: Run Scout models to produce initial consumption estimates
-2. **Extract Monthly Totals**: Aggregate hourly data to monthly state-level consumption
-3. **Compare with EIA Data**: Calculate ratios between modeled and observed consumption
-4. **Calculate Multipliers**: Average ratios across years to create stable monthly factors
-5. **Apply Calibration**: Multiply hourly county consumption by appropriate calibration multipliers
-6. **Validation**: Verify that calibrated totals match EIA consumption data
+The multiplier tables are materialized in Athena/S3:
 
-### Why Calibration is Essential
+- **Annual county shares**: Defined by state × county × end use, these specify how state-level annual kWh are apportioned across counties
+- **Hourly county shares**: Defined by county × shape_ts × hour × end use, these specify how a county's annual kWh is time-distributed across hours
 
-1. **Model Accuracy**: Building energy models have inherent uncertainties and simplifications
-2. **Regional Variations**: Different regions have varying building characteristics not fully captured in models
-3. **Temporal Patterns**: Seasonal and monthly consumption patterns may differ between models and reality
-4. **Policy Relevance**: Calibrated results provide reliable baselines for energy policy analysis and planning
-5. **Data Quality**: Ensures the dataset accurately represents real-world energy consumption patterns
+The resulting multiplier tables are subsequently joined in `annual_county.sql` and `hourly_county.sql` to perform the disaggregation process.
 
-### Calibration Validation
+## Quality Assurance and Visualization
 
-The calibration process includes built-in validation to ensure:
-- **Energy Conservation**: Total calibrated energy matches EIA data
-- **Temporal Accuracy**: Monthly patterns align with observed consumption
-- **Sector Balance**: Both residential and commercial sectors are properly calibrated
-- **Regional Consistency**: Calibration factors are reasonable across all states
+### Automated Quality Checks
 
-## Technical Notes
+Automated checks are embedded in critical workflow steps to verify data integrity:
 
-- **Data Source**: Generated from Scout building energy modeling tool
-- **Processing**: AWS Athena and S3-based data pipeline
-- **Updates**: Dataset versioned by month/year (e.g., 122024)
-- **Compression**: Snappy compression for optimal storage efficiency
-- **Gap Modeling**: Applied to commercial electric consumption only
-- **Calibration**: Applied to all hourly consumption data using monthly state-sector factors
+- **Consistency tests**: Verify scenario coverage and non-negativity of energy consumptions
+- **Multiplier validation**: Ensure multipliers sum to 1.0 within each group
+- **Coverage validation**: Confirm all counties and states are included in each scenario
+- These safeguards reduce propagation of errors across large batch queries
 
-## Support and Contact
+### County-Level Data Checks
 
-For technical questions, data access issues, or analysis support, please contact the dataset maintainer or refer to the main project documentation in the root directory.
+The `test_county` function performs quality checks that verify data integrity before further diagnostics via visualization. Tests include:
+
+- Consistency of column types
+- Scenario coverage validation
+- SQL queries executed per scenario to extract analysis-ready datasets (CSVs)
+
+The resulting files summarize:
+- Annual county electricity consumption
+- Peak-hour distributions
+- Representative hourly load shapes
+
+These are saved locally for use in graphical routines.
+
+### Annual Graphs (`annual_graphs.R`)
+
+This script aggregates national and sectoral electricity consumption by end use and scenario. It produces:
+
+1. **Area plots** of sectoral end-uses across scenarios
+2. **Line charts** comparing scenario totals
+3. **Detailed disaggregation** by technology type (e.g., HVAC, water heating, other end uses)
+
+Outputs include both national totals and state-level comparisons.
+
+### County and Hourly Graphs (`county_and_hourly_graphs.R`)
+
+This script provides comprehensive county-level visualizations:
+
+- **Maps**: County-level electricity change between year to year across scenarios
+- **Histograms**: Percent changes in consumption
+- **Peak load comparisons**: Winter vs. summer peak loads
+- **Top-100 peak hours**: Visualization of highest demand periods
+- **Seasonal ratios**: Analysis of seasonal consumption patterns
+- **Representative peak-day hourly load shapes**: For selected counties
+
+Geographical layers from U.S. Census county boundaries are merged with modeled data to produce interpretable maps.
 
 ## When to use each CLI argument
 
-Use these to run just the parts of the workflow you need. Typical runs don’t require every step.
+Use these to run just the parts of the workflow you need. Typical runs don't require every step.
 
-- `--gen_mults`
+**Quick Start**: For a full workflow refresh when inputs have changed broadly, use `--gen_countyall` which runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps in one command.
+
+- `--gen_mults` (or `--gen_multipliers`)
   - Use when you changed multiplier SQL/templates under `sql/res` or `sql/com`, or updated files in `map_eu/` or other mapping sources that affect multipliers.
   - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
 
@@ -303,7 +521,8 @@ Use these to run just the parts of the workflow you need. Typical runs don’t r
   - Run after `--combine_countydata` (and after `--gen_scoutdata` for Scout-wide outputs).
 
 - `--gen_countyall`
-  - One-shot pipeline: runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
+  - **Recommended**: One-shot pipeline that orchestrates the complete workflow in a single command.
+  - Runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
   - Use for a full refresh when inputs changed broadly.
 
 - `--run_test`
@@ -327,3 +546,7 @@ Use these to run just the parts of the workflow you need. Typical runs don’t r
 Guidance for common tasks:
 - Need new county hourly results with new Scout runs (but same multipliers): run `--gen_scoutdata`, then `--combine_countydata`, then `--convert_wide` if you want wide outputs. Run `--gen_county` only if the per-year county tables don’t already exist or templates changed.
 - Updated multipliers or mapping/templates: run `--gen_mults`, then `--gen_county`, then `--combine_countydata`, and optionally `--convert_wide`/publishing.
+
+## Support and Contact
+
+For technical questions, data access issues, or analysis support, please contact the authors via emails mentioned in the journal article.

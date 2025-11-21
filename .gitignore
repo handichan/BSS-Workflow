@@ -11,3 +11,7 @@ agg_results
 scout_results
 R/generated_csvs
 R/.Rhistory
+
+# Ignore helper and scout folders
+helper/
+scout/
