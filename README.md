@@ -462,7 +462,9 @@ Before running `python bss_workflow.py --gen_countyall`, please complete the fol
   - res_hourly_disaggregation_multipliers_amy
   If they are missing, follow the instructions in [Register S3 data as AWS Glue tables](#register-s2-data-as-aws-glue-tables-so-athena-can-query)
 
-- Confirm ComStock and ResStock data availability: You’ll also need ComStock and ResStock datasets (e.g., resstock_amy2018_release_2024.2_metadata). To register them in Athena/Glue, follow the same [Register S3 data as AWS Glue tables](#register-s2-data-as-aws-glue-tables-so-athena-can-query) process, with source set to `s3://oedi-data-lake/nrel-pds-building-stock/`.
+- Confirm ComStock and ResStock data availability: You’ll also need ComStock and ResStock datasets (e.g., resstock_amy2018_release_2024.2_metadata). To register them in Athena/Glue, follow the same [Register S3 data as AWS Glue tables](#register-s2-data-as-aws-glue-tables-so-athena-can-query) process, with source set to `s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/resstock_amy2018_release_2/metadata`.  Remember to use Table prefix "resstock_amy2018_release_2024.2_". Set the output database to the same as the one specified in the `DATABASE_NAME` in the `config` class.
+After crawling, you should see the table "resstock_amy2018_release_2024.2_metadata" in the database.
+- Generate the uncalibrated monthly result file used in the calibration process: run the query in `sql/data_downloads/state_monthly.sql` on table "long_county_hourly_{turnover}_{weather}" for one specific turnover and weather that covers 2020-2024 period, and save the result as "diagnostics/state_monthly_for_cal.csv" 
 
 ### Granular Workflow Steps
 

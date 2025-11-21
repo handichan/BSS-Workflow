@@ -1384,7 +1384,10 @@ def run_r_script(r_file: str):
     if robjects is None:
         print("rpy2 not available; skipping R execution.")
         return
-    r_path = os.path.join("R", r_file)
+    # Get the absolute path to the folder containing THIS Python file
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    # Build the absolute path to the R script
+    r_path = os.path.join(project_root, "R", r_file)
     with open(r_path, "r", encoding="utf-8") as f:
         r_code = f.read()
     try:
