@@ -429,6 +429,41 @@ For more detailed information on setting up AWS credentials, refer to the [AWS S
 
 **Recommended**: The `--gen_countyall` flag orchestrates the complete workflow in a single command. It performs ingestion of Scout data, county generation, post-processing, diagnostics, CSVs, and plots. This is the simplest way to run a full workflow refresh when inputs have changed broadly.
 
+Before running `python bss_workflow.py --gen_countyall`, please complete the following preparations:
+- Prepare the scout folders and files: 
+  - create the following folder structure
+  ```
+  scout/
+    ├── scout_json/
+    └── scout_tsv_df/
+  ```
+  - From your generated SCOUT data, copy the `results/<scenario_name>/ecm_results.json` file into `scout/scout_json/<scenario_name>.json` ,generated using `python3 scout/run_batch.py --batch ./batch/bss-v1`.
+- Configure bucket and database settings: 
+  - Open the bss_workflow.py file and find the config class. 
+  - Update these two variables to match your setup:
+    - BUCKET_NAME: The name of your AWS S3 bucket where results will be saved.
+    - DATABASE_NAME: The Athena/Glue database to save output tables.
+  - If the specified database doesn’t exist, you can create one.
+- Set AWS environment variables: make sure the AWS_PROFILE and AWS_REGION environment variables are set. 
+  - You can verify with 
+  ```
+  echo $AWS_PROFILE
+  echo $AWS_REGION
+  ```
+  - If not set, run the following command to set them up as follows.
+  ```
+  export AWS_PROFILE=<you_profile>
+  export AWS_REGION=<your_region>
+  ```
+- Verify the disaggregation multiplier tables exist: In the DATABASE_NAME you set above, ensure these tables exist. 
+  - com_annual_disaggregation_multipliers_amy 
+  - com_hourly_disaggregation_multipliers_amy
+  - res_annual_disaggregation_multipliers_amy 
+  - res_hourly_disaggregation_multipliers_amy
+  If they are missing, follow the instructions in [Register S3 data as AWS Glue tables](#register-s2-data-as-aws-glue-tables-so-athena-can-query)
+
+- Confirm ComStock and ResStock data availability: You’ll also need ComStock and ResStock datasets (e.g., resstock_amy2018_release_2024.2_metadata). To register them in Athena/Glue, follow the same [Register S3 data as AWS Glue tables](#register-s2-data-as-aws-glue-tables-so-athena-can-query) process, with source set to `s3://oedi-data-lake/nrel-pds-building-stock/`.
+
 ### Granular Workflow Steps
 
 For more control over the workflow, you can run individual steps:
@@ -465,9 +500,11 @@ To produce coherent scenario files, all county-level extractions are combined in
 - Facilitates unified multi-scenario comparisons
 - Maintains outputs both in S3 and locally
 
-#### Step 4: Generating Multipliers (`--gen_multipliers`)
+#### Step 4: Generating Multipliers (`--gen_mults`)
 
-The `--gen_multipliers` flag builds disaggregation scaffolding used later to generate county-level data. It executes a library of SQL files — first for annual geographic shares and then for hourly load shape shares.
+The `--gen_mults` flag builds disaggregation scaffolding used later to generate county-level data. It executes a library of SQL files — first for annual geographic shares and then for hourly load shape shares.
+
+Before running `--gen_mults`, comstock and resstock data are needed: such as `resstock_amy2018_release_2024.2_metadata`. Please refer to [this section](#register-s2-data-as-aws-glue-tables-so-athena-can-query), with source set to `s3://oedi-data-lake/nrel-pds-building-stock/`.
 
 The multiplier tables are materialized in Athena/S3:
 

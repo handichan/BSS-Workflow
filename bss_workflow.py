@@ -1829,6 +1829,10 @@ def main(opts):
         _, athena = get_boto3_clients()
         gen_countydata(athena, cfg)
 
+    if opts.combine_countydata:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
+
     if opts.convert_wide:
         _, athena = get_boto3_clients()
         convert_countyhourly_long_to_wide(athena, cfg)
@@ -1883,6 +1887,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_county", action="store_true", help="Generate County Data")
     parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
     parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
+    parser.add_argument("--combine_countydata", action="store_true", help="Combine County Data")
     parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
