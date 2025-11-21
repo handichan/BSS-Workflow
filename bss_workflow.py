@@ -54,7 +54,9 @@ class Config:
 
     # data version identifiers
     SCOUT_RUN_DATE = "2026-01-09"       # identifier for the Scout result vintage
+    VERSION_ID = "20260109"
     DISAG_ID = "20260305"               # identifier for disaggregated energy data
+    WEATHER = "amy"
 
     # S3 locations
     DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
@@ -64,10 +66,10 @@ class Config:
 
     # names of tables that contain disaggregation multipliers
     MULTIPLIERS_TABLES = [
-        "com_annual_disaggregation_multipliers_20260304",   # mult_com_annual
-        "res_annual_disaggregation_multipliers_20260206",   # mult_res_annual
-        "com_hourly_disaggregation_multipliers_20260304",   # mult_com_hourly
-        "res_hourly_disaggregation_multipliers_20260212"    # mult_res_hourly
+        f"com_annual_disaggregation_multipliers_{WEATHER}",   # mult_com_annual
+        f"res_annual_disaggregation_multipliers_{WEATHER}",   # mult_res_annual
+        f"com_hourly_disaggregation_multipliers_{WEATHER}",   # mult_com_hourly
+        f"res_hourly_disaggregation_multipliers_{WEATHER}",   # mult_res_hourly
     ]
 
     # names of tables that contain BuildStock data - required to calculate disaggregation multipliers
@@ -82,6 +84,7 @@ class Config:
     # Scenarios to process
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
+    # this is used in bss paper
     TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
     # TURNOVERS = ["aeo_010926"]
     # TURNOVERS = ['brk_010926']
@@ -2168,6 +2171,10 @@ def main(opts):
         s3, athena = get_boto3_clients()
         get_csvs_for_R(s3, athena, cfg)
         # run_r_script("county and hourly graphs.R")
+
+    if opts.combine_countydata:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
 
     if opts.convert_wide:
         _, athena = get_boto3_clients()
