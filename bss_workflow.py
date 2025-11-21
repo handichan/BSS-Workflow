@@ -372,7 +372,7 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
     # Fix measures without a fuel key
     to_shift = all_df[pd.isna(all_df["value"])].copy()
     if not to_shift.empty:
-        to_shift.loc[:, "value"] = to_shift["year"]
+        to_shift.loc[:, "value"] = pd.to_numeric(to_shift["year"], errors="coerce")
         to_shift.loc[:, "year"] = to_shift["fuel"]
         to_shift.loc[:, "fuel"] = "Electric"
         df = pd.concat([all_df[pd.notna(all_df["value"])], to_shift])
@@ -532,8 +532,16 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
+            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_all["kwh_before"] = pd.to_numeric(cmp_all["kwh_before"], errors="coerce")
+            cmp_all["kwh_after"]  = pd.to_numeric(cmp_all["kwh_after"], errors="coerce")
+
+            # Now fill NaNs safely
+            cmp_all = cmp_all.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_all["delta"] = cmp_all["kwh_after"] - cmp_all["kwh_before"]
             cmp_all["pct_delta"] = cmp_all.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
@@ -557,8 +565,14 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_sub["kwh_before"] = pd.to_numeric(cmp_sub["kwh_before"], errors="coerce")
+            cmp_sub["kwh_after"]  = pd.to_numeric(cmp_sub["kwh_after"], errors="coerce")
+
+            cmp_sub = cmp_sub.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_sub["delta"] = cmp_sub["kwh_after"] - cmp_sub["kwh_before"]
             cmp_sub["pct_delta"] = cmp_sub.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
