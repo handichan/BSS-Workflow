@@ -1,5 +1,6 @@
-
-setwd("R")
+if (basename(getwd()) != "R") {
+    setwd("R")
+}
 #install the packages if they're not already installed
 packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
 install.packages(setdiff(packages, rownames(installed.packages())))
@@ -22,14 +23,17 @@ eia_gross<-read_csv("../map_meas/eia_gross_consumption_by_state_sector_year_mont
 state_monthly<-read_csv("../diagnostics/state_monthly_for_cal.csv")
 
 # if you have TMY
-state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
-  mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
+if (file.exists("../diagnostics/state_monthly_for_cal_tmy.csv")) {
+  state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
+    mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
+}
 
 type_label<-c(state_monthly_uncal_kwh="BSS uncalibrated",state_monthly_cal_kwh="BSS calibrated",state_monthly_tmy_kwh="BSS uncalibrated, TMY weather")
 s_label<-c(com="Commercial",res="Residential",all="Buildings")
 
 # calculate monthly state-level calibration ratios ------------------------
 monthly_ratios<-state_monthly %>%
+  dplyr::mutate_at(vars(month, year), as.numeric) %>%
   inner_join(eia_gross,by=c("in.state","month","sector","year")) %>%
   mutate(gross_over_bss=gross.kWh/state_monthly_uncal_kwh,
          net_over_bss=sales.kWh/state_monthly_uncal_kwh) %>% 

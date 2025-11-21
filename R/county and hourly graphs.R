@@ -1,4 +1,6 @@
-setwd("R")
+if (basename(getwd()) != "R") {
+    setwd("R")
+}
 
 #install the packages if they're not already installed
 packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
