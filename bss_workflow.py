@@ -47,7 +47,7 @@ class Config:
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
-    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     SCOUT_OUT_TSV = "scout/scout_tsv"
     SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
