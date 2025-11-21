@@ -245,50 +245,82 @@ ORDER BY heating;
 
 #### Register S3 data as AWS Glue tables (so Athena can query)
 
-You can register Parquet/CSV in S3 as external tables that Athena can query via the AWS Glue Data Catalog:
+To register the multiplier data in S3 as AWS Glue tables for Athena queries, set up Glue Crawlers for each sub-folder and parquet file. The data is located in `s3://bucket/v1.0.0_2025/multipliers/` and should be registered in the `default` database.
 
-- Option 1 – Glue Crawler (no-code):
-  - In AWS Glue → Crawlers → Create crawler
-  - Source: your S3 prefixes (e.g., `s3://bucket/20251031/hourly_county_demand/...`)
-  - IAM role: grant read access to the bucket
-  - Target: Glue Data Catalog database (e.g., `euss_oedi`)
-  - Run the crawler to create/refresh tables; then query them from Athena
+**Data Structure:**
+- **3 Sub-folders** (each containing parquet files):
+  - `com_hourly_multipliers_amy/`
+  - `res_hourly_multipliers_amy/`
+  - `res_hourly_multipliers_tmy/`
+- **3 Parquet files**:
+  - `com_annual_multipliers_amy.parquet`
+  - `res_annual_multipliers_amy.parquet`
+  - `res_annual_multipliers_tmy.parquet`
 
-- Option 2 – Glue Spark job (code):
+**Setting up Glue Crawlers:**
 
-```python
-from awsglue.context import GlueContext
-from pyspark.context import SparkContext
+For each of the 6 resources (3 folders + 3 files), create a separate Glue Crawler:
 
-glueContext = GlueContext(SparkContext.getOrCreate())
+1. **Navigate to AWS Glue Console** → Crawlers → Create crawler
 
-# Read S3 objects as a DynamicFrame
-dyf = glueContext.create_dynamic_frame_from_options(
-    connection_type="s3",
-    connection_options={
-        "paths": [
-            "s3://your-bucket/20251031/hourly_county_demand/accel/sector=res/year=2026/"
-        ],
-        "recurse": True
-    },
-    format="parquet",
-    format_options={}
-)
+2. **Configure Crawler Details:**
+   - **Crawler name**: Use descriptive names such as:
+     - `com_hourly_multipliers_amy_crawler`
+     - `res_hourly_multipliers_amy_crawler`
+     - `res_hourly_multipliers_tmy_crawler`
+     - `com_annual_multipliers_amy_crawler`
+     - `res_annual_multipliers_amy_crawler`
+     - `res_annual_multipliers_tmy_crawler`
 
-# Write back to S3 and register/update the Glue Data Catalog table
-sink = glueContext.getSink(
-    path="s3://your-bucket/published/hourly/",
-    connection_type="s3",
-    enableUpdateCatalog=True,
-    updateBehavior="UPDATE_IN_DATABASE"
-)
-sink.setFormat("glueparquet")
-sink.setCatalogInfo(catalogDatabase="euss_oedi", catalogTableName="county_hourly_accel")
-sink.setCatalogPartitioning(partitionKeys=["sector", "year", "state"])  # optional partitions
-sink.writeFrame(dyf)
+3. **Add Data Source:**
+   - For **sub-folders**, specify the S3 path:
+     - `s3://bucket/v1.0.0_2025/multipliers/com_hourly_multipliers_amy/`
+     - `s3://bucket/v1.0.0_2025/multipliers/res_hourly_multipliers_amy/`
+     - `s3://bucket/v1.0.0_2025/multipliers/res_hourly_multipliers_tmy/`
+   - For **parquet files**, specify the full file path:
+     - `s3://bucket/v1.0.0_2025/multipliers/com_annual_multipliers_amy.parquet`
+     - `s3://bucket/v1.0.0_2025/multipliers/res_annual_multipliers_amy.parquet`
+     - `s3://bucket/v1.0.0_2025/multipliers/res_annual_multipliers_tmy.parquet`
+   - **Data store**: S3
+   - **Include path**: The specific path for each crawler
+   - **Exclude patterns**: Leave empty (unless you need to exclude specific files)
+
+4. **Configure IAM Role:**
+   - Select or create an IAM role that has read access to the S3 bucket
+   - The role should have permissions to read, for example, from `s3://bucket/v1.0.0_2025/multipliers/`
+
+5. **Set Output:**
+   - **Target database**: `default`
+   - **Table name prefix**: Leave empty (or specify if you want a prefix)
+   - Each crawler will create a separate table in the `default` database
+
+6. **Configure Schema:**
+   - **Schema updates**: Choose "Update the schema in the data catalog" to refresh table schemas on each run
+   - **Add new columns only**: Recommended to avoid breaking changes
+
+7. **Run the Crawler:**
+   - After creating all 6 crawlers, run each one individually
+   - Or schedule them to run periodically if the data is updated regularly
+
+**Resulting Athena Tables:**
+
+After running the crawlers, you will have 6 tables in the `default` database:
+- `com_hourly_multipliers_amy` (from folder)
+- `res_hourly_multipliers_amy` (from folder)
+- `res_hourly_multipliers_tmy` (from folder)
+- `com_annual_multipliers_amy` (from parquet file)
+- `res_annual_multipliers_amy` (from parquet file)
+- `res_annual_multipliers_tmy` (from parquet file)
+
+**Query Example:**
+
+```sql
+SELECT * 
+FROM "default"."com_annual_multipliers_amy" 
+LIMIT 10;
 ```
 
-For S3 connection options and format options, see the AWS Glue S3 connections docs: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-connect-s3-home.html
+For more information on Glue Crawlers, see the [AWS Glue Crawler documentation](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html).
 
 ## Accessing Pre-Defined Multipliers
 
