@@ -150,8 +150,6 @@ def scout_to_df_noenv(filename):
     all_df = all_df[all_df['metric'].isin(['Efficient Energy Use (MMBtu)',
         'Efficient Energy Use, Measure (MMBtu)',
         'Baseline Energy Use (MMBtu)'])]
-    print('Removing (R) Electric FS (Secondary Fossil Heating)')
-    all_df = all_df[all_df['meas'] != '(R) Electric FS (Secondary Fossil Heating)']
     
     # fix measures that don't have a fuel key
     to_shift = all_df[pd.isna(all_df['value'])]
