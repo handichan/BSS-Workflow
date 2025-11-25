@@ -1,16 +1,16 @@
 shape_ts	description	in.hvac_cool_type	in.hvac_category	in.hvac_heat_type	applicability	upgrade	shape_end_use
-com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Boiler 	TRUE	1	ventilation
-com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	District	TRUE	1	ventilation
-com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Electric Resistance	TRUE	1	ventilation
-com_ventilation_1	Variable Speed HP RTU, Electric Backup	DX	Small Packaged Unit	Furnace	TRUE	1	ventilation
-com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Boiler 	TRUE	2	ventilation
-com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	District	TRUE	2	ventilation
-com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Electric Resistance	TRUE	2	ventilation
-com_ventilation_2	Variable Speed HP RTU, Original Heating Fuel Backup	DX	Small Packaged Unit	Furnace	TRUE	2	ventilation
-com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Boiler 	TRUE	3	ventilation
-com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	District	TRUE	3	ventilation
-com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Electric Resistance	TRUE	3	ventilation
-com_ventilation_3	Variable Speed HP RTU, Electric Backup, Energy Recovery	DX	Small Packaged Unit	Furnace	TRUE	3	ventilation
+com_ventilation_1	"Variable Speed HP RTU, Electric Backup"	DX	Small Packaged Unit	Boiler 	TRUE	1	ventilation
+com_ventilation_1	"Variable Speed HP RTU, Electric Backup"	DX	Small Packaged Unit	District	TRUE	1	ventilation
+com_ventilation_1	"Variable Speed HP RTU, Electric Backup"	DX	Small Packaged Unit	Electric Resistance	TRUE	1	ventilation
+com_ventilation_1	"Variable Speed HP RTU, Electric Backup"	DX	Small Packaged Unit	Furnace	TRUE	1	ventilation
+com_ventilation_2	"Variable Speed HP RTU, Original Heating Fuel Backup"	DX	Small Packaged Unit	Boiler 	TRUE	2	ventilation
+com_ventilation_2	"Variable Speed HP RTU, Original Heating Fuel Backup"	DX	Small Packaged Unit	District	TRUE	2	ventilation
+com_ventilation_2	"Variable Speed HP RTU, Original Heating Fuel Backup"	DX	Small Packaged Unit	Electric Resistance	TRUE	2	ventilation
+com_ventilation_2	"Variable Speed HP RTU, Original Heating Fuel Backup"	DX	Small Packaged Unit	Furnace	TRUE	2	ventilation
+com_ventilation_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	DX	Small Packaged Unit	Boiler 	TRUE	3	ventilation
+com_ventilation_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	DX	Small Packaged Unit	District	TRUE	3	ventilation
+com_ventilation_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	DX	Small Packaged Unit	Electric Resistance	TRUE	3	ventilation
+com_ventilation_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	DX	Small Packaged Unit	Furnace	TRUE	3	ventilation
 com_ventilation_4	Boiler + rtac&chiller	ACC	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation
 com_ventilation_4	Boiler + rtac&chiller	District	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation
 com_ventilation_4	Boiler + rtac&chiller	DX	Multizone CAV/VAV	Boiler 	TRUE	0	ventilation
@@ -48,47 +48,47 @@ com_ventilation_7	Resistance heat + rtac&chiller	ACC	Zone-by-Zone	Electric Resis
 com_ventilation_7	Resistance heat + rtac&chiller	District	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation
 com_ventilation_7	Resistance heat + rtac&chiller	DX	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation
 com_ventilation_7	Resistance heat + rtac&chiller	WCC	Zone-by-Zone	Electric Resistance	TRUE	0	ventilation
-com_ventilation_8	GSHP	DX	Small Packaged Unit	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Zone-by-Zone	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Multizone CAV/VAV	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Zone-by-Zone	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Small Packaged Unit	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Residential Style Central Systems	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Small Packaged Unit	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Small Packaged Unit	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	None	Other HVAC	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	None	Residential Style Central Systems	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	None	Zone-by-Zone	Furnace	TRUE	22	ventilation
-com_ventilation_8	GSHP	ASHP	Zone-by-Zone	ASHP	TRUE	22	ventilation
-com_ventilation_8	GSHP	ASHP	Small Packaged Unit	ASHP	TRUE	22	ventilation
-com_ventilation_8	GSHP	GSHP	Zone-by-Zone	GSHP	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Zone-by-Zone	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Zone-by-Zone	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Zone-by-Zone	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Zone-by-Zone	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Electric Resistance	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	District	TRUE	22	ventilation
-com_ventilation_8	GSHP	WCC	Zone-by-Zone	Boiler 	TRUE	22	ventilation
-com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Boiler 	TRUE	22	ventilation
-com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Boiler 	TRUE	37	ventilation
-com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	District	TRUE	37	ventilation
-com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Electric Resistance	TRUE	37	ventilation
-com_ventilation_9	Variable Speed HP RTU, Electric Backup, Envelope	DX	Small Packaged Unit	Furnace	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	ACC	Multizone CAV/VAV	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	District	Multizone CAV/VAV	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Multizone CAV/VAV	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	WCC	Multizone CAV/VAV	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Small Packaged Unit	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	Evaporative Cooling	Small Packaged Unit	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	ACC	Zone-by-Zone	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	District	Zone-by-Zone	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	DX	Zone-by-Zone	Boiler 	TRUE	37	ventilation
-com_ventilation_10	Boiler + rtac&chiller, Envelope	WCC	Zone-by-Zone	Boiler 	TRUE	37	ventilation
+com_ventilation_8	GSHP	DX	Small Packaged Unit	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Zone-by-Zone	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Residential Style Central Systems	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Small Packaged Unit	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	DX	Multizone CAV/VAV	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	None	Other HVAC	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	None	Residential Style Central Systems	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	None	Zone-by-Zone	Furnace	TRUE	55	ventilation
+com_ventilation_8	GSHP	ASHP	Zone-by-Zone	ASHP	TRUE	55	ventilation
+com_ventilation_8	GSHP	ASHP	Small Packaged Unit	ASHP	TRUE	55	ventilation
+com_ventilation_8	GSHP	GSHP	Zone-by-Zone	GSHP	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Zone-by-Zone	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Electric Resistance	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Multizone CAV/VAV	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	District	TRUE	55	ventilation
+com_ventilation_8	GSHP	WCC	Zone-by-Zone	Boiler 	TRUE	55	ventilation
+com_ventilation_8	GSHP	ACC	Multizone CAV/VAV	Boiler 	TRUE	55	ventilation
+com_ventilation_9	"Variable Speed HP RTU, Electric Backup, Envelope"	DX	Small Packaged Unit	Boiler 	TRUE	50	ventilation
+com_ventilation_9	"Variable Speed HP RTU, Electric Backup, Envelope"	DX	Small Packaged Unit	District	TRUE	50	ventilation
+com_ventilation_9	"Variable Speed HP RTU, Electric Backup, Envelope"	DX	Small Packaged Unit	Electric Resistance	TRUE	50	ventilation
+com_ventilation_9	"Variable Speed HP RTU, Electric Backup, Envelope"	DX	Small Packaged Unit	Furnace	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	ACC	Multizone CAV/VAV	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	District	Multizone CAV/VAV	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	DX	Multizone CAV/VAV	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	WCC	Multizone CAV/VAV	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	DX	Small Packaged Unit	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	Evaporative Cooling	Small Packaged Unit	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	ACC	Zone-by-Zone	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	District	Zone-by-Zone	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	DX	Zone-by-Zone	Boiler 	TRUE	50	ventilation
+com_ventilation_10	"Boiler + rtac&chiller, Envelope"	WCC	Zone-by-Zone	Boiler 	TRUE	50	ventilation
