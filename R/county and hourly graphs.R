@@ -1,19 +1,16 @@
-
-
-
-setwd("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Policy Analysis Team/Projects/Buildings Standard Scenarios/v1/Annual_Results/bss-batch_012725")
+setwd("R")
 
 #install the packages if they're not already installed
 packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
 install.packages(setdiff(packages, rownames(installed.packages())))
 
-#load required packages
 library(tidyverse)
 library(scales)
 library(cowplot)
 library(maps)
 library(mapdata)
 library(colorspace)
+
 theme_set(theme_bw())
 
 
@@ -23,34 +20,34 @@ theme_set(theme_bw())
 
 input_dir <- "generated_csvs" #directory where the csvs are stored
 filename_prefix <- ""
-graph_dir <- "graphs" #directory where the graphs will be written
+graph_dir <- "graphs/county_hourly" #directory where the graphs will be written
 
-county_ann_eu<-read_csv(paste0(input_dir,"/",filename_prefix,"county_ann_eu.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
-county_100_hrs<-read_csv(paste0(input_dir,"/",filename_prefix,"county_100_hrs.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
-county_monthly_maxes<-read_csv(paste0(input_dir,"/",filename_prefix,"county_monthly_maxes.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T))
+# scenarios
+scenarios<-c("aeo", "ref", "fossil", "state", "accel", "brk", "dual_switch", "high_switch", "min_switch")
+# scenario to get the baseline (AEO 2023) data from
+scenario_for_baseline <- "aeo"
 
-county_hourly_examples_stated<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_stated.csv"))
-county_hourly_examples_mid<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_mid.csv"))
-county_hourly_examples_high<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_high.csv"))
-county_hourly_examples_breakthrough<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_breakthrough.csv"))
-county_hourly_examples_ineff<-read_csv(paste0(input_dir,"/",filename_prefix,"county_hourly_examples_ineff.csv"))
+county_ann_eu<-data.frame()
+county_share_winter<-data.frame()
+county_peak_hr<-data.frame()
+county_monthly_maxes<-data.frame()
+county_hourly_examples_list <- list()
 
-county_hourly_examples_list <- list(
-  county_hourly_examples_stated,
-  county_hourly_examples_mid,
-  county_hourly_examples_high,
-  county_hourly_examples_breakthrough,
-  county_hourly_examples_ineff
-)
-
-state_monthly_2024<-read_csv(paste0(input_dir,"/",filename_prefix,"state_monthly_2024.csv"))
-
-state_ann<-read_csv(paste0(input_dir,"/state_ann_eu_stage_fossil.csv")) %>% mutate(turnover=factor(turnover,levels=c("baseline","stated","mid","high","breakthrough","ineff"),ordered=T)) %>%
-    # this won't be needed once the measure map from 1/29/2025 is used
-    mutate(description=case_when(description=="HP boiler, best" ~ "Boiler, best HP",
-                               description=="Water heater, HP, ESTAR 240V" ~ "Water heater, HP, ESTAR",
-                               description=="Water heater, HP, ESTAR 120V" ~ "Water heater, HP, ESTAR",
-                               TRUE ~ description))
+for (scen in scenarios){
+  if (scen==scenario_for_baseline){
+    county_ann_eu<-bind_rows(county_ann_eu,read_csv(paste0(input_dir,"/",scen,"_county_ann_eu.csv")))
+    county_peak_hr<-bind_rows(county_peak_hr,read_csv(paste0(input_dir,"/",scen,"_county_peak_hour.csv")))
+    county_share_winter<-bind_rows(county_share_winter,read_csv(paste0(input_dir,"/",scen,"_county_share_winter.csv")))
+    county_monthly_maxes<-bind_rows(county_monthly_maxes,read_csv(paste0(input_dir,"/",scen,"_county_monthly_maxes.csv")))
+    county_hourly_examples_list[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples_60_days.csv"))
+  } else{
+    county_ann_eu<-bind_rows(county_ann_eu,read_csv(paste0(input_dir,"/",scen,"_county_ann_eu.csv"))%>% filter(turnover!="baseline"))
+    county_peak_hr<-bind_rows(county_peak_hr,read_csv(paste0(input_dir,"/",scen,"_county_peak_hour.csv"))%>% filter(turnover!="baseline"))
+    county_share_winter<-bind_rows(county_share_winter,read_csv(paste0(input_dir,"/",scen,"_county_share_winter.csv"))%>% filter(turnover!="baseline"))
+    county_monthly_maxes<-bind_rows(county_monthly_maxes,read_csv(paste0(input_dir,"/",scen,"_county_monthly_maxes.csv"))%>% filter(turnover!="baseline"))
+    county_hourly_examples_list[[scen]]<-read_csv(paste0(input_dir,"/",filename_prefix,scen,"_county_hourly_examples_60_days.csv"))
+  }
+}
 
 
 # map data ----------------------------------------------------------------
@@ -66,7 +63,23 @@ geo_counties<-read_csv("../map_meas/emm_county_map.csv") %>% filter(subregion!="
 # for labeling ---------------------------------------------------------------
 
 # Scout scenarios -- every value of "turnover" should be here
-to<-c(baseline="Reference",breakthrough="Breakthrough",ineff="Inefficient",high="High",mid="Mid",stated_policies="Stated Policies",stated="Stated Policies")
+# this is the order they'll be shown in the plots
+to<-c(baseline="baseline",
+      aeo="AEO 2025",
+      ref="Reference",
+      fossil="Fossil Favorable",
+      stated_policies="Stated Policies",
+      mid="Mid",
+      high="High",
+      state="State and Local Action",
+      accel="Accelerated Innovation",
+      breakthrough="Breakthrough",
+      brk="Breakthrough",
+      ineff="Inefficient",
+      dual_switch="Dual Switch",
+      high_switch="High Switch",
+      min_switch="Min Switch"
+)
 # sector
 s_label<-c(com="Commercial",res="Residential",all="All Buildings")
 # end uses
@@ -96,16 +109,30 @@ round_any<-function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
 ns<-read_csv("../map_meas/resstock_ns.csv")
 
 
-#width for annual graphs changeable based on number of scenarios
-width<-(1+length(unique(state_ann$turnover)))*1.8
+#order the scenarios
+county_ann_eu<-county_ann_eu %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
+county_share_winter<-county_share_winter %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
+county_peak_hr<-county_peak_hr %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
+county_monthly_maxes<-county_monthly_maxes %>% mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T))
+
+# choose scenarios to plot ----------------------------------------------
+filename_prefix <- ""
+scen_filtered<-c("baseline", scenarios)
+
+# scen_filtered<-c("aeo","ref","fossil","state","accel","brk")
+# scen_filtered<-c("aeo","ref","state","brk","min_switch","dual_switch")
+# scen_filtered<-c("aeo","min_switch","dual_switch","high_switch")
+
+# filename_prefix <- paste(c(scen_filtered,"_"),collapse="_")
+
+#width for annual graphs changes based on number of scenarios
+width<-(1+length(scen_filtered))*1.8
 
 
 # map with histogram - functions -----------------------------------------------------------------
 
-
-
 # Function to create main and inset plots
-create_plot_pair <- function(data) {
+create_plot_pair <- function(data,label) {
   list(
     main = county_map %>% ggplot()+
       geom_polygon(data = data%>%
@@ -131,175 +158,190 @@ create_plot_pair <- function(data) {
       scale_fill_identity() +
       scale_x_continuous(labels=percent_format(),limits=c(-1,3.05),expand=expansion(add=0,mult=c(0,.05)))+
       scale_y_continuous(n.breaks=3,expand=expansion(add=0,mult=c(0,.05)))+
-      theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0))
+      ggtitle(str_replace_all(label,pattern = "\n",replacement = " "))+
+      theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(t = 0, b = 0, l = 0, r = 0),
+            plot.title.position = "plot",
+            plot.title = element_text(hjust=0))
   )
 }
+
 
 # function to combine and format the map and histogram plots
+
 plot_map_hist<-function(data_list){
-  # Generate plot pairs for each subset
-  plot_pairs <- purrr::imap(datasets, ~ create_plot_pair(
-    .x
-  ))
-  
-  combined_plots <- purrr::map(plot_pairs, ~ plot_grid(.x$main, plot_grid(NULL,.x$inset,NULL,rel_widths=c(1,4,1),ncol=3), rel_heights = c(4, 1), rel_widths = c(5,4),ncol=1))
-  
   nice_labels <- setNames(
-    purrr::map_chr(names(combined_plots), ~ {
-      parts <- str_split(.x, "\\.", n = 2)[[1]] # Ensure only 2 parts: turnover and end_use/sector
-      
-      # Extract turnover and end_use parts
-      turnover_label <- to[parts[1]] # First part is turnover
-      subset_label <- c(eu,s)[parts[2]] # Second part is end_use or sector
-      
-      # Combine into a single label, skipping NA
+    purrr::map_chr(names(datasets), ~ {
+      parts <- str_split(.x, "\\.", n = 2)[[1]]
+      turnover_label <- to[parts[1]]
+      subset_label <- c(eu, s_label)[parts[2]]
       paste(na.omit(c(turnover_label, subset_label)), collapse = " - ")
     }),
-    names(combined_plots) # Assign names
+    names(datasets)
   )
-
-  # Add titles to each plot using the nice labels
-  annotated_plots <- purrr::imap(combined_plots, ~ {
-    label <- nice_labels[.y] 
-    ggdraw() +
-      draw_plot(.x) +
-      draw_text(label, x = .5, y = .25, vjust = 1.5, hjust = 0.5, size = 12)
+  # Now create plots using those labels
+  plot_pairs <- purrr::imap(datasets, ~ {
+    label <- nice_labels[.y]
+    create_plot_pair(.x, label = label)
   })
-  
-  nrows<-if_else(sum(str_detect(names(datasets),pattern = "."))>=1,2,1)
-  if(length(nice_labels)==0){return(plot_grid(plotlist = combined_plots, nrow = nrows))}
-  else{
-    return(plot_grid(plotlist = annotated_plots, nrow = nrows))}
-  
+  combined_plots <- purrr::map(plot_pairs, ~
+                                 plot_grid(.x$main,
+                                           plot_grid(NULL, .x$inset, NULL, rel_widths = c(1, 4, 1), ncol = 3),
+                                           rel_heights = c(3, 1), rel_widths = c(5, 4), ncol = 1, align="v")
+  )
+  nrows <- if_else(sum(str_detect(names(datasets), pattern = "\\.")) >= 1, 2, 1)
+  return(plot_grid(plotlist = combined_plots, nrow = nrows))
 }
-
 
 
 # map with histogram - plot % changes! ----------------------------------------------
 
+# percent change in annual electricity
 # by turnover
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   group_by(turnover,in.state,in.county,year) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
-filename<-"county_map_ann_2050vs2024_all"
-plottitle<-"Change in Building Electricity: 2024 to 2050"
-annual_county_change<- aggregated %>%
-  filter(year %in% c(2024,2050)) %>%
-  pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
-  mutate(percent_change=`2050`/`2024`-1,
-         fill_color=color_interp(percent_change))
-datasets <- split(annual_county_change, list(annual_county_change$turnover))
+if(nrow(aggregated > 0)){
+  filename<-"county_map_ann_2050vs2026_all"
+  plottitle<-"Change in Building Electricity: 2026 to 2050"
+  annual_county_change<- aggregated %>%
+    filter(year %in% c(2026,2050)) %>%
+    pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
+    mutate(percent_change=`2050`/`2026`-1,
+           fill_color=color_interp(percent_change))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover), drop=T)
+  
+  p<-plot_map_hist(datasets)
+  ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+         plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.3,1)),
+         width=length(scen_filtered)*4,height=4,units="in",bg = "white")
+}
 
-p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_height = 12,bg="white")
 
 
 # by turnover, 50+ RS samples
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   right_join(ns %>% filter(n>=50),by="in.county") %>%
   group_by(turnover,in.state,in.county,year) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
-filename<-"county_map_ann_2050vs2024_all_50plus"
-plottitle<-"Change in Building Electricity: 2024 to 2050\nCounties with 50+ ResStock Samples"
-annual_county_change<- aggregated %>%
-  filter(year %in% c(2024,2050)) %>%
-  pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
-  mutate(percent_change=`2050`/`2024`-1,
-         fill_color=color_interp(percent_change))
-datasets <- split(annual_county_change, list(annual_county_change$turnover))
-
-p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_height = 12,bg="white")
+if(nrow(aggregated > 0)){
+  filename<-"county_map_ann_2050vs2026_all_50plus"
+  plottitle<-"Change in Building Electricity: 2026 to 2050\nCounties with 50+ ResStock Samples"
+  annual_county_change<- aggregated %>%
+    filter(year %in% c(2026,2050)) %>%
+    pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
+    mutate(percent_change=`2050`/`2026`-1,
+           fill_color=color_interp(percent_change))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover), drop=T)
+  
+  p<-plot_map_hist(datasets)
+  ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+         plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.3,1)),
+         width=length(scen_filtered)*4,height=4,units="in",bg = "white")
+}
 
 
 # by turnover and sector
 aggregated<-county_ann_eu %>%
+  filter(turnover %in% scen_filtered) %>%
   group_by(turnover,in.state,in.county,year,sector) %>% summarize(county_ann_kwh=sum(county_ann_kwh))
-filename<-"county_map_ann_2050vs2024_sector"
-plottitle<-"Change in Building Electricity: 2024 to 2050"
-annual_county_change<- aggregated %>%
-  filter(year %in% c(2024,2050)) %>%
-  pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
-  mutate(percent_change=`2050`/`2024`-1,
-         fill_color=color_interp(percent_change))
-datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$sector))
-
-p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
+if(nrow(aggregated > 0)){
+  filename<-"county_map_ann_2050vs2026_sector"
+  plottitle<-"Change in Building Electricity: 2026 to 2050"
+  annual_county_change<- aggregated %>%
+    filter(year %in% c(2026,2050)) %>%
+    pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
+    mutate(percent_change=`2050`/`2026`-1,
+           fill_color=color_interp(percent_change))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$sector), drop=T)
+  
+  p<-plot_map_hist(datasets)
+  ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+         plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+         width=length(scen_filtered)*4,height=7,units="in",bg = "white")
+}
 
 
 # res HVAC by turnover
 aggregated<-county_ann_eu %>%
-  filter(sector=="res",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"))
-filename<-"county_map_ann_2050vs2024_res_hvac"
-plottitle<-"Change in Residential HVAC Electricity: 2024 to 2050"
-annual_county_change<- aggregated %>%
-  filter(year %in% c(2024,2050)) %>%
-  pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
-  mutate(percent_change=`2050`/`2024`-1,
-         fill_color=color_interp(percent_change))
-datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
+  filter(sector=="res",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"),
+         turnover %in% scen_filtered)
+if(nrow(aggregated > 0)){
+  filename<-"county_map_ann_2050vs2026_res_hvac"
+  plottitle<-"Change in Residential HVAC Electricity: 2026 to 2050"
+  annual_county_change<- aggregated %>%
+    filter(year %in% c(2026,2050)) %>%
+    pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
+    mutate(percent_change=`2050`/`2026`-1,
+           fill_color=color_interp(percent_change))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use), drop=T)
+  
+  p<-plot_map_hist(datasets)
+  ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+         plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+         width=length(scen_filtered)*4,height=7,units="in",bg = "white")
+}
 
-p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
 
 # com HVAC by turnover
 aggregated<-county_ann_eu %>%
-  filter(sector=="com",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"))
-filename<-"county_map_ann_2050vs2024_com_hvac"
-plottitle<-"Change in Commercial Heating and Cooling Electricity: 2024 to 2050"
-annual_county_change<- aggregated %>%
-  filter(year %in% c(2024,2050)) %>%
-  pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
-  mutate(percent_change=`2050`/`2024`-1,
-         fill_color=color_interp(percent_change))
-datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use))
+  filter(sector=="com",end_use %in% c("Heating (Equip.)","Cooling (Equip.)"),
+         turnover %in% scen_filtered)
+if(nrow(aggregated > 0)){
+  filename<-"county_map_ann_2050vs2026_com_hvac"
+  plottitle<-"Change in Commercial Heating and Cooling Electricity: 2026 to 2050"
+  annual_county_change<- aggregated %>%
+    filter(year %in% c(2026,2050)) %>%
+    pivot_wider(names_from=year,values_from=county_ann_kwh) %>%
+    mutate(percent_change=`2050`/`2026`-1,
+           fill_color=color_interp(percent_change))
+  datasets <- split(annual_county_change, list(annual_county_change$turnover,annual_county_change$end_use), drop=T)
+  
+  p<-plot_map_hist(datasets)
+  ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+         plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+         width=length(scen_filtered)*4,height=7,units="in",bg = "white")
+}
 
+
+# percent change in peak demand
+# by turnover
+peak_change<-county_peak_hr %>%
+  filter(turnover %in% scen_filtered) %>%
+  mutate(fill_color=color_interp(percent_change))
+filename<-"county_map_peak_2050vs2026_all"
+plottitle<-"Change in Building Peak Electricity: 2026 to 2050"
+datasets <- split(peak_change, list(droplevels(peak_change$turnover)), drop=T)
 p<-plot_map_hist(datasets)
-save_plot(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
-          plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
-          base_width = 20,bg="white",base_height = 8)
-
-
+ggsave(paste0(graph_dir,"/",filename_prefix,filename,".jpg"),
+       plot_grid(ggdraw()+draw_text(plottitle,x=.5,y=.5,vjust=.5,hjust=.5),p,nrow = 2,rel_heights = c(.05,1)),
+       width=length(scen_filtered)*4,height=4,units="in",bg = "white")
 
 # top 100 hours - map and histogram of share in the winter -----------------------------------------------------------
 
-#county_100_hrs<-county_100_hrs %>% filter(turnover %in% c("baseline","breakthrough","high,"ineff"),year %in% c(2024,2030,2040,2050)) %>% droplevels()
-# filename_prefix<-"ref_high_brk_ineff_"
 
-county_100_hrs_share<-county_100_hrs %>%
-  mutate(month=month(timestamp_hour),season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(turnover,year,in.county) %>%
-  mutate(share_winter=sum(season=="Winter")/100) %>%
-  filter(rank_num==1)
-
-top100_map<- county_100_hrs_share %>% 
+top100_map<- county_share_winter %>%
+  filter(turnover %in% scen_filtered) %>%
   left_join(geo_counties %>% select(stock.county,subregion,region,population),by=c("in.county"="stock.county"),relationship="many-to-many") %>%
   full_join(county_map,by=c("region","subregion"),relationship="many-to-many") %>%
-  filter(!is.na(turnover),!is.na(year))
+  filter(!is.na(turnover),!is.na(year)) 
 
 
 p100<-county_map %>% ggplot()+
   geom_polygon(data = top100_map , 
                mapping = aes(x = long, y = lat, group = group,fill=share_winter),color=NA) +
   coord_map("conic", lat0 = 30)+
-  scale_fill_gradient2(low="#FDAB31",mid="#E5E8C1",midpoint=.5,high="#3F7DDE",name="",labels=percent_format())+
+  scale_fill_gradientn(colors=diverg,name="",labels=percent_format())+
   theme(panel.grid = element_blank(),axis.title = element_blank(),axis.line = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.border = element_blank(),
         panel.background = element_blank(),
         legend.position="bottom",legend.key.width = unit(1,"in"),
         panel.spacing = unit(0, "in"),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
+        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))+
   facet_grid(year~turnover,labeller = labeller(turnover=to))+
   ggtitle("Share of Top 100 Hours in the Winter")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share.jpg"),p100,base_height = 6,bg="white")
+save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share.jpg"), p100, base_height = 6,bg="white")
 
-p100_hist<-county_100_hrs_share %>%
+p100_hist<-county_share_winter %>%
+  filter(turnover %in% scen_filtered) %>%
   mutate(percent_binned=round_any(share_winter,.05),
          fill_color=diverg_tophours_interp(percent_binned))%>%
   ggplot(aes(x=percent_binned,y=after_stat(count/3107),fill=fill_color))+
@@ -309,15 +351,17 @@ p100_hist<-county_100_hrs_share %>%
   scale_x_continuous(labels=percent_format())+
   scale_y_continuous(n.breaks=4,expand=expansion(add=0,mult=c(0,.05)),labels=percent_format())+
   theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
+        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))+
   ggtitle("Share of Top 100 Hours in the Winter")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share_hist.jpg"),p100_hist,base_height = 4,base_width = 7,bg="white")
+save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share_hist.jpg"), p100_hist, base_height = 6,bg="white")
+
 
 
 # winter to summer ratio - map and histogram --------------------------------------------------
 
 
 peak_ratio<-county_monthly_maxes %>%
+  filter(turnover %in% scen_filtered) %>%
   mutate(month=month(timestamp_hour),season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
   group_by(in.county,turnover,year,season) %>% filter(county_total_hourly_kwh==max(county_total_hourly_kwh)) %>%
   select(in.county,turnover,in.state,year,season,county_total_hourly_kwh) %>%
@@ -334,18 +378,19 @@ ratio_map<-county_map %>% ggplot()+
   geom_polygon(data = peak_ratio_map , 
                mapping = aes(x = long, y = lat, group = group,fill=log_winter_to_summer),color=NA) +
   coord_map("conic", lat0 = 30)+
-  scale_fill_gradient2(low="#FA9C26",mid="#E5E8C1",midpoint=0,high="#3166D7",name="",labels = function(x) round(10^x, 2),breaks=c(-1,-.6,-.3,0,.3,.6,1))+
+  scale_fill_gradientn(colors=diverg,name="",labels=function(x) round(10^x, 2),limits=c(-.9,.9),breaks=c(-1,-.6,-.3,0,.3,.6,1))+
   theme(panel.grid = element_blank(),axis.title = element_blank(),axis.line = element_blank(),axis.text = element_blank(),axis.ticks = element_blank(),panel.border = element_blank(),
         panel.background = element_blank(),
         legend.position="bottom",legend.key.width = unit(1,"in"),
         panel.spacing = unit(0, "in"),
-        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
+        strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=10),strip.text.x = element_text(size=10))+
   facet_grid(year~turnover,labeller = labeller(turnover=to))+
   ggtitle("Ratio of Winter Peak to Summer Peak")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio.jpg"),ratio_map,base_height = 12,bg="white")
+save_plot(paste0(graph_dir,"/",filename_prefix,"county_peak_ratio.jpg"),ratio_map,base_height = 6,bg="white")
 
 
-ratio_hist<-peak_ratio %>% filter(turnover %in% c("baseline","high","breakthrough","ineff"),year %in% c(2024,2030,2040,2050)) %>% droplevels() %>%
+ratio_hist<-peak_ratio %>% 
+  filter(turnover %in% scen_filtered) %>%
   mutate(log_ratio_binned=round_any(log_winter_to_summer,.02),
          fill_color=diverg_ratio(log_ratio_binned))%>%
   ggplot(aes(x=log_ratio_binned,y=after_stat(count/3107),fill=fill_color))+
@@ -359,304 +404,61 @@ ratio_hist<-peak_ratio %>% filter(turnover %in% c("baseline","high","breakthroug
   theme(panel.grid.minor.y = element_blank(),axis.title = element_blank(),plot.margin=margin(b = 0),
         strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))+
   ggtitle("Ratio of Winter Peak to Summer Peak")
-save_plot(paste0(graph_dir,"/",filename_prefix,"county_ratio_hist.jpg"),ratio_hist,base_height = 6,base_width = 12,bg="white")
-
+save_plot(paste0(graph_dir,"/",filename_prefix,"county_peak_ratio_hist.jpg"),ratio_hist,base_height = 6,bg="white",base_asp = 2)
 
 
 # example counties - peak day line plots --------------------------------------------------------
-#peak day is selected based on the scenario (not the baseline)
-
 
 for (i in 1:length(county_hourly_examples_list)){
-with_ex_labels<-county_hourly_examples_list[[i]]%>% 
+  with_ex_labels<-county_hourly_examples_list[[i]]%>% 
+    filter(peak_source_turnover!="baseline",day_type=="monthly_peak_day") %>%
+    left_join(ns %>% select(in.county,county_name),by="in.county") %>%
+    mutate(example_label=paste0(example_type,": ",county_name),
+           day_of_month=day(date))
+  maxes<-with_ex_labels %>% filter(turnover!="baseline") %>%
+    group_by(year,in.county,example_label) %>%
+    filter(county_hourly_kwh==max(county_hourly_kwh)) %>% ungroup()
+  day_labels<-with_ex_labels %>% 
+    right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
+    select(in.county,year,month,day_of_month,example_label,turnover) %>% unique() %>%
+    mutate(day_label=paste(month,day_of_month,sep="/"),x=if_else(year==2024,3,13))
+  psample<-with_ex_labels %>% 
+    right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
+    mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
+    ggplot(aes(color=factor(year)))+
+    geom_line(aes(x=hour_of_day,y=county_hourly_kwh/1000,linetype=turnover))+
+    xlab("EST")+
+    geom_text(data=day_labels,y=-Inf,vjust=-.5,aes(x=x,label=day_label),show.legend = F,size=8) +
+    scale_y_continuous(name="MWh",labels=comma_format(),limits=c(0,NA))+
+    scale_color_brewer(name="",palette = "Dark2")+
+    scale_linetype(name="",labels=to)+
+    facet_wrap(~example_label,scales="free",ncol=2)+
+    ggtitle("Day with the Peak Hour")
+  save_plot(paste0(graph_dir,"/example_peak_days_",names(county_hourly_examples_list)[i],".jpg"),psample,base_height = 18,base_width = 8,bg="white")
+}
+
+# example counties - monthly line plots --------------------------------------------------------
+
+example_labels<-county_hourly_examples_list[[i]]%>% select(in.county,example_type) %>% unique() %>%
   left_join(ns %>% select(in.county,county_name),by="in.county") %>%
   mutate(example_label=paste0(example_type,": ",county_name))
-day_labels<-with_ex_labels %>%   filter(year %in% c(2024,2050),turnover_max!="baseline") %>%
-  select(in.county,year,month,day,example_label,turnover) %>% unique() %>%
-  mutate(day_label=paste(month,day,sep="/"),x=if_else(year==2024,3,13))
-psample<-with_ex_labels %>%
-  filter(year %in% c(2024,2050),turnover_max!="baseline") %>%
-  ggplot(aes(color=factor(year)))+
-  geom_line(aes(x=hour,y=county_total_hourly_kwh/1000,linetype=turnover))+
-  xlab("EST")+
-  geom_text(data=day_labels,y=-Inf,vjust=-.5,aes(x=x,label=day_label),show.legend = F,size=8) +
-  scale_y_continuous(name="MWh",labels=comma_format(),limits=c(0,NA))+
-  scale_color_brewer(name="",palette = "Dark2")+
-  scale_linetype(name="",labels=to)+
-  facet_wrap(~example_label,scales="free",ncol=2)+
-  ggtitle("Day with the Peak Hour")
-save_plot(paste0(graph_dir,"/example_peak_days_",day_labels[1,"turnover"],".jpg"),psample,base_height = 18,base_width = 8,bg="white")
-}
 
-# compare state-level seasonal ratios to EIA ------------------------------
-
-#https://drive.google.com/open?id=1btgB7_rSUJSTANdQ_kgGN3evd1baOQf8&usp=drive_fs
-eia<-read_csv("/Users/mpigman/Library/CloudStorage/GoogleDrive-mpigman@lbl.gov/Shared drives/Buildings Standard Scenarios/Workflow design/Comparison Data/eia_gas_and_electricity_by_state_sector_year_month.csv")
-
-eia_ratios_sector<-eia %>% filter(fuel=="electricity",sector %in% c("residential","commercial")) %>% 
-  mutate(month=(match(month, month.abb)),
-         season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder"),
-         in.state=if_else(state=="District of Columbia","DC",state.abb[match(state,state.name)]),
-         sector=if_else(sector=="commercial","com","res")) %>%
-  group_by(state,in.state,year,month,season,sector) %>% summarize(sales.kWh=sum(sales.kWh)) %>%
-  group_by(state,in.state,year,season,sector) %>% summarize(sales.kWh_max=max(sales.kWh)) %>%
-  pivot_wider(names_from=season,values_from=sales.kWh_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer)
-
-bss_ratios_sector<-state_monthly_2024 %>%
-  mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(in.state,sector,season) %>% summarize(monthly_max=max(state_monthly_kwh)) %>%
-  pivot_wider(names_from=season,values_from=monthly_max) %>%
-  mutate(max_winter_to_max_summer=Winter/Summer) %>%
-  arrange(max_winter_to_max_summer)
-
-eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
-  ggplot(aes(x=in.state,y=max_winter_to_max_summer))+
-  geom_hline(yintercept = 1,color="grey30")+
-  geom_boxplot()+
-  geom_point(data=bss_ratios_sector ,color="red")+
-  scale_x_discrete(limits=bss_ratios_sector[bss_ratios_sector$sector=="res",]$in.state,name="")+
-  ylab("winter max / summer max")+
-  facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
-  ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
-save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
-
-
-
-# annual, national --------------------------------------------------------
-
-# area plot by year, scenario, end use, sector
-
-#electric all scenarios
-filename_prefix<-""
-state_ann %>%
-  filter(fuel=="Electric") %>%
-  group_by(year,sector,end_use,turnover) %>% 
-  summarize(twh=sum(state_ann_kwh)/10^9) %>%
-  ggplot(aes(x=year,y=twh,fill=end_use))+
-  geom_area() + 
-  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
-  scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
-  scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-  scale_fill_manual(name="",labels=eu,values=colors)+
-  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario.jpeg"),device = "jpeg",width = width, height =4,units = "in")
-
-#electric no stated policies
-filename_prefix<-"no_stated_"
-state_ann %>%
-  filter(turnover!="stated",fuel=="Electric") %>%
-  group_by(year,sector,end_use,turnover) %>% 
-  summarize(twh=sum(state_ann_kwh)/10^9) %>%
-  ggplot(aes(x=year,y=twh,fill=end_use))+
-  geom_area() + 
-  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
-  scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
-  scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-  scale_fill_manual(name="",labels=eu,values=colors)+
-  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario.jpeg"),device = "jpeg",width = width, height =4,units = "in")
-
-
-#fossil all scenarios
-filename_prefix<-""
-state_ann %>%
-  filter(fuel!="Electric") %>%
-  group_by(year,sector,end_use,turnover) %>% 
-  summarize(twh=sum(state_ann_kwh)/10^9) %>%
-  ggplot(aes(x=year,y=twh,fill=end_use))+
-  geom_area() + 
-  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
-  scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
-  scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-  scale_fill_manual(name="",labels=eu,values=colors[c(2,3,4,6,9)])+
-  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario_fossil.jpeg"),device = "jpeg",width = width, height =4,units = "in")
-
-
-#fossil no stated policies
-filename_prefix<-"no_stated_"
-state_ann %>%
-  filter(turnover!="stated",fuel!="Electric") %>%
-  group_by(year,sector,end_use,turnover) %>% 
-  summarize(twh=sum(state_ann_kwh)/10^9) %>%
-  ggplot(aes(x=year,y=twh,fill=end_use))+
-  geom_area() + 
-  facet_grid(sector~turnover,labeller = labeller(turnover=to,sector=s_label))+
-  scale_y_continuous("TWh",labels=comma_format(),expand=expansion(add=0,mult=c(0,.05)))+ 
-  scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-  scale_fill_manual(name="",labels=eu,values=colors[c(2,3,4,6,9)])+
-  theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_sector_scenario_fossil.jpeg"),device = "jpeg",width = width, height =4,units = "in")
-
-
-# annual, national by tech type ------------------------------------------------------------
-
-agg <-state_ann %>% filter(fuel=="Electric") %>% group_by(year,end_use,turnover,sector,description) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% ungroup() 
-
-
-#all scenarios
-filename_prefix<-""
-#HVAC
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
-    filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),sector==sec,description!="fossil") %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(end_use~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_hvac.jpeg"),device = "jpeg",width = width, height =4,units = "in")
-}
-
-
-#water heating
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
-    filter((end_use %in% c("Water Heating")),sector==sec,description!="fossil") %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
-}
-
-
-#non HVAC, non-WH
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0) %>% 
-    filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),description!="fossil",sector==sec) %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
-}
-
-
-
-#no stated policies
-filename_prefix<-"no_stated_"
-#HVAC
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
-    filter((end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation")),description!="fossil",sector==sec) %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(end_use~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_hvac.jpeg"),device = "jpeg",width = width, height =5,units = "in")
-}
-
-
-#water heating
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
-    filter(end_use %in% c("Water Heating"),sector==sec,description!="fossil") %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_wh.jpeg"),device = "jpeg",width = width, height =4/1.5,units = "in")
-}
-
-
-#non HVAC, non-WH
-for (sec in c("com","res")){
-  agg%>%  group_by(description) %>% filter(sum(TWh)>0, turnover!="stated") %>% 
-    filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),sector==sec) %>%
-    ggplot(aes(x=year,y=TWh,fill=description)) +
-    geom_area()+
-    facet_grid(~turnover,labeller = labeller(turnover=to,end_use=eu))+
-    scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)),labels=comma_format())+ 
-    scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-    scale_fill_manual(values=colors,name="")+
-    theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-  ggsave(paste0(graph_dir,"/",filename_prefix,"national_annual_",sec,"_non-mech.jpeg"),device = "jpeg",width = width, height =4/1.15,units = "in")
-}
-
-
-# annual by state and tech type for heating and cooling  ------------------------------------------------------------
-
-# states to show as examples for heating and cooling
-states<-c("WA","CA","MA","FL")
-
-agg_state <-state_ann %>% filter(reg %in% states,fuel=="Electric") %>% 
-  group_by(year,reg,end_use,turnover,sector,description) %>% 
-  summarize(TWh=sum(state_ann_kwh)/10^9) %>%
-  ungroup()
-
-#all scenarios
-filename_prefix<-"all_"
-for(sec in c("res","com")){
-  for (u in c("Heating (Equip.)","Cooling (Equip.)")){
-    agg_state%>% 
-      group_by(description) %>% filter(sum(TWh)>0) %>%
-      filter(end_use ==u,sector==sec) %>%
-      ggplot(aes(x=year,y=TWh,fill=description)) +
-      geom_area()+
-      facet_grid(reg~turnover,labeller = labeller(turnover=to,end_use=eu),scales="free")+
-      scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)))+ 
-      scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-      scale_fill_manual(values=colors,name="")+
-      theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-    ggsave(paste0(graph_dir,"/",filename_prefix,"state_annual_",sec,"_",eu[u],".jpeg"),device = "jpeg",width = width, height =width/8*length(states),units = "in",limitsize = FALSE)
+for (i in 1:length(county_hourly_examples_list)){
+  for (cty in unique(county_hourly_examples_list[[i]]$in.county)){
+    monthly_examples<-county_hourly_examples_list[[i]] %>%
+      filter(in.county==cty, (peak_source_turnover!="baseline" | is.na(peak_source_turnover)), turnover!="baseline") %>%
+      pivot_wider(names_from="day_type",values_from="county_hourly_kwh",id_cols=c("year","month","hour_of_day","turnover")) %>%
+      ggplot(aes(x=hour_of_day))+
+      geom_ribbon(aes(ymin=monthly_min_peak_day/1000,ymax=monthly_peak_day/1000,fill=factor(year)),alpha=.4)+
+      geom_line(aes(y=monthly_mean/1000,color=factor(year)))+
+      xlab("EST")+
+      scale_y_continuous(name="MWh",labels=comma_format(),limits=c(0,NA))+
+      scale_color_brewer(name="",palette = "Dark2")+
+      scale_fill_brewer(name="",palette = "Dark2")+
+      facet_wrap(~month)+
+      ggtitle(paste0(to[names(county_hourly_examples_list)[[i]]],": Mean, Day with Highest Peak, Day with Lowest Peak by Month"),
+              subtitle = (example_labels %>% filter(in.county==cty))$example_label)
+    save_plot(paste0(graph_dir,"/example_by_month/",names(county_hourly_examples_list)[i],"_",(example_labels %>% filter(in.county==cty))$county_name,".jpg"),
+              monthly_examples,base_height = 7,base_width = 8,bg="white")
   }
 }
-
-#no stated policies
-filename_prefix<-"no_stated_sc_"
-for(sec in c("res","com")){
-  for (u in c("Heating (Equip.)","Cooling (Equip.)")){
-    agg_state%>% 
-      group_by(description) %>% filter(sum(TWh)>0,turnover!="stated") %>%
-      filter(end_use ==u,sector==sec) %>%
-      ggplot(aes(x=year,y=TWh,fill=description)) +
-      geom_area()+
-      facet_grid(reg~turnover,labeller = labeller(turnover=to,end_use=eu),scales="free")+
-      scale_y_continuous("TWh",expand=expansion(add=0,mult=c(0,.05)))+ 
-      scale_x_continuous(name="",expand=c(0,0),breaks=seq(2030,2050,by=10))+
-      scale_fill_manual(values=colors[2:18],name="")+
-      theme(strip.background = element_blank(),strip.text.y = element_text(angle=-90,size=12),strip.text.x = element_text(size=12))
-    ggsave(paste0(graph_dir,"/",filename_prefix,"state_annual_",sec,"_",eu[u],".jpeg"),device = "jpeg",width = width*.7, height =width*.85/2,units = "in")
-  }
-}
-
-
-# 2050 end use comparison -------------------------------------------------
-
-#all buildings
-state_ann %>% filter(year==2050,fuel=="Electric") %>% group_by(turnover,end_use) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% 
-  ggplot(aes(x=turnover,y=TWh,fill=turnover))+
-  geom_col(position="dodge")+
-  scale_fill_brewer(name="",palette="Paired",labels=to)+scale_x_discrete(labels=eu,name="")+
-  scale_y_continuous(expand=expansion(add=0,mult=c(0,.05)))+
-  facet_grid(~end_use,labeller=labeller(end_use=eu))+
-  theme(axis.text.x = element_blank(),axis.ticks.x=element_blank(),panel.grid.major.x = element_blank())
-ggsave(paste0(graph_dir,"/national_annual_2050_by_eu.jpeg"),device = "jpeg",width = 10, height =2,units = "in")
-
-
-#by sector
-state_ann %>% filter(year==2050,fuel=="Electric") %>% group_by(turnover,end_use,sector) %>% summarize(TWh=sum(state_ann_kwh)/10^9) %>% 
-  ggplot(aes(x=turnover,y=TWh,fill=turnover))+
-  geom_col(position="dodge")+
-  scale_fill_brewer(name="",palette="Paired",labels=to)+scale_x_discrete(labels=eu,name="")+
-  scale_y_continuous(expand=expansion(add=0,mult=c(0,.05)))+
-  facet_grid(sector~end_use,labeller=labeller(sector=s_label,end_use=eu))+
-  theme(axis.text.x = element_blank(),axis.ticks.x=element_blank(),panel.grid.major.x = element_blank())
-ggsave(paste0(graph_dir,"/national_annual_2050_by_eu_sector.jpeg"),device = "jpeg",width = 10, height =3,units = "in")
-

@@ -1,0 +1,347 @@
+# Conda Environment Configuration for BSS Workflow
+# Environment name: bss
+# To recreate this environment, use:
+# conda env create -f environment.yml
+# (Note: This TOML file documents dependencies. Use the exported YAML for recreation.)
+
+[environment]
+name = "bss"
+channels = [
+    "apple",
+    "conda-forge",
+    "defaults",
+    "https://repo.anaconda.com/pkgs/main",
+    "https://repo.anaconda.com/pkgs/r"
+]
+
+[dependencies.conda]
+# Core Python
+python = "3.10.13"
+pip = "24.2"
+
+# AWS and Cloud Services
+boto3 = "1.34.154"
+botocore = "1.34.154"
+s3fs = "2024.12.0"
+s3transfer = "0.10.1"
+s5cmd = "2.3.0"
+aiobotocore = "2.13.3"
+
+# Data Processing and Analysis
+pandas = "2.2.3"
+pyarrow = "19.0.1"
+pyarrow-core = "19.0.1"
+fsspec = "2024.12.0"
+numexpr = "2.10.1"
+bottleneck = "1.4.2"
+
+# Scientific Computing
+numpy = "2.2.6"  # Installed via pip
+
+# Visualization
+matplotlib = "3.10.0"
+matplotlib-base = "3.10.0"
+matplotlib-inline = "0.1.7"
+contourpy = "1.3.1"
+cycler = "0.12.1"
+fonttools = "4.56.0"
+kiwisolver = "1.4.7"
+pillow = "11.1.0"
+
+# Jupyter and Notebooks
+jupyterlab = "4.3.5"
+jupyterlab-server = "2.27.3"
+jupyterlab-pygments = "0.3.0"
+jupyter-server = "2.15.0"
+jupyter-core = "5.7.2"
+jupyter-client = "8.6.3"
+jupyter-events = "0.12.0"
+jupyter-lsp = "2.2.5"
+jupyter-server-terminals = "0.5.3"
+ipython = "8.32.0"
+ipykernel = "6.29.5"
+notebook-shim = "0.2.4"
+
+# R and R Integration
+r-base = "4.2.3"
+rpy2 = "3.5.11"
+_r-mutex = "1.0.1"
+bwidget = "1.10.1"
+tktable = "2.10"
+
+# HTTP and Web
+requests = "2.32.3"
+aiohttp = "3.11.11"
+httpx = "0.28.1"
+httpcore = "1.0.7"
+urllib3 = "2.3.0"
+websocket-client = "1.8.0"
+h11 = "0.14.0"
+h2 = "4.2.0"
+hpack = "4.1.0"
+hyperframe = "6.1.0"
+
+# Utilities
+pyyaml = "6.0.2"
+tqdm = "4.67.1"  # Installed via pip
+python-dateutil = "2.9.0post0"
+pytz = "2024.1"
+python-tzdata = "2023.3"
+tzlocal = "5.3"
+tzdata = "2024b"
+
+# Security and Authentication
+certifi = "2025.6.15"
+ca-certificates = "2025.7.9"
+cryptography = null  # Dependencies included
+argon2-cffi = "23.1.0"
+argon2-cffi-bindings = "21.2.0"
+
+# System Libraries (selected key ones)
+openssl = "3.5.1"
+sqlite = "3.45.2"
+libsqlite = "3.45.2"
+zlib = "1.3.1"
+libzlib = "1.3.1"
+xz = "5.8.1"
+bzip2 = "1.0.8"
+curl = "8.14.1"
+libcurl = "8.14.1"
+
+# Compilers and Build Tools
+clang = "18.1.8"
+clang-18 = "18.1.8"
+make = "4.4.1"
+gfortran_osx-arm64 = "13.4.0"
+gfortran_impl_osx-arm64 = "13.4.0"
+
+# Arrow and Parquet
+libarrow = "19.0.1"
+libarrow-acero = "19.0.1"
+libarrow-dataset = "19.0.1"
+libarrow-substrait = "19.0.1"
+libparquet = "19.0.1"
+
+# AWS SDK
+aws-sdk-cpp = "1.11.489"
+aws-crt-cpp = "0.29.9"
+aws-c-s3 = "0.7.9"
+aws-c-http = "0.9.2"
+aws-c-io = "0.15.3"
+aws-c-auth = "0.8.1"
+aws-c-cal = "0.8.1"
+aws-c-common = "0.10.6"
+aws-c-compression = "0.3.0"
+aws-c-event-stream = "0.5.0"
+aws-c-mqtt = "0.11.0"
+aws-c-sdkutils = "0.2.2"
+aws-checksums = "0.2.2"
+
+# Azure (if needed)
+azure-core-cpp = "1.14.0"
+azure-identity-cpp = "1.10.0"
+azure-storage-blobs-cpp = "12.13.0"
+azure-storage-common-cpp = "12.8.0"
+azure-storage-files-datalake-cpp = "12.12.0"
+
+# Google Cloud (if needed)
+libgoogle-cloud = "2.35.0"
+libgoogle-cloud-storage = "2.35.0"
+
+# gRPC and Protocol Buffers
+libgrpc = "1.67.1"
+libprotobuf = "5.28.3"
+
+# Compression
+snappy = "1.2.1"
+lz4-c = "1.10.0"
+zstd = "1.5.7"
+brotli = "1.1.0"
+brotli-bin = "1.1.0"
+brotli-python = "1.0.9"
+
+# Text Processing
+beautifulsoup4 = "4.13.3"
+html5lib = null
+lxml = null
+chardet = null
+
+# JSON and Schema
+jsonschema = "4.23.0"
+jsonschema-specifications = "2024.10.1"
+jsonschema-with-format-nongpl = "4.23.0"
+json5 = "0.10.0"
+jsonpointer = "3.0.0"
+python-fastjsonschema = "2.21.1"
+
+# XML Processing
+defusedxml = "0.7.1"
+lxml = null
+
+# Networking
+c-ares = "1.34.4"
+libnghttp2 = "1.64.0"
+libssh2 = "1.11.1"
+krb5 = "1.21.3"
+
+# Graphics and Rendering (for R)
+cairo = "1.18.4"
+pango = "1.56.4"
+harfbuzz = "11.2.1"
+freetype = "2.13.3"
+libfreetype = "2.13.3"
+libfreetype6 = "2.13.3"
+fontconfig = "2.15.0"
+pixman = "0.46.2"
+
+# Image Processing
+libjpeg-turbo = "3.1.0"
+libpng = "1.6.50"
+libtiff = "4.7.0"
+openjpeg = "2.5.3"
+libwebp-base = "1.5.0"
+lcms2 = "2.17"
+
+# Math and Scientific Libraries
+gsl = "2.7"
+blas = "1.0"
+libblas = "3.9.0"
+libcblas = "3.9.0"
+liblapack = "3.9.0"
+libopenblas = "0.3.21"
+qhull = "2020.2"
+
+# String Processing
+icu = "75.1"
+libiconv = "1.18"
+fribidi = "1.0.10"
+libutf8proc = "2.10.0"
+re2 = "2024.07.02"
+libre2-11 = "2024.07.02"
+pcre2 = "10.45"
+
+# Utilities
+readline = "8.2"
+ncurses = "6.4"
+libedit = "3.1.20191231"
+tk = "8.6.13"
+
+# Development Tools
+ipython = "8.32.0"
+jedi = "0.19.2"
+parso = "0.8.4"
+prompt-toolkit = "3.0.50"
+pygments = "2.19.1"
+
+# Async and Concurrency
+asyncio = null  # Built-in
+aioitertools = "0.12.0"
+async-lru = "2.0.4"
+async-timeout = "5.0.1"
+aiosignal = "1.3.2"
+anyio = "4.8.0"
+nest-asyncio = "1.6.0"
+frozenlist = "1.5.0"
+multidict = "6.1.0"
+yarl = "1.18.3"
+
+# Configuration and Packaging
+setuptools = "75.1.0"
+wheel = "0.44.0"
+packaging = "24.2"
+tomli = "2.2.1"
+
+# Type Checking
+typing-extensions = "4.12.2"
+typing_extensions = "4.12.2"
+types-python-dateutil = "2.9.0.20241206"
+
+# Other Python Packages
+decorator = "5.2.1"
+attrs = "24.3.0"
+six = "1.16.0"
+python-abi = "3.10"
+importlib-metadata = "8.6.1"
+importlib_resources = "6.5.2"
+zipp = "3.21.0"
+platformdirs = "4.3.6"
+pkgutil-resolve-name = "1.3.10"
+exceptiongroup = "1.2.2"
+executing = "2.1.0"
+asttokens = "3.0.0"
+pure_eval = "0.2.3"
+stack_data = "0.6.3"
+wrapt = "1.17.2"
+cached-property = "1.5.2"
+cached_property = "1.5.2"
+propcache = "0.2.1"
+overrides = "7.7.0"
+munkres = "1.1.4"
+simplegeneric = "0.8.1"
+pickleshare = "0.7.5"
+pexpect = "4.9.0"
+ptyprocess = "0.7.0"
+send2trash = "1.8.3"
+traitlets = "5.14.3"
+tornado = "6.4.2"
+pyzmq = "26.2.1"
+zeromq = "4.3.5"
+psutil = "6.1.1"
+appnope = "0.1.4"
+comm = "0.2.2"
+debugpy = "1.8.12"
+jupyterlab-pygments = "0.3.0"
+nbformat = "5.10.4"
+nbclient = "0.10.2"
+nbconvert-core = "7.16.6"
+pandocfilters = "1.5.0"
+mistune = "3.1.2"
+bleach = "6.2.0"
+bleach-with-css = "6.2.0"
+soupsieve = "2.5"
+tinycss2 = "1.4.0"
+webencodings = "0.5.1"
+webcolors = "24.11.1"
+markupsafe = "3.0.2"
+jinja2 = "3.1.5"
+babel = "2.17.0"
+pysocks = "1.7.1"
+charset-normalizer = "3.4.1"
+idna = "3.10"
+certifi = "2025.6.15"
+python-json-logger = "2.0.7"
+prometheus_client = "0.21.1"
+jmespath = "1.0.1"
+s2n = null  # AWS TLS implementation
+fqdn = "1.5.1"
+referencing = "0.36.2"
+rpds-py = "0.23.1"
+uri-template = "1.3.0"
+rfc3339-validator = "0.1.4"
+rfc3986-validator = "0.1.1"
+isoduration = "20.11.0"
+arrow = "1.3.0"
+wcwidth = "0.2.13"
+pyparsing = "3.2.1"
+sniffio = "1.3.1"
+
+[dependencies.pip]
+# Packages installed via pip
+numpy = "2.2.6"
+tqdm = "4.67.1"
+argparse = "1.4.0"
+
+[metadata]
+created = "2025-01-27"
+description = "BSS Workflow conda environment dependencies"
+python_version = "3.10.13"
+platform = "osx-arm64"
+
+[notes]
+# To recreate this environment:
+# 1. Export the environment: conda env export -n bss > environment.yml
+# 2. Create environment: conda env create -f environment.yml
+# 
+# This TOML file provides a human-readable list of all dependencies.
+# For actual environment recreation, use the exported YAML format.
+

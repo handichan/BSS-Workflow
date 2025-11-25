@@ -1,0 +1,11 @@
+-- state monthly by sector for 2024 baseline
+-- for comparison with EIA 861
+
+with with_month as 
+(SELECT *, month(timestamp_hour) as "month" FROM long_county_hourly_{turnover}_{weather} 
+WHERE "year" = {baseyear} AND turnover='baseline'
+)
+
+SELECT "month", turnover, sector, "in.state", "year", sum(county_hourly_cal_kwh) as state_monthly_kwh
+FROM with_month
+GROUP BY "month", turnover, sector, "in.state", "year";

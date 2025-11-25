@@ -1,4 +1,4 @@
-INSERT INTO county_hourly_com_YEARID_TURNOVERID
+INSERT INTO county_hourly_com_{year}_{turnover}_{weather}
 WITH filtered_annual AS (
     SELECT "in.county",
     meas,
@@ -10,14 +10,11 @@ WITH filtered_annual AS (
     "in.state",
     "year",
     end_use
-    FROM county_annual_com_YEARID_TURNOVERID
-    -- convert to variable
-    WHERE "year" = YEARID
-      AND county_ann_kwh > 0
-      -- convert to variable
-      AND scout_run = 'SCOUTRUNDATE'
-      -- convert to variable
-      AND end_use = 'ENDUSEID'
+    FROM county_annual_com_{year}_{turnover}_{weather}
+    WHERE "year" = {year}
+      AND scout_run = '{scout_version}'
+      AND end_use = '{enduse}'
+      AND county_ann_kwh = county_ann_kwh
 ),
 
 measure_map_ts_long AS (
@@ -90,12 +87,9 @@ hourly_ungrouped AS (
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
     "in.county", end_use, shape_ts, timestamp_hour, sector, multiplier_hourly 
-    FROM com_hourly_disaggregation_multipliers_VERSIONID
+    FROM com_hourly_disaggregation_multipliers_{weather}
     WHERE multiplier_hourly >= 0
-    -- convert to variable
-    AND end_use = 'ENDUSEID'
-    -- convert to variable
-    AND group_version = '2024-07-19') AS h
+    AND end_use = '{enduse}') AS h
     ON gd."in.county" = h."in.county"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts
@@ -110,7 +104,7 @@ hourly_grouped AS (
         timestamp_hour,
         turnover,
         sector,
-        SUM(county_hourly_kwh) AS county_hourly_kwh,
+        SUM(county_hourly_kwh) AS county_hourly_uncal_kwh,
         scout_run
     FROM hourly_ungrouped
     GROUP BY
@@ -122,18 +116,39 @@ hourly_grouped AS (
         turnover,
         scout_run,
         sector
+),
+hourly_calibrated AS (
+    SELECT
+        hg."in.state",
+        hg."in.county",
+        hg."year",
+        month(hg.timestamp_hour) AS "month",
+        hg.end_use,
+        hg.timestamp_hour,
+        hg.turnover,
+        hg.sector,
+        county_hourly_uncal_kwh,
+        county_hourly_uncal_kwh * calibration_multiplier AS county_hourly_cal_kwh,
+        hg.scout_run
+    FROM hourly_grouped AS hg
+    LEFT JOIN calibration_multipliers AS cm
+      ON cm."in.state" = hg."in.state"
+     AND cm."month"    = CAST(month(hg.timestamp_hour) AS INTEGER)
+     AND cm.sector     = hg.sector
+    WHERE hg.sector = 'com'
 )
 
 SELECT 
     "in.county",
     timestamp_hour,
     turnover,
-    county_hourly_kwh,
+    county_hourly_uncal_kwh,
+    county_hourly_cal_kwh,
     scout_run,
     sector,
     "in.state",
     "year",
     end_use
-FROM hourly_grouped
+FROM hourly_calibrated
 WHERE timestamp_hour IS NOT NULL
 ;

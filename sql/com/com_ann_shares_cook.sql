@@ -3,7 +3,7 @@
 -- we could also weight the different types of equipment or different building types separately
 -- the AEO technologies are range oven griddle, but this uses all the cooking equipment in ComStock
 
-INSERT INTO com_annual_disaggregation_multipliers_VERSIONID
+INSERT INTO com_annual_disaggregation_multipliers_{version}
 WITH meta_processing as(
 SELECT "in.state", "in.nhgis_county_gisjoin" as "in.county",
 CASE WHEN "out.params.fryer_fuel_type" = 'Gas' then cast("out.params.num_fryers" as double) * weight else 0 end as gas_fryers,
@@ -18,8 +18,8 @@ CASE WHEN "out.params.steamer_fuel_type" = 'Gas' then cast("out.params.num_steam
 CASE WHEN "out.params.steamer_fuel_type" = 'Electric' then cast("out.params.num_steamers" as double) * weight else 0 end as elec_steamers,
 CASE WHEN "out.params.broiler_fuel_type" = 'Gas' then cast("out.params.num_broilers" as double) * weight else 0 end as gas_broilers,
 CASE WHEN "out.params.broiler_fuel_type" = 'Electric' then cast("out.params.num_broilers" as double) * weight else 0 end as elec_broilers
-FROM "comstock_amy2018_release_2024.1_metadata"
-WHERE upgrade = 22 
+FROM "comstock_amy2018_release_2024.2_parquet"
+WHERE upgrade = 28 
 ),
 unnormalized as(
 SELECT "in.state","in.county", sum(gas_broilers+gas_steamers+gas_ranges+gas_ovens+gas_griddles+gas_fryers) as gas_equip,
@@ -36,7 +36,6 @@ FROM unnormalized)
         "in.county" ,
         'com_cook_ann_1' as group_ann,
         gas_share AS multiplier_annual,
-        '2024-07-19' as group_version,
         'com' AS sector,
         "in.state",
         'Cooking' AS end_use
@@ -49,7 +48,6 @@ FROM unnormalized)
         "in.county",
         'com_cook_ann_2' as group_ann,
         elec_share AS multiplier_annual,
-        '2024-07-19' as group_version,
         'com' AS sector,
         "in.state",
         'Cooking' AS end_use

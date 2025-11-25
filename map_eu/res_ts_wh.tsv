@@ -1,0 +1,28 @@
+shape_ts	description	in.water_heater_efficiency	upgrade
+res_wh_ts_1	fossil WH	FIXME Fuel Oil Indirect	0
+res_wh_ts_1	fossil WH	Fuel Oil Premium	0
+res_wh_ts_1	fossil WH	Fuel Oil Standard	0
+res_wh_ts_1	fossil WH	Natural Gas Premium	0
+res_wh_ts_1	fossil WH	Natural Gas Standard	0
+res_wh_ts_1	fossil WH	Natural Gas Tankless	0
+res_wh_ts_1	fossil WH	Other Fuel	0
+res_wh_ts_1	fossil WH	Propane Premium	0
+res_wh_ts_1	fossil WH	Propane Standard	0
+res_wh_ts_1	fossil WH	Propane Tankless	0
+res_wh_ts_2	ER WH	Electric Premium	0
+res_wh_ts_2	ER WH	Electric Standard	0
+res_wh_ts_2	ER WH	Electric Tankless	0
+res_wh_ts_3	HPWH	FIXME Fuel Oil Indirect	11
+res_wh_ts_3	HPWH	Fuel Oil Premium	11
+res_wh_ts_3	HPWH	Fuel Oil Standard	11
+res_wh_ts_3	HPWH	Natural Gas Premium	11
+res_wh_ts_3	HPWH	Natural Gas Standard	11
+res_wh_ts_3	HPWH	Natural Gas Tankless	11
+res_wh_ts_3	HPWH	Other Fuel	11
+res_wh_ts_3	HPWH	Propane Premium	11
+res_wh_ts_3	HPWH	Propane Standard	11
+res_wh_ts_3	HPWH	Propane Tankless	11
+res_wh_ts_3	HPWH	Electric Premium	11
+res_wh_ts_3	HPWH	Electric Standard	11
+res_wh_ts_3	HPWH	Electric Tankless	11
+res_wh_ts_3	HPWH	Electric Heat Pump, 50 gal, 3.45 UEF	11
