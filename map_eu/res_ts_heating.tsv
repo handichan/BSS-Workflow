@@ -1,208 +1,268 @@
-shape_ts	description	in.heating_fuel	in.hvac_cooling_type	upgrade	shape_end_use
-res_heating_ts_1	ER heating	Electricity	Central AC	0	heating
-res_heating_ts_2	Fossil heating	Fuel Oil	Central AC	0	heating
-res_heating_ts_2	Fossil heating	Natural Gas	Central AC	0	heating
-res_heating_ts_2	Fossil heating	Other Fuel	Central AC	0	heating
-res_heating_ts_2	Fossil heating	Propane	Central AC	0	heating
-res_heating_ts_3	ES ASHP heating	Electricity	Central AC	1	heating
-res_heating_ts_3	ES ASHP heating	Fuel Oil	Central AC	1	heating
-res_heating_ts_3	ES ASHP heating	Natural Gas	Central AC	1	heating
-res_heating_ts_3	ES ASHP heating	None	Central AC	1	heating
-res_heating_ts_3	ES ASHP heating	Other Fuel	Central AC	1	heating
-res_heating_ts_3	ES ASHP heating	Propane	Central AC	1	heating
-res_heating_ts_4	high eff ASHP heating	Electricity	Central AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Fuel Oil	Central AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Natural Gas	Central AC	2	heating
-res_heating_ts_4	high eff ASHP heating	None	Central AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Other Fuel	Central AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Propane	Central AC	2	heating
-res_heating_ts_5	ultra high eff ASHP heating	Electricity	Central AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil	Central AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Natural Gas	Central AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	None	Central AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Other Fuel	Central AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Propane	Central AC	3	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil	Central AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas	Central AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel	Central AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Propane	Central AC	4	heating
-res_heating_ts_7	GSHP heating	Electricity	Central AC	5	heating
-res_heating_ts_7	GSHP heating	Fuel Oil	Central AC	5	heating
-res_heating_ts_7	GSHP heating	Natural Gas	Central AC	5	heating
-res_heating_ts_7	GSHP heating	None	Central AC	5	heating
-res_heating_ts_7	GSHP heating	Other Fuel	Central AC	5	heating
-res_heating_ts_7	GSHP heating	Propane	Central AC	5	heating
-res_heating_ts_8	ES ASHP  + light env heating	Electricity	Central AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Fuel Oil	Central AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Natural Gas	Central AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	None	Central AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Other Fuel	Central AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Propane	Central AC	6	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Electricity	Central AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Fuel Oil	Central AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Natural Gas	Central AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	None	Central AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Other Fuel	Central AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Propane	Central AC	7	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	Central AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Fuel Oil	Central AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Natural Gas	Central AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	None	Central AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Other Fuel	Central AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Propane	Central AC	8	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	Central AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Fuel Oil	Central AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Natural Gas	Central AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Other Fuel	Central AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Propane	Central AC	9	heating
-res_heating_ts_12	GSHP  + light env heating	Electricity	Central AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Fuel Oil	Central AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Natural Gas	Central AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	None	Central AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Other Fuel	Central AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Propane	Central AC	10	heating
-res_heating_ts_3	ES ASHP heating	Electricity	Non-Ducted Heat Pump	1	heating
-res_heating_ts_4	high eff ASHP heating	Electricity	Non-Ducted Heat Pump	2	heating
-res_heating_ts_5	ultra high eff ASHP heating	Electricity	Non-Ducted Heat Pump	3	heating
-res_heating_ts_7	GSHP heating	Electricity	Non-Ducted Heat Pump	5	heating
-res_heating_ts_8	ES ASHP  + light env heating	Electricity	Non-Ducted Heat Pump	6	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Electricity	Non-Ducted Heat Pump	7	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	Non-Ducted Heat Pump	8	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	Non-Ducted Heat Pump	9	heating
-res_heating_ts_12	GSHP  + light env heating	Electricity	Non-Ducted Heat Pump	10	heating
-res_heating_ts_1	ER heating	Electricity	None	0	heating
-res_heating_ts_2	Fossil heating	Fuel Oil	None	0	heating
-res_heating_ts_2	Fossil heating	Natural Gas	None	0	heating
-res_heating_ts_2	Fossil heating	Other Fuel	None	0	heating
-res_heating_ts_2	Fossil heating	Propane	None	0	heating
-res_heating_ts_3	ES ASHP heating	Electricity	None	1	heating
-res_heating_ts_3	ES ASHP heating	Fuel Oil	None	1	heating
-res_heating_ts_3	ES ASHP heating	Natural Gas	None	1	heating
-res_heating_ts_3	ES ASHP heating	None	None	1	heating
-res_heating_ts_3	ES ASHP heating	Other Fuel	None	1	heating
-res_heating_ts_3	ES ASHP heating	Propane	None	1	heating
-res_heating_ts_4	high eff ASHP heating	Electricity	None	2	heating
-res_heating_ts_4	high eff ASHP heating	Fuel Oil	None	2	heating
-res_heating_ts_4	high eff ASHP heating	Natural Gas	None	2	heating
-res_heating_ts_4	high eff ASHP heating	None	None	2	heating
-res_heating_ts_4	high eff ASHP heating	Other Fuel	None	2	heating
-res_heating_ts_4	high eff ASHP heating	Propane	None	2	heating
-res_heating_ts_5	ultra high eff ASHP heating	Electricity	None	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil	None	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Natural Gas	None	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	None	None	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Other Fuel	None	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Propane	None	3	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil	None	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas	None	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel	None	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Propane	None	4	heating
-res_heating_ts_7	GSHP heating	Electricity	None	5	heating
-res_heating_ts_7	GSHP heating	Fuel Oil	None	5	heating
-res_heating_ts_7	GSHP heating	Natural Gas	None	5	heating
-res_heating_ts_7	GSHP heating	None	None	5	heating
-res_heating_ts_7	GSHP heating	Other Fuel	None	5	heating
-res_heating_ts_7	GSHP heating	Propane	None	5	heating
-res_heating_ts_8	ES ASHP  + light env heating	Electricity	None	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Fuel Oil	None	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Natural Gas	None	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	None	None	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Other Fuel	None	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Propane	None	6	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Electricity	None	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Fuel Oil	None	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Natural Gas	None	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	None	None	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Other Fuel	None	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Propane	None	7	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	None	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Fuel Oil	None	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Natural Gas	None	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	None	None	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Other Fuel	None	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Propane	None	8	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	None	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Fuel Oil	None	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Natural Gas	None	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Other Fuel	None	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Propane	None	9	heating
-res_heating_ts_12	GSHP  + light env heating	Electricity	None	10	heating
-res_heating_ts_12	GSHP  + light env heating	Fuel Oil	None	10	heating
-res_heating_ts_12	GSHP  + light env heating	Natural Gas	None	10	heating
-res_heating_ts_12	GSHP  + light env heating	None	None	10	heating
-res_heating_ts_12	GSHP  + light env heating	Other Fuel	None	10	heating
-res_heating_ts_12	GSHP  + light env heating	Propane	None	10	heating
-res_heating_ts_1	ER heating	Electricity	Room AC	0	heating
-res_heating_ts_2	Fossil heating	Fuel Oil	Room AC	0	heating
-res_heating_ts_2	Fossil heating	Natural Gas	Room AC	0	heating
-res_heating_ts_2	Fossil heating	Other Fuel	Room AC	0	heating
-res_heating_ts_2	Fossil heating	Propane	Room AC	0	heating
-res_heating_ts_3	ES ASHP heating	Electricity	Room AC	1	heating
-res_heating_ts_3	ES ASHP heating	Fuel Oil	Room AC	1	heating
-res_heating_ts_3	ES ASHP heating	Natural Gas	Room AC	1	heating
-res_heating_ts_3	ES ASHP heating	None	Room AC	1	heating
-res_heating_ts_3	ES ASHP heating	Other Fuel	Room AC	1	heating
-res_heating_ts_3	ES ASHP heating	Propane	Room AC	1	heating
-res_heating_ts_4	high eff ASHP heating	Electricity	Room AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Fuel Oil	Room AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Natural Gas	Room AC	2	heating
-res_heating_ts_4	high eff ASHP heating	None	Room AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Other Fuel	Room AC	2	heating
-res_heating_ts_4	high eff ASHP heating	Propane	Room AC	2	heating
-res_heating_ts_5	ultra high eff ASHP heating	Electricity	Room AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil	Room AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Natural Gas	Room AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	None	Room AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Other Fuel	Room AC	3	heating
-res_heating_ts_5	ultra high eff ASHP heating	Propane	Room AC	3	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil	Room AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas	Room AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel	Room AC	4	heating
-res_heating_ts_6	ES ASHP fossil backup heating	Propane	Room AC	4	heating
-res_heating_ts_7	GSHP heating	Electricity	Room AC	5	heating
-res_heating_ts_7	GSHP heating	Fuel Oil	Room AC	5	heating
-res_heating_ts_7	GSHP heating	Natural Gas	Room AC	5	heating
-res_heating_ts_7	GSHP heating	None	Room AC	5	heating
-res_heating_ts_7	GSHP heating	Other Fuel	Room AC	5	heating
-res_heating_ts_7	GSHP heating	Propane	Room AC	5	heating
-res_heating_ts_8	ES ASHP  + light env heating	Electricity	Room AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Fuel Oil	Room AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Natural Gas	Room AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	None	Room AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Other Fuel	Room AC	6	heating
-res_heating_ts_8	ES ASHP  + light env heating	Propane	Room AC	6	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Electricity	Room AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Fuel Oil	Room AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Natural Gas	Room AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	None	Room AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Other Fuel	Room AC	7	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Propane	Room AC	7	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	Room AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Fuel Oil	Room AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Natural Gas	Room AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	None	Room AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Other Fuel	Room AC	8	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Propane	Room AC	8	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	Room AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Fuel Oil	Room AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Natural Gas	Room AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Other Fuel	Room AC	9	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Propane	Room AC	9	heating
-res_heating_ts_12	GSHP  + light env heating	Electricity	Room AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Fuel Oil	Room AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Natural Gas	Room AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	None	Room AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Other Fuel	Room AC	10	heating
-res_heating_ts_12	GSHP  + light env heating	Propane	Room AC	10	heating
-res_heating_ts_3	ES ASHP heating	Electricity	Ducted Heat Pump	1	heating
-res_heating_ts_4	high eff ASHP heating	Electricity	Ducted Heat Pump	2	heating
-res_heating_ts_5	ultra high eff ASHP heating	Electricity	Ducted Heat Pump	3	heating
-res_heating_ts_7	GSHP heating	Electricity	Ducted Heat Pump	5	heating
-res_heating_ts_8	ES ASHP  + light env heating	Electricity	Ducted Heat Pump	6	heating
-res_heating_ts_9	high eff ASHP  + light env heating	Electricity	Ducted Heat Pump	7	heating
-res_heating_ts_10	ultra high eff ASHP  + light env heating	Electricity	Ducted Heat Pump	8	heating
-res_heating_ts_11	ES ASHP fossil backup  + light env heating	Electricity	Ducted Heat Pump	9	heating
-res_heating_ts_12	GSHP  + light env heating	Electricity	Ducted Heat Pump	10	heating
-res_heating_ts_13	ER heating + light env	Electricity	Central AC	16	heating
-res_heating_ts_13	ER heating + light env	Electricity	Room AC	16	heating
-res_heating_ts_13	ER heating + light env	Electricity	None	16	heating
+shape_ts	description	in.hvac_heating_type_and_fuel	upgrade	energy_source
+res_heating_ts_1	ER heating	Electricity Baseboard	0	electricity
+res_heating_ts_1	ER heating	Electricity Electric Boiler	0	electricity
+res_heating_ts_1	ER heating	Electricity Electric Furnace	0	electricity
+res_heating_ts_1	ER heating	Electricity Electric Wall Furnace	0	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity ASHP	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity Baseboard	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity Electric Boiler	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity Electric Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity Electric Wall Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity MSHP	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Electricity Shared Heating	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Fuel Oil Fuel Boiler	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Fuel Oil Fuel Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Fuel Oil Fuel Wall/Floor Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Fuel Oil Shared Heating	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Natural Gas Fuel Boiler	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Natural Gas Fuel Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Natural Gas Fuel Wall/Floor Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Natural Gas Shared Heating	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	None	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Other Fuel Fuel Boiler	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Other Fuel Fuel Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Other Fuel Fuel Wall/Floor Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Other Fuel Shared Heating	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Propane Fuel Boiler	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Propane Fuel Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Propane Fuel Wall/Floor Furnace	8	electricity
+res_heating_ts_10	ultra high eff ASHP + light env heating	Propane Shared Heating	8	electricity
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Fuel Oil Fuel Boiler	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Fuel Oil Fuel Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Fuel Oil Fuel Wall/Floor Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Fuel Oil Shared Heating	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Natural Gas Fuel Boiler	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Natural Gas Fuel Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Natural Gas Fuel Wall/Floor Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Natural Gas Shared Heating	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	None	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Other Fuel Fuel Boiler	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Other Fuel Fuel Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Other Fuel Fuel Wall/Floor Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Other Fuel Shared Heating	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Propane Fuel Boiler	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Propane Fuel Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Propane Fuel Wall/Floor Furnace	9	combination
+res_heating_ts_11	ES ASHP fossil backup + light env heating	Propane Shared Heating	9	combination
+res_heating_ts_12	GSHP + light env heating	Electricity ASHP	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity Baseboard	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity Electric Boiler	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity Electric Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity Electric Wall Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity MSHP	10	electricity
+res_heating_ts_12	GSHP + light env heating	Electricity Shared Heating	10	electricity
+res_heating_ts_12	GSHP + light env heating	Fuel Oil Fuel Boiler	10	electricity
+res_heating_ts_12	GSHP + light env heating	Fuel Oil Fuel Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Fuel Oil Fuel Wall/Floor Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Fuel Oil Shared Heating	10	electricity
+res_heating_ts_12	GSHP + light env heating	Natural Gas Fuel Boiler	10	electricity
+res_heating_ts_12	GSHP + light env heating	Natural Gas Fuel Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Natural Gas Fuel Wall/Floor Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Natural Gas Shared Heating	10	electricity
+res_heating_ts_12	GSHP + light env heating	None	10	electricity
+res_heating_ts_12	GSHP + light env heating	Other Fuel Fuel Boiler	10	electricity
+res_heating_ts_12	GSHP + light env heating	Other Fuel Fuel Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Other Fuel Fuel Wall/Floor Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Other Fuel Shared Heating	10	electricity
+res_heating_ts_12	GSHP + light env heating	Propane Fuel Boiler	10	electricity
+res_heating_ts_12	GSHP + light env heating	Propane Fuel Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Propane Fuel Wall/Floor Furnace	10	electricity
+res_heating_ts_12	GSHP + light env heating	Propane Shared Heating	10	electricity
+res_heating_ts_13	ER heating + light env	Electricity Baseboard	16	electricity
+res_heating_ts_13	ER heating + light env	Electricity Electric Boiler	16	electricity
+res_heating_ts_13	ER heating + light env	Electricity Electric Furnace	16	electricity
+res_heating_ts_13	ER heating + light env	Electricity Electric Wall Furnace	16	electricity
+res_heating_ts_2	Fossil heating	Fuel Oil Fuel Boiler	0	fossil
+res_heating_ts_2	Fossil heating	Fuel Oil Fuel Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Fuel Oil Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Fuel Oil Shared Heating	0	fossil
+res_heating_ts_2	Fossil heating	Natural Gas Fuel Boiler	0	fossil
+res_heating_ts_2	Fossil heating	Natural Gas Fuel Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Natural Gas Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Natural Gas Shared Heating	0	fossil
+res_heating_ts_2	Fossil heating	None	0	fossil
+res_heating_ts_2	Fossil heating	Other Fuel Fuel Boiler	0	fossil
+res_heating_ts_2	Fossil heating	Other Fuel Fuel Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Other Fuel Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Other Fuel Shared Heating	0	fossil
+res_heating_ts_2	Fossil heating	Propane Fuel Boiler	0	fossil
+res_heating_ts_2	Fossil heating	Propane Fuel Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Propane Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_2	Fossil heating	Propane Shared Heating	0	fossil
+res_heating_ts_3	ES ASHP heating	Electricity ASHP	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity Baseboard	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity Electric Boiler	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity Electric Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity Electric Wall Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity MSHP	1	electricity
+res_heating_ts_3	ES ASHP heating	Electricity Shared Heating	1	electricity
+res_heating_ts_3	ES ASHP heating	Fuel Oil Fuel Boiler	1	electricity
+res_heating_ts_3	ES ASHP heating	Fuel Oil Fuel Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Fuel Oil Fuel Wall/Floor Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Fuel Oil Shared Heating	1	electricity
+res_heating_ts_3	ES ASHP heating	Natural Gas Fuel Boiler	1	electricity
+res_heating_ts_3	ES ASHP heating	Natural Gas Fuel Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Natural Gas Fuel Wall/Floor Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Natural Gas Shared Heating	1	electricity
+res_heating_ts_3	ES ASHP heating	None	1	electricity
+res_heating_ts_3	ES ASHP heating	Other Fuel Fuel Boiler	1	electricity
+res_heating_ts_3	ES ASHP heating	Other Fuel Fuel Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Other Fuel Fuel Wall/Floor Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Other Fuel Shared Heating	1	electricity
+res_heating_ts_3	ES ASHP heating	Propane Fuel Boiler	1	electricity
+res_heating_ts_3	ES ASHP heating	Propane Fuel Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Propane Fuel Wall/Floor Furnace	1	electricity
+res_heating_ts_3	ES ASHP heating	Propane Shared Heating	1	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity ASHP	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity Baseboard	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity Electric Boiler	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity Electric Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity Electric Wall Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity MSHP	2	electricity
+res_heating_ts_4	high eff ASHP heating	Electricity Shared Heating	2	electricity
+res_heating_ts_4	high eff ASHP heating	Fuel Oil Fuel Boiler	2	electricity
+res_heating_ts_4	high eff ASHP heating	Fuel Oil Fuel Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Fuel Oil Fuel Wall/Floor Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Fuel Oil Shared Heating	2	electricity
+res_heating_ts_4	high eff ASHP heating	Natural Gas Fuel Boiler	2	electricity
+res_heating_ts_4	high eff ASHP heating	Natural Gas Fuel Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Natural Gas Fuel Wall/Floor Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Natural Gas Shared Heating	2	electricity
+res_heating_ts_4	high eff ASHP heating	None	2	electricity
+res_heating_ts_4	high eff ASHP heating	Other Fuel Fuel Boiler	2	electricity
+res_heating_ts_4	high eff ASHP heating	Other Fuel Fuel Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Other Fuel Fuel Wall/Floor Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Other Fuel Shared Heating	2	electricity
+res_heating_ts_4	high eff ASHP heating	Propane Fuel Boiler	2	electricity
+res_heating_ts_4	high eff ASHP heating	Propane Fuel Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Propane Fuel Wall/Floor Furnace	2	electricity
+res_heating_ts_4	high eff ASHP heating	Propane Shared Heating	2	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity ASHP	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity Baseboard	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity Electric Boiler	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity Electric Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity Electric Wall Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity MSHP	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Electricity Shared Heating	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil Fuel Boiler	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil Fuel Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil Fuel Wall/Floor Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Fuel Oil Shared Heating	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Natural Gas Fuel Boiler	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Natural Gas Fuel Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Natural Gas Fuel Wall/Floor Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Natural Gas Shared Heating	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	None	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Other Fuel Fuel Boiler	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Other Fuel Fuel Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Other Fuel Fuel Wall/Floor Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Other Fuel Shared Heating	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Propane Fuel Boiler	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Propane Fuel Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Propane Fuel Wall/Floor Furnace	3	electricity
+res_heating_ts_5	ultra high eff ASHP heating	Propane Shared Heating	3	electricity
+res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil Fuel Boiler	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil Fuel Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil Fuel Wall/Floor Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Fuel Oil Shared Heating	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas Fuel Boiler	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas Fuel Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas Fuel Wall/Floor Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Natural Gas Shared Heating	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	None	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel Fuel Boiler	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel Fuel Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel Fuel Wall/Floor Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Other Fuel Shared Heating	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Propane Fuel Boiler	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Propane Fuel Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Propane Fuel Wall/Floor Furnace	4	combination
+res_heating_ts_6	ES ASHP fossil backup heating	Propane Shared Heating	4	combination
+res_heating_ts_7	GSHP heating	Electricity ASHP	5	electricity
+res_heating_ts_7	GSHP heating	Electricity Baseboard	5	electricity
+res_heating_ts_7	GSHP heating	Electricity Electric Boiler	5	electricity
+res_heating_ts_7	GSHP heating	Electricity Electric Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Electricity Electric Wall Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Electricity MSHP	5	electricity
+res_heating_ts_7	GSHP heating	Electricity Shared Heating	5	electricity
+res_heating_ts_7	GSHP heating	Fuel Oil Fuel Boiler	5	electricity
+res_heating_ts_7	GSHP heating	Fuel Oil Fuel Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Fuel Oil Fuel Wall/Floor Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Fuel Oil Shared Heating	5	electricity
+res_heating_ts_7	GSHP heating	Natural Gas Fuel Boiler	5	electricity
+res_heating_ts_7	GSHP heating	Natural Gas Fuel Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Natural Gas Fuel Wall/Floor Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Natural Gas Shared Heating	5	electricity
+res_heating_ts_7	GSHP heating	None	5	electricity
+res_heating_ts_7	GSHP heating	Other Fuel Fuel Boiler	5	electricity
+res_heating_ts_7	GSHP heating	Other Fuel Fuel Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Other Fuel Fuel Wall/Floor Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Other Fuel Shared Heating	5	electricity
+res_heating_ts_7	GSHP heating	Propane Fuel Boiler	5	electricity
+res_heating_ts_7	GSHP heating	Propane Fuel Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Propane Fuel Wall/Floor Furnace	5	electricity
+res_heating_ts_7	GSHP heating	Propane Shared Heating	5	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity ASHP	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity Baseboard	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity Electric Boiler	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity Electric Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity Electric Wall Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity MSHP	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Electricity Shared Heating	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Fuel Oil Fuel Boiler	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Fuel Oil Fuel Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Fuel Oil Fuel Wall/Floor Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Fuel Oil Shared Heating	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Natural Gas Fuel Boiler	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Natural Gas Fuel Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Natural Gas Fuel Wall/Floor Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Natural Gas Shared Heating	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	None	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Other Fuel Fuel Boiler	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Other Fuel Fuel Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Other Fuel Fuel Wall/Floor Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Other Fuel Shared Heating	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Propane Fuel Boiler	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Propane Fuel Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Propane Fuel Wall/Floor Furnace	6	electricity
+res_heating_ts_8	ES ASHP + light env heating	Propane Shared Heating	6	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity ASHP	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity Baseboard	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity Electric Boiler	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity Electric Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity Electric Wall Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity MSHP	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Electricity Shared Heating	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Fuel Oil Fuel Boiler	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Fuel Oil Fuel Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Fuel Oil Fuel Wall/Floor Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Fuel Oil Shared Heating	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Natural Gas Fuel Boiler	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Natural Gas Fuel Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Natural Gas Fuel Wall/Floor Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Natural Gas Shared Heating	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	None	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Other Fuel Fuel Boiler	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Other Fuel Fuel Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Other Fuel Fuel Wall/Floor Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Other Fuel Shared Heating	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Propane Fuel Boiler	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Propane Fuel Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Propane Fuel Wall/Floor Furnace	7	electricity
+res_heating_ts_9	high eff ASHP + light env heating	Propane Shared Heating	7	electricity
+res_heating_ts_14	Fossil boiler	Natural Gas Fuel Boiler	0	fossil
+res_heating_ts_14	Fossil boiler	Natural Gas Shared Heating	0	fossil
+res_heating_ts_15	Fossil furnace	Natural Gas Fuel Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Natural Gas Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_14	Fossil boiler	Fuel Oil Fuel Boiler	0	fossil
+res_heating_ts_14	Fossil boiler	Other Fuel Fuel Boiler	0	fossil
+res_heating_ts_14	Fossil boiler	Other Fuel Shared Heating	0	fossil
+res_heating_ts_14	Fossil boiler	Fuel Oil Shared Heating	0	fossil
+res_heating_ts_14	Fossil boiler	Propane Fuel Boiler	0	fossil
+res_heating_ts_15	Fossil furnace	Propane Shared Heating	0	fossil
+res_heating_ts_15	Fossil furnace	Fuel Oil Fuel Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Fuel Oil Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Other Fuel Fuel Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Other Fuel Fuel Wall/Floor Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Propane Fuel Furnace	0	fossil
+res_heating_ts_15	Fossil furnace	Propane Fuel Wall/Floor Furnace	0	fossil

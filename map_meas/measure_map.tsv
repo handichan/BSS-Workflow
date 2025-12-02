@@ -185,11 +185,11 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Best HP FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best	AC	ASHP, best
 (R) Best HP FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_heating_ts_15	res_heating_ts_4	res	Furnace, NG	ASHP, best	Furnace, NG	ASHP, best
 (R) Best HP FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_64	res_cooling_ts_0	res_cooling_ts_3	res	none	ASHP, best	none	ASHP, best
-(R) Best HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_64	res_heating_ts_18	res_heating_ts_4	res	Heating, NG	ASHP, best	Heating, NG	ASHP, best
+(R) Best HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_64	 res_heating_ts_2	res_heating_ts_4	res	Heating, NG	ASHP, best	Heating, NG	ASHP, best
 (R) Best HP FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_23	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best	AC	ASHP, best
-(R) Best HP FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_23	res_heating_ts_16	res_heating_ts_4	res	Boiler, other fossil	ASHP, best	Boiler, other fossil	ASHP, best
+(R) Best HP FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_23	res_heating_ts_14	res_heating_ts_4	res	Boiler, other fossil	ASHP, best	Boiler, other fossil	ASHP, best
 (R) Best HP FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_23	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best	AC	ASHP, best
-(R) Best HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_23	res_heating_ts_17	res_heating_ts_4	res	Furnace, other fossil	ASHP, best	Furnace, other fossil	ASHP, best
+(R) Best HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_23	 res_heating_ts_15	res_heating_ts_4	res	Furnace, other fossil	ASHP, best	Furnace, other fossil	ASHP, best
 (R) Best HP FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_75	res_cooling_ts_0	res_cooling_ts_3	res	none	ASHP, best	none	ASHP, best
 (R) Best HP FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_75	res_heating_ts_19	res_heating_ts_4	res	Heating, other fossil	ASHP, best	Heating, other fossil	ASHP, best
 (R) Best HP Pt. FS (NG Boiler)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_14	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best with fossil backup	AC	ASHP, best with fossil backup
@@ -197,11 +197,11 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Best HP Pt. FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_14	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best with fossil backup	AC	ASHP, best with fossil backup
 (R) Best HP Pt. FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_14	res_heating_ts_15	res_heating_ts_6	res	Furnace, NG	ASHP, best with fossil backup	Furnace, NG	ASHP, best with fossil backup
 (R) Best HP Pt. FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_cooling_ts_0	res_cooling_ts_3	res	none	ASHP, best with fossil backup	none	ASHP, best with fossil backup
-(R) Best HP Pt. FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_heating_ts_18	res_heating_ts_6	res	Heating, NG	ASHP, best with fossil backup	Heating, NG	ASHP, best with fossil backup
+(R) Best HP Pt. FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	 res_heating_ts_2	res_heating_ts_6	res	Heating, NG	ASHP, best with fossil backup	Heating, NG	ASHP, best with fossil backup
 (R) Best HP Pt. FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best with fossil backup	AC	ASHP, best with fossil backup
-(R) Best HP Pt. FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_heating_ts_16	res_heating_ts_6	res	Boiler, other fossil	ASHP, best with fossil backup	Boiler, other fossil	ASHP, best with fossil backup
+(R) Best HP Pt. FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_heating_ts_14	res_heating_ts_6	res	Boiler, other fossil	ASHP, best with fossil backup	Boiler, other fossil	ASHP, best with fossil backup
 (R) Best HP Pt. FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_cooling_ts_1	res_cooling_ts_3	res	AC	ASHP, best with fossil backup	AC	ASHP, best with fossil backup
-(R) Best HP Pt. FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_heating_ts_17	res_heating_ts_6	res	Furnace, other fossil	ASHP, best with fossil backup	Furnace, other fossil	ASHP, best with fossil backup
+(R) Best HP Pt. FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	 res_heating_ts_15	res_heating_ts_6	res	Furnace, other fossil	ASHP, best with fossil backup	Furnace, other fossil	ASHP, best with fossil backup
 (R) Best HP Pt. FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_77	res_cooling_ts_0	res_cooling_ts_3	res	none	ASHP, best with fossil backup	none	ASHP, best with fossil backup
 (R) Best HP Pt. FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_77	res_heating_ts_19	res_heating_ts_6	res	Heating, other fossil	ASHP, best with fossil backup	Heating, other fossil	ASHP, best with fossil backup
 (R) Best HP TS (Resist. Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_53	res_hvac_ann_55	res_cooling_ts_0	res_cooling_ts_3	res	none	ASHP, best	none	ASHP, best
@@ -221,13 +221,13 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Brk. HP FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_13	res_cooling_ts_1	res_cooling_ts_4	res	AC	ASHP, breakthrough	AC	ASHP, breakthrough
 (R) Brk. HP FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_13	res_heating_ts_15	res_heating_ts_5	res	Furnace, NG	ASHP, breakthrough	Furnace, NG	ASHP, breakthrough
 (R) Brk. HP FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_65	res_cooling_ts_0	res_cooling_ts_4	res	none	ASHP, breakthrough	none	ASHP, breakthrough
-(R) Brk. HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_65	res_heating_ts_18	res_heating_ts_5	res	Heating, NG	ASHP, breakthrough	Heating, NG	ASHP, breakthrough
+(R) Brk. HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_65	 res_heating_ts_2	res_heating_ts_5	res	Heating, NG	ASHP, breakthrough	Heating, NG	ASHP, breakthrough
 (R) Brk. HP FS (Oth. Fs. Frn.) & Env.++	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_29	res_cooling_ts_1	res_cooling_ts_8	res	AC	ASHP, breakthrough with env ++	AC	ASHP, breakthrough
-(R) Brk. HP FS (Oth. Fs. Frn.) & Env.++	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_29	res_heating_ts_17	res_heating_ts_10	res	Furnace, other fossil	ASHP, breakthrough with env ++	Furnace, other fossil	ASHP, breakthrough
+(R) Brk. HP FS (Oth. Fs. Frn.) & Env.++	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_29	 res_heating_ts_15	res_heating_ts_10	res	Furnace, other fossil	ASHP, breakthrough with env ++	Furnace, other fossil	ASHP, breakthrough
 (R) Brk. HP FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_24	res_cooling_ts_1	res_cooling_ts_4	res	AC	ASHP, breakthrough	AC	ASHP, breakthrough
-(R) Brk. HP FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_24	res_heating_ts_16	res_heating_ts_5	res	Boiler, other fossil	ASHP, breakthrough	Boiler, other fossil	ASHP, breakthrough
+(R) Brk. HP FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_24	res_heating_ts_14	res_heating_ts_5	res	Boiler, other fossil	ASHP, breakthrough	Boiler, other fossil	ASHP, breakthrough
 (R) Brk. HP FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_24	res_cooling_ts_1	res_cooling_ts_4	res	AC	ASHP, breakthrough	AC	ASHP, breakthrough
-(R) Brk. HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_24	res_heating_ts_17	res_heating_ts_5	res	Furnace, other fossil	ASHP, breakthrough	Furnace, other fossil	ASHP, breakthrough
+(R) Brk. HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_24	 res_heating_ts_15	res_heating_ts_5	res	Furnace, other fossil	ASHP, breakthrough	Furnace, other fossil	ASHP, breakthrough
 (R) Brk. HP FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_76	res_cooling_ts_0	res_cooling_ts_4	res	none	ASHP, breakthrough	none	ASHP, breakthrough
 (R) Brk. HP FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_76	res_heating_ts_19	res_heating_ts_5	res	Heating, other fossil	ASHP, breakthrough	Heating, other fossil	ASHP, breakthrough
 (R) Brk. HP LFL	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_35	res_cooling_ts_2	res_cooling_ts_4	res	ASHP, reference	ASHP, breakthrough	ASHP, reference	ASHP, breakthrough
@@ -243,7 +243,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Bst. HP FS (NG Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_17	res_cooling_ts_1	res_cooling_ts_7	res	AC	ASHP, best with env +	AC	ASHP, best
 (R) Bst. HP FS (NG Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_17	res_heating_ts_15	res_heating_ts_9	res	Furnace, NG	ASHP, best with env +	Furnace, NG	ASHP, best
 (R) Bst. HP FS (Oth. Fs. Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_28	res_cooling_ts_1	res_cooling_ts_7	res	AC	ASHP, best with env +	AC	ASHP, best
-(R) Bst. HP FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_28	res_heating_ts_17	res_heating_ts_9	res	Furnace, other fossil	ASHP, best with env +	Furnace, other fossil	ASHP, best
+(R) Bst. HP FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_28	 res_heating_ts_15	res_heating_ts_9	res	Furnace, other fossil	ASHP, best with env +	Furnace, other fossil	ASHP, best
 (R) Bst. HP TS (Resist.) & Env.+	Cooling (Equip.)	res_hvac_ann_1	res_hvac_ann_7	res_cooling_ts_1	res_cooling_ts_7	res	AC	ASHP, best with env +	AC	ASHP, best
 (R) Bst. HP TS (Resist.) & Env.+	Heating (Equip.)	res_hvac_ann_1	res_hvac_ann_7	res_heating_ts_1	res_heating_ts_9	res	ER	ASHP, best with env +	ER	ASHP, best
 (R) Electric FS (Secondary Fossil Heating)	Heating (Equip.)	res_hvac_ann_84	res_hvac_ann_52	res_heating_ts_2	res_heating_ts_1	res	Secondary heating	Secondary heating	Secondary heating	Secondary heating
@@ -256,17 +256,17 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) ES GSHP (NG Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_20	res_cooling_ts_1	res_cooling_ts_9	res	AC	GSHP, ESTAR with env	AC	GSHP, ESTAR
 (R) ES GSHP (NG Frn.) & Env.	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_20	res_heating_ts_15	res_heating_ts_12	res	Furnace, NG	GSHP, ESTAR with env	Furnace, NG	GSHP, ESTAR
 (R) ES GSHP (Oth. Fs. Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_31	res_cooling_ts_1	res_cooling_ts_9	res	AC	GSHP, ESTAR with env	AC	GSHP, ESTAR
-(R) ES GSHP (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_31	res_heating_ts_17	res_heating_ts_12	res	Furnace, other fossil	GSHP, ESTAR with env	Furnace, other fossil	GSHP, ESTAR
+(R) ES GSHP (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_31	 res_heating_ts_15	res_heating_ts_12	res	Furnace, other fossil	GSHP, ESTAR with env	Furnace, other fossil	GSHP, ESTAR
 (R) ES HP FS (NG Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with env	AC	ASHP, ESTAR
 (R) ES HP FS (NG Frn.) & Env.	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_15	res_heating_ts_8	res	Furnace, NG	ASHP, ESTAR with env	Furnace, NG	GSHP, ESTAR
 (R) ES HP FS (Oth. Fs. Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_27	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with env	AC	ASHP, ESTAR
-(R) ES HP FS (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_27	res_heating_ts_17	res_heating_ts_8	res	Furnace, other fossil	ASHP, ESTAR with env	Furnace, other fossil	GSHP, ESTAR
+(R) ES HP FS (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_27	 res_heating_ts_15	res_heating_ts_8	res	Furnace, other fossil	ASHP, ESTAR with env	Furnace, other fossil	GSHP, ESTAR
 (R) ES HP LFL & Env.	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_38	res_cooling_ts_2	res_cooling_ts_6	res	ASHP, reference	ASHP, ESTAR with env	ASHP, reference	ASHP, ESTAR
 (R) ES HP LFL & Env.	Heating (Equip.)	res_hvac_ann_32	res_hvac_ann_38	res_heating_ts_3	res_heating_ts_8	res	ASHP, reference	ASHP, ESTAR with env	ASHP, reference	ASHP, ESTAR
 (R) ES HP Pt. FS (NG Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with fossil backup and env	AC	ASHP, ESTAR with fossil backup
 (R) ES HP Pt. FS (NG Frn.) & Env.	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_19	res_heating_ts_15	res_heating_ts_11	res	Furnace, NG	ASHP, ESTAR with fossil backup and env	Furnace, NG	ASHP, ESTAR with fossil backup
 (R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with fossil backup and env	AC	ASHP, ESTAR with fossil backup
-(R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_heating_ts_17	res_heating_ts_11	res	Furnace, other fossil	ASHP, ESTAR with fossil backup and env	Furnace, other fossil	ASHP, ESTAR with fossil backup
+(R) ES HP Pt. FS (Oth. Fs. Frn.) & Env.	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	 res_heating_ts_15	res_heating_ts_11	res	Furnace, other fossil	ASHP, ESTAR with fossil backup and env	Furnace, other fossil	ASHP, ESTAR with fossil backup
 (R) ES HP TS (Resist.) & Env.	Cooling (Equip.)	res_hvac_ann_1	res_hvac_ann_6	res_cooling_ts_1	res_cooling_ts_6	res	AC	ASHP, ESTAR with env	AC	ASHP, ESTAR
 (R) ES HP TS (Resist.) & Env.	Heating (Equip.)	res_hvac_ann_1	res_hvac_ann_6	res_heating_ts_1	res_heating_ts_8	res	ER	ASHP, ESTAR with env	ER	ASHP, ESTAR
 (R) ESTAR 120V HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, ESTAR 120V	Water heater, fossil	Water heater, HP, ESTAR 120V
@@ -274,13 +274,13 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) ESTAR GSHP (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_15	res_cooling_ts_1	res_cooling_ts_5	res	AC	GSHP, ESTAR	AC	GSHP, ESTAR
 (R) ESTAR GSHP (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_15	res_heating_ts_15	res_heating_ts_7	res	Furnace, NG	GSHP, ESTAR	Furnace, NG	GSHP, ESTAR
 (R) ESTAR GSHP (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_26	res_cooling_ts_1	res_cooling_ts_5	res	AC	GSHP, ESTAR	AC	GSHP, ESTAR
-(R) ESTAR GSHP (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_heating_ts_17	res_heating_ts_7	res	Furnace, other fossil	GSHP, ESTAR	Furnace, other fossil	GSHP, ESTAR
+(R) ESTAR GSHP (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	 res_heating_ts_15	res_heating_ts_7	res	Furnace, other fossil	GSHP, ESTAR	Furnace, other fossil	GSHP, ESTAR
 (R) ESTAR HP FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR	AC	ASHP, ESTAR
 (R) ESTAR HP FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_heating_ts_15	res_heating_ts_3	res	Furnace, NG	ASHP, ESTAR	Furnace, NG	ASHP, ESTAR
 (R) ESTAR HP FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR	none	ASHP, ESTAR
-(R) ESTAR HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_heating_ts_18	res_heating_ts_3	res	Heating, NG	ASHP, ESTAR	Heating, NG	ASHP, ESTAR
+(R) ESTAR HP FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	 res_heating_ts_2	res_heating_ts_3	res	Heating, NG	ASHP, ESTAR	Heating, NG	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR	AC	ASHP, ESTAR
-(R) ESTAR HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_17	res_heating_ts_3	res	Furnace, other fossil	ASHP, ESTAR	Furnace, other fossil	ASHP, ESTAR
+(R) ESTAR HP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	 res_heating_ts_15	res_heating_ts_3	res	Furnace, other fossil	ASHP, ESTAR	Furnace, other fossil	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_74	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR	none	ASHP, ESTAR
 (R) ESTAR HP FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_74	res_heating_ts_19	res_heating_ts_3	res	Heating, other fossil	ASHP, ESTAR	Heating, other fossil	ASHP, ESTAR
 (R) ESTAR HP LFL	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_33	res_cooling_ts_2	res_cooling_ts_2	res	ASHP, reference	ASHP, ESTAR	ASHP, reference	ASHP, ESTAR
@@ -290,11 +290,11 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) ESTAR HP Pt. FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_14	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR with fossil backup	AC	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_14	res_heating_ts_15	res_heating_ts_6	res	Furnace, NG	ASHP, ESTAR with fossil backup	Furnace, NG	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR with fossil backup	none	ASHP, ESTAR with fossil backup
-(R) ESTAR HP Pt. FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	res_heating_ts_18	res_heating_ts_6	res	Heating, NG	ASHP, ESTAR with fossil backup	Heating, NG	ASHP, ESTAR with fossil backup
+(R) ESTAR HP Pt. FS (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_66	 res_heating_ts_2	res_heating_ts_6	res	Heating, NG	ASHP, ESTAR with fossil backup	Heating, NG	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_14	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR with fossil backup	AC	ASHP, ESTAR with fossil backup
-(R) ESTAR HP Pt. FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_14	res_heating_ts_16	res_heating_ts_6	res	Boiler, other fossil	ASHP, ESTAR with fossil backup	Boiler, other fossil	ASHP, ESTAR with fossil backup
+(R) ESTAR HP Pt. FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_14	res_heating_ts_14	res_heating_ts_6	res	Boiler, other fossil	ASHP, ESTAR with fossil backup	Boiler, other fossil	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, ESTAR with fossil backup	AC	ASHP, ESTAR with fossil backup
-(R) ESTAR HP Pt. FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	res_heating_ts_17	res_heating_ts_6	res	Furnace, other fossil	ASHP, ESTAR with fossil backup	Furnace, other fossil	ASHP, ESTAR with fossil backup
+(R) ESTAR HP Pt. FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_25	 res_heating_ts_15	res_heating_ts_6	res	Furnace, other fossil	ASHP, ESTAR with fossil backup	Furnace, other fossil	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_77	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR with fossil backup	none	ASHP, ESTAR with fossil backup
 (R) ESTAR HP Pt. FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_77	res_heating_ts_19	res_heating_ts_6	res	Heating, other fossil	ASHP, ESTAR with fossil backup	Heating, other fossil	ASHP, ESTAR with fossil backup
 (R) ESTAR HP TS (Resist. Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_53	res_hvac_ann_54	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, ESTAR	none	ASHP, ESTAR
@@ -306,11 +306,11 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Min. Efficiency ASHP FS (NG Furnace)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS (NG Furnace)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_heating_ts_15	res_heating_ts_3	res	Furnace, NG	ASHP, minimum efficiency	Furnace, NG	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS (Other Fossil Furnace)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_2	res	AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
-(R) Min. Efficiency ASHP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_17	res_heating_ts_3	res	Furnace, other fossil	ASHP, minimum efficiency	Furnace, other fossil	ASHP, minimum efficiency
+(R) Min. Efficiency ASHP FS (Other Fossil Furnace)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	 res_heating_ts_15	res_heating_ts_3	res	Furnace, other fossil	ASHP, minimum efficiency	Furnace, other fossil	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS (Other Fossil Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_74	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, minimum efficiency	none	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS (Other Fossil Heat, No Cool)	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_74	res_heating_ts_19	res_heating_ts_3	res	Heating, other fossil	ASHP, minimum efficiency	Heating, other fossil	ASHP, minimum efficiency
 (R) Min. Efficiency ASHP FS, (NG Heat, No Cool)	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_63	res_cooling_ts_0	res_cooling_ts_2	res	none	ASHP, minimum efficiency	none	ASHP, minimum efficiency
-(R) Min. Efficiency ASHP FS, (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_63	res_heating_ts_18	res_heating_ts_3	res	Heating, NG	ASHP, minimum efficiency	Heating, NG	ASHP, minimum efficiency
+(R) Min. Efficiency ASHP FS, (NG Heat, No Cool)	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_63	 res_heating_ts_2	res_heating_ts_3	res	Heating, NG	ASHP, minimum efficiency	Heating, NG	ASHP, minimum efficiency
 (R) Min. Efficiency HPWH FS	Water Heating	res_wh_ann_1	res_wh_ann_2	res_wh_ts_1	res_wh_ts_3	res	Water heater, fossil	Water heater, HP, minimum efficiency	Water heater, fossil	Water heater, HP, minimum efficiency
 (R) Ref. Case ASHP	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_cooling_ts_2	res_cooling_ts_2	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
 (R) Ref. Case ASHP	Heating (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_heating_ts_3	res_heating_ts_3	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
@@ -321,7 +321,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case Elec. Boiler FS (NG Boiler)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case Elec. Boiler FS (NG Boiler)	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_heating_ts_14	res_heating_ts_1	res	Boiler, NG	Boiler, electric	Boiler, NG	Boiler, electric
 (R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
-(R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_16	res_heating_ts_1	res	Boiler, other fossil	Boiler, electric	Boiler, other fossil	Boiler, electric
+(R) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_22	res_heating_ts_14	res_heating_ts_1	res	Boiler, other fossil	Boiler, electric	Boiler, other fossil	Boiler, electric
 (R) Ref. Case Electric Dryer	Other	res_dry_ann_3	res_dry_ann_3	res_dry_ts_2	res_dry_ts_2	res	Dryer, resistance	Dryer, resistance	Dryer, resistance	Dryer, resistance
 (R) Ref. Case Electric Other	Other	res_misc_ann_1	res_misc_ann_1	res_misc_ts_2	res_misc_ts_2	res	Other	Other	Other	Other
 (R) Ref. Case Electric Range	Cooking	res_cook_ann_3	res_cook_ann_3	res_cook_ts_2	res_cook_ts_2	res	Range, electric	Range, electric	Range, electric	Range, electric
@@ -342,13 +342,13 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case NG Furnace & AC	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
 (R) Ref. Case NG Furnace & AC	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_heating_ts_15	res_heating_ts_15	res	Furnace, NG	Furnace, NG	Furnace, NG	Furnace, NG
 (R) Ref. Case NG Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_cooling_ts_0	res_cooling_ts_1	res	none	none	none	none
-(R) Ref. Case NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_heating_ts_18	res_heating_ts_18	res	Heating, NG	Heating, NG	Heating, NG	Heating, NG
+(R) Ref. Case NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	 res_heating_ts_2	 res_heating_ts_2	res	Heating, NG	Heating, NG	Heating, NG	Heating, NG
 (R) Ref. Case NGHP	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_cooling_ts_1	res_cooling_ts_1	res	NGHP	NGHP	NGHP	NGHP
 (R) Ref. Case NGHP	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_10	res_heating_ts_2	res_heating_ts_2	res	NGHP	NGHP	NGHP	NGHP
 (R) Ref. Case Other Fossil Boiler & AC	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_21	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
-(R) Ref. Case Other Fossil Boiler & AC	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_21	res_heating_ts_16	res_heating_ts_16	res	Boiler, other fossil	Boiler, other fossil	Boiler, other fossil	Boiler, other fossil
+(R) Ref. Case Other Fossil Boiler & AC	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_21	res_heating_ts_14	res_heating_ts_14	res	Boiler, other fossil	Boiler, other fossil	Boiler, other fossil	Boiler, other fossil
 (R) Ref. Case Other Fossil Furnace & AC	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_21	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
-(R) Ref. Case Other Fossil Furnace & AC	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_21	res_heating_ts_17	res_heating_ts_17	res	Furnace, other fossil	Furnace, other fossil	Furnace, other fossil	Furnace, other fossil
+(R) Ref. Case Other Fossil Furnace & AC	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_21	 res_heating_ts_15	 res_heating_ts_15	res	Furnace, other fossil	Furnace, other fossil	Furnace, other fossil	Furnace, other fossil
 (R) Ref. Case Other Fossil Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_73	res_hvac_ann_73	res_cooling_ts_0	res_cooling_ts_1	res	none	none	none	none
 (R) Ref. Case Other Fossil Heat, No Cooling	Heating (Equip.)	res_hvac_ann_73	res_hvac_ann_73	res_heating_ts_19	res_heating_ts_19	res	Heating, other fossil	Heating, other fossil	Heating, other fossil	Heating, other fossil
 (R) Ref. Case Pool Pumps	Other	res_pp_ann_1	res_pp_ann_1	res_pp_ts_1	res_pp_ts_1	res	Pool pump	Pool pump	Pool pump	Pool pump
@@ -431,9 +431,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Best NG Furnace & AC	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_cooling_ts_1	res_cooling_ts_3	res	AC	AC, best	AC	AC
 (R) Best NG Furnace & AC	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_12	res_heating_ts_15	res_heating_ts_15	res	Furnace, NG	Furnace, NG	Furnace, NG	Furnace, best NG
 (R) Best NG Heat, No Cooling	Cooling (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_cooling_ts_0	res_cooling_ts_0	res	none	none	none	none
-(R) Best NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	res_heating_ts_18	res_heating_ts_18	res	Heating, NG	Heating, best NG	Heating, NG	Heating, NG
+(R) Best NG Heat, No Cooling	Heating (Equip.)	res_hvac_ann_62	res_hvac_ann_62	 res_heating_ts_2	 res_heating_ts_2	res	Heating, NG	Heating, best NG	Heating, NG	Heating, NG
 (R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Cooling (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_cooling_ts_1	res_cooling_ts_8	res	AC	ASHP, best with fossil backup and env +	AC	ASHP, best with fossil backup
-(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	res_heating_ts_17	res_heating_ts_11	res	Furnace, other fossil	ASHP, best with fossil backup and env +	Furnace, other fossil	ASHP, best with fossil backup
+(R) Bst. HP Pt. FS (Oth. Fs. Frn.) & Env.+	Heating (Equip.)	res_hvac_ann_21	res_hvac_ann_30	 res_heating_ts_15	res_heating_ts_11	res	Furnace, other fossil	ASHP, best with fossil backup and env +	Furnace, other fossil	ASHP, best with fossil backup
 (R) Ref. NG Furnace & AC & Env.+	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env +	AC	AC
 (R) Ref. NG Furnace & AC & Env.+	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_15	res_heating_ts_15	res	Furnace, NG	Furnace, NG with env +	Furnace, NG	Furnace, NG
 Gap	Gap	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Gap	Gap	Gap	Gap

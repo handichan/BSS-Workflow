@@ -29,12 +29,8 @@ com_heating_ts_6	GSHP heating	Propane	Furnace	TRUE	55	heating
 com_heating_ts_6	GSHP heating	Propane	Boiler 	TRUE	55	heating
 com_heating_ts_7	Electric resistance	Electricity	Electric Resistance	TRUE	0	heating
 com_heating_ts_7	Electric resistance	Electricity	Furnace	TRUE	0	heating
-com_heating_ts_8	Fossil furnace	FuelOil	Furnace	TRUE	0	heating
-com_heating_ts_8	Fossil furnace	NaturalGas	Furnace	TRUE	0	heating
-com_heating_ts_8	Fossil furnace	Propane	Furnace	TRUE	0	heating
-com_heating_ts_9	Fossil Boiler 	FuelOil	Boiler 	TRUE	0	heating
-com_heating_ts_9	Fossil Boiler 	NaturalGas	Boiler 	TRUE	0	heating
-com_heating_ts_9	Fossil Boiler 	Propane	Boiler 	TRUE	0	heating
+com_heating_ts_8	NG Furnace	NaturalGas	Furnace	TRUE	0	heating
+com_heating_ts_9	NG Boiler 	NaturalGas	Boiler 	TRUE	0	heating
 com_heating_ts_10	"Variable Speed HP RTU, Electric Backup, Envelope"	Electricity	Electric Resistance	TRUE	50	heating
 com_heating_ts_10	"Variable Speed HP RTU, Electric Backup, Envelope"	FuelOil	Furnace	TRUE	50	heating
 com_heating_ts_10	"Variable Speed HP RTU, Electric Backup, Envelope"	NaturalGas	Furnace	TRUE	50	heating
@@ -42,3 +38,7 @@ com_heating_ts_10	"Variable Speed HP RTU, Electric Backup, Envelope"	Propane	Fur
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	FuelOil	Boiler 	TRUE	50	heating
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	NaturalGas	Boiler 	TRUE	50	heating
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	Propane	Boiler 	TRUE	50	heating
+com_heating_ts_12	Other fossil Furnace	FuelOil	Furnace	TRUE	0	heating
+com_heating_ts_12	Other fossil Furnace	Propane	Furnace	TRUE	0	heating
+com_heating_ts_13	Other fossil Boiler 	FuelOil	Boiler 	TRUE	0	heating
+com_heating_ts_13	Other fossil Boiler 	Propane	Boiler 	TRUE	0	heating
