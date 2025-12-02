@@ -50,6 +50,7 @@ SELECT "in.weather_file_city",
 	misc / sum(misc) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Computers and Electronics' as end_use
+	'Computers and Electronics' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;

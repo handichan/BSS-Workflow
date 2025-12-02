@@ -56,6 +56,7 @@ SELECT "in.weather_file_city",
 	cooling / sum(cooling) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Cooling (Equip.)' as end_use
+	'Cooling (Equip.)' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;

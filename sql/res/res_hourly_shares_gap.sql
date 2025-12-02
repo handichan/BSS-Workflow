@@ -29,5 +29,6 @@ kwh,
 multiplier_hourly,
 sector,
 "in.state",
-end_use
+end_use,
+'Electric' as fuel
 FROM unformatted;

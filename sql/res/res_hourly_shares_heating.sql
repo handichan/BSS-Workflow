@@ -1,26 +1,17 @@
--- rerun if there have been updates to res_ts_heating
--- res_ts_heating defines the grouping characteristics for heating shapes (e.g. ER heating, ES HP, GSHP with light envelope)
--- potential reasons to update res_ts_heating
-    -- new ResStock upgrades
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
 
 INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH meta_shapes AS (
--- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
 		meta."in.state",
 		chars.shape_ts,
 		chars.upgrade
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-		RIGHT JOIN res_ts_heating as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
-		AND meta."in.hvac_cooling_type" = chars."in.hvac_cooling_type"
+		RIGHT JOIN (SELECT * FROM res_ts_heating WHERE energy_source != 'fossil') as chars 
+		ON meta."in.hvac_heating_type_and_fuel" = chars."in.hvac_heating_type_and_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
--- get the timeseries data for the building ids
--- mostly this step is to make aliases to make the next step nicer
--- calculate simplified end uses
--- filter to the appropriate partitions!!!! doing it here vastly reduces the data scanned and therefore runtime
+
 ts_not_agg AS (
 	SELECT meta_shapes."in.weather_file_city",
 	meta_shapes."in.state",
@@ -35,7 +26,7 @@ ts_not_agg AS (
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_heating)
 	AND ts.state='{state}'
 ),
--- aggregate to hourly by weather file, and shape
+
 ts_agg AS(
 	SELECT "in.weather_file_city",
 	"in.state",
@@ -48,7 +39,7 @@ ts_agg AS(
         "in.weather_file_city",
 		shape_ts
 )
--- normalize the shapes
+
 SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
@@ -56,6 +47,7 @@ SELECT "in.weather_file_city",
 	heating / sum(heating) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Heating (Equip.)' as end_use
+	'Heating (Equip.)' as end_use,
+	'Electric' AS fuel
 FROM ts_agg
 ;

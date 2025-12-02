@@ -38,6 +38,7 @@ SELECT "in.weather_file_city",
 	lighting / sum(lighting) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Lighting' as end_use
+	'Lighting' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;

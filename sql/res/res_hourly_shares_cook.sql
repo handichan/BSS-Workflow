@@ -1,25 +1,17 @@
--- rerun if there have been updates to res_ts_cook
--- res_ts_cook defines the grouping characteristics for cooking shapes
--- potential reasons to update res_ts_cook
-    -- new ResStock upgrades
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
-
 INSERT INTO res_hourly_disaggregation_multipliers_{version}
+
 WITH meta_shapes AS (
--- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
 		meta."in.state",
 		chars.shape_ts,
 		chars.upgrade
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-		RIGHT JOIN res_ts_cook as chars ON meta."in.cooking_range" = chars."in.cooking_range"
+	RIGHT JOIN (SELECT * FROM res_ts_cook WHERE energy_source != 'fossil') as chars 
+		ON meta."in.cooking_range" = chars."in.cooking_range"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
--- get the timeseries data for the building ids
--- mostly this step is to make aliases to make the next step nicer
--- calculate simplified end uses
--- filter to the appropriate partitions!!!! doing it here vastly reduces the data scanned and therefore runtime
+
 ts_not_agg AS (
 	SELECT meta_shapes."in.weather_file_city",
 	meta_shapes."in.state",
@@ -33,7 +25,7 @@ ts_not_agg AS (
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook)
 ),
--- aggregate to hourly by weather file, and shape
+
 ts_agg AS(
 	SELECT "in.weather_file_city",
 	"in.state",
@@ -46,7 +38,7 @@ ts_agg AS(
         "in.weather_file_city",
 		shape_ts
 )
--- normalize the shapes
+
 SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
@@ -54,6 +46,7 @@ SELECT "in.weather_file_city",
 	cooking / sum(cooking) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Cooking' as end_use
+	'Cooking' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;
