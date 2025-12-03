@@ -29,7 +29,6 @@ ts_not_agg AS (
 	SELECT meta_shapes."in.county",
 	meta_shapes."in.state",
 		meta_shapes.shape_ts,
-		meta_shapes."version",
 		-- make sure all the hours are 2018
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
@@ -47,14 +46,12 @@ ts_agg AS(
 	"in.state",
 		shape_ts,
 		timestamp_hour,
-		"version",
 		sum(heating) as heating
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.state",
         "in.county",
-		shape_ts,
-		"version"
+		shape_ts
 )
 -- don't normalize the shapes
 SELECT "in.county",

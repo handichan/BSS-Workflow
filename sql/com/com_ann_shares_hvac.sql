@@ -23,14 +23,13 @@ WITH meta_filtered AS (
 geo_shares AS (
     SELECT "in.nhgis_county_gisjoin",
     "in.state",
-    "version",
     group_ann,
     heating,
-    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann, "version") as heating_mult,
+    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
     cooling,
-    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann, "version") as cooling_mult,
+    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult,
     ventilation,
-    ventilation / sum(ventilation) OVER (PARTITION BY "in.state", group_ann, "version") as ventilation_mult
+    ventilation / sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_mult
 FROM meta_filtered
 )
     SELECT 

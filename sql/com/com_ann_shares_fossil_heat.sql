@@ -20,10 +20,9 @@ WITH meta_filtered AS (
 geo_shares AS (
     SELECT "in.nhgis_county_gisjoin",
     "in.state",
-    "version",
     group_ann,
     heating,
-    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann, "version") as heating_mult
+    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult
 FROM meta_filtered
 )
     SELECT 
