@@ -19,7 +19,8 @@ SELECT "in.county",
     misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,
     "in.state",
-    'Other' AS end_use
+    'Other' AS end_use,
+	'Electric' AS fuel
 FROM meta_filtered
 
 UNION ALL
@@ -30,7 +31,8 @@ SELECT "in.county",
     misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,
     "in.state",
-    'Computers and Electronics' AS end_use
+    'Computers and Electronics' AS end_use,
+	'Electric' AS fuel
 FROM meta_filtered
 
 ;

@@ -1,5 +1,4 @@
 -- we're disaggregating secondary heating based on delivered heat, not energy consumption for heating
--- rerun if another group_ann is added that's based on delivered heat
 
 INSERT INTO res_annual_disaggregation_multipliers_{version}
 
@@ -45,23 +44,15 @@ WITH meta_filtered AS (
 		"in.county",
 		"in.weather_file_city",
 		"in.state"
-),
-geo_shares AS (
-    SELECT "in.county",
-		"in.weather_file_city",
-    	"in.state",
-    	group_ann,
-    	delivered_heat,
-    	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) as heating_mult
-	FROM meta_filtered
-	ORDER BY "in.county"
-) 
+)
+
 SELECT 
 	"in.county",
 	"in.weather_file_city",
 	group_ann,
-	heating_mult AS multiplier_annual,
+	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
 	'res' AS sector,
 	"in.state",
-	'Heating (Equip.)' AS end_use
-FROM geo_shares;
+	'Heating (Equip.)' AS end_use,
+	'All' AS fuel
+FROM meta_filtered;

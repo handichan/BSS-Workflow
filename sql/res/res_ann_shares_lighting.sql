@@ -19,6 +19,7 @@ SELECT "in.county",
 	lighting / sum(lighting) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
 	'res' AS sector,
 	"in.state",
-	'Lighting' AS end_use
+	'Lighting' AS end_use,
+	'Electric' AS fuel
 FROM meta_filtered
 ;

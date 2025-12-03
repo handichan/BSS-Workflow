@@ -19,6 +19,7 @@ SELECT "in.county",
 	refrig / sum(refrig) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
 	'res' AS sector,
 	"in.state",
-	'Refrigeration' AS end_use
+	'Refrigeration' AS end_use,
+	'Electric' AS fuel
 FROM meta_filtered
 ;

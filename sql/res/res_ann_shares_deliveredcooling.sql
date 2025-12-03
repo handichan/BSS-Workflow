@@ -14,23 +14,15 @@ WITH meta_filtered AS (
 		"in.county",
 		"in.weather_file_city",
 		"in.state"
-),
-geo_shares AS (
-    SELECT "in.county",
-		"in.weather_file_city",
-        "in.state",
-        group_ann,
-        delivered_cool,
-        delivered_cool / sum(delivered_cool) OVER (PARTITION BY "in.state", group_ann) as cooling_mult
-    FROM meta_filtered
-    ORDER BY "in.county"
-) 
+)
+
 SELECT 
     "in.county",
     "in.weather_file_city",
     group_ann,
-    cooling_mult AS multiplier_annual,
+    delivered_cool / sum(delivered_cool) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,
     "in.state",
-    'Cooling (Equip.)' AS end_use
-FROM geo_shares;
+    'Cooling (Equip.)' AS end_use,
+	'Electric' AS fuel
+FROM meta_filtered;

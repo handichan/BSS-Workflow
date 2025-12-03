@@ -1,9 +1,8 @@
 INSERT INTO county_annual_res_{year}_{turnover}_{weather}
-WITH electric_df AS (
+WITH scout AS (
     SELECT *
     FROM scout_annual_state_{turnover}
     WHERE scout_run = '{scout_version}'
-    AND fuel = 'Electric'
     AND end_use = '{enduse}'
     AND year = {year}
 ),
@@ -26,21 +25,21 @@ FROM measure_map),
 
 scout_meas AS
 (SELECT 
-    elec.meas,
-    elec.reg,
-    elec.end_use,
-    elec.tech_stage,
+    scout.meas,
+    scout.reg,
+    scout.end_use,
+    scout.tech_stage,
     mm.group_ann,
-    elec.fuel,
-    elec."year",
-    elec.state_ann_kwh,
-    elec.scout_run,
-    elec.turnover
-FROM electric_df AS elec
+    scout.fuel,
+    scout."year",
+    scout.state_ann_kwh,
+    scout.scout_run,
+    scout.turnover
+FROM scout
 JOIN measure_map_ann_long as mm
-ON elec.meas = mm.meas
-AND elec.end_use = mm.scout_end_use
-AND elec.tech_stage = mm.tech_stage
+ON scout.meas = mm.meas
+AND scout.end_use = mm.scout_end_use
+AND scout.tech_stage = mm.tech_stage
 )
 
 SELECT 
@@ -60,11 +59,18 @@ SELECT
     scout_meas.end_use
 FROM scout_meas
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use 
+    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
     FROM res_annual_disaggregation_multipliers_{weather}
     WHERE end_use = '{enduse}'
 ) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann
 AND scout_meas.reg = ann_disag."in.state"
 AND scout_meas.end_use = ann_disag.end_use
+AND (
+    (ann_disag.fuel = 'All')
+    OR 
+    (scout_meas.fuel = 'Biomass' AND ann_disag.fuel = 'Propane')
+    OR
+    (ann_disag.fuel != 'All' AND scout_meas.fuel = ann_disag.fuel)
+  )
 ;

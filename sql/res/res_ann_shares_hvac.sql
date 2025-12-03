@@ -1,9 +1,3 @@
--- rerun if there have been updates to res_ann_hvac
--- res_ann_hvac defines the grouping characteristics for hvac (e.g. ER heating with AC to ES HP, HP heating to ultra high eff HP, fossil heating without cooling to high eff HP)
--- potential reasons to update res_ann_hvac
-    -- add new cooling load when installing a HP to houses without cooling in the baseline
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
--- after making the new table, run 'res delivered heat.sql' to add the groups for secondary heating
     
 INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
@@ -11,7 +5,10 @@ WITH meta_filtered AS (
     	meta."in.weather_file_city",
 	    meta."in.state",
 		chars.group_ann,
-		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating,
+		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating_elec,
+        sum(meta."out.natural_gas.heating.energy_consumption") as heating_ng,
+        sum(meta."out.fuel_oil.heating.energy_consumption") as heating_fo,
+        sum(meta."out.propane.heating.energy_consumption") as heating_prop,
 		sum(meta."out.electricity.cooling.energy_consumption") as cooling
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
 		RIGHT JOIN res_ann_hvac as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
@@ -25,27 +22,36 @@ WITH meta_filtered AS (
 		meta."in.state",
 		chars.group_ann
 ),
-geo_shares AS (
+
+geo_totals AS (
     SELECT "in.county",
     	"in.weather_file_city",
         "in.state",
         group_ann,
-        heating,
-        heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
+        heating_elec,
+        sum(heating_elec) OVER (PARTITION BY "in.state", group_ann) as heating_elec_total,
+        heating_ng,
+        sum(heating_ng) OVER (PARTITION BY "in.state", group_ann) as heating_ng_total,
+        heating_fo,
+        sum(heating_fo) OVER (PARTITION BY "in.state", group_ann) as heating_fo_total,
+        heating_prop,
+        sum(heating_prop) OVER (PARTITION BY "in.state", group_ann) as heating_prop_total,
         cooling,
-        cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult
+        sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_total
 FROM meta_filtered
 )
+
 SELECT 
     "in.county",
     "in.weather_file_city",
     group_ann,
-    heating_mult AS multiplier_annual,
+    heating_elec / heating_elec_total AS multiplier_annual,
     'res' AS sector,
     "in.state",
-    'Heating (Equip.)' AS end_use
-
-FROM geo_shares
+    'Heating (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE heating_elec_total > 0
 
 UNION ALL
 
@@ -53,9 +59,53 @@ SELECT
     "in.county",
     "in.weather_file_city",
     group_ann,
-    cooling_mult AS multiplier_annual,
+    heating_ng / heating_ng_total AS multiplier_annual,
     'res' AS sector,
     "in.state",
-    'Cooling (Equip.)' AS end_use
+    'Heating (Equip.)' AS end_use,
+    'Natural Gas' AS fuel
+FROM geo_totals
+WHERE heating_ng_total > 0
 
-FROM geo_shares;
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    group_ann,
+    heating_fo / heating_fo_total AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Distillate/Other' AS fuel
+FROM geo_totals
+WHERE heating_fo_total > 0
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    group_ann,
+    heating_prop / heating_prop_total AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Propane' AS fuel
+FROM geo_totals
+WHERE heating_prop_total > 0
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    group_ann,
+    cooling / cooling_total AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE cooling_total > 0
+;
