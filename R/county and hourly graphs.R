@@ -343,7 +343,7 @@ save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share.jpg"), p100
 p100_hist<-county_share_winter %>%
   filter(turnover %in% scen_filtered) %>%
   mutate(percent_binned=round_any(share_winter,.05),
-         fill_color=diverg_interp(percent_binned))%>%
+         fill_color=diverg_tophours_interp(percent_binned))%>%
   ggplot(aes(x=percent_binned,y=after_stat(count/3107),fill=fill_color))+
   geom_bar()+
   scale_fill_identity() +

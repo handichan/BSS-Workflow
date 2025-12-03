@@ -114,7 +114,14 @@ The `Config` class centralizes all constants and runtime switches that control h
 The dataset is organized hierarchically to facilitate efficient data access and analysis:
 
 ```
-20251031/
+dmd_cal_ann_state_county_hourly/v1.0.0/
+│   ├── com_annual_multipliers_amy.parquet
+│   ├── res_annual_multipliers_amy.parquet
+│   ├── res_annual_multipliers_tmy.parquet
+│   ├── com_hourly_multipliers_amy/
+│   ├── res_hourly_multipliers_amy/
+│   ├── res_hourly_multipliers_tmy/
+├── multipliers/
 ├── annual_results/
 │   ├── scout_annual_state_baseline.parquet
 │   ├── scout_annual_state.parquet
