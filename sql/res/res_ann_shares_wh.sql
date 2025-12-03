@@ -31,7 +31,7 @@ geo_totals AS (
         wh_ng,
         sum(wh_ng) OVER (PARTITION BY "in.state", group_ann) as wh_ng_total,
         wh_fo,
-        sum(wh_fo) OVER (PARTITION BY "in.state", group_ann) as wh_fo_total
+        sum(wh_fo) OVER (PARTITION BY "in.state", group_ann) as wh_fo_total,
         wh_prop,
         sum(wh_prop) OVER (PARTITION BY "in.state", group_ann) as wh_prop_total
 FROM meta_filtered

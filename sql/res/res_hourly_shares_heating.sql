@@ -33,7 +33,8 @@ ts_agg AS(
 	"in.state",
 		shape_ts,
 		timestamp_hour,
-		sum(heating) as heating
+		sum(heating_elec) as heating_elec,
+		sum(heating_fossil) as heating_fossil
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.state",
@@ -42,13 +43,13 @@ ts_agg AS(
 ),
 
 ts_totals AS(
-	"in.weather_file_city",
+	SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
 	heating_elec as heating_elec,
-	heating_elec / sum(heating_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_elec_total,
+	sum(heating_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_elec_total,
 	heating_fossil as heating_fossil,
-	heating_fossil / sum(heating_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_fossil_total,
+	sum(heating_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_fossil_total,
     'res' AS sector,
     "in.state"
 FROM ts_agg

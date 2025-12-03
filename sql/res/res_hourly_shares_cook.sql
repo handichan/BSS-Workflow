@@ -20,7 +20,7 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.range_oven.energy_consumption" as cooking_elec,
-		ts."out.electricity.natural_gas.energy_consumption" + ts."out.electricity.propane.energy_consumption" as cooking_fossil
+		ts."out.natural_gas.range_oven.energy_consumption" + ts."out.propane.range_oven.energy_consumption" as cooking_fossil
 	FROM "resstock_amy2018_release_2024.2_by_state" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
@@ -42,13 +42,13 @@ ts_agg AS(
 ),
 
 ts_totals AS(
-	"in.weather_file_city",
+	SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
 	cooking_elec as cooking_elec,
-	cooking_elec / sum(cooking_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as cooking_elec_total,
+	sum(cooking_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as cooking_elec_total,
 	cooking_fossil as cooking_fossil,
-	cooking_fossil / sum(cooking_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as cooking_fossil_total,
+	sum(cooking_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as cooking_fossil_total,
     'res' AS sector,
     "in.state"
 FROM ts_agg
