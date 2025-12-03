@@ -7,7 +7,8 @@ CREATE EXTERNAL TABLE com_hourly_hvac_temp_{version}(
     kwh double,
     sector string,
     `in.state` string,
-    end_use string
+    end_use string,
+    fuel string
 )
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/com_hourly_hvac_temp_{version}/'

@@ -9,7 +9,8 @@ CREATE EXTERNAL TABLE county_hourly_com_{year}_{turnover}_{weather} (
     sector string,
     `in.state` string,
     year int,
-    end_use string
+    end_use string,
+    fuel string
 )
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/{version}/county_runs/county_hourly_com_{year}_{turnover}_{weather}/'

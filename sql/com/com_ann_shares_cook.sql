@@ -38,7 +38,8 @@ FROM unnormalized)
         gas_share AS multiplier_annual,
         'com' AS sector,
         "in.state",
-        'Cooking' AS end_use
+        'Cooking' AS end_use,
+        'Natural Gas' AS fuel
 
     FROM normalized
 
@@ -50,7 +51,8 @@ FROM unnormalized)
         elec_share AS multiplier_annual,
         'com' AS sector,
         "in.state",
-        'Cooking' AS end_use
+        'Cooking' AS end_use,
+        'Electric' AS fuel
 
     FROM normalized
 

@@ -4,7 +4,9 @@ WITH meta_filtered AS (
 	SELECT meta."in.nhgis_county_gisjoin",
 	    meta."in.state",
 	    'com_misc_ann_1' AS group_ann,
-		sum(meta."calc.weighted.electricity.interior_equipment.energy_consumption..tbtu") as misc
+		sum(meta."calc.weighted.electricity.interior_equipment.energy_consumption..tbtu") as misc_elec,
+        sum(meta."calc.weighted.natural_gas.interior_equipment.energy_consumption..tbtu") as misc_ng,
+        sum(meta."calc.weighted.other_fuel.interior_equipment.energy_consumption..tbtu") as misc_fo
 	FROM "comstock_2025.1_parquet" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
@@ -14,10 +16,11 @@ WITH meta_filtered AS (
     SELECT 
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
-    misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    misc_elec / sum(misc_elec) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'com' AS sector,
     "in.state",
-    'Other' AS end_use
+    'Other' AS end_use,
+    'Electric' AS fuel
 FROM meta_filtered
 
 UNION ALL
@@ -25,9 +28,34 @@ UNION ALL
     SELECT 
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
-    misc / sum(misc) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    misc_elec / sum(misc_elec) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'com' AS sector,
     "in.state",
-    'Computers and Electronics' AS end_use
+    'Computers and Electronics' AS end_use,
+    'Electric' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+    SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    misc_ng / sum(misc_ng) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Other' AS end_use,
+    'Natural Gas' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+    SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    misc_fo / sum(misc_fo) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Other' AS end_use,
+    'Distillate/Other' AS fuel
 FROM meta_filtered
 ;

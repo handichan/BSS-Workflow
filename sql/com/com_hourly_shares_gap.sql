@@ -28,7 +28,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Gap' AS varchar) as end_use
+	CAST('Gap' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -43,7 +44,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Other' AS varchar) as end_use
+	CAST('Other' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -58,7 +60,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Lighting' AS varchar) as end_use
+	CAST('Lighting' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -73,7 +76,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Heating (Equip.)' AS varchar) as end_use
+	CAST('Heating (Equip.)' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -88,7 +92,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Cooling (Equip.)' AS varchar) as end_use
+	CAST('Cooling (Equip.)' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -103,7 +108,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Ventilation' AS varchar) as end_use
+	CAST('Ventilation' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -118,7 +124,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Computers and Electronics' AS varchar) as end_use
+	CAST('Computers and Electronics' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -133,7 +140,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Water Heating' AS varchar) as end_use
+	CAST('Water Heating' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -148,7 +156,8 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Refrigeration' AS varchar) as end_use
+	CAST('Refrigeration' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -163,6 +172,7 @@ SELECT
 	multiplier_hourly,
 		sector,
 	 "in.state",
-	CAST('Cooking' AS varchar) as end_use
+	CAST('Cooking' AS varchar) as end_use,
+	'Electric' AS fuel
 FROM unformatted
 ;

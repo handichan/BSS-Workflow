@@ -1,3 +1,4 @@
+-- cooking shape is the difference in out.electricity.interior_equipment.energy_consumption before and after electric cooking upgrade
 INSERT INTO com_hourly_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
@@ -43,7 +44,7 @@ ts_not_agg_kitchen AS (
 		ts."out.electricity.interior_equipment.energy_consumption" * meta_filtered.weight as int_equip
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_filtered ON ts.bldg_id = meta_filtered.bldg_id
-	WHERE ts.upgrade = '28'
+	WHERE ts.upgrade = '40'
 ),
 -- aggregate to hourly by upgrade, county, and shape
 ts_agg_kitchen AS(
@@ -82,7 +83,8 @@ kwh,
 multiplier_hourly,
 sector,
 "in.state",
-end_use
+end_use,
+'All' AS fuel
 FROM ts_norm_tz 
 LEFT JOIN county2tz2state
 ON ts_norm_tz.tz = county2tz2state.tz

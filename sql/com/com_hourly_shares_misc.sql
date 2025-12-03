@@ -11,7 +11,8 @@ ts_not_agg AS (
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.interior_equipment.energy_consumption" * meta.weight as misc
+		ts."out.electricity.interior_equipment.energy_consumption" * meta.weight as misc_elec,
+		(ts."out.natural_gas.interior_equipment.energy_consumption" + ts."out.other_fuel.interior_equipment.energy_consumption") * meta.weight as misc_fossil
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN "comstock_2025.1_parquet" as meta 
 		ON ts.bldg_id = meta.bldg_id
@@ -24,7 +25,8 @@ ts_agg AS(
 	"in.state",
 		shape_ts,
 		timestamp_hour,
-		sum(misc) as misc
+		sum(misc_elec) as misc_elec,
+		sum(misc_fossil) as misc_fossil
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.state",
@@ -35,11 +37,12 @@ ts_agg AS(
 SELECT "in.county",
 	shape_ts,
 	timestamp_hour,
-	misc as kwh,
-	misc / sum(misc) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+	misc_elec as kwh,
+	misc_elec / sum(misc_elec) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
-	'Other' as end_use
+	'Other' as end_use,
+	'Electric' AS fuel
 FROM ts_agg
 
 UNION ALL
@@ -47,11 +50,25 @@ UNION ALL
 SELECT "in.county",
 	shape_ts,
 	timestamp_hour,
-	misc as kwh,
-	misc / sum(misc) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+	misc_elec as kwh,
+	misc_elec / sum(misc_elec) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
-	'Computers and Electronics' as end_use
+	'Computers and Electronics' as end_use,
+	'Electric' AS fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.county",
+	shape_ts,
+	timestamp_hour,
+	misc_fossil as kwh,
+	misc_fossil / sum(misc_fossil) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+    'com' AS sector,
+    "in.state",
+	'Other' as end_use,
+	'Fossil' AS fuel
 FROM ts_agg
 
 ;

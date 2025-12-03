@@ -17,6 +17,7 @@ WITH meta_filtered AS (
     refrigeration / sum(refrigeration) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'com' AS sector,
     "in.state",
-    'Refrigeration' AS end_use
+    'Refrigeration' AS end_use,
+    'Electric' AS fuel
 FROM meta_filtered
 ;

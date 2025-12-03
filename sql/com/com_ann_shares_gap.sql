@@ -29,7 +29,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Gap' AS end_use
+'Gap' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -39,7 +40,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Other' AS end_use
+'Other' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -49,7 +51,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Heating (Equip.)' AS end_use
+'Heating (Equip.)' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -59,7 +62,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Cooling (Equip.)' AS end_use
+'Cooling (Equip.)' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -69,7 +73,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Ventilation' AS end_use
+'Ventilation' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -79,7 +84,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Water Heating' AS end_use
+'Water Heating' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -89,7 +95,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Lighting' AS end_use
+'Lighting' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -99,7 +106,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Refrigeration' AS end_use
+'Refrigeration' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -109,7 +117,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Cooking' AS end_use
+'Cooking' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 UNION ALL
@@ -119,7 +128,8 @@ group_ann,
 multiplier_annual,
 'com' AS sector,
 "in.state",
-'Computers and Electronics' AS end_use
+'Computers and Electronics' AS end_use,
+'Electric' AS fuel
 FROM unformatted
 
 ;

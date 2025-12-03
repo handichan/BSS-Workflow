@@ -39,6 +39,7 @@ SELECT "in.county",
 	refrigeration / sum(refrigeration) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
-	'Refrigeration' as end_use
+	'Refrigeration' as end_use,
+	'Electric' AS fuel
 FROM ts_agg
 ;

@@ -38,6 +38,7 @@ SELECT "in.county",
 	ventilation as kwh,
     'com' AS sector,
     "in.state",
-	'Ventilation' as end_use
+	'Ventilation' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;

@@ -11,7 +11,8 @@ ts_not_agg AS (
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.water_systems.energy_consumption" * meta.weight as wh
+		ts."out.electricity.water_systems.energy_consumption" * meta.weight as wh_elec,
+		(ts."out.natural_gas.water_systems.energy_consumption" + ts."out.other_fuel.water_systems.energy_consumption" + ts."out.district_heating.water_systems.energy_consumption" + ts."out.electricity.water_systems.energy_consumption") * meta.weight as wh_fossil
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN "comstock_2025.1_parquet" as meta 
 		ON ts.bldg_id = meta.bldg_id
@@ -24,7 +25,8 @@ ts_agg AS(
 	"in.state",
 		shape_ts,
 		timestamp_hour,
-		sum(wh) as wh
+		sum(wh_elec) as wh_elec,
+		sum(wh_fossil) as wh_fossil
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.state",
@@ -35,10 +37,24 @@ ts_agg AS(
 SELECT "in.county",
 	shape_ts,
 	timestamp_hour,
-	wh as kwh,
-	wh / sum(wh) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+	wh_elec as kwh,
+	wh_elec / sum(wh_elec) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
-	'Water Heating' as end_use
+	'Water Heating' as end_use,
+	'Electric' AS fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.county",
+	shape_ts,
+	timestamp_hour,
+	wh_fossil as kwh,
+	wh_fossil / sum(wh_fossil) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+    'com' AS sector,
+    "in.state",
+	'Water Heating' as end_use,
+	'Fossil' AS fuel
 FROM ts_agg
 ;

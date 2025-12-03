@@ -6,7 +6,9 @@ WITH meta_filtered AS (
     SELECT meta."in.nhgis_county_gisjoin",
         meta."in.state",
         chars.group_ann,
-        sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating,
+        sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec,
+		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu") as heating_ng,
+        sum(meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu") as heating_fo,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
     FROM "comstock_2025.1_parquet" as meta
@@ -20,50 +22,80 @@ WITH meta_filtered AS (
         meta."in.state",
         chars.group_ann
 ),
-geo_shares AS (
+geo_totals AS (
     SELECT "in.nhgis_county_gisjoin",
     "in.state",
     group_ann,
-    heating,
-    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
+    heating_elec,
+    sum(heating_elec) OVER (PARTITION BY "in.state", group_ann) as heating_elec_total,
+    heating_ng,
+    sum(heating_ng) OVER (PARTITION BY "in.state", group_ann) as heating_ng_total,
+    heating_fo,
+    sum(heating_fo) OVER (PARTITION BY "in.state", group_ann) as heating_fo_total,
     cooling,
-    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult,
+    sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_total,
     ventilation,
-    ventilation / sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_mult
+    sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_total
 FROM meta_filtered
 )
     SELECT 
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
-        heating_mult AS multiplier_annual,
+        heating_elec / heating_elec_total AS multiplier_annual,
         'com' AS sector,
         "in.state",
-        'Heating (Equip.)' AS end_use
+        'Heating (Equip.)' AS end_use,
+	    'Electric' AS fuel
+    FROM geo_totals
+    WHERE heating_elec_total > 0
 
-    FROM geo_shares
+UNION ALL
+
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    heating_ng / heating_ng_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Natural Gas' AS fuel
+FROM geo_totals
+WHERE heating_ng_total > 0
+
+UNION ALL
+
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    heating_fo / heating_fo_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Distillate/Other' AS fuel
+FROM geo_totals
+WHERE heating_fo_total > 0
 
     UNION ALL
 
     SELECT 
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
-        cooling_mult AS multiplier_annual,
+        cooling / cooling_total AS multiplier_annual,
         'com' AS sector,
         "in.state",
-        'Cooling (Equip.)' AS end_use
-
-    FROM geo_shares
-    
+        'Cooling (Equip.)' AS end_use,
+	    'Electric' AS fuel
+FROM geo_totals
     
     UNION ALL
 
     SELECT 
         "in.nhgis_county_gisjoin" as "in.county",
         group_ann,
-        ventilation_mult AS multiplier_annual,
+        ventilation / ventilation_total AS multiplier_annual,
         'com' AS sector,
         "in.state",
-        'Ventilation' AS end_use
-
-    FROM geo_shares
+        'Ventilation' AS end_use,
+	    'Electric' AS fuel
+FROM geo_totals
 ;

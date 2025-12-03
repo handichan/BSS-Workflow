@@ -39,6 +39,7 @@ SELECT "in.county",
 	lights / sum(lights) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
     'com' AS sector,
     "in.state",
-	'Lighting' as end_use
+	'Lighting' as end_use,
+	'Electric' AS fuel
 FROM ts_agg
 ;
