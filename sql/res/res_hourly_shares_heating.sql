@@ -7,7 +7,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-		RIGHT JOIN (SELECT * FROM res_ts_heating WHERE energy_source != 'fossil') as chars 
+		RIGHT JOIN res_ts_heating as chars 
 		ON meta."in.hvac_heating_type_and_fuel" = chars."in.hvac_heating_type_and_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -19,7 +19,8 @@ ts_not_agg AS (
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heating_hp_bkup.energy_consumption" as heating
+		ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heating_hp_bkup.energy_consumption" as heating_elec,
+		ts."out.fuel_oil.heating.energy_consumption" + ts."out.natural_gas.heating.energy_consumption" + ts."out.propane.heating.energy_consumption" as heating_fossil
 	FROM "resstock_amy2018_release_2024.2_by_state" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
@@ -38,16 +39,44 @@ ts_agg AS(
 	"in.state",
         "in.weather_file_city",
 		shape_ts
+),
+
+ts_totals AS(
+	"in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	heating_elec as heating_elec,
+	heating_elec / sum(heating_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_elec_total,
+	heating_fossil as heating_fossil,
+	heating_fossil / sum(heating_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as heating_fossil_total,
+    'res' AS sector,
+    "in.state"
+FROM ts_agg
 )
 
 SELECT "in.weather_file_city",
 	shape_ts,
 	timestamp_hour,
-	heating as kwh,
-	heating / sum(heating) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
+	heating_elec as kwh,
+	heating_elec / heating_elec_total as multiplier_hourly,
     'res' AS sector,
     "in.state",
 	'Heating (Equip.)' as end_use,
-	'Electric' AS fuel
-FROM ts_agg
+	'Electric' as fuel
+FROM ts_totals
+WHERE heating_elec_total > 0
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	heating_fossil as kwh,
+	heating_fossil / heating_fossil_total as multiplier_hourly,
+    'res' AS sector,
+    "in.state",
+	'Heating (Equip.)' as end_use,
+	'Fossil' as fuel
+FROM ts_totals
+WHERE heating_fossil > 0
 ;

@@ -6,7 +6,8 @@ CREATE EXTERNAL TABLE res_annual_disaggregation_multipliers_{version}(
     multiplier_annual double,
     sector string,
     `in.state` string,
-    end_use string
+    end_use string,
+    fuel string
 )
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/res_annual_multipliers_{version}/'

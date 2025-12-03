@@ -1,8 +1,8 @@
-shape_ts	description	in.clothes_dryer	upgrade	energy_source
-res_dry_ts_1	fossil clothes dryer	Gas	0	fossil
-res_dry_ts_1	fossil clothes dryer	Propane	0	fossil
-res_dry_ts_2	ER clothes dryer	Electric	0	electricity
-res_dry_ts_3	HP clothes dryer	Gas	11	electricity
-res_dry_ts_3	HP clothes dryer	Propane	11	electricity
-res_dry_ts_3	HP clothes dryer	None	11	electricity
-res_dry_ts_3	HP clothes dryer	Electric	11	electricity
+shape_ts	description	in.clothes_dryer	upgrade
+res_dry_ts_1	fossil clothes dryer	Gas	0
+res_dry_ts_1	fossil clothes dryer	Propane	0
+res_dry_ts_2	ER clothes dryer	Electric	0
+res_dry_ts_3	HP clothes dryer	Gas	11
+res_dry_ts_3	HP clothes dryer	Propane	11
+res_dry_ts_3	HP clothes dryer	None	11
+res_dry_ts_3	HP clothes dryer	Electric	11
