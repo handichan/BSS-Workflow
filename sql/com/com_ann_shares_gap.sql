@@ -1,4 +1,4 @@
-INSERT INTO com_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_annual}
 
 WITH states as(
     SELECT "in.state", "in.county"
@@ -9,7 +9,7 @@ WITH states as(
 
 annual as(
     SELECT "in.state", g."in.county", sum("out.electricity.total.energy_consumption..kwh") AS gap
-    FROM "comstock_2025.1_upgrade_0" g 
+    FROM "{gap_com}" g 
     LEFT JOIN states ON states."in.county" = g."in.county"
     GROUP BY "in.state", g."in.county"),
 

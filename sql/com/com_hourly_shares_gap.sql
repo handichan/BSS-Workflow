@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_hourly}
 WITH states as(
     SELECT "in.state", "in.county"
   FROM "resstock_amy2018_release_2024.2_metadata"
@@ -14,7 +14,7 @@ CAST('com_gap_ts_1' AS varchar) AS shape_ts,
 	   CAST('com' AS varchar) AS sector,
 	"out.electricity.total.energy_consumption..kwh" as kwh,
 	"out.electricity.total.energy_consumption..kwh" / sum("out.electricity.total.energy_consumption..kwh") OVER (PARTITION BY g."in.county") as multiplier_hourly
-FROM "comstock_2025.1_upgrade_0" g 
+FROM "{gap_com}" g 
 LEFT JOIN states ON states."in.county" = g."in.county"
 )
 

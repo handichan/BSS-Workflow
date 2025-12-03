@@ -15,7 +15,7 @@ WITH meta_shapes AS (
 		chars.upgrade,
         chars."version",
         meta.weight
-    	FROM "comstock_amy2018_release_2024.2_parquet" as meta
+    	FROM "{meta_com}" as meta
 		RIGHT JOIN com_ts_heating as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
         AND meta.applicability = chars.applicability
@@ -36,7 +36,7 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		(ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heat_recovery.energy_consumption") * meta_shapes.weight as heating
-	FROM "comstock_amy2018_release_2024.2_by_state" as ts
+	FROM "{ts_com}" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = cast(meta_shapes.upgrade as varchar)
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_heating)
