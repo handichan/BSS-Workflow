@@ -52,7 +52,7 @@ class Config:
     SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
     EXTERNAL_S3_DIR = "datasets"
-    DATABASE_NAME = "euss_oedi"
+    DATABASE_NAME = "default"
 
     # Runtime switches/identifiers
     DEST_BUCKET = "bss-workflow"
@@ -704,7 +704,18 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
         weather=cfg.WEATHER,
-        baseyear=cfg.BASE_YEAR
+        baseyear=cfg.BASE_YEAR,
+
+        mult_com_annual=cfg.MULTIPLIERS_TABLES[0],
+        mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
+        mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
+        mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+
+        meta_com=cfg.BLDSTOCK_TABLES[0],
+        ts_com=cfg.BLDSTOCK_TABLES[1],
+        gap_com=cfg.BLDSTOCK_TABLES[2],
+        meta_res=cfg.BLDSTOCK_TABLES[3],
+        ts_res=cfg.BLDSTOCK_TABLES[4]
     )
 
     contains_state = "{state}" in template_raw
