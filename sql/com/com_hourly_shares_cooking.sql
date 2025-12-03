@@ -6,7 +6,7 @@ WITH meta_filtered AS (
         meta."in.state",
         weight,
 		tz
-    	FROM "comstock_amy2018_release_2024.2_parquet" as meta
+    	FROM "comstock_2025.1_parquet" as meta
     	INNER JOIN county2tz2state ON meta."in.nhgis_county_gisjoin" = county2tz2state."in.county"
     	WHERE "in.comstock_building_type" IN ('FullServiceRestaurant','Hospital','LargeHotel','PrimarySchool','QuickServiceRestaurant','SecondarySchool')
 		AND upgrade = 0
@@ -19,7 +19,7 @@ ts_not_agg_base AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.interior_equipment.energy_consumption" * meta_filtered.weight as int_equip
-	FROM "comstock_amy2018_release_2024.2_by_state" as ts
+	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_filtered ON ts.bldg_id = meta_filtered.bldg_id
 	WHERE ts.upgrade = '0'
 	-- can't filter to state because time zones cover multiple states
@@ -41,7 +41,7 @@ ts_not_agg_kitchen AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.interior_equipment.energy_consumption" * meta_filtered.weight as int_equip
-	FROM "comstock_amy2018_release_2024.2_by_state" as ts
+	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_filtered ON ts.bldg_id = meta_filtered.bldg_id
 	WHERE ts.upgrade = '28'
 ),
