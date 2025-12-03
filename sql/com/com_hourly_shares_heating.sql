@@ -13,7 +13,6 @@ WITH meta_shapes AS (
 		meta."in.state",
 		chars.shape_ts,
 		chars.upgrade,
-        chars."version",
         meta.weight
     	FROM "comstock_2025.1_parquet" as meta
 		RIGHT JOIN com_ts_heating as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"

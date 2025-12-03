@@ -6,7 +6,6 @@ WITH meta_filtered AS (
     SELECT meta."in.nhgis_county_gisjoin",
         meta."in.state",
         chars.group_ann,
-        chars."version",
         sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
@@ -19,8 +18,7 @@ WITH meta_filtered AS (
     GROUP BY 
         meta."in.nhgis_county_gisjoin",
         meta."in.state",
-        chars.group_ann,
-        chars."version"
+        chars.group_ann
 ),
 geo_shares AS (
     SELECT "in.nhgis_county_gisjoin",

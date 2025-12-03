@@ -6,7 +6,6 @@ WITH meta_filtered AS (
 	SELECT meta."in.nhgis_county_gisjoin",
 	    meta."in.state",
 		chars.group_ann,
-        chars."version",
 		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu" + meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating
 	FROM "comstock_2025.1_parquet" as meta
 		RIGHT JOIN (SELECT * FROM com_ann_hvac WHERE group_ann in ('com_hvac_ann_12','com_hvac_ann_24')) as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
@@ -16,8 +15,7 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.nhgis_county_gisjoin",
 		meta."in.state",
-		chars.group_ann,
-        chars."version"
+		chars.group_ann
 ),
 geo_shares AS (
     SELECT "in.nhgis_county_gisjoin",
