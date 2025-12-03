@@ -96,7 +96,7 @@ color_interp <- gradient_n_pal(colours = c("#2A7062","#80cdc1", "#f5f5f5", "#dfc
 diverg<-c("#9e3d22","#e36621","#fcad52","#ffffff","#95c5e1","#5b8fbc","#2b5c8a")
 #for top 100 hrs maps
 diverg_tophours_interp<-gradient_n_pal(colours=diverg,
-                              values=seq(0,1,length.out = 7),space="Lab")
+                                       values=seq(0,1,length.out = 7),space="Lab")
 #for winter/summer ratio
 diverg_ratio <- gradient_n_pal(colours = diverg, 
                                values = seq(-.9,.9,length.out = 7), space = "Lab")
