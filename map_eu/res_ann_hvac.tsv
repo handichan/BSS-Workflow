@@ -1,233 +1,233 @@
-group_ann	original	description	in.heating_fuel	in.hvac_cooling_type	upgrade	shape_ts_cooling	shape_ts_heating
-res_hvac_ann_1	ER heating + AC	ER heating + AC	Electricity	Central AC	0	res_cooling_ts_1	res_heating_ts_1
-res_hvac_ann_1	ER heating + AC	ER heating + AC	Electricity	Room AC	0	res_cooling_ts_1	res_heating_ts_1
-res_hvac_ann_10	NG heating + AC	NG heating + AC	Natural Gas	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_10	NG heating + AC	NG heating + AC	Natural Gas	Room AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_11	NG heating + AC	NG heating + AC to ES ASHP	Natural Gas	Central AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_11	NG heating + AC	NG heating + AC to ES ASHP	Natural Gas	Room AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_12	NG heating + AC	NG heating + AC to high eff ASHP	Natural Gas	Central AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_12	NG heating + AC	NG heating + AC to high eff ASHP	Natural Gas	Room AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_13	NG heating + AC	NG heating + AC to ultra high eff ASHP	Natural Gas	Central AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_13	NG heating + AC	NG heating + AC to ultra high eff ASHP	Natural Gas	Room AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_14	NG heating + AC	NG heating + AC to ES ASHP existing backup	Natural Gas	Central AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_14	NG heating + AC	NG heating + AC to ES ASHP existing backup	Natural Gas	Room AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_15	NG heating + AC	NG heating + AC to GSHP	Natural Gas	Central AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_15	NG heating + AC	NG heating + AC to GSHP	Natural Gas	Room AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_16	NG heating + AC	NG heating + AC to ES ASHP + light env	Natural Gas	Central AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_16	NG heating + AC	NG heating + AC to ES ASHP + light env	Natural Gas	Room AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_17	NG heating + AC	NG heating + AC to high eff ASHP + light env	Natural Gas	Central AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_17	NG heating + AC	NG heating + AC to high eff ASHP + light env	Natural Gas	Room AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_18	NG heating + AC	NG heating + AC to ultra high eff ASHP + light env	Natural Gas	Central AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_18	NG heating + AC	NG heating + AC to ultra high eff ASHP + light env	Natural Gas	Room AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_19	NG heating + AC	NG heating + AC to ES ASHP existing backup + light env	Natural Gas	Central AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_19	NG heating + AC	NG heating + AC to ES ASHP existing backup + light env	Natural Gas	Room AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_2	ER heating + AC	ER heating + AC to ES ASHP	Electricity	Central AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_2	ER heating + AC	ER heating + AC to ES ASHP	Electricity	Room AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_20	NG heating + AC	NG heating + AC to GSHP + light env	Natural Gas	Central AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_20	NG heating + AC	NG heating + AC to GSHP + light env	Natural Gas	Room AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Other Fuel	Room AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Propane	Room AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Fuel Oil	Room AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Other Fuel	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Propane	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Fuel Oil	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Other Fuel	Room AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Propane	Room AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Fuel Oil	Room AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Other Fuel	Central AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Propane	Central AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Fuel Oil	Central AC	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Other Fuel	Room AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Propane	Room AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Fuel Oil	Room AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Other Fuel	Central AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Propane	Central AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Fuel Oil	Central AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Other Fuel	Room AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Propane	Room AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Fuel Oil	Room AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Other Fuel	Central AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Propane	Central AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Fuel Oil	Central AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Other Fuel	Room AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Propane	Room AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Fuel Oil	Room AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Other Fuel	Central AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Propane	Central AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Fuel Oil	Central AC	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Other Fuel	Room AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Propane	Room AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Fuel Oil	Room AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Other Fuel	Central AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Propane	Central AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Fuel Oil	Central AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Other Fuel	Room AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Propane	Room AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Fuel Oil	Room AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Other Fuel	Central AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Propane	Central AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Fuel Oil	Central AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Other Fuel	Room AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Propane	Room AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Fuel Oil	Room AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Other Fuel	Central AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Propane	Central AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Fuel Oil	Central AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Other Fuel	Room AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Propane	Room AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Fuel Oil	Room AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Other Fuel	Central AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Propane	Central AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Fuel Oil	Central AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_3	ER heating + AC	ER heating + AC to high eff ASHP	Electricity	Central AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_3	ER heating + AC	ER heating + AC to high eff ASHP	Electricity	Room AC	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Other Fuel	Room AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Propane	Room AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Fuel Oil	Room AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Other Fuel	Central AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Propane	Central AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Fuel Oil	Central AC	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Other Fuel	Room AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Propane	Room AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Fuel Oil	Room AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Other Fuel	Central AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Propane	Central AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Fuel Oil	Central AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_32	HP heating	HP heating	Electricity	Non-Ducted Heat Pump	0	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_33	HP heating	HP heating to ES ASHP	Electricity	Non-Ducted Heat Pump	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_34	HP heating	HP heating to high eff ASHP	Electricity	Non-Ducted Heat Pump	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_35	HP heating	HP heating to ultra high eff ASHP	Electricity	Non-Ducted Heat Pump	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_36	HP heating	HP heating to ES ASHP existing backup	Electricity	Non-Ducted Heat Pump	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_37	HP heating	HP heating to GSHP	Electricity	Non-Ducted Heat Pump	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_38	HP heating	HP heating to ES ASHP + light env	Electricity	Non-Ducted Heat Pump	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_39	HP heating	HP heating to high eff ASHP + light env	Electricity	Non-Ducted Heat Pump	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_4	ER heating + AC	ER heating + AC to ultra high eff ASHP	Electricity	Central AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_4	ER heating + AC	ER heating + AC to ultra high eff ASHP	Electricity	Room AC	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_40	HP heating	HP heating to ultra high eff ASHP + light env	Electricity	Non-Ducted Heat Pump	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_41	HP heating	HP heating to ES ASHP existing backup + light env	Electricity	Non-Ducted Heat Pump	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_42	HP heating	HP heating to GSHP + light env	Electricity	Non-Ducted Heat Pump	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Electricity	None	0	res_cooling_ts_0	res_heating_ts_1
-res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Fuel Oil	None	0	res_cooling_ts_0	res_heating_ts_1
-res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Natural Gas	None	0	res_cooling_ts_0	res_heating_ts_1
-res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Other Fuel	None	0	res_cooling_ts_0	res_heating_ts_1
-res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Propane	None	0	res_cooling_ts_0	res_heating_ts_1
-res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Electricity	None	1	res_cooling_ts_0	res_heating_ts_3
-res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Fuel Oil	None	1	res_cooling_ts_0	res_heating_ts_3
-res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Natural Gas	None	1	res_cooling_ts_0	res_heating_ts_3
-res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Other Fuel	None	1	res_cooling_ts_0	res_heating_ts_3
-res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Propane	None	1	res_cooling_ts_0	res_heating_ts_3
-res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Electricity	None	2	res_cooling_ts_0	res_heating_ts_4
-res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Fuel Oil	None	2	res_cooling_ts_0	res_heating_ts_4
-res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Natural Gas	None	2	res_cooling_ts_0	res_heating_ts_4
-res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Other Fuel	None	2	res_cooling_ts_0	res_heating_ts_4
-res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Propane	None	2	res_cooling_ts_0	res_heating_ts_4
-res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Electricity	None	3	res_cooling_ts_0	res_heating_ts_5
-res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Fuel Oil	None	3	res_cooling_ts_0	res_heating_ts_5
-res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Natural Gas	None	3	res_cooling_ts_0	res_heating_ts_5
-res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Other Fuel	None	3	res_cooling_ts_0	res_heating_ts_5
-res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Propane	None	3	res_cooling_ts_0	res_heating_ts_5
-res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Electricity	None	5	res_cooling_ts_0	res_heating_ts_7
-res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Fuel Oil	None	5	res_cooling_ts_0	res_heating_ts_7
-res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Natural Gas	None	5	res_cooling_ts_0	res_heating_ts_7
-res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Other Fuel	None	5	res_cooling_ts_0	res_heating_ts_7
-res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Propane	None	5	res_cooling_ts_0	res_heating_ts_7
-res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Electricity	None	6	res_cooling_ts_0	res_heating_ts_8
-res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Fuel Oil	None	6	res_cooling_ts_0	res_heating_ts_8
-res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Natural Gas	None	6	res_cooling_ts_0	res_heating_ts_8
-res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Other Fuel	None	6	res_cooling_ts_0	res_heating_ts_8
-res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Propane	None	6	res_cooling_ts_0	res_heating_ts_8
-res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Electricity	None	7	res_cooling_ts_0	res_heating_ts_9
-res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Fuel Oil	None	7	res_cooling_ts_0	res_heating_ts_9
-res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Natural Gas	None	7	res_cooling_ts_0	res_heating_ts_9
-res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Other Fuel	None	7	res_cooling_ts_0	res_heating_ts_9
-res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Propane	None	7	res_cooling_ts_0	res_heating_ts_9
-res_hvac_ann_5	ER heating + AC	ER heating + AC to GSHP	Electricity	Central AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_5	ER heating + AC	ER heating + AC to GSHP	Electricity	Room AC	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Electricity	None	8	res_cooling_ts_0	res_heating_ts_10
-res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Fuel Oil	None	8	res_cooling_ts_0	res_heating_ts_10
-res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Natural Gas	None	8	res_cooling_ts_0	res_heating_ts_10
-res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Other Fuel	None	8	res_cooling_ts_0	res_heating_ts_10
-res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Propane	None	8	res_cooling_ts_0	res_heating_ts_10
-res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Electricity	None	10	res_cooling_ts_0	res_heating_ts_12
-res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Fuel Oil	None	10	res_cooling_ts_0	res_heating_ts_12
-res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Natural Gas	None	10	res_cooling_ts_0	res_heating_ts_12
-res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Other Fuel	None	10	res_cooling_ts_0	res_heating_ts_12
-res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Propane	None	10	res_cooling_ts_0	res_heating_ts_12
-res_hvac_ann_52	Delivered heat	Delivered heat	unused	unused	0	res_cooling_ts_1	res_heating_ts_1
-res_hvac_ann_53	ER heating no cooling	ER heating no cooling	Electricity	None	0	res_cooling_ts_1	res_heating_ts_1
-res_hvac_ann_54	ER heating no cooling	ER heating no cooling to ES ASHP	Electricity	None	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_55	ER heating no cooling	ER heating no cooling to high eff ASHP	Electricity	None	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_56	ER heating no cooling	ER heating no cooling to ultra high eff ASHP	Electricity	None	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_57	ER heating no cooling	ER heating no cooling to GSHP	Electricity	None	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_58	ER heating no cooling	ER heating no cooling to ES ASHP + light env	Electricity	None	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_59	ER heating no cooling	ER heating no cooling to high eff ASHP + light env	Electricity	None	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_6	ER heating + AC	ER heating + AC to ES ASHP + light env	Electricity	Central AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_6	ER heating + AC	ER heating + AC to ES ASHP + light env	Electricity	Room AC	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_60	ER heating no cooling	ER heating no cooling to ultra high eff ASHP + light env	Electricity	None	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_61	ER heating no cooling	ER heating no cooling to GSHP + light env	Electricity	None	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_62	NG heating no cooling	NG heating no cooling	Natural Gas	None	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_63	NG heating no cooling	NG heating no cooling to ES ASHP	Natural Gas	None	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_64	NG heating no cooling	NG heating no cooling to high eff ASHP	Natural Gas	None	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_65	NG heating no cooling	NG heating no cooling to ultra high eff ASHP	Natural Gas	None	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_66	NG heating no cooling	NG heating no cooling to ES ASHP existing backup	Natural Gas	None	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_67	NG heating no cooling	NG heating no cooling to GSHP	Natural Gas	None	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_68	NG heating no cooling	NG heating no cooling to ES ASHP + light env	Natural Gas	None	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_69	NG heating no cooling	NG heating no cooling to high eff ASHP + light env	Natural Gas	None	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_7	ER heating + AC	ER heating + AC to high eff ASHP + light env	Electricity	Central AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_7	ER heating + AC	ER heating + AC to high eff ASHP + light env	Electricity	Room AC	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_70	NG heating no cooling	NG heating no cooling to ultra high eff ASHP + light env	Natural Gas	None	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_71	NG heating no cooling	NG heating no cooling to ES ASHP existing backup + light env	Natural Gas	None	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_72	NG heating no cooling	NG heating no cooling to GSHP + light env	Natural Gas	None	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Fuel Oil	None	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Propane	None	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Other Fuel	None	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Fuel Oil	None	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Propane	None	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Other Fuel	None	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Fuel Oil	None	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Propane	None	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Other Fuel	None	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Fuel Oil	None	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Propane	None	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Other Fuel	None	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Fuel Oil	None	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Propane	None	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Other Fuel	None	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Fuel Oil	None	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Propane	None	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Other Fuel	None	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Fuel Oil	None	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Propane	None	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Other Fuel	None	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_8	ER heating + AC	ER heating + AC to ultra high eff ASHP + light env	Electricity	Central AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_8	ER heating + AC	ER heating + AC to ultra high eff ASHP + light env	Electricity	Room AC	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Fuel Oil	None	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Propane	None	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Other Fuel	None	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Fuel Oil	None	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Propane	None	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Other Fuel	None	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Fuel Oil	None	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Propane	None	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Other Fuel	None	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Fuel Oil	None	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Propane	None	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Other Fuel	None	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_84	Delivered fossil heat	Delivered fossil heat	Other Fuel	unused	unused	res_cooling_ts_0	res_heating_ts_2
-res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Central AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Room AC	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_32	HP heating	HP heating	Electricity	Ducted Heat Pump	0	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_33	HP heating	HP heating to ES ASHP	Electricity	Ducted Heat Pump	1	res_cooling_ts_2	res_heating_ts_3
-res_hvac_ann_34	HP heating	HP heating to high eff ASHP	Electricity	Ducted Heat Pump	2	res_cooling_ts_3	res_heating_ts_4
-res_hvac_ann_35	HP heating	HP heating to ultra high eff ASHP	Electricity	Ducted Heat Pump	3	res_cooling_ts_4	res_heating_ts_5
-res_hvac_ann_36	HP heating	HP heating to ES ASHP existing backup	Electricity	Ducted Heat Pump	4	res_cooling_ts_4	res_heating_ts_6
-res_hvac_ann_37	HP heating	HP heating to GSHP	Electricity	Ducted Heat Pump	5	res_cooling_ts_5	res_heating_ts_7
-res_hvac_ann_38	HP heating	HP heating to ES ASHP + light env	Electricity	Ducted Heat Pump	6	res_cooling_ts_6	res_heating_ts_8
-res_hvac_ann_39	HP heating	HP heating to high eff ASHP + light env	Electricity	Ducted Heat Pump	7	res_cooling_ts_7	res_heating_ts_9
-res_hvac_ann_40	HP heating	HP heating to ultra high eff ASHP + light env	Electricity	Ducted Heat Pump	8	res_cooling_ts_8	res_heating_ts_10
-res_hvac_ann_41	HP heating	HP heating to ES ASHP existing backup + light env	Electricity	Ducted Heat Pump	9	res_cooling_ts_8	res_heating_ts_11
-res_hvac_ann_42	HP heating	HP heating to GSHP + light env	Electricity	Ducted Heat Pump	10	res_cooling_ts_9	res_heating_ts_12
-res_hvac_ann_85	No heating + AC	No heating + AC	None	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_85	No heating + AC	No heating + AC	None	Room AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Central AC	0	res_cooling_ts_1	res_heating_ts_2
-res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Room AC	0	res_cooling_ts_1	res_heating_ts_2
+group_ann	original	description	in.heating_fuel	in.hvac_cooling_type	upgrade
+res_hvac_ann_1	ER heating + AC	ER heating + AC	Electricity	Central AC	0
+res_hvac_ann_1	ER heating + AC	ER heating + AC	Electricity	Room AC	0
+res_hvac_ann_10	NG heating + AC	NG heating + AC	Natural Gas	Central AC	0
+res_hvac_ann_10	NG heating + AC	NG heating + AC	Natural Gas	Room AC	0
+res_hvac_ann_11	NG heating + AC	NG heating + AC to ES ASHP	Natural Gas	Central AC	1
+res_hvac_ann_11	NG heating + AC	NG heating + AC to ES ASHP	Natural Gas	Room AC	1
+res_hvac_ann_12	NG heating + AC	NG heating + AC to high eff ASHP	Natural Gas	Central AC	2
+res_hvac_ann_12	NG heating + AC	NG heating + AC to high eff ASHP	Natural Gas	Room AC	2
+res_hvac_ann_13	NG heating + AC	NG heating + AC to ultra high eff ASHP	Natural Gas	Central AC	3
+res_hvac_ann_13	NG heating + AC	NG heating + AC to ultra high eff ASHP	Natural Gas	Room AC	3
+res_hvac_ann_14	NG heating + AC	NG heating + AC to ES ASHP existing backup	Natural Gas	Central AC	4
+res_hvac_ann_14	NG heating + AC	NG heating + AC to ES ASHP existing backup	Natural Gas	Room AC	4
+res_hvac_ann_15	NG heating + AC	NG heating + AC to GSHP	Natural Gas	Central AC	5
+res_hvac_ann_15	NG heating + AC	NG heating + AC to GSHP	Natural Gas	Room AC	5
+res_hvac_ann_16	NG heating + AC	NG heating + AC to ES ASHP + light env	Natural Gas	Central AC	6
+res_hvac_ann_16	NG heating + AC	NG heating + AC to ES ASHP + light env	Natural Gas	Room AC	6
+res_hvac_ann_17	NG heating + AC	NG heating + AC to high eff ASHP + light env	Natural Gas	Central AC	7
+res_hvac_ann_17	NG heating + AC	NG heating + AC to high eff ASHP + light env	Natural Gas	Room AC	7
+res_hvac_ann_18	NG heating + AC	NG heating + AC to ultra high eff ASHP + light env	Natural Gas	Central AC	8
+res_hvac_ann_18	NG heating + AC	NG heating + AC to ultra high eff ASHP + light env	Natural Gas	Room AC	8
+res_hvac_ann_19	NG heating + AC	NG heating + AC to ES ASHP existing backup + light env	Natural Gas	Central AC	9
+res_hvac_ann_19	NG heating + AC	NG heating + AC to ES ASHP existing backup + light env	Natural Gas	Room AC	9
+res_hvac_ann_2	ER heating + AC	ER heating + AC to ES ASHP	Electricity	Central AC	1
+res_hvac_ann_2	ER heating + AC	ER heating + AC to ES ASHP	Electricity	Room AC	1
+res_hvac_ann_20	NG heating + AC	NG heating + AC to GSHP + light env	Natural Gas	Central AC	10
+res_hvac_ann_20	NG heating + AC	NG heating + AC to GSHP + light env	Natural Gas	Room AC	10
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Other Fuel	Room AC	0
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Propane	Room AC	0
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Fuel Oil	Room AC	0
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Other Fuel	Central AC	0
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Propane	Central AC	0
+res_hvac_ann_21	Other fossil heating + AC	Other fossil heating + AC	Fuel Oil	Central AC	0
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Other Fuel	Room AC	1
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Propane	Room AC	1
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Fuel Oil	Room AC	1
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Other Fuel	Central AC	1
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Propane	Central AC	1
+res_hvac_ann_22	Other fossil heating + AC	Other fossil heating + AC to ES ASHP	Fuel Oil	Central AC	1
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Other Fuel	Room AC	2
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Propane	Room AC	2
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Fuel Oil	Room AC	2
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Other Fuel	Central AC	2
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Propane	Central AC	2
+res_hvac_ann_23	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP	Fuel Oil	Central AC	2
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Other Fuel	Room AC	3
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Propane	Room AC	3
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Fuel Oil	Room AC	3
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Other Fuel	Central AC	3
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Propane	Central AC	3
+res_hvac_ann_24	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP	Fuel Oil	Central AC	3
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Other Fuel	Room AC	4
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Propane	Room AC	4
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Fuel Oil	Room AC	4
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Other Fuel	Central AC	4
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Propane	Central AC	4
+res_hvac_ann_25	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup	Fuel Oil	Central AC	4
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Other Fuel	Room AC	5
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Propane	Room AC	5
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Fuel Oil	Room AC	5
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Other Fuel	Central AC	5
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Propane	Central AC	5
+res_hvac_ann_26	Other fossil heating + AC	Other fossil heating + AC to GSHP	Fuel Oil	Central AC	5
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Other Fuel	Room AC	6
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Propane	Room AC	6
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Fuel Oil	Room AC	6
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Other Fuel	Central AC	6
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Propane	Central AC	6
+res_hvac_ann_27	Other fossil heating + AC	Other fossil heating + AC to ES ASHP + light env	Fuel Oil	Central AC	6
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Other Fuel	Room AC	7
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Propane	Room AC	7
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Fuel Oil	Room AC	7
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Other Fuel	Central AC	7
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Propane	Central AC	7
+res_hvac_ann_28	Other fossil heating + AC	Other fossil heating + AC to high eff ASHP + light env	Fuel Oil	Central AC	7
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Other Fuel	Room AC	8
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Propane	Room AC	8
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Fuel Oil	Room AC	8
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Other Fuel	Central AC	8
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Propane	Central AC	8
+res_hvac_ann_29	Other fossil heating + AC	Other fossil heating + AC to ultra high eff ASHP + light env	Fuel Oil	Central AC	8
+res_hvac_ann_3	ER heating + AC	ER heating + AC to high eff ASHP	Electricity	Central AC	2
+res_hvac_ann_3	ER heating + AC	ER heating + AC to high eff ASHP	Electricity	Room AC	2
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Other Fuel	Room AC	9
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Propane	Room AC	9
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Fuel Oil	Room AC	9
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Other Fuel	Central AC	9
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Propane	Central AC	9
+res_hvac_ann_30	Other fossil heating + AC	Other fossil heating + AC to ES ASHP existing backup + light env	Fuel Oil	Central AC	9
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Other Fuel	Room AC	10
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Propane	Room AC	10
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Fuel Oil	Room AC	10
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Other Fuel	Central AC	10
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Propane	Central AC	10
+res_hvac_ann_31	Other fossil heating + AC	Other fossil heating + AC to GSHP + light env	Fuel Oil	Central AC	10
+res_hvac_ann_32	HP heating	HP heating	Electricity	Non-Ducted Heat Pump	0
+res_hvac_ann_33	HP heating	HP heating to ES ASHP	Electricity	Non-Ducted Heat Pump	1
+res_hvac_ann_34	HP heating	HP heating to high eff ASHP	Electricity	Non-Ducted Heat Pump	2
+res_hvac_ann_35	HP heating	HP heating to ultra high eff ASHP	Electricity	Non-Ducted Heat Pump	3
+res_hvac_ann_36	HP heating	HP heating to ES ASHP existing backup	Electricity	Non-Ducted Heat Pump	4
+res_hvac_ann_37	HP heating	HP heating to GSHP	Electricity	Non-Ducted Heat Pump	5
+res_hvac_ann_38	HP heating	HP heating to ES ASHP + light env	Electricity	Non-Ducted Heat Pump	6
+res_hvac_ann_39	HP heating	HP heating to high eff ASHP + light env	Electricity	Non-Ducted Heat Pump	7
+res_hvac_ann_4	ER heating + AC	ER heating + AC to ultra high eff ASHP	Electricity	Central AC	3
+res_hvac_ann_4	ER heating + AC	ER heating + AC to ultra high eff ASHP	Electricity	Room AC	3
+res_hvac_ann_40	HP heating	HP heating to ultra high eff ASHP + light env	Electricity	Non-Ducted Heat Pump	8
+res_hvac_ann_41	HP heating	HP heating to ES ASHP existing backup + light env	Electricity	Non-Ducted Heat Pump	9
+res_hvac_ann_42	HP heating	HP heating to GSHP + light env	Electricity	Non-Ducted Heat Pump	10
+res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Electricity	None	0
+res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Fuel Oil	None	0
+res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Natural Gas	None	0
+res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Other Fuel	None	0
+res_hvac_ann_43	Any heating no cooling	Any heating no cooling	Propane	None	0
+res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Electricity	None	1
+res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Fuel Oil	None	1
+res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Natural Gas	None	1
+res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Other Fuel	None	1
+res_hvac_ann_44	Any heating no cooling	Any heating no cooling to ES ASHP	Propane	None	1
+res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Electricity	None	2
+res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Fuel Oil	None	2
+res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Natural Gas	None	2
+res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Other Fuel	None	2
+res_hvac_ann_45	Any heating no cooling	Any heating no cooling to high eff ASHP	Propane	None	2
+res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Electricity	None	3
+res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Fuel Oil	None	3
+res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Natural Gas	None	3
+res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Other Fuel	None	3
+res_hvac_ann_46	Any heating no cooling	Any heating no cooling to ultra high eff ASHP	Propane	None	3
+res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Electricity	None	5
+res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Fuel Oil	None	5
+res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Natural Gas	None	5
+res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Other Fuel	None	5
+res_hvac_ann_47	Any heating no cooling	Any heating no cooling to GSHP	Propane	None	5
+res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Electricity	None	6
+res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Fuel Oil	None	6
+res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Natural Gas	None	6
+res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Other Fuel	None	6
+res_hvac_ann_48	Any heating no cooling	Any heating no cooling to ES ASHP + light env	Propane	None	6
+res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Electricity	None	7
+res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Fuel Oil	None	7
+res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Natural Gas	None	7
+res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Other Fuel	None	7
+res_hvac_ann_49	Any heating no cooling	Any heating no cooling to high eff ASHP + light env	Propane	None	7
+res_hvac_ann_5	ER heating + AC	ER heating + AC to GSHP	Electricity	Central AC	5
+res_hvac_ann_5	ER heating + AC	ER heating + AC to GSHP	Electricity	Room AC	5
+res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Electricity	None	8
+res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Fuel Oil	None	8
+res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Natural Gas	None	8
+res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Other Fuel	None	8
+res_hvac_ann_50	Any heating no cooling	Any heating no cooling to ultra high eff ASHP + light env	Propane	None	8
+res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Electricity	None	10
+res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Fuel Oil	None	10
+res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Natural Gas	None	10
+res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Other Fuel	None	10
+res_hvac_ann_51	Any heating no cooling	Any heating no cooling to GSHP + light env	Propane	None	10
+res_hvac_ann_52	Delivered heat	Delivered heat	unused	unused	0
+res_hvac_ann_53	ER heating no cooling	ER heating no cooling	Electricity	None	0
+res_hvac_ann_54	ER heating no cooling	ER heating no cooling to ES ASHP	Electricity	None	1
+res_hvac_ann_55	ER heating no cooling	ER heating no cooling to high eff ASHP	Electricity	None	2
+res_hvac_ann_56	ER heating no cooling	ER heating no cooling to ultra high eff ASHP	Electricity	None	3
+res_hvac_ann_57	ER heating no cooling	ER heating no cooling to GSHP	Electricity	None	5
+res_hvac_ann_58	ER heating no cooling	ER heating no cooling to ES ASHP + light env	Electricity	None	6
+res_hvac_ann_59	ER heating no cooling	ER heating no cooling to high eff ASHP + light env	Electricity	None	7
+res_hvac_ann_6	ER heating + AC	ER heating + AC to ES ASHP + light env	Electricity	Central AC	6
+res_hvac_ann_6	ER heating + AC	ER heating + AC to ES ASHP + light env	Electricity	Room AC	6
+res_hvac_ann_60	ER heating no cooling	ER heating no cooling to ultra high eff ASHP + light env	Electricity	None	8
+res_hvac_ann_61	ER heating no cooling	ER heating no cooling to GSHP + light env	Electricity	None	10
+res_hvac_ann_62	NG heating no cooling	NG heating no cooling	Natural Gas	None	0
+res_hvac_ann_63	NG heating no cooling	NG heating no cooling to ES ASHP	Natural Gas	None	1
+res_hvac_ann_64	NG heating no cooling	NG heating no cooling to high eff ASHP	Natural Gas	None	2
+res_hvac_ann_65	NG heating no cooling	NG heating no cooling to ultra high eff ASHP	Natural Gas	None	3
+res_hvac_ann_66	NG heating no cooling	NG heating no cooling to ES ASHP existing backup	Natural Gas	None	4
+res_hvac_ann_67	NG heating no cooling	NG heating no cooling to GSHP	Natural Gas	None	5
+res_hvac_ann_68	NG heating no cooling	NG heating no cooling to ES ASHP + light env	Natural Gas	None	6
+res_hvac_ann_69	NG heating no cooling	NG heating no cooling to high eff ASHP + light env	Natural Gas	None	7
+res_hvac_ann_7	ER heating + AC	ER heating + AC to high eff ASHP + light env	Electricity	Central AC	7
+res_hvac_ann_7	ER heating + AC	ER heating + AC to high eff ASHP + light env	Electricity	Room AC	7
+res_hvac_ann_70	NG heating no cooling	NG heating no cooling to ultra high eff ASHP + light env	Natural Gas	None	8
+res_hvac_ann_71	NG heating no cooling	NG heating no cooling to ES ASHP existing backup + light env	Natural Gas	None	9
+res_hvac_ann_72	NG heating no cooling	NG heating no cooling to GSHP + light env	Natural Gas	None	10
+res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Fuel Oil	None	0
+res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Propane	None	0
+res_hvac_ann_73	Other fossil heating no cooling	Other fossil heating no cooling	Other Fuel	None	0
+res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Fuel Oil	None	1
+res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Propane	None	1
+res_hvac_ann_74	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP	Other Fuel	None	1
+res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Fuel Oil	None	2
+res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Propane	None	2
+res_hvac_ann_75	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP	Other Fuel	None	2
+res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Fuel Oil	None	3
+res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Propane	None	3
+res_hvac_ann_76	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP	Other Fuel	None	3
+res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Fuel Oil	None	4
+res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Propane	None	4
+res_hvac_ann_77	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup	Other Fuel	None	4
+res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Fuel Oil	None	5
+res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Propane	None	5
+res_hvac_ann_78	Other fossil heating no cooling	Other fossil heating no cooling to GSHP	Other Fuel	None	5
+res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Fuel Oil	None	6
+res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Propane	None	6
+res_hvac_ann_79	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP + light env	Other Fuel	None	6
+res_hvac_ann_8	ER heating + AC	ER heating + AC to ultra high eff ASHP + light env	Electricity	Central AC	8
+res_hvac_ann_8	ER heating + AC	ER heating + AC to ultra high eff ASHP + light env	Electricity	Room AC	8
+res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Fuel Oil	None	7
+res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Propane	None	7
+res_hvac_ann_80	Other fossil heating no cooling	Other fossil heating no cooling to high eff ASHP + light env	Other Fuel	None	7
+res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Fuel Oil	None	8
+res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Propane	None	8
+res_hvac_ann_81	Other fossil heating no cooling	Other fossil heating no cooling to ultra high eff ASHP + light env	Other Fuel	None	8
+res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Fuel Oil	None	9
+res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Propane	None	9
+res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling to ES ASHP existing backup + light env	Other Fuel	None	9
+res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Fuel Oil	None	10
+res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Propane	None	10
+res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Other Fuel	None	10
+res_hvac_ann_84	Delivered fossil heat	Delivered fossil heat	Other Fuel	unused	unused	0
+res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Central AC	10
+res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Room AC	10
+res_hvac_ann_32	HP heating	HP heating	Electricity	Ducted Heat Pump	0
+res_hvac_ann_33	HP heating	HP heating to ES ASHP	Electricity	Ducted Heat Pump	1
+res_hvac_ann_34	HP heating	HP heating to high eff ASHP	Electricity	Ducted Heat Pump	2
+res_hvac_ann_35	HP heating	HP heating to ultra high eff ASHP	Electricity	Ducted Heat Pump	3
+res_hvac_ann_36	HP heating	HP heating to ES ASHP existing backup	Electricity	Ducted Heat Pump	4
+res_hvac_ann_37	HP heating	HP heating to GSHP	Electricity	Ducted Heat Pump	5
+res_hvac_ann_38	HP heating	HP heating to ES ASHP + light env	Electricity	Ducted Heat Pump	6
+res_hvac_ann_39	HP heating	HP heating to high eff ASHP + light env	Electricity	Ducted Heat Pump	7
+res_hvac_ann_40	HP heating	HP heating to ultra high eff ASHP + light env	Electricity	Ducted Heat Pump	8
+res_hvac_ann_41	HP heating	HP heating to ES ASHP existing backup + light env	Electricity	Ducted Heat Pump	9
+res_hvac_ann_42	HP heating	HP heating to GSHP + light env	Electricity	Ducted Heat Pump	10
+res_hvac_ann_85	No heating + AC	No heating + AC	None	Central AC	0
+res_hvac_ann_85	No heating + AC	No heating + AC	None	Room AC	0
+res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Central AC	0
+res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Room AC	0
