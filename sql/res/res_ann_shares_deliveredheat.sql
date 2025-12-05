@@ -8,7 +8,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_52' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata"
+	FROM "resstock_amy2018_release_2024.2_metadata" meta
 	WHERE upgrade = 0
 	GROUP BY 
 		"in.county",

@@ -5,8 +5,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'com_misc_ann_1' AS group_ann,
 		sum(meta."calc.weighted.electricity.interior_equipment.energy_consumption..tbtu") as misc_elec,
-        sum(meta."calc.weighted.natural_gas.interior_equipment.energy_consumption..tbtu") as misc_ng,
-        sum(meta."calc.weighted.other_fuel.interior_equipment.energy_consumption..tbtu") as misc_fo
+        sum(meta."calc.weighted.natural_gas.interior_equipment.energy_consumption..tbtu") as misc_ng
 	FROM "comstock_2025.1_parquet" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
@@ -44,18 +43,6 @@ UNION ALL
     'com' AS sector,
     "in.state",
     'Other' AS end_use,
-    'Natural Gas' AS fuel
-FROM meta_filtered
-
-UNION ALL
-
-    SELECT 
-    "in.nhgis_county_gisjoin" as "in.county",
-    group_ann,
-    misc_fo / sum(misc_fo) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
-    'com' AS sector,
-    "in.state",
-    'Other' AS end_use,
-    'Distillate/Other' AS fuel
+    'Fossil' AS fuel
 FROM meta_filtered
 ;

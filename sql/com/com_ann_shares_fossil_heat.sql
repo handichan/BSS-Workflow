@@ -8,7 +8,7 @@ WITH meta_filtered AS (
 		chars.group_ann,
 		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu") as heating_ng,
         sum(meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu") as heating_fo,
-        sum(meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec,
+        sum(meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec
 	FROM "comstock_2025.1_parquet" as meta
 		RIGHT JOIN (SELECT * FROM com_ann_hvac WHERE group_ann in ('com_hvac_ann_12','com_hvac_ann_24')) as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"

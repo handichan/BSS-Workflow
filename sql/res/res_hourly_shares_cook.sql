@@ -25,6 +25,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook)
+	AND ts.state='{state}'
 ),
 
 ts_agg AS(

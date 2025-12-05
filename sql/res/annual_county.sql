@@ -60,7 +60,7 @@ SELECT
 FROM scout_meas
 JOIN (
     SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
-    FROM res_annual_disaggregation_multipliers_{weather}
+    FROM res_annual_disaggregation_multipliers_{version}
     WHERE end_use = '{enduse}'
 ) as ann_disag
 ON scout_meas.group_ann = ann_disag.group_ann

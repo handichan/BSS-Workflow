@@ -16,6 +16,7 @@ ts_not_agg AS (
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by weather file, and shape
 ts_agg AS(
@@ -38,7 +39,8 @@ SELECT "in.weather_file_city",
 	misc / sum(misc) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
-	'Other' as end_use
+	'Other' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 
 UNION ALL

@@ -9,14 +9,15 @@ ts_not_agg AS (
 		'com_refrig_ts_1' AS shape_ts,
 		-- make sure all the hours are 2018
 		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
+		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.refrigeration.energy_consumption" * meta.weight as refrigeration
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN "comstock_2025.1_parquet" as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by county, and shape
 ts_agg AS(

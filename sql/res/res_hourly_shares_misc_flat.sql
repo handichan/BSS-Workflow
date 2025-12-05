@@ -17,6 +17,7 @@ ts_not_agg AS (
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by weather file, and shape
 ts_agg AS(

@@ -30,9 +30,9 @@ ts_not_agg AS (
 	meta_shapes."in.state",
 		meta_shapes.shape_ts,
 		-- make sure all the hours are 2018
-		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
+		CASE 
+		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		(ts."out.electricity.cooling.energy_consumption" + ts."out.electricity.heat_rejection.energy_consumption" + ts."out.district_cooling.cooling.energy_consumption" + ts."out.electricity.pumps.energy_consumption") * meta_shapes.weight as cooling
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id

@@ -105,7 +105,7 @@ SELECT
     'res' AS sector,
     "in.state",
     'Cooling (Equip.)' AS end_use,
-    'Electric' AS fuel
+    'All' AS fuel
 FROM geo_totals
 WHERE cooling_total > 0
 ;

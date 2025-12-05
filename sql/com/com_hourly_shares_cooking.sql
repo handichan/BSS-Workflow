@@ -17,8 +17,8 @@ ts_not_agg_base AS (
 		meta_filtered.tz,
 		-- make sure all the hours are 2018
 		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
+		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.interior_equipment.energy_consumption" * meta_filtered.weight as int_equip
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_filtered ON ts.bldg_id = meta_filtered.bldg_id
@@ -39,8 +39,8 @@ ts_not_agg_kitchen AS (
 		meta_filtered.tz,
 		-- make sure all the hours are 2018
 		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
+		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.interior_equipment.energy_consumption" * meta_filtered.weight as int_equip
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_filtered ON ts.bldg_id = meta_filtered.bldg_id

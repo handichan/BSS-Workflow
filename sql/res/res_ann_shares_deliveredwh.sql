@@ -8,7 +8,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.hot_water.energy_delivered.kbtu") as delivered_wh,
 	    'res_wh_ann_6' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata"
+	FROM "resstock_amy2018_release_2024.2_metadata" meta
 	WHERE upgrade = 0
 	GROUP BY 
 		"in.county",

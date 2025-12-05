@@ -1,5 +1,6 @@
 INSERT INTO com_hourly_disaggregation_multipliers_{version}
-"in.county",
+SELECT 
+	"in.county",
 	shape_ts,
 	timestamp_hour,
 	kwh,
