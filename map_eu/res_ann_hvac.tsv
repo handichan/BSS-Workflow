@@ -213,7 +213,7 @@ res_hvac_ann_82	Other fossil heating no cooling	Other fossil heating no cooling 
 res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Fuel Oil	None	10
 res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Propane	None	10
 res_hvac_ann_83	Other fossil heating no cooling	Other fossil heating no cooling to GSHP + light env	Other Fuel	None	10
-res_hvac_ann_84	Delivered fossil heat	Delivered fossil heat	Other Fuel	unused	unused	0
+res_hvac_ann_84	Delivered fossil heat	Delivered fossil heat	Other Fuel	unused	0
 res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Central AC	10
 res_hvac_ann_9	ER heating + AC	ER heating + AC to GSHP + light env	Electricity	Room AC	10
 res_hvac_ann_32	HP heating	HP heating	Electricity	Ducted Heat Pump	0
