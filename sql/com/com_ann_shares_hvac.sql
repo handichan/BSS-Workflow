@@ -12,11 +12,10 @@ WITH meta_filtered AS (
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
     FROM "comstock_2025.1_parquet" as meta
-        RIGHT JOIN com_ann_hvac as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
+        RIGHT JOIN com_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade
-    WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac)
-    AND group_ann NOT IN ('com_hvac_ann_42','com_hvac_ann_43')
+    WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac2)
     GROUP BY 
         meta."in.nhgis_county_gisjoin",
         meta."in.state",
@@ -85,6 +84,18 @@ WHERE heating_fo_total > 0
         "in.state",
         'Cooling (Equip.)' AS end_use,
 	    'Electric' AS fuel
+FROM geo_totals
+
+    UNION ALL
+
+    SELECT 
+        "in.nhgis_county_gisjoin" as "in.county",
+        group_ann,
+        cooling / cooling_total AS multiplier_annual,
+        'com' AS sector,
+        "in.state",
+        'Cooling (Equip.)' AS end_use,
+	    'Natural Gas' AS fuel
 FROM geo_totals
     
     UNION ALL

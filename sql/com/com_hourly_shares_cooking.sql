@@ -54,38 +54,39 @@ ts_agg_kitchen AS(
 	FROM ts_not_agg_kitchen
 	GROUP BY timestamp_hour,
 		tz
-		),
+),
 ts_diff_not_norm AS(
-SELECT ts_agg_base.tz,
-ts_agg_base.timestamp_hour,
-(int_equip_kitchen - int_equip_base) as int_equip_diff
-FROM ts_agg_base
-FULL JOIN ts_agg_kitchen
-ON ts_agg_base.tz = ts_agg_kitchen.tz
-AND ts_agg_base.timestamp_hour = ts_agg_kitchen.timestamp_hour
+	SELECT ts_agg_base.tz,
+		ts_agg_base.timestamp_hour,
+		(int_equip_kitchen - int_equip_base) as int_equip_diff
+	FROM ts_agg_base
+	FULL JOIN ts_agg_kitchen
+		ON ts_agg_base.tz = ts_agg_kitchen.tz
+		AND ts_agg_base.timestamp_hour = ts_agg_kitchen.timestamp_hour
 ),
 ts_norm_tz AS(
-SELECT
-tz,
-'com_cook_ts_1' as shape_ts,
-timestamp_hour,
-int_equip_diff as kwh,
-int_equip_diff/sum(int_equip_diff) OVER (PARTITION BY tz) as multiplier_hourly,
-'com' as sector,
-'Cooking' as end_use
-FROM ts_diff_not_norm)
+	SELECT
+		tz,
+		'com_cook_ts_1' as shape_ts,
+		timestamp_hour,
+		int_equip_diff as kwh,
+		int_equip_diff/sum(int_equip_diff) OVER (PARTITION BY tz) as multiplier_hourly,
+		'com' as sector,
+		'Cooking' as end_use
+	FROM ts_diff_not_norm
+)
 
 SELECT 
-"in.county",
-shape_ts,
-timestamp_hour,
-kwh,
-multiplier_hourly,
-sector,
-"in.state",
-end_use,
-'All' AS fuel
+	"in.county",
+	shape_ts,
+	timestamp_hour,
+	kwh,
+	multiplier_hourly,
+	sector,
+	"in.state",
+	end_use,
+	'All' AS fuel
 FROM ts_norm_tz 
 LEFT JOIN county2tz2state
-ON ts_norm_tz.tz = county2tz2state.tz
+	ON ts_norm_tz.tz = county2tz2state.tz
 ;

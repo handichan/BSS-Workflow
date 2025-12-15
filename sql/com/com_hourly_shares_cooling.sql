@@ -61,6 +61,6 @@ SELECT "in.county",
     'com' AS sector,
     "in.state",
 	'Cooling (Equip.)' as end_use,
-	'Electric' AS fuel
+	'All' AS fuel
 FROM ts_agg
 ;
