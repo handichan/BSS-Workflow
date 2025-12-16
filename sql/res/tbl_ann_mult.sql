@@ -2,6 +2,7 @@
 CREATE EXTERNAL TABLE res_annual_disaggregation_multipliers_{version}(
     `in.county` string,
     `in.weather_file_city` string,
+    `in.weather_file_longitude` double,
     group_ann string,
     multiplier_annual double,
     sector string,

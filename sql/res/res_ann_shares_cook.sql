@@ -7,6 +7,7 @@ INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.range_oven.energy_consumption") as cooking_elec,
@@ -19,12 +20,14 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann
 ),
 geo_totals AS (
     SELECT "in.county",
     	"in.weather_file_city",
+		"in.weather_file_longitude",
         "in.state",
         group_ann,
         cooking_elec,
@@ -38,6 +41,7 @@ FROM meta_filtered
 
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	cooking_elec / cooking_elec_total as multiplier_annual,
 	'res' AS sector,
@@ -51,6 +55,7 @@ UNION ALL
 
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	cooking_ng / cooking_ng_total as multiplier_annual,
 	'res' AS sector,
@@ -64,6 +69,7 @@ UNION ALL
 
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	cooking_prop / cooking_prop_total as multiplier_annual,
 	'res' AS sector,

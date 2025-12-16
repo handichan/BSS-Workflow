@@ -3,6 +3,7 @@ INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
     	meta."in.weather_file_city",
+        meta."in.weather_file_longitude",
 	    meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating_elec,
@@ -19,6 +20,7 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+        meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann
 ),
@@ -26,6 +28,7 @@ WITH meta_filtered AS (
 geo_totals AS (
     SELECT "in.county",
     	"in.weather_file_city",
+        "in.weather_file_longitude",
         "in.state",
         group_ann,
         heating_elec,
@@ -44,6 +47,7 @@ FROM meta_filtered
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     heating_elec / heating_elec_total AS multiplier_annual,
     'res' AS sector,
@@ -58,6 +62,7 @@ UNION ALL
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     heating_ng / heating_ng_total AS multiplier_annual,
     'res' AS sector,
@@ -72,6 +77,7 @@ UNION ALL
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     heating_fo / heating_fo_total AS multiplier_annual,
     'res' AS sector,
@@ -86,6 +92,7 @@ UNION ALL
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     heating_prop / heating_prop_total AS multiplier_annual,
     'res' AS sector,
@@ -100,6 +107,7 @@ UNION ALL
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     cooling / cooling_total AS multiplier_annual,
     'res' AS sector,

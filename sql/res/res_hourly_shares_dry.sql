@@ -4,7 +4,7 @@ WITH meta_shapes AS (
 
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
-		meta."in.state",
+		meta."in.weather_file_longitude",
 		chars.shape_ts,
 		chars.upgrade
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
@@ -15,7 +15,7 @@ WITH meta_shapes AS (
 
 ts_not_agg AS (
 	SELECT meta_shapes."in.weather_file_city",
-	meta_shapes."in.state",
+		meta_shapes."in.weather_file_longitude",
 		meta_shapes.shape_ts,
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
@@ -26,12 +26,11 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry)
-	AND ts.state='{state}'
 ),
 
 ts_agg AS(
 	SELECT "in.weather_file_city",
-	"in.state",
+		"in.weather_file_longitude",
 		shape_ts,
 		timestamp_hour,
 		sum(drying_elec) as drying_elec,
@@ -39,7 +38,7 @@ ts_agg AS(
 
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
-	"in.state",
+	"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
 ),
@@ -49,11 +48,11 @@ ts_totals AS(
 	shape_ts,
 	timestamp_hour,
 	drying_elec as drying_elec,
-	sum(drying_elec) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as drying_elec_total,
+	sum(drying_elec) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as drying_elec_total,
 	drying_fossil as drying_fossil,
-	sum(drying_fossil) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as drying_fossil_total,
+	sum(drying_fossil) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as drying_fossil_total,
     'res' AS sector,
-    "in.state"
+    "in.weather_file_longitude"
 FROM ts_agg
 )
 
@@ -63,7 +62,7 @@ SELECT "in.weather_file_city",
 	drying_elec as kwh,
 	drying_elec / drying_elec_total as multiplier_hourly,
     'res' AS sector,
-    "in.state",
+    "in.weather_file_longitude",
 	'Other' as end_use,
 	'Electric' as fuel
 FROM ts_totals
@@ -77,7 +76,7 @@ SELECT "in.weather_file_city",
 	drying_fossil as kwh,
 	drying_fossil / drying_fossil_total as multiplier_hourly,
     'res' AS sector,
-    "in.state",
+    "in.weather_file_longitude",
 	'Other' as end_use,
 	'Fossil' as fuel
 FROM ts_totals

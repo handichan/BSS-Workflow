@@ -3,6 +3,7 @@ INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
 		meta."in.weather_file_city",
+        meta."in.weather_file_longitude",
 	    meta."in.state",
 	    'res_misc_ann_1' AS group_ann,
 		sum(meta."out.electricity.plug_loads.energy_consumption" + meta."out.electricity.permanent_spa_heat.energy_consumption" + meta."out.electricity.permanent_spa_pump.energy_consumption" + meta."out.electricity.pool_heater.energy_consumption" + meta."out.electricity.well_pump.energy_consumption") as misc_elec,
@@ -12,10 +13,12 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+        meta."in.weather_file_longitude",
 		meta."in.state"
 )
 SELECT "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     misc_elec / sum(misc_elec) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,
@@ -28,6 +31,7 @@ UNION ALL
 
 SELECT "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     misc_elec / sum(misc_elec) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,
@@ -40,6 +44,7 @@ UNION ALL
 
 SELECT "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     misc_ng / sum(misc_ng) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'res' AS sector,

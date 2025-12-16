@@ -3,6 +3,7 @@ INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 	    meta."in.state",
 	    'res_light_ann_1' AS group_ann,
 		sum(meta."out.electricity.lighting_exterior.energy_consumption" + meta."out.electricity.lighting_interior.energy_consumption" + meta."out.electricity.lighting_garage.energy_consumption") as lighting
@@ -11,10 +12,12 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state"
 )
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	lighting / sum(lighting) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
 	'res' AS sector,

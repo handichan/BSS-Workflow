@@ -61,6 +61,7 @@ scout_fossil AS(
 SELECT 
     ann_disag."in.county",
     ann_disag."in.weather_file_city",
+    ann_disag."in.weather_file_longitude",
     scout_biomass.fuel,
     scout_biomass.meas,
     scout_biomass.tech_stage,
@@ -75,7 +76,7 @@ SELECT
     scout_biomass.end_use
 FROM scout_biomass
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
+    SELECT "in.county", "in.weather_file_city", "in.weather_file_longitude", multiplier_annual, "in.state", group_ann, end_use, fuel 
     FROM res_annual_disaggregation_multipliers_{version}
     WHERE end_use = '{enduse}' 
     AND fuel = 'Propane'
@@ -88,6 +89,7 @@ UNION
 SELECT 
     ann_disag."in.county",
     ann_disag."in.weather_file_city",
+    ann_disag."in.weather_file_longitude",
     scout_fossil.fuel,
     scout_fossil.meas,
     scout_fossil.tech_stage,
@@ -102,7 +104,7 @@ SELECT
     scout_fossil.end_use
 FROM scout_fossil
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
+    SELECT "in.county", "in.weather_file_city", "in.weather_file_longitude", multiplier_annual, "in.state", group_ann, end_use, fuel 
     FROM res_annual_disaggregation_multipliers_{version}
     WHERE end_use = '{enduse}' 
     AND fuel = 'Fossil'
@@ -115,6 +117,7 @@ AND scout_fossil.end_use = ann_disag.end_use
   SELECT 
     ann_disag."in.county",
     ann_disag."in.weather_file_city",
+    ann_disag."in.weather_file_longitude",
     scout_meas.fuel,
     scout_meas.meas,
     scout_meas.tech_stage,
@@ -129,7 +132,7 @@ AND scout_fossil.end_use = ann_disag.end_use
     scout_meas.end_use
 FROM scout_meas
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
+    SELECT "in.county", "in.weather_file_city", "in.weather_file_longitude", multiplier_annual, "in.state", group_ann, end_use, fuel 
     FROM res_annual_disaggregation_multipliers_{version}
     WHERE end_use = '{enduse}'
     AND fuel = 'All'
@@ -142,6 +145,7 @@ AND scout_meas.end_use = ann_disag.end_use
   SELECT 
     ann_disag."in.county",
     ann_disag."in.weather_file_city",
+    ann_disag."in.weather_file_longitude",
     scout_meas.fuel,
     scout_meas.meas,
     scout_meas.tech_stage,
@@ -156,7 +160,7 @@ AND scout_meas.end_use = ann_disag.end_use
     scout_meas.end_use
 FROM scout_meas
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use, fuel 
+    SELECT "in.county", "in.weather_file_city", "in.weather_file_longitude", multiplier_annual, "in.state", group_ann, end_use, fuel 
     FROM res_annual_disaggregation_multipliers_{version}
     WHERE end_use = '{enduse}'
     AND fuel != 'All'

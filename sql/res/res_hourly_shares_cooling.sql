@@ -1,8 +1,5 @@
--- rerun if there have been updates to res_ts_cooling
--- res_ts_cooling defines the grouping characteristics for heating shapes (e.g. ES HP, GSHP with light envelope)
--- potential reasons to update res_ts_cooling
-    -- new ResStock upgrades
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
+-- put into a temp table because weather files cross states, but it times out to do all the states at the same time
+-- res_hourly_hvac_norm combines the states
 
 INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH meta_shapes AS (

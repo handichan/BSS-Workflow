@@ -5,6 +5,7 @@ WITH meta_filtered AS (
 	
 	SELECT "in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 	    "in.state",
 	    sum("out.load.hot_water.energy_delivered.kbtu") as delivered_wh,
 	    'res_wh_ann_6' AS group_ann
@@ -13,12 +14,14 @@ WITH meta_filtered AS (
 	GROUP BY 
 		"in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 		"in.state"
 )
 
 SELECT 
     "in.county",
     "in.weather_file_city",
+	"in.weather_file_longitude",
     group_ann,
     delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
     'res' AS sector,

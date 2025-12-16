@@ -3,6 +3,7 @@ INSERT INTO res_annual_disaggregation_multipliers_{version}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 	    meta."in.state",
 	    'res_fanspumps_ann_1' AS group_ann,
 		sum(meta."out.electricity.mech_vent.energy_consumption" + meta."out.electricity.ceiling_fan.energy_consumption" + meta."out.electricity.cooling_fans_pumps.energy_consumption" + meta."out.electricity.heating_fans_pumps.energy_consumption" + meta."out.electricity.heating_hp_bkup_fa.energy_consumption") as fanspumps
@@ -11,10 +12,12 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state"
 )
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	fanspumps / sum(fanspumps) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
 	'res' AS sector,

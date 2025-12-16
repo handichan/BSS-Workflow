@@ -2,6 +2,7 @@ INSERT INTO  county_hourly_res_{year}_{turnover}_{weather}
 WITH filtered_annual AS (
     SELECT "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     meas,
     tech_stage,
     turnover,
@@ -43,6 +44,7 @@ to_disagg AS (
         fa."year",
         fa."in.county",
         fa."in.weather_file_city",
+        fa."in.weather_file_longitude",
         fa.end_use,
         fa.fuel,
         mmtsl.shape_ts,
@@ -62,6 +64,7 @@ grouped_disagg AS (
         "year",
         "in.county",
         "in.weather_file_city",
+        "in.weather_file_longitude",
         end_use,
         fuel,
         shape_ts,
@@ -74,6 +77,7 @@ grouped_disagg AS (
         "year",
         "in.county",
         "in.weather_file_city",
+        "in.weather_file_longitude",
         end_use,
         fuel,
         shape_ts,
@@ -83,7 +87,7 @@ grouped_disagg AS (
 
 grouped_fossil AS (
     SELECT 
-        "in.state", "in.weather_file_city", "year","in.county",end_use,shape_ts,fuel,turnover,county_ann_kwh,scout_run
+        "in.state", "in.weather_file_city", "in.weather_file_longitude", "year","in.county",end_use,shape_ts,fuel,turnover,county_ann_kwh,scout_run
     FROM grouped_disagg
     WHERE fuel IN ('Natural Gas', 'Propane', 'Biomass', 'Distillate/Other')
 ),
@@ -102,13 +106,13 @@ hourly_ungrouped AS (
         gf.scout_run
         FROM grouped_fossil as gf
     LEFT JOIN (SELECT 
-    "in.weather_file_city", "in.state", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
+    "in.weather_file_city", "in.weather_file_longitude", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM res_hourly_disaggregation_multipliers_{version}
     WHERE multiplier_hourly >= 0
     AND fuel = 'Fossil'
     AND end_use = '{enduse}') AS h
     ON gf."in.weather_file_city" = h."in.weather_file_city"
-    AND gf."in.state" = h."in.state"
+    AND gf."in.weather_file_longitude" = h."in.weather_file_longitude"
     AND gf.end_use = h.end_use
     AND gf.shape_ts = h.shape_ts
 
@@ -126,13 +130,13 @@ hourly_ungrouped AS (
         gd.scout_run
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
-    "in.weather_file_city", "in.state", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
+    "in.weather_file_city", "in.weather_file_longitude", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
     FROM res_hourly_disaggregation_multipliers_{version}
     WHERE multiplier_hourly >= 0
     AND fuel = 'All'
     AND end_use = '{enduse}') AS h
     ON gd."in.weather_file_city" = h."in.weather_file_city"
-    AND gd."in.state" = h."in.state"
+    AND gd."in.weather_file_longitude" = h."in.weather_file_longitude"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts
 
@@ -150,13 +154,13 @@ hourly_ungrouped AS (
         gd.scout_run
     FROM grouped_disagg AS gd
     LEFT JOIN (SELECT 
-        "in.weather_file_city", "in.state", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
+        "in.weather_file_city", "in.weather_file_longitude", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
         FROM res_hourly_disaggregation_multipliers_{version}
         WHERE multiplier_hourly >= 0
         AND fuel NOT IN ('Fossil', 'All')
         AND end_use = '{enduse}') AS h
     ON gd."in.weather_file_city" = h."in.weather_file_city"
-    AND gd."in.state" = h."in.state"
+    AND gd."in.weather_file_longitude" = h."in.weather_file_longitude"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts
     AND gd.fuel = h.fuel

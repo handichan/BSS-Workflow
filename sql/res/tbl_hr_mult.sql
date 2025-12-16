@@ -6,7 +6,7 @@ CREATE EXTERNAL TABLE res_hourly_disaggregation_multipliers_{version}(
     kwh double,
     multiplier_hourly double,
     sector string,
-    `in.state` string,
+    `in.weather_file_longitude` double,
     end_use string,
     fuel string
 )
