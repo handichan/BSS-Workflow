@@ -1,5 +1,7 @@
+-- put into a temp table because weather files cross states, but it times out to do all the states at the same time
+-- res_hourly_hvac_norm combines the states
 
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO res_hourly_hvac_temp_{version}
 WITH meta_shapes AS (
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
@@ -7,7 +9,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-		RIGHT JOIN res_ts_heating2 as chars 
+	RIGHT JOIN res_ts_heating2 as chars 
 		ON meta."in.hvac_heating_type_and_fuel" = chars."in.hvac_heating_type_and_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -22,7 +24,7 @@ ts_not_agg AS (
 		ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heating_hp_bkup.energy_consumption" as heating_elec,
 		ts."out.fuel_oil.heating.energy_consumption" + ts."out.natural_gas.heating.energy_consumption" + ts."out.propane.heating.energy_consumption" as heating_fossil
 	FROM "resstock_amy2018_release_2024.2_by_state" as ts
-		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
+	RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_heating2)
 ),
@@ -55,12 +57,11 @@ FROM ts_agg
 )
 
 SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
 	heating_elec as kwh,
-	heating_elec / heating_elec_total as multiplier_hourly,
     'res' AS sector,
-    "in.weather_file_longitude",
 	'Heating (Equip.)' as end_use,
 	'Electric' as fuel
 FROM ts_totals
@@ -69,12 +70,11 @@ WHERE heating_elec_total > 0
 UNION ALL
 
 SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
 	heating_fossil as kwh,
-	heating_fossil / heating_fossil_total as multiplier_hourly,
     'res' AS sector,
-    "in.weather_file_longitude",
 	'Heating (Equip.)' as end_use,
 	'Fossil' as fuel
 FROM ts_totals

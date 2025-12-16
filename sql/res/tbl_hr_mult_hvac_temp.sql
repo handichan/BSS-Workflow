@@ -7,7 +7,6 @@ CREATE EXTERNAL TABLE res_hourly_hvac_temp_{version}(
     timestamp_hour timestamp,
     kwh double,
     sector string,
-    `in.weather_file_longitude` double,
     end_use string,
     fuel string
 )
