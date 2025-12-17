@@ -315,7 +315,7 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (R) Ref. Case ASHP	Cooling (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_cooling_ts_2	res_cooling_ts_2	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
 (R) Ref. Case ASHP	Heating (Equip.)	res_hvac_ann_32	res_hvac_ann_32	res_heating_ts_3	res_heating_ts_3	res	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
 (R) Ref. Case Bio or No Heat & AC	Cooling (Equip.)	res_hvac_ann_85	res_hvac_ann_85	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
-(R) Ref. Case Bio or No Heat & AC	Heating (Equip.)	res_hvac_ann_85	res_hvac_ann_85	res_heating_ts_2	res_heating_ts_2	res	Secondary heating	Secondary heating	Secondary heating	Secondary heating
+(R) Ref. Case Bio or No Heat & AC	Heating (Equip.)	res_hvac_ann_52	res_hvac_ann_52	res_heating_ts_2	res_heating_ts_2	res	Secondary heating	Secondary heating	Secondary heating	Secondary heating
 (R) Ref. Case Clothes Washer	Other	res_cw_ann_1	res_cw_ann_1	res_cw_ts_1	res_cw_ts_1	res	Clothes washer	Clothes washer	Clothes washer	Clothes washer
 (R) Ref. Case Dishwasher	Other	res_dw_ann_1	res_dw_ann_1	res_dw_ts_1	res_dw_ts_1	res	Dishwasher	Dishwasher	Dishwasher	Dishwasher
 (R) Ref. Case Elec. Boiler FS (NG Boiler)	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_11	res_cooling_ts_1	res_cooling_ts_1	res	AC	AC	AC	AC
