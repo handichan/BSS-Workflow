@@ -10,7 +10,7 @@ WITH meta_shapes AS (
 		chars.upgrade,
         meta.weight
     	FROM "comstock_2025.1_parquet" as meta
-		RIGHT JOIN com_ts_heating as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
+		RIGHT JOIN com_ts_heating2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
         AND meta.applicability = chars.applicability
 		AND cast(meta.upgrade as varchar) = chars.upgrade
@@ -29,7 +29,7 @@ ts_not_agg AS (
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = cast(meta_shapes.upgrade as varchar)
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_heating)
+	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_heating2)
 	AND ts.state='{state}'
 ),
 -- aggregate to hourly by county, and shape

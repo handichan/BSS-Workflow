@@ -14,9 +14,9 @@ WITH meta_filtered AS (
 		sum(meta."out.natural_gas.range_oven.energy_consumption") as cooking_ng,
 		sum(meta."out.propane.range_oven.energy_consumption") as cooking_prop
 	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-	RIGHT JOIN res_ann_cook as chars ON meta."in.cooking_range" = chars."in.cooking_range"
+	RIGHT JOIN res_ann_cook2 as chars ON meta."in.cooking_range" = chars."in.cooking_range"
 	AND cast(meta.upgrade as varchar) = chars.upgrade
-	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_cook)
+	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_cook2)
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",

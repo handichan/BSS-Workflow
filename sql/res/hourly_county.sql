@@ -26,7 +26,7 @@ SELECT
     Scout_end_use,
     'original_ann' AS tech_stage,
     original_ts AS shape_ts
-FROM measure_map
+FROM measure_map2
 
 UNION ALL
 
@@ -35,7 +35,7 @@ SELECT
     Scout_end_use,
     'measure_ann' AS tech_stage,
     measure_ts AS shape_ts
-FROM measure_map
+FROM measure_map2
 ),
 
 to_disagg AS (
