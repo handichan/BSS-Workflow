@@ -10,7 +10,8 @@ ts_not_agg AS (
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.plug_loads.energy_consumption" + ts."out.electricity.permanent_spa_heat.energy_consumption" + ts."out.electricity.permanent_spa_pump.energy_consumption" + ts."out.electricity.pool_heater.energy_consumption" + ts."out.electricity.well_pump.energy_consumption" as misc
+		ts."out.electricity.plug_loads.energy_consumption" + ts."out.electricity.permanent_spa_heat.energy_consumption" + ts."out.electricity.permanent_spa_pump.energy_consumption" + ts."out.electricity.pool_heater.energy_consumption" + ts."out.electricity.well_pump.energy_consumption" as misc,
+		ts."out.natural_gas.fireplace.energy_consumption" + ts."out.natural_gas.grill.energy_consumption" + ts."out.natural_gas.lighting.energy_consumption" + ts."out.natural_gas.permanent_spa_heat.energy_consumption" + ts."out.natural_gas.pool_heater.energy_consumption"as misc_ng
 	FROM "resstock_amy2018_release_2024.2_by_state" as ts
 		RIGHT JOIN "resstock_amy2018_release_2024.2_metadata" as meta 
 		ON ts.bldg_id = meta.bldg_id
@@ -23,7 +24,8 @@ ts_agg AS(
 	"in.weather_file_longitude",
 		shape_ts,
 		timestamp_hour,
-		sum(misc) as misc
+		sum(misc) as misc,
+		sum(misc_ng) as misc_ng
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 	"in.weather_file_longitude",
@@ -54,4 +56,18 @@ SELECT "in.weather_file_city",
 	'Computers and Electronics' as end_use,
 	'Electric' as fuel
 FROM ts_agg
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	misc_ng as kwh,
+	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
+    'res' AS sector,
+    "in.weather_file_longitude",
+	'Other' as end_use,
+	'Fossil' as fuel
+FROM ts_agg
+
 ;
