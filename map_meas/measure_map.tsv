@@ -13,9 +13,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Best HP FS (Other Fossil Furnace & AC)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, best	Central or room AC	HP, best
 (C) Best HP FS (Other Fossil Furnace & AC)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_3	com	Other fossil furnace + central or room AC	HP, best	Furnace, other fossil	HP, best
 (C) Best HP FS (Other Fossil Furnace & AC)	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, best	Central or room AC	HP, best
-(C) Best HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_18	com_cooling_ts_9	com_cooling_ts_3	com	NG RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
-(C) Best HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_18	com_heating_ts_8	com_heating_ts_3	com	NG RTU + RTAC or chiller	HP, best	Furnace, NG	HP, best
-(C) Best HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_18	com_ventilation_5	com_ventilation_2	com	NG RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
+(C) Best HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_18	com_cooling_ts_9	com_cooling_ts_3	com	NG RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
+(C) Best HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_18	com_heating_ts_8	com_heating_ts_3	com	NG RTU + RTAC or chiller	HP, best	Furnace, NG	HP, best
+(C) Best HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_12	com_hvac_ann_18	com_ventilation_5	com_ventilation_2	com	NG RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
 (C) Best HP FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_30	com_cooling_ts_9	com_cooling_ts_3	com	Other fossil RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
 (C) Best HP FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_30	com_heating_ts_12	com_heating_ts_3	com	Other fossil RTU + RTAC or chiller	HP, best	Furnace, other fossil	HP, best
 (C) Best HP FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_25	com_hvac_ann_30	com_ventilation_5	com_ventilation_2	com	Other fossil RTU + RTAC or chiller	HP, best	RTAC or chiller	HP, best
@@ -31,9 +31,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Best HP Pt. FS (Other Fossil Furnace & AC)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, best with fossil backup	Central or room AC	HP, best with fossil backup
 (C) Best HP Pt. FS (Other Fossil Furnace & AC)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_2	com	Other fossil furnace + central or room AC	HP, best with fossil backup	Furnace, other fossil	HP, best with fossil backup
 (C) Best HP Pt. FS (Other Fossil Furnace & AC)	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, best with fossil backup	Central or room AC	HP, best with fossil backup
-(C) Best HP Pt. FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
-(C) Best HP Pt. FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, best with fossil backup	Furnace, NG	HP, best with fossil backup
-(C) Best HP Pt. FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
+(C) Best HP Pt. FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
+(C) Best HP Pt. FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, best with fossil backup	Furnace, NG	HP, best with fossil backup
+(C) Best HP Pt. FS (RTU, NG Heat)	Ventilation	com_hvac_ann_12	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
 (C) Best HP Pt. FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
 (C) Best HP Pt. FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_heating_ts_12	com_heating_ts_2	com	Other fossil RTU + RTAC or chiller	HP, best with fossil backup	Furnace, other fossil	HP, best with fossil backup
 (C) Best HP Pt. FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_25	com_hvac_ann_31	com_ventilation_5	com_ventilation_3	com	Other fossil RTU + RTAC or chiller	HP, best with fossil backup	RTAC or chiller	HP, best with fossil backup
@@ -57,21 +57,21 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Bst. HP FS (NG Boiler) & Env.+	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_cooling_ts_9	com_cooling_ts_11	com	NG boiler + RTAC or chiller	HP boiler, best with env +	RTAC or chiller	HP boiler, best
 (C) Bst. HP FS (NG Boiler) & Env.+	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_heating_ts_9	com_heating_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env +	Boiler, NG	Boiler, best HP
 (C) Bst. HP FS (NG Boiler) & Env.+	Ventilation	com_hvac_ann_9	com_hvac_ann_40	com_ventilation_4	com_ventilation_10	com	NG boiler + RTAC or chiller	Boiler, best HP with env +	RTAC or chiller	Boiler, best HP
-(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_18	com_cooling_ts_9	com_cooling_ts_3	com	NG RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
-(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_18	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	HP, best with env +	Furnace, NG	HP, best
-(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Ventilation	com_hvac_ann_16	com_hvac_ann_18	com_ventilation_5	com_ventilation_2	com	NG RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_18	com_cooling_ts_9	com_cooling_ts_3	com	NG RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_18	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	HP, best with env +	Furnace, NG	HP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.+	Ventilation	com_hvac_ann_12	com_hvac_ann_18	com_ventilation_5	com_ventilation_2	com	NG RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
 (C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_30	com_cooling_ts_9	com_cooling_ts_3	com	Other fossil RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
 (C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_30	com_heating_ts_12	com_heating_ts_10	com	Other fossil RTU + RTAC or chiller	HP, best with env +	Furnace, other fossil	HP, best
 (C) Bst. HP FS (RTU, Oth. Fs. Ht.) & Env.+	Ventilation	com_hvac_ann_25	com_hvac_ann_30	com_ventilation_5	com_ventilation_2	com	Other fossil RTU + RTAC or chiller	HP, best with env +	RTAC or chiller	HP, best
-(C) ES HP FS (RTU, NG Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_cooling_ts_9	com_cooling_ts_10	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
-(C) ES HP FS (RTU, NG Ht.) & Env.	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	HP, ESTAR with env	Furnace, NG	HP, ESTAR
-(C) ES HP FS (RTU, NG Ht.) & Env.	Ventilation	com_hvac_ann_16	com_hvac_ann_39	com_ventilation_5	com_ventilation_9	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
+(C) ES HP FS (RTU, NG Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_39	com_cooling_ts_9	com_cooling_ts_10	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
+(C) ES HP FS (RTU, NG Ht.) & Env.	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_39	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	HP, ESTAR with env	Furnace, NG	HP, ESTAR
+(C) ES HP FS (RTU, NG Ht.) & Env.	Ventilation	com_hvac_ann_12	com_hvac_ann_39	com_ventilation_5	com_ventilation_9	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
 (C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_38	com_cooling_ts_9	com_cooling_ts_10	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
 (C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_38	com_heating_ts_12	com_heating_ts_10	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	Furnace, other fossil	HP, ESTAR
 (C) ES HP FS (RTU, Oth. Fs. Ht.) & Env.	Ventilation	com_hvac_ann_25	com_hvac_ann_38	com_ventilation_5	com_ventilation_9	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
-(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
-(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, ESTAR with env	Furnace, NG	HP, ESTAR
-(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Ventilation	com_hvac_ann_16	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
+(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
+(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, ESTAR with env	Furnace, NG	HP, ESTAR
+(C) ES HP Pt. FS (RTU, NG Ht.) & Env.	Ventilation	com_hvac_ann_12	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
 (C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
 (C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_heating_ts_12	com_heating_ts_2	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	Furnace, other fossil	HP, ESTAR
 (C) ES HP Pt. FS (RTU, Oth. Fs. Ht.) & Env.	Ventilation	com_hvac_ann_25	com_hvac_ann_31	com_ventilation_5	com_ventilation_3	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with env	RTAC or chiller	HP, ESTAR
@@ -81,9 +81,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) ESTAR HP FS (Other Fossil Furnace)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, ESTAR	Central or room AC	HP, ESTAR
 (C) ESTAR HP FS (Other Fossil Furnace)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_1	com	Other fossil furnace + central or room AC	HP, ESTAR	Furnace, other fossil	HP, ESTAR
 (C) ESTAR HP FS (Other Fossil Furnace)	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, ESTAR	Central or room AC	HP, ESTAR
-(C) ESTAR HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
-(C) ESTAR HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_heating_ts_8	com_heating_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR	Furnace, NG	HP, ESTAR
-(C) ESTAR HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_17	com_ventilation_5	com_ventilation_1	com	NG RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
+(C) ESTAR HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_17	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
+(C) ESTAR HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_17	com_heating_ts_8	com_heating_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR	Furnace, NG	HP, ESTAR
+(C) ESTAR HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_12	com_hvac_ann_17	com_ventilation_5	com_ventilation_1	com	NG RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
 (C) ESTAR HP FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_29	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
 (C) ESTAR HP FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_29	com_heating_ts_12	com_heating_ts_1	com	Other fossil RTU + RTAC or chiller	HP, ESTAR	Furnace, other fossil	HP, ESTAR
 (C) ESTAR HP FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_25	com_hvac_ann_29	com_ventilation_5	com_ventilation_1	com	Other fossil RTU + RTAC or chiller	HP, ESTAR	RTAC or chiller	HP, ESTAR
@@ -93,9 +93,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) ESTAR HP Pt. FS (Other Fossil Furnace)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, ESTAR with fossil backup	Central or room AC	HP, ESTAR with fossil backup
 (C) ESTAR HP Pt. FS (Other Fossil Furnace)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_2	com	Other fossil furnace + central or room AC	HP, ESTAR with fossil backup	Furnace, other fossil	HP, ESTAR with fossil backup
 (C) ESTAR HP Pt. FS (Other Fossil Furnace)	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, ESTAR with fossil backup	Central or room AC	HP, ESTAR with fossil backup
-(C) ESTAR HP Pt. FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
-(C) ESTAR HP Pt. FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	Furnace, NG	HP, ESTAR with fossil backup
-(C) ESTAR HP Pt. FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
+(C) ESTAR HP Pt. FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
+(C) ESTAR HP Pt. FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_19	com_heating_ts_8	com_heating_ts_2	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	Furnace, NG	HP, ESTAR with fossil backup
+(C) ESTAR HP Pt. FS (RTU, NG Heat)	Ventilation	com_hvac_ann_12	com_hvac_ann_19	com_ventilation_5	com_ventilation_3	com	NG RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
 (C) ESTAR HP Pt. FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
 (C) ESTAR HP Pt. FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_31	com_heating_ts_12	com_heating_ts_2	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with fossil backup	Furnace, other fossil	HP, ESTAR with fossil backup
 (C) ESTAR HP Pt. FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_25	com_hvac_ann_31	com_ventilation_5	com_ventilation_3	com	Other fossil RTU + RTAC or chiller	HP, ESTAR with fossil backup	RTAC or chiller	HP, ESTAR with fossil backup
@@ -113,9 +113,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Min. Efficiency HP FS (Other Fossil Furnace)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	HP, minimum efficiency	Central or room AC	HP, minimum efficiency
 (C) Min. Efficiency HP FS (Other Fossil Furnace)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_1	com	Other fossil furnace + central or room AC	HP, minimum efficiency	Furnace, other fossil	HP, minimum efficiency
 (C) Min. Efficiency HP FS (Other Fossil Furnace)	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	HP, minimum efficiency	Central or room AC	HP, minimum efficiency
-(C) Min. Efficiency HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
-(C) Min. Efficiency HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_heating_ts_8	com_heating_ts_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	Furnace, NG	HP, minimum efficiency
-(C) Min. Efficiency HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_17	com_ventilation_5	com_ventilation_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_17	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_17	com_heating_ts_8	com_heating_ts_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	Furnace, NG	HP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_12	com_hvac_ann_17	com_ventilation_5	com_ventilation_1	com	NG RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
 (C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_29	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
 (C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_29	com_heating_ts_12	com_heating_ts_1	com	Other fossil RTU + RTAC or chiller	HP, minimum efficiency	Furnace, other fossil	HP, minimum efficiency
 (C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_25	com_hvac_ann_29	com_ventilation_5	com_ventilation_1	com	Other fossil RTU + RTAC or chiller	HP, minimum efficiency	RTAC or chiller	HP, minimum efficiency
@@ -160,9 +160,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Ref. Case Resist. WH TS	Water Heating	com_wh_ann_2	com_wh_ann_2	com_wh_ts_1	com_wh_ts_1	com	Water heater, resistance	Water heater, resistance	Water heater, resistance	Water heater, resistance
 (C) Ref. Case RTHP	Cooling (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_cooling_ts_1	com_cooling_ts_1	com	HP, reference	HP, reference	HP, reference	HP, reference
 (C) Ref. Case RTHP	Heating (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_heating_ts_1	com_heating_ts_1	com	HP, reference	HP, reference	HP, reference	HP, reference
-(C) Ref. Case RTU, NG Heat	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_16	com_cooling_ts_9	com_cooling_ts_9	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
-(C) Ref. Case RTU, NG Heat	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_16	com_heating_ts_8	com_heating_ts_8	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	Furnace, NG	Furnace, NG
-(C) Ref. Case RTU, NG Heat	Ventilation	com_hvac_ann_16	com_hvac_ann_16	com_ventilation_5	com_ventilation_5	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
+(C) Ref. Case RTU, NG Heat	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_cooling_ts_9	com_cooling_ts_9	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
+(C) Ref. Case RTU, NG Heat	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_heating_ts_8	com_heating_ts_8	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	Furnace, NG	Furnace, NG
+(C) Ref. Case RTU, NG Heat	Ventilation	com_hvac_ann_12	com_hvac_ann_12	com_ventilation_5	com_ventilation_5	com	NG RTU + RTAC or chiller	NG RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
 (C) Ref. Case RTU, Other Fossil Heat	Cooling (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil RTU + RTAC or chiller	Other fossil RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
 (C) Ref. Case RTU, Other Fossil Heat	Heating (Equip.)	com_hvac_ann_25	com_hvac_ann_25	com_heating_ts_12	com_heating_ts_12	com	Other fossil RTU + RTAC or chiller	Other fossil RTU + RTAC or chiller	Furnace, other fossil	Furnace, other fossil
 (C) Ref. Case RTU, Other Fossil Heat	Ventilation	com_hvac_ann_25	com_hvac_ann_25	com_ventilation_5	com_ventilation_5	com	Other fossil RTU + RTAC or chiller	Other fossil RTU + RTAC or chiller	RTAC or chiller	RTAC or chiller
@@ -419,9 +419,9 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Bst. HP FS (NG Boiler) & Env.++	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_40	com_heating_ts_9	com_heating_ts_11	com	NG boiler + RTAC or chiller	Boiler, best HP with env ++	fossil	Boiler, best HP
 (C) Bst. HP FS (NG Boiler) & Env.++	Ventilation	com_hvac_ann_9	com_hvac_ann_40	com_ventilation_4	com_ventilation_10	com	NG boiler + RTAC or chiller	Boiler, best HP with env ++	RTAC or chiller	Boiler, best HP
 (R) Best 120V HP Dryer TS	Other	res_dry_ann_3	res_dry_ann_4	res_dry_ts_2	res_dry_ts_3	res	Dryer, resistance	Dryer, best HP 120V	Dryer, resistance	Dryer, best HP
-(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_cooling_ts_9	com_cooling_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
-(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_39	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	fossil	ASHP, best
-(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Ventilation	com_hvac_ann_16	com_hvac_ann_39	com_ventilation_5	com_ventilation_9	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_39	com_cooling_ts_9	com_cooling_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_39	com_heating_ts_8	com_heating_ts_10	com	NG RTU + RTAC or chiller	ASHP, best with env ++	fossil	ASHP, best
+(C) Bst. HP FS (RTU, NG Ht.) & Env.++	Ventilation	com_hvac_ann_12	com_hvac_ann_39	com_ventilation_5	com_ventilation_9	com	NG RTU + RTAC or chiller	ASHP, best with env ++	RTAC or chiller	ASHP, best
 (R) Ref. NG Furnace & AC & Env.++	Cooling (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_cooling_ts_1	res_cooling_ts_6	res	AC	AC with env ++	AC	AC
 (R) Ref. NG Furnace & AC & Env.++	Heating (Equip.)	res_hvac_ann_10	res_hvac_ann_16	res_heating_ts_15	res_heating_ts_15	res	Furnace, NG	Furnace, NG with env ++	Furnace, NG	Furnace, NG
 (R) Best 120V HP Dryer FS	Other	res_dry_ann_1	res_dry_ann_2	res_dry_ts_1	res_dry_ts_3	res	Dryer, fossil	Dryer, best HP 120V	Dryer, fossil	Dryer, best HP
