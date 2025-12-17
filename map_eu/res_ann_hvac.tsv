@@ -231,3 +231,5 @@ res_hvac_ann_85	No heating + AC	No heating + AC	None	Central AC	0
 res_hvac_ann_85	No heating + AC	No heating + AC	None	Room AC	0
 res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Central AC	0
 res_hvac_ann_85	No heating + AC	No heating + AC	Other Fuel	Room AC	0
+res_hvac_ann_85	No heating + AC	No heating + AC	Propane	Central AC	0
+res_hvac_ann_85	No heating + AC	No heating + AC	Propane	Room AC	0

@@ -7,6 +7,7 @@ CREATE EXTERNAL TABLE county_hourly_res_{year}_{turnover}_{weather} (
     county_hourly_cal_kwh double,
     scout_run string,
     sector string,
+    `in.state` string,
     year int,
     end_use string,
     fuel string

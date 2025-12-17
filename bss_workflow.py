@@ -47,37 +47,41 @@ class Config:
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
-    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
-    SCOUT_OUT_TSV = "scout/scout_tsv"
-    SCOUT_IN_JSON = "scout/scout_json"
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
+    SCOUT_OUT_TSV = "scout_tsv"
+    SCOUT_IN_JSON = "scout_results"
     OUTPUT_DIR = "agg_results"
     EXTERNAL_S3_DIR = "datasets"
     DATABASE_NAME = "euss_oedi"
 
     # Runtime switches/identifiers
     DEST_BUCKET = "bss-workflow"
-    BUCKET_NAME = "handibucket" 
-    SCOUT_RUN_DATE = "2025-09-24"
-    VERSION_ID = "20250924"
+    BUCKET_NAME = "margaretbucket" 
+    SCOUT_RUN_DATE = "2025-10-01"
+    VERSION_ID = "20251001"
     WEATHER = "amy"
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
 
-    TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    #TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    TURNOVERS = ["test"]
     # YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
-    YEARS = ['2026','2030','2040','2050']
+    #YEARS = ['2026','2030','2040','2050']
+    YEARS = ['2026']
     
     BASE_YEAR = '2026'
 
     # Auxiliary constants
-    US_STATES = [
-        'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-        'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-        'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
-        'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
-        'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-    ]
+   # US_STATES = [
+    #    'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
+     #   'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
+      #  'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
+       # 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
+        #'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    #]
+    US_STATES = ['WY']
+    # US_STATES = ['CO', 'ID', 'MT', 'NM', 'NV', 'UT']
 
 # ----------------------------
 # Utilities
@@ -379,12 +383,12 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
     else:
         df = all_df
 
-    out_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}_df",
+    out_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}",
         f"scout_annual_state_{os.path.basename(filename).split('/')[0]}_df.tsv")
     os.makedirs(cfg.SCOUT_OUT_TSV, exist_ok=True)
     df.to_csv(out_path, sep="\t", index=False)
 
-    out_weight_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}_df",
+    out_weight_path = os.path.join(f"{cfg.SCOUT_OUT_TSV}",
         f"scout_annual_state_{os.path.basename(filename).split('/')[0]}_weights_df.tsv")
     weights_df_all.to_csv(out_weight_path, sep="\t", index=False)
 
@@ -713,8 +717,10 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
     if contains_state:
         for st in cfg.US_STATES:
             q = render(**base_kwargs, state=st)
-            f"RUN {sql_rel} | sector={sectorid} turnover={turnover} "
-            f"year={yearid} state={st} enduse={eu}"
+            print(
+                f"RUN {sql_rel} | sector={sectorid} turnover={turnover} "
+                f"year={yearid} state={st}"
+            )
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
         return
     # Case 3: only {enduse}
@@ -738,63 +744,63 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     sectors = ["com", "res"]
     # lists as in original
     tbl_res = [
-        "tbl_ann_mult.sql",
-        "res_ann_shares_cook.sql",
-        "res_ann_shares_lighting.sql",
-        "res_ann_shares_refrig.sql",
-        "res_ann_shares_wh.sql",
-        "res_ann_shares_hvac.sql",
-        "res_ann_shares_deliveredheat.sql",
-        "res_ann_shares_deliveredcool.sql",
-        "res_ann_shares_deliveredwh.sql",
-        "res_ann_shares_cw.sql",
-        "res_ann_shares_dry.sql",
-        "res_ann_shares_dw.sql",
-        "res_ann_shares_fanspumps.sql",
-        "res_ann_shares_misc.sql",
-        "res_ann_shares_poolpump.sql",
-        "tbl_hr_mult.sql",
+        # "tbl_ann_mult.sql",
+        # "res_ann_shares_cook.sql",
+        # "res_ann_shares_lighting.sql",
+        # "res_ann_shares_refrig.sql",
+        # "res_ann_shares_wh.sql",
+        # "res_ann_shares_hvac.sql",
+        # "res_ann_shares_deliveredheat.sql",
+        # "res_ann_shares_deliveredcooling.sql",
+        # "res_ann_shares_deliveredwh.sql",
+        # "res_ann_shares_cw.sql",
+        # "res_ann_shares_dry.sql",
+        # "res_ann_shares_dw.sql",
+        # "res_ann_shares_fanspumps.sql",
+        # "res_ann_shares_misc.sql",
+        # "res_ann_shares_poolpump.sql",
+        # "tbl_hr_mult.sql",
+        # "tbl_hr_mult_hvac_temp.sql",
         "res_hourly_shares_cooling.sql",
-        "res_hourly_shares_heating.sql",
-        "res_hourly_shares_refrig.sql",
-        "res_hourly_shares_lighting.sql",
-        "res_hourly_shares_cook.sql",
-        "res_hourly_shares_wh.sql",
-        "res_hourly_shares_fanspumps.sql",
-        "res_hourly_shares_dw.sql",
-        "res_hourly_shares_dry.sql",
-        "res_hourly_shares_cw.sql",
-        "res_hourly_shares_poolpump.sql",
-        "res_hourly_shares_misc.sql",
-        "res_hourly_shares_misc_flat.sql",
-        "res_hourly_shares_gap.sql",
+        # "res_hourly_shares_heating.sql",
+        # "res_hourly_shares_refrig.sql",
+        # "res_hourly_shares_lighting.sql",
+        # "res_hourly_shares_cook.sql",
+        # "res_hourly_shares_wh.sql",
+        # "res_hourly_shares_fanspumps.sql",
+        # "res_hourly_shares_dw.sql",
+        # "res_hourly_shares_dry.sql",
+        # "res_hourly_shares_cw.sql",
+        # "res_hourly_shares_poolpump.sql",
+        # "res_hourly_shares_misc.sql",
+        # "res_hourly_shares_gap.sql",       
+        "res_hourly_hvac_norm.sql",
     ]
     tbl_com = [
-        "tbl_ann_mult.sql",
-        "com_ann_shares_cook.sql",
-        "com_ann_shares_deliveredcool.sql",
-        "com_ann_shares_electric_heat.sql",
-        "com_ann_shares_hvac.sql",
-        "com_ann_shares_lighting.sql",
-        "com_ann_shares_refrig.sql",
-        "com_ann_shares_ventilation_ref.sql",
-        "com_ann_shares_wh.sql",
-        "com_ann_shares_misc.sql",
-        "com_ann_shares_gap.sql",
-        "com_ann_shares_fossil_heat.sql",
-        "tbl_hr_mult.sql",
-        "tbl_hr_mult_hvac_temp.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
-        "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_gap.sql",
-        "com_hourly_shares_cooking.sql",
-        "com_hourly_hvac_norm.sql",
+        # "tbl_ann_mult.sql",
+        # "com_ann_shares_cook.sql",
+        # "com_ann_shares_deliveredcool.sql",
+        # "com_ann_shares_gap.sql",
+        # "com_ann_shares_heat_agnostic.sql",
+        # "com_ann_shares_hvac.sql",
+        # "com_ann_shares_lighting.sql",
+        # "com_ann_shares_misc.sql",
+        # "com_ann_shares_refrig.sql",
+        # "com_ann_shares_ventilation_ref.sql",
+        # "com_ann_shares_wh.sql",
+        # "tbl_hr_mult.sql",
+        # "tbl_hr_mult_hvac_temp.sql",
+        # "com_hourly_shares_cooling.sql",
+        # "com_hourly_shares_heating.sql",
+        # "com_hourly_shares_lighting.sql",
+        # "com_hourly_shares_refrig.sql",
+        # "com_hourly_shares_ventilation.sql",
+        # "com_hourly_shares_ventilation_ref.sql",
+        # "com_hourly_shares_wh.sql",
+        # "com_hourly_shares_misc.sql",
+        # "com_hourly_shares_gap.sql",
+        # "com_hourly_shares_cooking.sql",
+        # "com_hourly_hvac_norm.sql",
     ]
 
     for sectorid in sectors:
@@ -896,8 +902,10 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         turnover = scout_file.split(".")[0]
 
         # choose conversion path
+        # Scout scenario does NOT have envelope measures
         if scout_file in {
             "aeo.json",
+            "test.json",
             "fossil.json",
             "aeo25_20to50_byeu_indiv.json",
             "aeo25_20to50_bytech_gap_indiv.json",
@@ -917,6 +925,7 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
                 cfg=cfg,
             )
 
+        # Scout scenario HAS have envelope measures
         else:
             sdf, gap_weights = scout_to_df(fp, cfg) 
             use_gap_model = not gap_weights.empty
@@ -939,7 +948,8 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         print(f"Finished adding scout data {scout_file}")
 
 def gen_countydata(athena_client, cfg: Config):
-    sectors = ["res", "com"]
+    # sectors = ["res", "com"]
+    sectors = ["res"]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
 
@@ -1280,33 +1290,33 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
     checks = [
         f"""
         with re_agg as(
-            SELECT group_ann, sector, "in.state", end_use, sum(multiplier_annual) as added
+            SELECT group_ann, sector, "in.state", end_use, fuel, sum(multiplier_annual) as added
             FROM res_annual_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY group_ann, sector, "in.state", end_use
+            GROUP BY group_ann, sector, "in.state", end_use, fuel
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
         """,
         f"""
         with re_agg as(
-            SELECT shape_ts, sector, "in.state", "in.weather_file_city", end_use, sum(multiplier_hourly) as added
+            SELECT shape_ts, sector, "in.state", "in.weather_file_city", end_use, fuel, sum(multiplier_hourly) as added
             FROM res_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY shape_ts, sector, "in.state", "in.weather_file_city", end_use
+            GROUP BY shape_ts, sector, "in.state", "in.weather_file_city", end_use, fuel
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
         """,
         f"""
         with re_agg as(
-            SELECT group_ann, sector, "in.state", end_use, sum(multiplier_annual) as added
+            SELECT group_ann, sector, "in.state", end_use, fuel, sum(multiplier_annual) as added
             FROM com_annual_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY group_ann, sector, "in.state", end_use
+            GROUP BY group_ann, sector, "in.state", end_use, fuel
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
         """,
         f"""
         with re_agg as(
-            SELECT shape_ts, sector, "in.county", end_use, sum(multiplier_hourly) as added
+            SELECT shape_ts, sector, "in.county", end_use, fuel, sum(multiplier_hourly) as added
             FROM com_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY shape_ts, sector, "in.county", end_use
+            GROUP BY shape_ts, sector, "in.county", end_use, fuel
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
         """,
@@ -1802,14 +1812,14 @@ def main(opts):
 
     if opts.gen_mults:
         s3, athena = get_boto3_clients()
-        s3_create_tables_from_csvdir(s3, athena, cfg)
+        # s3_create_tables_from_csvdir(s3, athena, cfg)
         gen_multipliers(s3, athena, cfg)
-        test_multipliers(s3, athena, cfg)
+        # test_multipliers(s3, athena, cfg)
 
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
         gen_scoutdata(s3, athena, cfg)
-        run_r_script("annual_graphs.R")
+        # run_r_script("annual_graphs.R")
 
     if opts.gen_county:
         _, athena = get_boto3_clients()

@@ -93,7 +93,7 @@ grouped_fossil AS (
 ),
 
 hourly_ungrouped AS (
-        SELECT 
+    SELECT 
         gf."in.state",
         gf."year",
         gf."in.county",
