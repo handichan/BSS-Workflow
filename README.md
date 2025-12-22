@@ -114,7 +114,14 @@ The `Config` class centralizes all constants and runtime switches that control h
 The dataset is organized hierarchically to facilitate efficient data access and analysis:
 
 ```
-20251031/
+dmd_cal_ann_state_county_hourly/v1.0.0/
+├── multipliers/
+│   ├── com_annual_multipliers_amy.parquet
+│   ├── res_annual_multipliers_amy.parquet
+│   ├── res_annual_multipliers_tmy.parquet
+│   ├── com_hourly_multipliers_amy/
+│   ├── res_hourly_multipliers_amy/
+│   ├── res_hourly_multipliers_tmy/
 ├── annual_results/
 │   ├── scout_annual_state_baseline.parquet
 │   ├── scout_annual_state.parquet
@@ -125,16 +132,17 @@ The dataset is organized hierarchically to facilitate efficient data access and 
 |   |   |   |   ├─- <state>.parquet
 ```
 
-### Directory Structure Breakdown
+### Directory Structure Breakdown for `hourly_county_demand/`
 
-#### Root Level: `20251031`
+#### Root Level: `v1.0.0`
 - **Purpose**: Indicates the dataset version
 - **Content**: Contains the entire processed dataset
 - **Access Point**: Primary entry for all data files and subdirectories
+  - `multipliers`: Annual and hourly multipliers
   - `hourly_county_demand`: Hourly energy consumption patterns
   - `annual_results`: Annual energy consumption patterns
 
-#### First Level: `hourly_county_demand/scenario`
+#### First Level: `scenario`
   - `aeo`: Annual Energy Outlook reference case
   - `ref`: Reference case
   - `brk`: Breakthrough technology scenario

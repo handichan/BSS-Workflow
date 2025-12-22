@@ -1,6 +1,4 @@
-if (basename(getwd()) != "R") {
-    setwd("R")
-}
+setwd("R")
 
 #install the packages if they're not already installed
 packages <- c("tidyverse", "scales", "cowplot", "maps", "mapdata", "colorspace")
@@ -98,7 +96,7 @@ color_interp <- gradient_n_pal(colours = c("#2A7062","#80cdc1", "#f5f5f5", "#dfc
 diverg<-c("#9e3d22","#e36621","#fcad52","#ffffff","#95c5e1","#5b8fbc","#2b5c8a")
 #for top 100 hrs maps
 diverg_tophours_interp<-gradient_n_pal(colours=diverg,
-                              values=seq(0,1,length.out = 7),space="Lab")
+                                       values=seq(0,1,length.out = 7),space="Lab")
 #for winter/summer ratio
 diverg_ratio <- gradient_n_pal(colours = diverg, 
                                values = seq(-.9,.9,length.out = 7), space = "Lab")
@@ -345,7 +343,7 @@ save_plot(paste0(graph_dir,"/",filename_prefix,"county_100_hrs_share.jpg"), p100
 p100_hist<-county_share_winter %>%
   filter(turnover %in% scen_filtered) %>%
   mutate(percent_binned=round_any(share_winter,.05),
-         fill_color=diverg_interp(percent_binned))%>%
+         fill_color=diverg_tophours_interp(percent_binned))%>%
   ggplot(aes(x=percent_binned,y=after_stat(count/3107),fill=fill_color))+
   geom_bar()+
   scale_fill_identity() +

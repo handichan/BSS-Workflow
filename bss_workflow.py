@@ -52,7 +52,7 @@ class Config:
     SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
     EXTERNAL_S3_DIR = "datasets"
-    DATABASE_NAME = "euss_oedi"
+    DATABASE_NAME = "default"
 
     # Runtime switches/identifiers
     DEST_BUCKET = "bss-workflow"
@@ -60,6 +60,22 @@ class Config:
     SCOUT_RUN_DATE = "2025-09-24"
     VERSION_ID = "20250924"
     WEATHER = "amy"
+
+    MULTIPLIERS_TABLES = [
+        "com_annual_disaggregation_multipliers",   # mult_com_annual
+        "res_annual_disaggregation_multipliers",   # mult_res_annual
+        "com_hourly_disaggregation_multipliers",   # mult_com_hourly
+        "res_hourly_disaggregation_multipliers",   # mult_res_hourly
+    ]
+
+    BLDSTOCK_TABLES = [
+        "comstock_amy2018_release_2024.2_parquet",  # meta_com
+        "comstock_amy2018_release_2024.2_by_state", # ts_com
+        "comstock_2025.1_upgrade_0"                 # gap_com
+        "resstock_amy2018_release_2024.2_metadata". # meta_res
+        "resstock_amy2018_release_2024.2_by_state". # ts_res
+    ]
+
 
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
@@ -702,7 +718,18 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
         weather=cfg.WEATHER,
-        baseyear=cfg.BASE_YEAR
+        baseyear=cfg.BASE_YEAR,
+
+        mult_com_annual=cfg.MULTIPLIERS_TABLES[0],
+        mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
+        mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
+        mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+
+        meta_com=cfg.BLDSTOCK_TABLES[0],
+        ts_com=cfg.BLDSTOCK_TABLES[1],
+        gap_com=cfg.BLDSTOCK_TABLES[2],
+        meta_res=cfg.BLDSTOCK_TABLES[3],
+        ts_res=cfg.BLDSTOCK_TABLES[4]
     )
 
     contains_state = "{state}" in template_raw
@@ -1860,13 +1887,13 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        # bssbucket_insert(athena, cfg)
-        # bssbucket_parquetmerge(s3, cfg)
+        bssbucket_insert(athena, cfg)
+        bssbucket_parquetmerge(s3, cfg)
         merge_and_replace_folders(s3, 'bss-workflow', 'v2/annual_results/')
         # # Insert and merge (IEF)
-        # bssiefbucket_insert(athena, cfg)
-        # bssiefbucket_parquetmerge(s3, cfg)
-        # bssbucket_parquet_scout(s3, athena, cfg)
+        bssiefbucket_insert(athena, cfg)
+        bssiefbucket_parquetmerge(s3, cfg)
+        bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
