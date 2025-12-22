@@ -47,7 +47,7 @@ class Config:
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
-    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.csv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     SCOUT_OUT_TSV = "scout/scout_tsv"
     SCOUT_IN_JSON = "scout/scout_json"
     OUTPUT_DIR = "agg_results"
@@ -388,7 +388,7 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
     # Fix measures without a fuel key
     to_shift = all_df[pd.isna(all_df["value"])].copy()
     if not to_shift.empty:
-        to_shift.loc[:, "value"] = to_shift["year"]
+        to_shift.loc[:, "value"] = pd.to_numeric(to_shift["year"], errors="coerce")
         to_shift.loc[:, "year"] = to_shift["fuel"]
         to_shift.loc[:, "fuel"] = "Electric"
         df = pd.concat([all_df[pd.notna(all_df["value"])], to_shift])
@@ -548,8 +548,16 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
+            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_all["kwh_before"] = pd.to_numeric(cmp_all["kwh_before"], errors="coerce")
+            cmp_all["kwh_after"]  = pd.to_numeric(cmp_all["kwh_after"], errors="coerce")
+
+            # Now fill NaNs safely
+            cmp_all = cmp_all.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_all["delta"] = cmp_all["kwh_after"] - cmp_all["kwh_before"]
             cmp_all["pct_delta"] = cmp_all.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
@@ -573,8 +581,14 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_sub["kwh_before"] = pd.to_numeric(cmp_sub["kwh_before"], errors="coerce")
+            cmp_sub["kwh_after"]  = pd.to_numeric(cmp_sub["kwh_after"], errors="coerce")
+
+            cmp_sub = cmp_sub.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_sub["delta"] = cmp_sub["kwh_after"] - cmp_sub["kwh_before"]
             cmp_sub["pct_delta"] = cmp_sub.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
@@ -1397,7 +1411,10 @@ def run_r_script(r_file: str):
     if robjects is None:
         print("rpy2 not available; skipping R execution.")
         return
-    r_path = os.path.join("R", r_file)
+    # Get the absolute path to the folder containing THIS Python file
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    # Build the absolute path to the R script
+    r_path = os.path.join(project_root, "R", r_file)
     with open(r_path, "r", encoding="utf-8") as f:
         r_code = f.read()
     try:
@@ -1842,6 +1859,10 @@ def main(opts):
         _, athena = get_boto3_clients()
         gen_countydata(athena, cfg)
 
+    if opts.combine_countydata:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
+
     if opts.convert_wide:
         _, athena = get_boto3_clients()
         convert_countyhourly_long_to_wide(athena, cfg)
@@ -1896,6 +1917,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_county", action="store_true", help="Generate County Data")
     parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
     parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
+    parser.add_argument("--combine_countydata", action="store_true", help="Combine County Data")
     parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")

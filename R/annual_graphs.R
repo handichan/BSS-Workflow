@@ -19,7 +19,7 @@ scenarios <- c("brk", "fossil", "accel", "aeo", "ref", "state",
 scenario_for_baseline <- "aeo"
 
 # I/O locations (unchanged names)
-input_dir   <- "../scout_tsv"   # where TSVs live
+input_dir   <- "../scout/scout_tsv"   # where TSVs live
 filename_prefix <- ""
 graph_dir   <- "graphs/annual_results"        # where graphs are written
 
