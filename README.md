@@ -78,6 +78,7 @@ The column names and descriptions for the unformatted disaggregation results are
 | `sector` | Building sector: com, res | String |
 | `year` | Projection year | Integer |
 | `in.state` | State abbreviation (e.g. AL, WA) | String |
+
 **Table 1:** Unformatted annual county-level results
 
 | Variable Name | Description | Data Type |
@@ -92,6 +93,7 @@ The column names and descriptions for the unformatted disaggregation results are
 | `in.state` | State abbreviation (e.g. AL, WA) | String |
 | `year` | Projection year | Integer |
 | `end_use` | Building end use: Computers and Electronics, Cooking, Cooling (Equip.), Heating (Equip.), Lighting, Other, Refrigeration, Ventilation, Water Heating | String |
+
 **Table 2:** Unformatted hourly county-level results
 
 The disaggregated outputs can be converted to wide format for publication (`--convert_wide`). The column names and descriptions of the formatted results are shown in Tables 3 and 4. The allowed values of `end_use` are computers_electronics, cooking, cooling, heating, water_heating, lighting, other, refrigeration, ventilation, water_heating.
@@ -108,6 +110,7 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 | `propane.{end_use}.kwh` | Annual propane for the specified end-use, kWh | Float |
 | `biomass.{end_use}.kwh` | Annual biomass for the specified end-use, kWh | Float |
 | `other.{end_use}.kwh` | Annual consumption of other fuels for the specified end-use, kWh | Float |
+
 **Table 3:** Annual state-level results in publication format
 
 | Variable Name | Description | Data Type |
@@ -120,6 +123,7 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 | `state` | State abbreviation (e.g. AL, WA) | String |
 | `electricity uncal.{end use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
 | `electricity cal.{end use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
+
 **Table 4:** Hourly county-level results in publication format
 
 ## Installation and Environment Setup -- Python
@@ -362,6 +366,7 @@ Run `python bss_workflow.py --gen_scoutdata` to parse the Scout JSON, save a fla
 | `fuel` | End use fuel |
 | `year` | Projection year | 
 | `value` | Numeric value |
+
 **Table 5:** `scout_tsv_df` variables  
 
 The full set of metrics that may be present in this file is
@@ -392,6 +397,7 @@ For example, `res_ann_wh.tsv` (excerpted in Table 6) indicates that the group `r
 | res_wh_ann_4 | ER WH | ER WH to HPWH | Electric Premium | 11 |
 | res_wh_ann_4 | ER WH | ER WH to HPWH | Electric Standard | 11 |
 | res_wh_ann_4 | ER WH | ER WH to HPWH | Electric Tankless | 11 |
+
 **Table 6:** Excerpt of `res_ann_wh.tsv`  
 
 For the hourly disaggregation multipliers, `res_ts_wh.tsv` (excerpted in Table 7) indicates that load shape for an electric resistance water heater, `res_wh_ts_2`, is calculated with the same models and upgrade as `res_wh_ann_3`. The heat pump water heater load shape, however, is calculated with upgrade 11 for all ResStock models to maximize the sample size for defining the multipliers.
@@ -415,6 +421,7 @@ For the hourly disaggregation multipliers, `res_ts_wh.tsv` (excerpted in Table 7
 | res_wh_ts_3 | HPWH | Electric Standard | 11 |
 | res_wh_ts_3 | HPWH | Electric Tankless | 11 |
 | res_wh_ts_3 | HPWH | Electric Heat Pump, 50 gal, 3.45 UEF | 11 |
+
 **Table 7:** Excerpt of `res_ts_wh.tsv`
 
 Update these files to add new groups of multipliers or change the characteristics of the buildings that are used to calculate them. Note that the upgrade numbers vary between SDR versions and may need to be updated when switching to a different release. Any changes to the multiplier definitions require time-consuming recalculation (`--gen_mults`).
@@ -432,6 +439,7 @@ For example, the Scout measure `(R) ESTAR HPWH TS` replaces a residential electr
 | meas | Scout_end_use | original_ann | measure_ann | original_ts | measure_ts | sector |
 | --- | -------------- | ------------ | ----------- | ----------- | ---------- | ------ |
 | (R) ESTAR HPWH TS | Water Heating | res_wh_ann_3 | res_wh_ann_4 | res_wh_ts_2 | res_wh_ts_3 | res |
+
 **Table 8:** Excerpt of `measure_map.tsv`
 
 Scout packages are made up of combinations of individual measures. `map_meas/envelope_map.tsv` separates the packages into their component measures so that they can be assigned the correct multipliers via the measure mapping.
@@ -466,6 +474,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
 | `YEARS` | Analysis years to disaggregate. | Looped in county/hourly disaggregation. |
 | `US_STATES` | List of two-letter U.S. state abbreviations to disaggregate. | SQL templates with `{state}` placeholders. |
+
 **Table 9:** Configuration paramters in `bss_workflow.py`
 
 You can verify that the `AWS_PROFILE` and `AWS_REGION` environment variables are set with
