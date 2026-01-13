@@ -21,9 +21,9 @@ theme_set(theme_bw())
 eia_gross<-read_csv("../map_meas/eia_gross_consumption_by_state_sector_year_month.csv")
 state_monthly<-read_csv("../diagnostics/state_monthly_for_cal.csv")
 
-# if you have TMY
-state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
-  mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
+# # if you have TMY
+# state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
+#   mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
 
 type_label<-c(state_monthly_uncal_kwh="BSS uncalibrated",state_monthly_cal_kwh="BSS calibrated",state_monthly_tmy_kwh="BSS uncalibrated, TMY weather")
 s_label<-c(com="Commercial",res="Residential",all="Buildings")

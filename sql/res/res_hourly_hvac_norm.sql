@@ -26,7 +26,7 @@ SELECT
     shape_ts,
     timestamp_hour,
     kwh,
-    kwh / sum(kwh) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
+    kwh / sum(kwh) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts, fuel) as multiplier_hourly,
     sector,
     "in.weather_file_longitude",
     end_use,

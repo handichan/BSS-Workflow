@@ -46,7 +46,7 @@ class Config:
     MAP_EU_DIR = "map_eu"
     MAP_MEAS_DIR = "map_meas"
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
-    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
+    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map2.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     SCOUT_OUT_TSV = "scout_tsv"
     SCOUT_IN_JSON = "scout_results"
@@ -73,14 +73,15 @@ class Config:
     BASE_YEAR = '2026'
 
     # Auxiliary constants
-   # US_STATES = [
-    #    'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-     #   'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-      #  'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
-       # 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
-        #'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-    #]
-    US_STATES = ['WY']
+    US_STATES = [
+        # 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
+        # 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
+        # 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
+        # 'NY', 'NC', 'ND', 
+        'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
+        'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+    ]
+    # US_STATES = ['WY']
     # US_STATES = ['CO', 'ID', 'MT', 'NM', 'NV', 'UT']
 
 # ----------------------------
@@ -761,7 +762,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "res_ann_shares_poolpump.sql",
         # "tbl_hr_mult.sql",
         # "tbl_hr_mult_hvac_temp.sql",
-        "res_hourly_shares_cooling.sql",
+        # "res_hourly_shares_cooling.sql",
         # "res_hourly_shares_heating.sql",
         # "res_hourly_shares_refrig.sql",
         # "res_hourly_shares_lighting.sql",
@@ -773,8 +774,8 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "res_hourly_shares_cw.sql",
         # "res_hourly_shares_poolpump.sql",
         # "res_hourly_shares_misc.sql",
-        # "res_hourly_shares_gap.sql",       
-        "res_hourly_hvac_norm.sql",
+        # # "res_hourly_shares_gap.sql",       
+        # "res_hourly_hvac_norm.sql",
     ]
     tbl_com = [
         # "tbl_ann_mult.sql",
@@ -796,7 +797,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "com_hourly_shares_refrig.sql",
         # "com_hourly_shares_ventilation.sql",
         # "com_hourly_shares_ventilation_ref.sql",
-        # "com_hourly_shares_wh.sql",
+        "com_hourly_shares_wh.sql",
         # "com_hourly_shares_misc.sql",
         # "com_hourly_shares_gap.sql",
         # "com_hourly_shares_cooking.sql",
@@ -948,8 +949,8 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         print(f"Finished adding scout data {scout_file}")
 
 def gen_countydata(athena_client, cfg: Config):
-    # sectors = ["res", "com"]
-    sectors = ["res"]
+    sectors = ["res", "com"]
+    # sectors = ["res"]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
 
@@ -1286,45 +1287,41 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
     final.to_csv(out_csv, index=False)
     print(f"Saved {out_csv}")
 
-    # Sum-to-1 checks
-    checks = [
-        f"""
-        with re_agg as(
-            SELECT group_ann, sector, "in.state", end_use, fuel, sum(multiplier_annual) as added
-            FROM res_annual_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY group_ann, sector, "in.state", end_use, fuel
-        )
-        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
-        """,
-        f"""
-        with re_agg as(
-            SELECT shape_ts, sector, "in.state", "in.weather_file_city", end_use, fuel, sum(multiplier_hourly) as added
-            FROM res_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY shape_ts, sector, "in.state", "in.weather_file_city", end_use, fuel
-        )
-        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
-        """,
-        f"""
-        with re_agg as(
-            SELECT group_ann, sector, "in.state", end_use, fuel, sum(multiplier_annual) as added
-            FROM com_annual_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY group_ann, sector, "in.state", end_use, fuel
-        )
-        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
-        """,
-        f"""
-        with re_agg as(
-            SELECT shape_ts, sector, "in.county", end_use, fuel, sum(multiplier_hourly) as added
-            FROM com_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
-            GROUP BY shape_ts, sector, "in.county", end_use, fuel
-        )
-        SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
-        """,
-    ]
-    for idx, q in enumerate(checks, 1):
+
+    sql_dir = "run_check"
+    os.makedirs("diagnostics", exist_ok=True)
+
+    # annual disaggregation multipliers sum to 1
+    final = pd.DataFrame()
+    for s in ["res", "com"]:
+        template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
+        q = template.format(version=cfg.VERSION_ID, sector=s)
+        print(q)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-        if df.empty:
-            print(f"Check {idx}: OK (sums ≈ 1)")
+    out_csv = "./diagnostics/test_multipliers_annual.csv"
+    if os.path.exists(out_csv):
+        os.remove(out_csv)
+    final.to_csv(out_csv, index=False)
+    print(f"Saved {out_csv}")
+
+    bad_sum = sum((final['multiplier_sum'] > 1.01) | (final['multiplier_sum'] > 0.99))
+    print(f"{bad_sum} group_ann's do not sum to 1.")
+
+    # hourly disaggregation multipliers sum to 1
+    hourly_test_files = ["test_multipliers_hourly_com.sql",
+                        "test_multipliers_hourly_res.sql"]
+    for sql_file in hourly_test_files:
+        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+        q = template.format(version=cfg.VERSION_ID)
+        print(q)
+        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+        out_csv = "./diagnostics/" + sql_file.split(".")[0] + ".csv"
+        if os.path.exists(out_csv):
+            os.remove(out_csv)
+        df.to_csv(out_csv, index=False)
+        print(f"Saved {out_csv}")
+        bad_sum = sum((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] > 0.99))
+        print(f"{bad_sum} shape_ts's do not sum to 1 in {sql_file}.")
 
 
 def test_compare_measures(s3_client, athena_client, cfg: Config):
@@ -1532,6 +1529,10 @@ def bssbucket_insert(athena_client, cfg: Config):
                 execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
+#rename the files for publication
+#unzip parquets
+#merge into state folder
+#zip back to parquet file
 def bssbucket_parquetmerge(s3_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
@@ -1825,6 +1826,16 @@ def main(opts):
         _, athena = get_boto3_clients()
         gen_countydata(athena, cfg)
 
+    if opts.combine_county:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
+        test_county(s3, athena, cfg)
+
+    if opts.gen_hourlyviz:
+        s3, athena = get_boto3_clients()
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
+
     if opts.convert_wide:
         _, athena = get_boto3_clients()
         convert_countyhourly_long_to_wide(athena, cfg)
@@ -1839,7 +1850,6 @@ def main(opts):
         test_county(s3, athena, cfg)
         get_csvs_for_R(s3, athena, cfg)
         run_r_script("county and hourly graphs.R")
-        run_r_script("calibration.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
