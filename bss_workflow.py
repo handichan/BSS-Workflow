@@ -1087,7 +1087,6 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         df.to_csv(out, index=False)
         print(f"Saved {out}")
 
-
 def get_csv_for_calibration(s3_client, athena_client, cfg: Config):
     t = cfg.TURNOVERS[0]
     sql_file = "state_monthly_for_cal.sql"
@@ -1123,6 +1122,31 @@ def calc_calibration_multipliers(cfg: Config):
     cmpath = cfg.CALIB_MULT_PATH
     monthly_ratios.to_csv(f"{cmpath}", index=False, sep="\t")
     print(f"Saved {cmpath}")
+
+def generate_state_monthly_for_cal(s3_client, athena_client, cfg: Config):
+    """
+    Generate state monthly for calibration from the long_county_hourly_ref_amy table
+    and save to diagnostics/state_monthly_for_cal.csv
+    """
+    os.makedirs("diagnostics", exist_ok=True)
+    out_path = "diagnostics/state_monthly_for_cal.csv"
+
+    # Using the state_monthly.sql template, but specifically for 'ref' turnover and 'amy' weather
+    sql_path = "data_downloads/state_monthly.sql"
+    template = read_sql_file(sql_path, cfg)
+    
+    # Override the default SQL to use specific table and turnover
+    q = template.format(
+        turnover='aeo', 
+        weather='amy', 
+        dest_bucket=cfg.BUCKET_NAME, 
+        baseyear=cfg.BASE_YEAR
+    )
+
+    # Execute the query and save to CSV
+    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+    df.to_csv(out_path, index=False)
+    print(f"Saved {out_path}")
 
 def county_partition_multipliers(athena_client, cfg: Config):
     """
@@ -2221,6 +2245,10 @@ def main(opts):
         _, athena = get_boto3_clients()
         county_partition_multipliers(athena, cfg)
 
+    if opts.gen_state_monthly_cal:
+        s3, athena = get_boto3_clients()
+        generate_state_monthly_for_cal(s3, athena, cfg)
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -2235,6 +2263,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
     parser.add_argument("--convert_wide", action="store_true", help="Convert to wide format for publication")
     parser.add_argument("--gen_countyall", action="store_true", help="Process Scout data and disaggregate")
+    parser.add_argument("--gen_state_monthly_cal", action="store_true", help="Generate State Monthly Calibration Data")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
