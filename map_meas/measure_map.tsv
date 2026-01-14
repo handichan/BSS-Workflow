@@ -195,8 +195,8 @@ Gap	Cooking	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooking, g
 (C) Building Performance Standards	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics, codes and BPS
 (C) Building Codes	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics, codes and BPS
 (C) Building Performance Standards	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other, BPS	Other	Other, codes and BPS
-(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
-(C) Ref. Case Electric Other TS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
+(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
+(C) Ref. Case Electric Other TS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
 (C) Ref. Case Fossil Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other, fossil	Other, fossil	Other, fossil
 (C) Ref. Case Fossil Other FS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other	Other, fossil	Other
 (C) Ref. Case Misc. Electric Appliances	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
