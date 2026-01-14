@@ -872,6 +872,31 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
             df.to_csv(out, index=False)
             print(f"Saved {out}")
 
+def generate_state_monthly_for_cal(s3_client, athena_client, cfg: Config):
+    """
+    Generate state monthly for calibration from the long_county_hourly_ref_amy table
+    and save to diagnostics/state_monthly_for_cal.csv
+    """
+    os.makedirs("diagnostics", exist_ok=True)
+    out_path = "diagnostics/state_monthly_for_cal.csv"
+
+    # Using the state_monthly.sql template, but specifically for 'ref' turnover and 'amy' weather
+    sql_path = "data_downloads/state_monthly.sql"
+    template = read_sql_file(sql_path, cfg)
+    
+    # Override the default SQL to use specific table and turnover
+    q = template.format(
+        turnover='aeo', 
+        weather='amy', 
+        dest_bucket=cfg.BUCKET_NAME, 
+        baseyear=cfg.BASE_YEAR
+    )
+
+    # Execute the query and save to CSV
+    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+    df.to_csv(out_path, index=False)
+    print(f"Saved {out_path}")
+
 
 def county_partition_multipliers(athena_client, cfg: Config):
     """
@@ -1907,6 +1932,10 @@ def main(opts):
         _, athena = get_boto3_clients()
         county_partition_multipliers(athena, cfg)
 
+    if opts.gen_state_monthly_cal:
+        s3, athena = get_boto3_clients()
+        generate_state_monthly_for_cal(s3, athena, cfg)
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -1918,6 +1947,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
     parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
     parser.add_argument("--combine_countydata", action="store_true", help="Combine County Data")
+    parser.add_argument("--gen_state_monthly_cal", action="store_true", help="Generate State Monthly Calibration Data")
     parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
