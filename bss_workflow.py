@@ -71,9 +71,9 @@ class Config:
     BLDSTOCK_TABLES = [
         "comstock_amy2018_release_2024.2_parquet",  # meta_com
         "comstock_amy2018_release_2024.2_by_state", # ts_com
-        "comstock_2025.1_upgrade_0"                 # gap_com
-        "resstock_amy2018_release_2024.2_metadata". # meta_res
-        "resstock_amy2018_release_2024.2_by_state". # ts_res
+        "comstock_2025.1_upgrade_0",                # gap_com
+        "resstock_amy2018_release_2024.2_metadata", # meta_res
+        "resstock_amy2018_release_2024.2_by_state", # ts_res
     ]
 
 
