@@ -1842,6 +1842,16 @@ def main(opts):
         _, athena = get_boto3_clients()
         gen_countydata(athena, cfg)
 
+    if opts.combine_county:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
+        test_county(s3, athena, cfg)
+
+    if opts.gen_hourlyviz:
+        s3, athena = get_boto3_clients()
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
+
     if opts.convert_wide:
         _, athena = get_boto3_clients()
         convert_countyhourly_long_to_wide(athena, cfg)
@@ -1856,7 +1866,6 @@ def main(opts):
         test_county(s3, athena, cfg)
         get_csvs_for_R(s3, athena, cfg)
         run_r_script("county and hourly graphs.R")
-        run_r_script("calibration.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
