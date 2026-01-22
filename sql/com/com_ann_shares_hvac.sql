@@ -6,7 +6,6 @@ WITH meta_filtered AS (
     SELECT meta."in.nhgis_county_gisjoin",
         meta."in.state",
         chars.group_ann,
-        chars."version",
         sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
@@ -19,20 +18,18 @@ WITH meta_filtered AS (
     GROUP BY 
         meta."in.nhgis_county_gisjoin",
         meta."in.state",
-        chars.group_ann,
-        chars."version"
+        chars.group_ann
 ),
 geo_shares AS (
     SELECT "in.nhgis_county_gisjoin",
     "in.state",
-    "version",
     group_ann,
     heating,
-    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann, "version") as heating_mult,
+    heating / sum(heating) OVER (PARTITION BY "in.state", group_ann) as heating_mult,
     cooling,
-    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann, "version") as cooling_mult,
+    cooling / sum(cooling) OVER (PARTITION BY "in.state", group_ann) as cooling_mult,
     ventilation,
-    ventilation / sum(ventilation) OVER (PARTITION BY "in.state", group_ann, "version") as ventilation_mult
+    ventilation / sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_mult
 FROM meta_filtered
 )
     SELECT 
