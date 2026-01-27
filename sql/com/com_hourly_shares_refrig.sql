@@ -15,6 +15,7 @@ ts_not_agg AS (
 	FROM "comstock_2025.1_by_state" as ts
 		RIGHT JOIN "comstock_2025.1_parquet" as meta 
 		ON ts.bldg_id = meta.bldg_id
+		AND ts.state = meta."in.state"
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
 	AND ts.state='{state}'
