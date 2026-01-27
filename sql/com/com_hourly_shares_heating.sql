@@ -9,7 +9,8 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade,
         meta.weight
-    	FROM "comstock_2025.1_parquet" as meta
+    	FROM "comstock_2025.1_parquet"
+		WHERE meta.state = '{state}' as meta
 		RIGHT JOIN com_ts_heating2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
         AND meta.applicability = chars.applicability

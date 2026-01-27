@@ -14,7 +14,9 @@ ts_not_agg AS (
 		ts."out.electricity.water_systems.energy_consumption" * meta.weight as wh_elec,
 		(ts."out.natural_gas.water_systems.energy_consumption" + ts."out.other_fuel.water_systems.energy_consumption" + ts."out.district_heating.water_systems.energy_consumption" + ts."out.electricity.water_systems.energy_consumption") * meta.weight as wh_fossil
 	FROM "comstock_2025.1_by_state" as ts
-		RIGHT JOIN "comstock_2025.1_parquet" as meta 
+		RIGHT JOIN (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade 
+			FROM "comstock_2025.1_parquet" 
+			WHERE state='{state}') as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.state = meta."in.state"
 		AND ts.upgrade = cast(meta.upgrade as varchar)

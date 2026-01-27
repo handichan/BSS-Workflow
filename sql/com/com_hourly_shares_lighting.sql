@@ -13,9 +13,10 @@ ts_not_agg AS (
 		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		(ts."out.electricity.interior_lighting.energy_consumption" + ts."out.electricity.exterior_lighting.energy_consumption") * meta.weight as lights
 	FROM "comstock_2025.1_by_state" as ts
-		RIGHT JOIN "comstock_2025.1_parquet" as meta 
+		RIGHT JOIN (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade 
+			FROM "comstock_2025.1_parquet" 
+			WHERE state='{state}') as meta 
 		ON ts.bldg_id = meta.bldg_id
-		AND ts.state = meta."in.state"
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
 	AND ts.state='{state}'
