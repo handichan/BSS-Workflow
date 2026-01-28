@@ -849,7 +849,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
             sql_to_s3table(athena_client, cfg, tbl_name, sectorid, yearid="2024", turnover="brk")
 
 
-def get_csvs_for_R(s3_client, athena_client, cfg: Config):
+def get_csvs_for_R(s3_client, athena_client, cfg: Config, for_calibration: bool = False):
     turnovers = cfg.TURNOVERS
     sql_files = [
         # "county_100_hrs.sql",
@@ -863,6 +863,10 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         "county_peak_hour.sql",
         "county_share_winter.sql"
     ]
+    
+    if for_calibration:
+        sql_files = ["state_monthly.sql"]
+    
     out_dir = "R/generated_csvs"
     os.makedirs(out_dir, exist_ok=True)
 
@@ -1904,6 +1908,21 @@ def main(opts):
         convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
+    if opts.calibration:
+        s3, athena = get_boto3_clients()
+        TURNOVERS_backup = cfg.TURNOVERS
+        YEARS_backup = cfg.YEARS
+        TURNOVERS = ["aeo"]
+        YEARS = ['2020','2022','2024']
+        gen_scoutdata(s3, athena, cfg)
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        get_csvs_for_R(s3, athena, cfg, for_calibration=True)
+        generate_state_monthly_for_cal(s3, athena, cfg)
+        run_r_script("calibration.R")
+        TURNOVERS = TURNOVERS_backup
+        YEARS = YEARS_backup
+
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
         gen_scoutdata(s3, athena, cfg)
@@ -1913,7 +1932,6 @@ def main(opts):
         test_county(s3, athena, cfg)
         get_csvs_for_R(s3, athena, cfg)
         run_r_script("county and hourly graphs.R")
-        run_r_script("calibration.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
@@ -1964,6 +1982,7 @@ if __name__ == "__main__":
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
+    parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
     
     opts = parser.parse_args()
     main(opts)
