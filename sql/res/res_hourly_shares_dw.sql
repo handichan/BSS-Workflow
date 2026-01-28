@@ -1,4 +1,4 @@
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_hourly}
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses

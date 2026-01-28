@@ -1,5 +1,5 @@
 
-INSERT INTO res_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_annual}
 
 WITH meta_filtered AS (
 	
