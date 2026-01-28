@@ -755,7 +755,7 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         for st in cfg.US_STATES:
             q = render(**base_kwargs, state=st)
             f"RUN {sql_rel} | sector={sectorid} turnover={turnover} "
-            f"year={yearid} state={st} enduse={eu}"
+            f"year={yearid} state={st}"
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
         return
     # Case 3: only {enduse}
