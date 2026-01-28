@@ -73,6 +73,8 @@ class Config:
     ]
 
     # names of tables that contain BuildStock data - required to calculate disaggregation multipliers
+    MULTIPLIERS_SUFFIX = "disaggregation_multipliers_" + WEATHER
+
     BLDSTOCK_TABLES = [
         "comstock_2025.1_parquet",                  # meta_com Commercial metadata
         "comstock_2025.1_by_state",                 # ts_com Commercial hourly data
@@ -768,6 +770,8 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
         mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
         mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+        # used in test_multipliers functions
+        mult_suffix=cfg.MULTIPLIERS_SUFFIX,
 
         meta_com=cfg.BLDSTOCK_TABLES[0],
         ts_com=cfg.BLDSTOCK_TABLES[1],
@@ -1568,7 +1572,6 @@ def combine_countydata(s3_client, athena_client, cfg: Config):
         for t in turnovers:
             q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
 
 # ----------------------------
 # R runner
