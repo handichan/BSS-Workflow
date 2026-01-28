@@ -1147,8 +1147,7 @@ def generate_state_monthly_for_cal(s3_client, athena_client, cfg: Config):
     q = template.format(
         turnover='aeo', 
         weather='amy', 
-        dest_bucket=cfg.BUCKET_NAME, 
-        baseyear=cfg.BASE_YEAR
+        dest_bucket=cfg.BUCKET_NAME
     )
 
     # Execute the query and save to CSV
