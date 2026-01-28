@@ -786,7 +786,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_ann_shares_wh.sql",
         "res_ann_shares_hvac.sql",
         "res_ann_shares_deliveredheat.sql",
-        "res_ann_shares_deliveredcool.sql",
+        "res_ann_shares_deliveredcooling.sql",
         "res_ann_shares_deliveredwh.sql",
         "res_ann_shares_cw.sql",
         "res_ann_shares_dry.sql",
