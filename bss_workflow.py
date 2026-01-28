@@ -1061,7 +1061,7 @@ def county_hourly_examples_60_days(s3_client, athena_client, cfg: Config, turnov
 
     return main_sql
 
-def get_csvs_for_R(s3_client, athena_client, cfg: Config):
+def get_csvs_for_R(s3_client, athena_client, cfg: Config, for_calibration: bool = False):
     turnovers = cfg.TURNOVERS
     sql_files = [
         "county_ann_eu.sql",
@@ -1070,6 +1070,10 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         "county_peak_hour.sql",
         "county_share_winter.sql"
     ]
+    
+    if for_calibration:
+        sql_files = ["state_monthly.sql"]
+    
     out_dir = "R/generated_csvs"
     os.makedirs(out_dir, exist_ok=True)
 
@@ -2211,17 +2215,43 @@ def main(opts):
         convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
-    # if opts.gen_countyall:
-    #     s3, athena = get_boto3_clients()
-    #     gen_scoutdata(s3, athena, cfg)
-    #     run_r_script("annual_graphs.R")
-    #     gen_countydata(s3, athena, cfg)
-    #     get_csv_for_calibration(s3, athena, cfg)
-    #     calc_calibration_multipliers(cfg)
-    #     combine_countydata(s3, athena, cfg)
-    #     test_county(s3, athena, cfg)
-    #     get_csvs_for_R(s3, athena, cfg)
-    #     run_r_script("county and hourly graphs.R")
+    if opts.gen_countyall:
+        s3, athena = get_boto3_clients()
+        gen_scoutdata(s3, athena, cfg)
+        run_r_script("annual_graphs.R")
+        gen_countydata(s3, athena, cfg)
+        get_csv_for_calibration(s3, athena, cfg)
+        calc_calibration_multipliers(cfg)
+        combine_countydata(s3, athena, cfg)
+        test_county(s3, athena, cfg)
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
+
+    if opts.calibration:
+        s3, athena = get_boto3_clients()
+        TURNOVERS_backup = cfg.TURNOVERS
+        YEARS_backup = cfg.YEARS
+        TURNOVERS = ["aeo"]
+        YEARS = ['2020','2022','2024']
+        gen_scoutdata(s3, athena, cfg)
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        get_csvs_for_R(s3, athena, cfg, for_calibration=True)
+        generate_state_monthly_for_cal(s3, athena, cfg)
+        run_r_script("calibration.R")
+        TURNOVERS = TURNOVERS_backup
+        YEARS = YEARS_backup
+
+    # previous workflow without running calibration
+    if opts.gen_countyall_no_calib:
+        s3, athena = get_boto3_clients()
+        gen_scoutdata(s3, athena, cfg)
+        run_r_script("annual_graphs.R")
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        test_county(s3, athena, cfg)
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
@@ -2271,6 +2301,7 @@ if __name__ == "__main__":
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
+    parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
     
     opts = parser.parse_args()
     main(opts)
