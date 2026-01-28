@@ -62,11 +62,13 @@ class Config:
     WEATHER = "amy"
 
     MULTIPLIERS_TABLES = [
-        "com_annual_disaggregation_multipliers",   # mult_com_annual
-        "res_annual_disaggregation_multipliers",   # mult_res_annual
-        "com_hourly_disaggregation_multipliers",   # mult_com_hourly
-        "res_hourly_disaggregation_multipliers",   # mult_res_hourly
+        f"com_annual_disaggregation_multipliers_{WEATHER}",   # mult_com_annual
+        f"res_annual_disaggregation_multipliers_{WEATHER}",   # mult_res_annual
+        f"com_hourly_disaggregation_multipliers_{WEATHER}",   # mult_com_hourly
+        f"res_hourly_disaggregation_multipliers_{WEATHER}",   # mult_res_hourly
     ]
+
+    MULTIPLIERS_SUFFIX = "disaggregation_multipliers_" + WEATHER
 
     BLDSTOCK_TABLES = [
         "comstock_amy2018_release_2024.2_parquet",  # meta_com
@@ -724,6 +726,8 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
         mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
         mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+        # used in test_multipliers functions
+        mult_suffix=cfg.MULTIPLIERS_SUFFIX,
 
         meta_com=cfg.BLDSTOCK_TABLES[0],
         ts_com=cfg.BLDSTOCK_TABLES[1],
@@ -1325,13 +1329,20 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
     out_csv = "./diagnostics/test_multipliers.csv"
     os.makedirs("diagnostics", exist_ok=True)
 
+    mult_com_annual=cfg.MULTIPLIERS_TABLES[0]
+    mult_res_annual=cfg.MULTIPLIERS_TABLES[1]
+    mult_com_hourly=cfg.MULTIPLIERS_TABLES[2]
+    mult_res_hourly=cfg.MULTIPLIERS_TABLES[3]
+    # used in test_multipliers functions
+    suf=cfg.MULTIPLIERS_SUFFIX
+
     final = pd.DataFrame()
     for sql_file in test_files:
         result_col = sql_file.split(".")[0]
         sectors = ["res", "com"] if "annual" in sql_file else (["com"] if "com" in sql_file else ["res"])
         for s in sectors:
             template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-            q = template.format(version=cfg.VERSION_ID, sector=s)
+            q = template.format(sector=s, suffix=suf)
             print(q)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
             df["test_name"] = f"{result_col}_{s}"
@@ -1347,7 +1358,7 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
         f"""
         with re_agg as(
             SELECT group_ann, sector, "in.state", end_use, sum(multiplier_annual) as added
-            FROM res_annual_disaggregation_multipliers_{cfg.VERSION_ID}
+            FROM {mult_res_annual}
             GROUP BY group_ann, sector, "in.state", end_use
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
@@ -1355,7 +1366,7 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
         f"""
         with re_agg as(
             SELECT shape_ts, sector, "in.state", "in.weather_file_city", end_use, sum(multiplier_hourly) as added
-            FROM res_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
+            FROM {mult_res_hourly}
             GROUP BY shape_ts, sector, "in.state", "in.weather_file_city", end_use
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
@@ -1363,7 +1374,7 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
         f"""
         with re_agg as(
             SELECT group_ann, sector, "in.state", end_use, sum(multiplier_annual) as added
-            FROM com_annual_disaggregation_multipliers_{cfg.VERSION_ID}
+            FROM {mult_com_annual}
             GROUP BY group_ann, sector, "in.state", end_use
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
@@ -1371,7 +1382,7 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
         f"""
         with re_agg as(
             SELECT shape_ts, sector, "in.county", end_use, sum(multiplier_hourly) as added
-            FROM com_hourly_disaggregation_multipliers_{cfg.VERSION_ID}
+            FROM {mult_com_hourly}
             GROUP BY shape_ts, sector, "in.county", end_use
         )
         SELECT * FROM re_agg WHERE added>1.001 OR added<.9999
