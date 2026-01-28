@@ -1,4 +1,15 @@
 INSERT INTO {mult_com_hourly}
+(
+"in.county",
+	shape_ts,
+	timestamp_hour,
+	kwh,
+    multiplier_hourly,
+    sector,
+    "in.state",
+	end_use
+)
+SELECT
 "in.county",
 	shape_ts,
 	timestamp_hour,
