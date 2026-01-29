@@ -1315,9 +1315,13 @@ def test_county(s3_client, athena_client, cfg: Config):
                 q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER, version=cfg.VERSION_ID)
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 df["year"] = y
+                df["turnover"] = t
 
-                final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
+                final = pd.concat([final, df], ignore_index=True)
 
+        # Sort once at the end if needed
+        final = final.sort_values(by=["turnover", "year"], ascending=[True, True])
+        
         if os.path.exists(out_csv):
             os.remove(out_csv)
         final.to_csv(out_csv, index=False)
