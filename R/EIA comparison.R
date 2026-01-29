@@ -47,3 +47,6 @@ eia_comp<-eia_ratios_sector %>%  filter(year<2024) %>%
   facet_wrap(~sector,nrow=2,labeller = labeller(sector=s_label))+
   ggtitle("Ratio of max monthly electricity consumption in the winter max to max monthly electricity consumption in the summer",subtitle = "EIA 861 2001-2023 (boxplot) vs. BSS 2024 baseline (red dot)")
 save_plot(paste0(graph_dir,"/",filename_prefix,"/eia_seasonal_ratio_comp.jpg"),eia_comp,base_height = 6,base_width = 12,bg="white")
+
+# restore previous working directory, otherwise will mess up python script calls
+setwd("../")

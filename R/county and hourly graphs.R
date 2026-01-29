@@ -462,3 +462,6 @@ for (i in 1:length(county_hourly_examples_list)){
               monthly_examples,base_height = 7,base_width = 8,bg="white")
   }
 }
+
+# restore previous working directory, otherwise will mess up python script calls
+setwd("../")
