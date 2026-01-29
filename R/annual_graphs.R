@@ -455,3 +455,6 @@ wide_all <- .make_factor(wide, setall_codes)
 .make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)
 .make_split_plots_for(wide_all, "", mm_long, states, to, sec, eu, colors)
 .make_split_plots_fossil(wide_all, "", mm_long, states, to, sec, eu, colors)
+
+# restore previous working directory, otherwise will mess up python script calls
+setwd("../")

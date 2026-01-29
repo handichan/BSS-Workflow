@@ -141,3 +141,9 @@ BSS summer")) %>%
   ),guide="none")+
   theme_void()+
   theme(aspect.ratio = 1)
+
+
+save_plot(plot_grid(quadgraph,leg,nrow = 1,rel_widths = c(4,1)),filename = "graphs/fig_max_ratios.jpg",base_height = 7,bg = "white")
+
+# restore previous base directory
+setwd("../")
