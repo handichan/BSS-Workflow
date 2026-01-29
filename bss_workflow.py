@@ -202,6 +202,20 @@ def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name
     print(f"{local_parquet_file} is uploaded to {s3_bucket_target}/{s3_folder}")   
 
 
+def drop_athena_table_if_exists(athena, t, cfg):
+    """
+    Drop an Athena table if it exists.
+    
+    Parameters:
+    - athena: Boto3 Athena client
+    - t: Table name to drop
+    - cfg: Config object containing DATABASE_NAME
+    """
+    query = f"DROP TABLE IF EXISTS {t};"
+    print(f"Dropping table if exists: {t}")
+    execute_athena_query(athena, query, cfg, is_create=True, wait=True)
+
+
 def upload_file_to_s3(s3_client, local_path: str, bucket: str, s3_path: str):
     s3_client.upload_file(local_path, bucket, s3_path)
     print(f"UPLOADED {os.path.basename(local_path)} to s3://{bucket}/{s3_path}")
@@ -1915,19 +1929,29 @@ def main(opts):
         s3, athena = get_boto3_clients()
         TURNOVERS_backup = cfg.TURNOVERS
         YEARS_backup = cfg.YEARS
-        TURNOVERS = ["aeo"]
-        YEARS = ['2020','2022','2024']
+        cfg.TURNOVERS = ["aeo"]
+        cfg.YEARS = ['2020','2022','2024']
         gen_scoutdata(s3, athena, cfg)
+        # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
         gen_countydata(athena, cfg)
         combine_countydata(athena, cfg)
         get_csvs_for_R(s3, athena, cfg, for_calibration=True)
         generate_state_monthly_for_cal(s3, athena, cfg)
         run_r_script("calibration.R")
-        TURNOVERS = TURNOVERS_backup
-        YEARS = YEARS_backup
+        cfg.TURNOVERS = TURNOVERS_backup
+        cfg.YEARS = YEARS_backup
 
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
+        # remove scout_annual_state_aeo (produced from calibration)
+        # also remove long_county_hourly_aeo_amy and long_county_annual_aeo_amy, as 2026 onward data will be generated and concatenated
+        drop_tables = [
+            "scout_annual_state_aeo",
+            "long_county_hourly_aeo_amy",
+            "long_county_annual_aeo_amy"
+        ]
+        for t in drop_tables:
+            drop_athena_table_if_exists(athena, t, cfg)
         gen_scoutdata(s3, athena, cfg)
         run_r_script("annual_graphs.R")
         gen_countydata(athena, cfg)
