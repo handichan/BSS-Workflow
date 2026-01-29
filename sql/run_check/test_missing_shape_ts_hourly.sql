@@ -49,14 +49,14 @@ combos AS (
 
 good_shape_ts AS (
     SELECT shape_ts, "in.county", "in.state", end_use, 1 AS present
-    FROM com_hourly_disaggregation_multipliers_{version}
+    FROM com_hourly_disaggregation_multipliers_{weather}
     WHERE multiplier_hourly = multiplier_hourly
     GROUP BY shape_ts, "in.county", "in.state", end_use
     
     UNION ALL
     
     SELECT shape_ts, "in.county", "in.state", end_use, 1 AS present
-    FROM res_hourly_disaggregation_multipliers_{version}
+    FROM res_hourly_disaggregation_multipliers_{weather}
     WHERE multiplier_hourly = multiplier_hourly
     GROUP BY shape_ts, "in.county", "in.state", end_use
 )

@@ -1,5 +1,5 @@
 -- Flag states and group_ann that have electricity assigned but the disaggregation multipliers aren't defined
--- Parameters: {turnover}, {weather}, {version}
+-- Parameters: {turnover}, {weather}
 
 WITH electric_df AS (
     SELECT
@@ -47,14 +47,14 @@ combos AS (
 
 good_group_ann AS (
     SELECT group_ann, "in.state", end_use, 1 AS present
-    FROM com_annual_disaggregation_multipliers_{version}
+    FROM com_annual_disaggregation_multipliers_{weather}
     WHERE multiplier_annual = multiplier_annual
     GROUP BY group_ann, "in.state", end_use
     
     UNION ALL
     
     SELECT group_ann, "in.state", end_use, 1 AS present
-    FROM res_annual_disaggregation_multipliers_{version}
+    FROM res_annual_disaggregation_multipliers_{weather}
     WHERE multiplier_annual = multiplier_annual
     GROUP BY group_ann, "in.state", end_use
 )

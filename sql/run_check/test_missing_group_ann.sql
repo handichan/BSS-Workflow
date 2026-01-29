@@ -37,14 +37,14 @@ AND elec.tech_stage = mm.tech_stage),
 
 good_group_ann as(
 SELECT group_ann,"in.state",end_use, 1 as present
-FROM com_annual_disaggregation_multipliers_{version} 
+FROM com_annual_disaggregation_multipliers_{weather} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY group_ann,"in.state",end_use
 
 UNION ALL
 
 SELECT group_ann,"in.state",end_use, 1 as present
-FROM res_annual_disaggregation_multipliers_{version} 
+FROM res_annual_disaggregation_multipliers_{weather} 
 WHERE multiplier_annual=multiplier_annual
 GROUP BY group_ann,"in.state",end_use
 )
