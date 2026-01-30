@@ -300,7 +300,7 @@ For each of the 6 resources (3 folders + 3 files), create a separate Glue Crawle
 
 4. **Configure Security Settings:**
    - Select or create an IAM role that has read access to the S3 bucket
-   - View the service role and check its permissions. For example, under Resource it could say `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/*`
+   - View the service role and check its permissions. For example, under Resource it could say `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/*` or `s3://oedi-data-lake/buildings-sector-scenarios/*`
 
 5. **Set Output and Scheduling:**
    - **Target database**: `default` This will be used in the `Config` class of bss_workflow.py 
@@ -490,7 +490,7 @@ If they are not set, run the following command to set them up.
 
 ## Calculating Disaggregation Multipliers (optional)
 
-Custom disaggregation multipliers are defined by [mapping files](#mapping-files) and calculated with `python bss_workflow.py --calc_mults`. This computation is by far the longest and can take about a day.
+Custom disaggregation multipliers are defined by [mapping files](#mapping-files) and calculated with `python bss_workflow.py --calc_mults`. This computation is by far the longest and can take about a day. It is only necessary if you change multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
 
 Before running, check that
 - BuildStock SDR tables are Glued.
@@ -528,7 +528,7 @@ See [Tables 1 and 2](#output-schema) for the schemas of the outputs.
 
 ### Automated Quality Checks
 
-- **Conservation Checks**: Energy conservation maintained across data transformations
+When performing the county hourly disaggregation, automatic checks are performed to confirm that the necessary disaggregation multipliers are defined and that the energy reaggregates to the raw Scout output. Files with the results of the checks can be found in `diagnostics`.
 
 ## Calculating Calibration Multipliers (optional)
 
@@ -558,21 +558,6 @@ Calculate the calibration multipliers using `R/calibration.R`. This script will 
 
 ## Visualization
 
-### County-Level Data Checks
-
-The `test_county` function performs quality checks that verify data integrity before further diagnostics via visualization. Tests include:
-
-- Consistency of column types
-- Scenario coverage validation
-- SQL queries executed per scenario to extract analysis-ready datasets (CSVs)
-
-The resulting files summarize:
-- Annual county electricity consumption
-- Peak-hour distributions
-- Representative hourly load shapes
-
-These are saved locally for use in graphical routines.
-
 ### Annual Graphs (`annual_graphs.R`)
 
 This script produces area plots that show energy consumption over time by scenario:
@@ -601,6 +586,8 @@ This script provides comprehensive county-level visualizations:
 
 These graphs are generated with `--gen_hourlyviz` and as part of `--gen_countyall`. Before running, check that the `scenarios` vector contains only the scenarios that you want to visualize.
 
+When this script is run using `bss_workflow.py`, the CSV files that are needed as input will be automatically created by several SQL files in `SQL/data_downloads/` and saved to `R/generated_csvs/`.
+
 ## Summary of Command Line Arguments
 
 The command line arguments for `bss_workflow.py` specify which parts of the workflow to run.
@@ -609,7 +596,7 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 
 - `--gen_mults` (or `--gen_multipliers`)
   - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
-  - Use when you changed multiplier SQL/templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
+  - Use when you changed multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
 
 ### Disaggregation
 
@@ -623,10 +610,15 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 
 - `--combine_countydata`
   - Consolidates the tables for the year and sector combinations created by `--gen_county` into two tables per scenario: one with annual county-level results and one with hourly county-level results. See [Tables 1 and 2](#output-schema) for the variables present in each.
+  - Runs diagnostics.
   - Run after `gen_county`.
 
 - `--gen_hourlyviz`
-  - Creates hourly county-level visualizations using the output from `--combine_countydata`.
+  - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_countydata`.
+
+- `--run_test`
+  - Runs diagnostics that are included in `--gen_mults` and `--combine_countydata`: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
+  - Use after changes to disaggregation multipliers or county generation templates.
 
 - `--gen_countyall`
   - One-shot pipeline that performs the complete disaggregation.
@@ -637,10 +629,6 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 - `--convert_wide`
   - Creates wide format annual and hourly tables. See [Tables 3 and 4](#output-schema) for the variables present in each.
   - Use to format results for publication.
-
-- `--run_test`
-  - Runs diagnostics: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
-  - Use after changes to disaggregation multipliers or county generation templates.
 
 - `--bssbucket_insert`
   - Creates published tables in the `bss-workflow` bucket from wide county hourly results.
