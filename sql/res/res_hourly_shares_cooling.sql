@@ -38,7 +38,23 @@ ts_not_agg AS (
 		sum(cooling) as kwh,
     	'res' AS sector,
 		'Cooling (Equip.)' as end_use,
-		'All' as fuel
+		'Electric' as fuel
+	FROM ts_not_agg
+	GROUP BY timestamp_hour,
+		"in.weather_file_longitude",
+        "in.weather_file_city",
+		shape_ts
+
+	UNION ALL
+
+	SELECT "in.weather_file_city",
+		"in.weather_file_longitude",
+		shape_ts,
+		timestamp_hour,
+		sum(cooling) as kwh,
+    	'res' AS sector,
+		'Cooling (Equip.)' as end_use,
+		'Natural Gas' as fuel
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
 		"in.weather_file_longitude",

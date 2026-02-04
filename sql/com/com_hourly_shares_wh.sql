@@ -59,6 +59,19 @@ SELECT "in.county",
     'com' AS sector,
     "in.state",
 	'Water Heating' as end_use,
-	'Fossil' AS fuel
+	'Natural Gas' AS fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.county",
+	shape_ts,
+	timestamp_hour,
+	wh_fossil as kwh,
+	wh_fossil / sum(wh_fossil) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+    'com' AS sector,
+    "in.state",
+	'Water Heating' as end_use,
+	'Distillate/Other' AS fuel
 FROM ts_agg
 ;

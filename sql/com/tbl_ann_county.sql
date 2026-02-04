@@ -1,5 +1,5 @@
 -- to hold results from Scout runs that have been disaggregated to annual, county
-CREATE EXTERNAL TABLE county_annual_com_{year}_{turnover}_{weather} (
+CREATE EXTERNAL TABLE county_annual_com_{year}_{turnover}_{disag_id} (
     `in.county` string,
     fuel string,
     meas string,
@@ -15,5 +15,5 @@ CREATE EXTERNAL TABLE county_annual_com_{year}_{turnover}_{weather} (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://{dest_bucket}/{version}/county_runs/county_annual_com_{year}_{turnover}_{weather}/'
+LOCATION 's3://{dest_bucket}/{version}/county_runs/county_annual_com_{year}_{turnover}_{disag_id}/'
 ;

@@ -76,7 +76,21 @@ SELECT "in.weather_file_city",
     'res' AS sector,
     "in.weather_file_longitude",
 	'Cooking' as end_use,
-	'Fossil' as fuel
+	'Natural Gas' as fuel
+FROM ts_totals
+WHERE cooking_fossil > 0
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	cooking_fossil as kwh,
+	cooking_fossil / cooking_fossil_total as multiplier_hourly,
+    'res' AS sector,
+    "in.weather_file_longitude",
+	'Cooking' as end_use,
+	'Propane' as fuel
 FROM ts_totals
 WHERE cooking_fossil > 0
 ;

@@ -78,7 +78,7 @@ SELECT "in.weather_file_city",
     'res' AS sector,
     "in.weather_file_longitude",
 	'Other' as end_use,
-	'Fossil' as fuel
+	'Natural Gas' as fuel
 FROM ts_totals
 WHERE drying_fossil > 0
 ;

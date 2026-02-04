@@ -113,7 +113,22 @@ SELECT
     'res' AS sector,
     "in.state",
     'Cooling (Equip.)' AS end_use,
-    'All' AS fuel
+    'Electric' AS fuel
+FROM geo_totals
+WHERE cooling_total > 0
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    cooling / cooling_total AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Natural Gas' AS fuel
 FROM geo_totals
 WHERE cooling_total > 0
 ;

@@ -50,7 +50,32 @@ SELECT "in.county",
     'res' AS sector,
     "in.state",
     'Other' AS end_use,
-	'Fossil' AS fuel
+	'Natural Gas' AS fuel
 FROM meta_filtered
 
+UNION ALL
+
+SELECT "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    misc_ng / sum(misc_ng) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Other' AS end_use,
+	'Propane' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    misc_ng / sum(misc_ng) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Other' AS end_use,
+	'Distillate/Other' AS fuel
+FROM meta_filtered
 ;

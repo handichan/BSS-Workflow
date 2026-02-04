@@ -14,8 +14,9 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade,
         meta.weight
-    	FROM "comstock_2025.1_parquet" 
-		WHERE meta.state = '{state}' as meta
+    	FROM (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade, "in.hvac_cool_type", "in.hvac_category", "in.hvac_heat_type", applicability
+			FROM "comstock_2025.1_parquet" 
+			WHERE state='{state}') as meta 
 		RIGHT JOIN com_ts_ventilation2 as chars ON meta."in.hvac_cool_type" = chars."in.hvac_cool_type"
 		AND meta."in.hvac_category" = chars."in.hvac_category"
         AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"

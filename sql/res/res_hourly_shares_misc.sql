@@ -67,7 +67,33 @@ SELECT "in.weather_file_city",
     'res' AS sector,
     "in.weather_file_longitude",
 	'Other' as end_use,
-	'Fossil' as fuel
+	'Natural Gas' as fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	misc_ng as kwh,
+	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
+    'res' AS sector,
+    "in.weather_file_longitude",
+	'Other' as end_use,
+	'Propane' as fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+	shape_ts,
+	timestamp_hour,
+	misc_ng as kwh,
+	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
+    'res' AS sector,
+    "in.weather_file_longitude",
+	'Other' as end_use,
+	'Distillate/Other' as fuel
 FROM ts_agg
 
 ;

@@ -9,8 +9,9 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade,
         meta.weight
-    	FROM "comstock_2025.1_parquet"
-		WHERE meta.state = '{state}' as meta
+    	FROM (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade, "in.heating_fuel", "in.hvac_heat_type", applicability
+			FROM "comstock_2025.1_parquet" 
+			WHERE state='{state}') as meta 
 		RIGHT JOIN com_ts_heating2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
         AND meta.applicability = chars.applicability
@@ -67,6 +68,18 @@ SELECT "in.county",
     'com' AS sector,
     "in.state",
 	'Heating (Equip.)' as end_use,
-	'Fossil' as fuel
+	'Natural Gas' as fuel
+FROM ts_agg
+
+UNION ALL
+
+SELECT "in.county",
+	shape_ts,
+	timestamp_hour,
+	heating_fossil as kwh,
+    'com' AS sector,
+    "in.state",
+	'Heating (Equip.)' as end_use,
+	'Distillate/Other' as fuel
 FROM ts_agg
 ;

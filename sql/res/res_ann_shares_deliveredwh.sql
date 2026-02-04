@@ -27,5 +27,48 @@ SELECT
     'res' AS sector,
     "in.state",
     'Water Heating' AS end_use,
-    'All' AS fuel
+    'Electric' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Natural Gas' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Propane' AS fuel
+FROM meta_filtered
+	
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Distillate/Other' AS fuel
+
 FROM meta_filtered;

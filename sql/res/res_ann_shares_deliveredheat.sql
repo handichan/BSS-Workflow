@@ -61,5 +61,60 @@ SELECT
 	'res' AS sector,
 	"in.state",
 	'Heating (Equip.)' AS end_use,
-	'All' AS fuel
+	'Electric' AS fuel
+
+UNION ALL
+
+SELECT 
+	"in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Heating (Equip.)' AS end_use,
+	'Natural Gas' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+	"in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Heating (Equip.)' AS end_use,
+	'Propane' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+	"in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Heating (Equip.)' AS end_use,
+	'Distillate/Other' AS fuel
+FROM meta_filtered
+	
+UNION ALL
+
+SELECT 
+	"in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	delivered_heat / sum(delivered_heat) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Heating (Equip.)' AS end_use,
+	'Biomass' AS fuel
 FROM meta_filtered;

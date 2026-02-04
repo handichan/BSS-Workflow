@@ -85,7 +85,23 @@ SELECT
 	sector,
 	"in.state",
 	end_use,
-	'All' AS fuel
+	'Electric' AS fuel
+FROM ts_norm_tz 
+LEFT JOIN county2tz2state
+	ON ts_norm_tz.tz = county2tz2state.tz
+
+UNION ALL 
+
+SELECT 
+	"in.county",
+	shape_ts,
+	timestamp_hour,
+	kwh,
+	multiplier_hourly,
+	sector,
+	"in.state",
+	end_use,
+	'Natural Gas' AS fuel
 FROM ts_norm_tz 
 LEFT JOIN county2tz2state
 	ON ts_norm_tz.tz = county2tz2state.tz

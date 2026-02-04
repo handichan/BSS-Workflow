@@ -1,4 +1,4 @@
-INSERT INTO county_hourly_com_{year}_{turnover}_{weather}
+INSERT INTO county_hourly_com_{year}_{turnover}_{disag_id}
 WITH filtered_annual AS (
     SELECT "in.county",
     meas,
@@ -11,7 +11,7 @@ WITH filtered_annual AS (
     "year",
     end_use,
     fuel
-    FROM county_annual_com_{year}_{turnover}_{weather}
+    FROM county_annual_com_{year}_{turnover}_{disag_id}
     WHERE "year" = {year}
       AND scout_run = '{scout_version}'
       AND end_use = '{enduse}'
@@ -78,38 +78,8 @@ grouped_disagg AS (
         scout_run
 ),
 
-grouped_fossil AS (
-    SELECT 
-        "in.state", "year","in.county",end_use,shape_ts,fuel,turnover,county_ann_kwh,scout_run
-    FROM grouped_disagg
-    WHERE fuel IN ('Natural Gas', 'Distillate/Other')
-),
-
 hourly_ungrouped AS (
     SELECT 
-        gf."in.state",
-        gf."year",
-        gf."in.county",
-        gf.end_use,
-        gf.fuel,
-        h.timestamp_hour,
-        h.sector,
-        gf.turnover,
-        gf.county_ann_kwh * h.multiplier_hourly AS county_hourly_kwh,
-        gf.scout_run
-        FROM grouped_fossil as gf
-    LEFT JOIN (SELECT 
-        "in.county", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
-        FROM com_hourly_disaggregation_multipliers_{version}
-        WHERE multiplier_hourly >= 0
-        AND fuel = 'Fossil'
-        AND end_use = '{enduse}') AS h
-    ON gf."in.county" = h."in.county"
-    AND gf.end_use = h.end_use
-    AND gf.shape_ts = h.shape_ts
-    
-    UNION 
-        SELECT 
         gd."in.state",
         gd."year",
         gd."in.county",
@@ -125,30 +95,6 @@ hourly_ungrouped AS (
         "in.county", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
         FROM com_hourly_disaggregation_multipliers_{version}
         WHERE multiplier_hourly >= 0
-        AND fuel = 'All'
-        AND end_use = '{enduse}') AS h
-    ON gd."in.county" = h."in.county"
-    AND gd.end_use = h.end_use
-    AND gd.shape_ts = h.shape_ts
-    
-    UNION 
-        SELECT 
-        gd."in.state",
-        gd."year",
-        gd."in.county",
-        gd.end_use,
-        gd.fuel,
-        h.timestamp_hour,
-        h.sector,
-        gd.turnover,
-        gd.county_ann_kwh * h.multiplier_hourly AS county_hourly_kwh,
-        gd.scout_run
-        FROM grouped_disagg as gd
-    LEFT JOIN (SELECT 
-        "in.county", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
-        FROM com_hourly_disaggregation_multipliers_{version}
-        WHERE multiplier_hourly >= 0
-        AND fuel NOT IN ('Fossil', 'All')
         AND end_use = '{enduse}') AS h
     ON gd."in.county" = h."in.county"
     AND gd.end_use = h.end_use

@@ -77,7 +77,45 @@ SELECT "in.weather_file_city",
 	heating_fossil as kwh,
     'res' AS sector,
 	'Heating (Equip.)' as end_use,
-	'Fossil' as fuel
+	'Natural Gas' as fuel
 FROM ts_totals
 WHERE heating_fossil > 0
-;
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
+	shape_ts,
+	timestamp_hour,
+	heating_fossil as kwh,
+    'res' AS sector,
+	'Heating (Equip.)' as end_use,
+	'Propane' as fuel
+FROM ts_totals
+WHERE heating_fossil > 0
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
+	shape_ts,
+	timestamp_hour,
+	heating_fossil as kwh,
+    'res' AS sector,
+	'Heating (Equip.)' as end_use,
+	'Distillate/Other' as fuel
+FROM ts_totals
+WHERE heating_fossil > 0
+
+UNION ALL
+
+SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
+	shape_ts,
+	timestamp_hour,
+	heating_fossil as kwh,
+    'res' AS sector,
+	'Heating (Equip.)' as end_use,
+	'Biomass' as fuel
+FROM ts_totals
+WHERE heating_fossil > 0;

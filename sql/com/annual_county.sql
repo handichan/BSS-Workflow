@@ -1,4 +1,4 @@
-INSERT INTO county_annual_com_{year}_{turnover}_{weather}
+INSERT INTO county_annual_com_{year}_{turnover}_{disag_id}
 WITH scout AS (
     SELECT 
     CASE WHEN meas='Gap' THEN 'Gap' ELSE meas END as meas,
