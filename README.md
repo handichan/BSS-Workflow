@@ -460,6 +460,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `MAP_MEAS_DIR` | Directory of measure mapping files. | Used in annual/hourly share generation. |
 | `ENVELOPE_MAP_PATH` | Mapping of measures into equipment vs. envelope packages. | `compute_with_package_energy`. |
 | `MEAS_MAP_PATH` | Core measure map linking Scout measures to groupings and time-shapes. | `calc_annual`, county/hourly SQL joins. |
+| `CALIB_MULT_PATH` | Calibration multipliers. | Used in hourly disaggregation. |
 | `SCOUT_OUT_TSV` | Directory for processed state-level TSVs. | Output of `gen_scoutdata`. |
 | `SCOUT_IN_JSON` | Directory for raw Scout JSON files. | Input to `scout_to_df`. |
 | `OUTPUT_DIR` | Aggregated results directory. | Downstream combination and QA. |
@@ -468,11 +469,13 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `DEST_BUCKET` | S3 bucket for bulk workflow outputs. | County results, disaggregation multipliers. |
 | `BUCKET_NAME` | Primary S3 bucket for configs and diagnostic CSVs. | Athena query outputs, staging. |
 | `SCOUT_RUN_DATE` | Tag of the Scout run date (YYYY-MM-DD). | Stamped in outputs as `scout_run`. |
-| `VERSION_ID` | Version identifier (e.g., 20250911). | S3 prefixes, table names. |
+| `MULT_VERSION_ID` | Version identifier for disaggregation multipliers (e.g., 20250911). | S3 prefixes, table names. |
+| `DISAG_ID` | Version identifier for county annual and hourly results. | S3 prefixes, table names. |
 | `MULTIPLIERS_TABLES` | List of Athena table names for the calculated disaggregation multipliers. | County/hourly disaggregation. |
 | `BLDSTOCK_TABLES` | List of Athena table names for the BuildStock SDR. | Calculation of disaggregation multipliers. |
 | `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
 | `YEARS` | Analysis years to disaggregate. | Looped in county/hourly disaggregation. |
+| `BASE_YEAR` | Base year for calculating percent differences. | Hourly visualizations. |
 | `US_STATES` | List of two-letter U.S. state abbreviations to disaggregate. | SQL templates with `{state}` placeholders. |
 
 **Table 9:** Configuration paramters in `bss_workflow.py`
@@ -495,19 +498,21 @@ Custom disaggregation multipliers are defined by [mapping files](#mapping-files)
 Before running, check that
 - BuildStock SDR tables are Glued.
 - `BLDSTOCK_TABLES` in the `Config` class contains the correct table names.
-- The tables created by `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` do not already exist on AWS. This might happen if the command has previously failed partway through. See [troubleshooting](#troubleshooting-1) for more information.
+- The tables created by `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` do not already exist on AWS. This might happen if the command has previously failed partway through or if you want to replace the tables. See [troubleshooting](#troubleshooting-1) for more information.
 
 ### Automated Quality Checks
 
-When calculating new disaggregation multipliers, automatic checks are performed to confirm that multipliers sum to 1. Output files with the sums of each combination of variables can be found in `diagnostics`.
+When calculating new disaggregation multipliers, automatic checks are performed to confirm that multipliers sum to 1. Output files with the sums of each combination of variables can be found in `diagnostics/`.
 
-For the annual multipliers, the diagnostics also report how many counties within a state have a non-zero multiplier associated with them for each `group_ann`, fuel, and end use combination. In general we expect every county in a state will have a non-zero multiplier. However, if the particular `group_ann` is based on a combination of building characteristics that is not present in that county, it will not have a multiplier.
+For the annual multipliers, the diagnostics also report how many counties within a state have a non-zero multiplier associated with them for each `group_ann`, fuel, and end use combination. In general we expect every county in a state will have a non-zero multiplier. However, if the particular `group_ann` is based on a combination of building characteristics that is not present in that county, it will not have a multiplier. ResStock reports energy consumption for 3,107 counties; ComStock reports energy consumption for 3,021 counties in the contiguous US and 3,043 in the 50 states plus DC.
 
 ### Troubleshooting
 
 The `--calc_mults` argument calls `gen_multipliers`, which in turn calls SQL scripts such as `tbl_ann_mult.sql`, `res_ann_shares_lighting.sql`, and `com_hourly_shares_misc.sql`. If the command fails part way through, you may want to only run a subset of the SQL scripts.
 
-If the AWS tables already exist and you just want to add more data to them, comment out `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` from  `gen_multipliers`. If you want instead to start from scratch, use Athena to drop the tables and navigate to the S3 bucket to delete the contents of each table's folder.
+If the AWS tables already exist and you just want to add more data to them, comment out `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` from `gen_multipliers`. 
+
+If you want to create new multipliers in tables whose names already exist, use the AWS console to remove those tables and data first. In Athena, run `DROP TABLE table_name` for all the tables that were created with `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql`. Then navigate to your S3 bucket and delete the contents of the folders with the same table names.
 
 The SDR versions do not all have consistent data types, particularly for the timestamp field. If the hourly disaggregation multipliers are not generating correctly, check the data types, especially for `upgrade` and `timestamp`.
 

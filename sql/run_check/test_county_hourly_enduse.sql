@@ -10,13 +10,13 @@ SELECT turnover, end_use,
 
 FROM (
     SELECT 'commercial' AS source, turnover, end_use, county_hourly_uncal_kwh AS kwh_uncal, county_hourly_cal_kwh AS kwh_cal
-    FROM long_county_hourly_{turnover}_{weather}
+    FROM long_county_hourly_{turnover}_{disag_id}
     WHERE county_hourly_uncal_kwh = county_hourly_uncal_kwh AND "year" = {year} AND sector = 'com'
 
     UNION ALL
     
     SELECT 'residential' AS source, turnover, end_use, county_hourly_uncal_kwh AS kwh_uncal, county_hourly_cal_kwh AS kwh_cal
-    FROM long_county_hourly_{turnover}_{weather}
+    FROM long_county_hourly_{turnover}_{disag_id}
     WHERE county_hourly_uncal_kwh = county_hourly_uncal_kwh AND "year" = {year} AND sector = 'res'
     
     UNION ALL

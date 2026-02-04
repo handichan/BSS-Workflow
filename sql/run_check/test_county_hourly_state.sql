@@ -6,7 +6,7 @@ WITH average_multipliers AS (
 
 bss_reagg AS(
     SELECT turnover, "in.state", sector, sum(county_hourly_uncal_kwh) AS kwh_uncal, sum(county_hourly_cal_kwh) AS kwh_cal
-    FROM long_county_hourly_{turnover}_{weather}
+    FROM long_county_hourly_{turnover}_{disag_id}
     WHERE county_hourly_uncal_kwh = county_hourly_uncal_kwh AND "year" = {year}
     GROUP BY turnover, "in.state", sector
     ),

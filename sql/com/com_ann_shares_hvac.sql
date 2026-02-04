@@ -37,16 +37,18 @@ geo_totals AS (
     sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_total
 FROM meta_filtered
 )
-    SELECT 
-        "in.nhgis_county_gisjoin" as "in.county",
-        group_ann,
-        heating_elec / heating_elec_total AS multiplier_annual,
-        'com' AS sector,
-        "in.state",
-        'Heating (Equip.)' AS end_use,
-	    'Electric' AS fuel
-    FROM geo_totals
-    WHERE heating_elec_total > 0
+
+
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    heating_elec / heating_elec_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE heating_elec_total > 0
 
 UNION ALL
 
@@ -74,39 +76,39 @@ SELECT
 FROM geo_totals
 WHERE heating_fo_total > 0
 
-    UNION ALL
+UNION ALL
 
-    SELECT 
-        "in.nhgis_county_gisjoin" as "in.county",
-        group_ann,
-        cooling / cooling_total AS multiplier_annual,
-        'com' AS sector,
-        "in.state",
-        'Cooling (Equip.)' AS end_use,
-	    'Electric' AS fuel
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    cooling / cooling_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Electric' AS fuel
 FROM geo_totals
 
-    UNION ALL
+UNION ALL
 
-    SELECT 
-        "in.nhgis_county_gisjoin" as "in.county",
-        group_ann,
-        cooling / cooling_total AS multiplier_annual,
-        'com' AS sector,
-        "in.state",
-        'Cooling (Equip.)' AS end_use,
-	    'Natural Gas' AS fuel
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    cooling / cooling_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Natural Gas' AS fuel
 FROM geo_totals
-    
-    UNION ALL
 
-    SELECT 
-        "in.nhgis_county_gisjoin" as "in.county",
-        group_ann,
-        ventilation / ventilation_total AS multiplier_annual,
-        'com' AS sector,
-        "in.state",
-        'Ventilation' AS end_use,
-	    'Electric' AS fuel
+UNION ALL
+
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    ventilation / ventilation_total AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Ventilation' AS end_use,
+    'Electric' AS fuel
 FROM geo_totals
 ;

@@ -58,14 +58,26 @@ class Config:
     DEST_BUCKET = "bss-workflow"
     BUCKET_NAME = "margaretbucket" 
     SCOUT_RUN_DATE = "2025-10-01"
-    VERSION_ID = "20251001"
-    WEATHER = "amy"
+    MULT_VERSION_ID = "20260203" #version of disaggregation multipliers to use
+    DISAG_ID = "20260130" #identifier for disaggregated data
 
+    # Scenarios to process
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
-
     #TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
     TURNOVERS = ["test"]
+
+    #scenarios that do NOT have envelope measures
+    no_env_meas = [ 
+        "aeo",
+        "test",
+        "fossil",
+        "aeo25_20to50_byeu_indiv",
+        "aeo25_20to50_bytech_gap_indiv",
+        "aeo25_20to50_bytech_indiv",
+        "min_switch",
+        "dual_switch"
+    ]
     # YEARS = ['2026','2030','2034','2035','2040','2044','2045','2050']
     #YEARS = ['2026','2030','2040','2050']
     YEARS = ['2026']
@@ -74,12 +86,13 @@ class Config:
 
     # Auxiliary constants
     US_STATES = [
-        # 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-        # 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-        # 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
-        # 'NY', 'NC', 'ND', 
+        'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
+        'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
+        'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
+        'NY', 'NC', 'ND', 
         'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
-        'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+        'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI'
+        #, 'WY'
     ]
     # US_STATES = ['WY']
     # US_STATES = ['CO', 'ID', 'MT', 'NM', 'NV', 'UT']
@@ -686,13 +699,13 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
     sectorlong = "Commercial" if sectorid == "com" else "Residential"
     base_kwargs = dict(
         turnover=turnover,
-        version=cfg.VERSION_ID,
+        version=cfg.MULT_VERSION_ID,
         sector=sectorid,
         year=yearid,
         dest_bucket=cfg.BUCKET_NAME,
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
-        weather=cfg.WEATHER,
+        disag_id=cfg.DISAG_ID,
         baseyear=cfg.BASE_YEAR
     )
 
@@ -761,9 +774,6 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "res_ann_shares_misc.sql",
         # "res_ann_shares_poolpump.sql",
         # "tbl_hr_mult.sql",
-        # "tbl_hr_mult_hvac_temp.sql",
-        # "res_hourly_shares_cooling.sql",
-        # "res_hourly_shares_heating.sql",
         # "res_hourly_shares_refrig.sql",
         # "res_hourly_shares_lighting.sql",
         # "res_hourly_shares_cook.sql",
@@ -774,8 +784,11 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "res_hourly_shares_cw.sql",
         # "res_hourly_shares_poolpump.sql",
         # "res_hourly_shares_misc.sql",
-        # # "res_hourly_shares_gap.sql",       
-        # "res_hourly_hvac_norm.sql",
+        # "res_hourly_shares_gap.sql",       
+        # "tbl_hr_mult_hvac_temp.sql",
+        "res_hourly_shares_cooling.sql",
+        "res_hourly_shares_heating.sql",
+        "res_hourly_hvac_norm.sql",
     ]
     tbl_com = [
         # "tbl_ann_mult.sql",
@@ -790,18 +803,18 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         # "com_ann_shares_ventilation_ref.sql",
         # "com_ann_shares_wh.sql",
         # "tbl_hr_mult.sql",
-        # "tbl_hr_mult_hvac_temp.sql",
-        # "com_hourly_shares_cooling.sql",
-        # "com_hourly_shares_heating.sql",
-        # "com_hourly_shares_lighting.sql",
-        # "com_hourly_shares_refrig.sql",
-        # "com_hourly_shares_ventilation.sql",
-        # "com_hourly_shares_ventilation_ref.sql",
+        "com_hourly_shares_lighting.sql",
+        "com_hourly_shares_refrig.sql",
         "com_hourly_shares_wh.sql",
-        # "com_hourly_shares_misc.sql",
-        # "com_hourly_shares_gap.sql",
+        "com_hourly_shares_misc.sql",
+        "com_hourly_shares_gap.sql",
         # "com_hourly_shares_cooking.sql",
-        # "com_hourly_hvac_norm.sql",
+        "tbl_hr_mult_hvac_temp.sql",
+        "com_hourly_shares_cooling.sql",
+        "com_hourly_shares_heating.sql",
+        "com_hourly_shares_ventilation.sql",
+        "com_hourly_shares_ventilation_ref.sql",
+        "com_hourly_hvac_norm.sql",
     ]
 
     for sectorid in sectors:
@@ -832,7 +845,7 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         for sql_file in sql_files:
             sql_path = f"data_downloads/{sql_file}"
             template = read_sql_file(sql_path, cfg)
-            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, weather=cfg.WEATHER, baseyear=cfg.BASE_YEAR)
+            q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID, baseyear=cfg.BASE_YEAR)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
             out = os.path.join(out_dir, f"{t}_{os.path.basename(sql_file).replace('.sql', '.csv')}")
             df.to_csv(out, index=False)
@@ -882,7 +895,7 @@ def county_partition_multipliers(athena_client, cfg: Config):
 
         for fips in fips_list:
             template = q_com if "com" in fname else q_res
-            q = template.format(county_fips=fips, versionid=cfg.VERSION_ID)
+            q = template.format(county_fips=fips, versionid=cfg.MULT_VERSION_ID)
             print(f"UNLOAD county={fips} ({'com' if 'com' in fname else 'res'})")
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
@@ -900,20 +913,10 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         scout_file = f"{turnover}.json"
         print(f">>> SCOUT FILE: {scout_file}")
         fp = os.path.join(cfg.SCOUT_IN_JSON, scout_file)
-        turnover = scout_file.split(".")[0]
 
         # choose conversion path
         # Scout scenario does NOT have envelope measures
-        if scout_file in {
-            "aeo.json",
-            "test.json",
-            "fossil.json",
-            "aeo25_20to50_byeu_indiv.json",
-            "aeo25_20to50_bytech_gap_indiv.json",
-            "aeo25_20to50_bytech_indiv.json",
-            "min_switch",
-            "dual_switch"
-        }:
+        if scout_file in cfg.no_env_meas:
             sdf, gap_weights = scout_to_df_noenv(fp, cfg)
             use_gap_model = not gap_weights.empty 
 
@@ -939,7 +942,7 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
                 include_bldg_type=use_gap_model,
                 cfg=cfg,
             )
-        # checks: measure map coverage and envelope packages coverage
+        # check coverage of: measure map, envelope packages
         check_missing_meas_path = sdf
         check_missing_meas(check_missing_meas_path, cfg)
         check_missing_packages(sdf, cfg)
@@ -973,13 +976,13 @@ def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
 
     # # baseline
     # template = read_sql_file(f"{sql_dir}/long_to_wide_baseline.sql", cfg)
-    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
     # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
     # scenarios
     template = read_sql_file(f"{sql_dir}/long_to_wide.sql", cfg)
     for t in turnovers:
-        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
         execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
@@ -989,7 +992,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     
     # # baseline
     # template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
-    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID)
     # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
     # scenarios
@@ -1148,7 +1151,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     all_sql = scout_header + "\nUNION ALL\n".join(scout_parts) + "),\n" + scout_footer + \
                 county_hourly_header + "\nUNION ALL\n".join(county_hourly_parts) + "),\n" + combined_footer
 
-    q = all_sql.format(turnover=turnover, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+    q = all_sql.format(turnover=turnover, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
 
     # print(q)
     execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
@@ -1162,9 +1165,9 @@ def _combine_countydata(
 ):
 
     # ---- HOURLY ----
-    hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{weather}}
+    hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{disag_id}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_hourly_{{turnover}}_{{weather}}/',
+            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_hourly_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -1172,20 +1175,20 @@ def _combine_countydata(
     hourly_select_tpl = (
         'SELECT "in.county", timestamp_hour, turnover, county_hourly_uncal_kwh, county_hourly_cal_kwh, '
         'scout_run, end_use, sector, year, "in.state"\n'
-        "FROM county_hourly_{sector}_{year}_{turnover}_{weather}"
+        "FROM county_hourly_{sector}_{year}_{turnover}_{disag_id}"
     )
     hourly_parts = []
     for sector in sectors:
         for yr in years:
             hourly_parts.append(
-                hourly_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", weather="{weather}")
+                hourly_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", disag_id="{disag_id}")
             )
     hourly_sql = hourly_header + "\nUNION ALL\n".join(hourly_parts) + ";"
 
     # ---- ANNUAL ----
-    annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{weather}}
+    annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{disag_id}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_annual_{{turnover}}_{{weather}}/',
+            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_annual_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -1194,13 +1197,13 @@ def _combine_countydata(
         'SELECT "in.county", fuel, meas, tech_stage, multiplier_annual, '
         'state_ann_kwh, turnover, county_ann_kwh, scout_run, end_use, '
         'sector, year, "in.state"\n'
-        "FROM county_annual_{sector}_{year}_{turnover}_{weather}"
+        "FROM county_annual_{sector}_{year}_{turnover}_{disag_id}"
     )
     annual_parts = []
     for sector in sectors:
         for yr in years:
             annual_parts.append(
-                annual_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", weather="{weather}")
+                annual_select_tpl.format(sector=sector, year=yr, turnover="{turnover}", disag_id="{disag_id}")
             )
     annual_sql = annual_header + "\nUNION ALL\n".join(annual_parts) + ";"
 
@@ -1221,73 +1224,72 @@ def combine_countydata(athena_client, cfg: Config):
     queries = [q_combined["annual"], q_combined["hourly"]]
     for query in queries:
         for t in turnovers:
-            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, weather=cfg.WEATHER)
+            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
 def test_county(s3_client, athena_client, cfg: Config):
+
     sql_dir = "run_check"
-    sql_files = [
-        # "test_county_annual_total.sql",
-        # "test_county_annual_enduse.sql",
-        # "test_county_annual_meas.sql",
-        "test_county_hourly_total.sql",
-        "test_county_hourly_enduse.sql",
-        "test_county_hourly_state.sql",
-        "test_missing_shape_ts_hourly.sql",
-        "test_missing_group_ann_hourly.sql"
-    ]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
-    weather = cfg.WEATHER
+    disag_id = cfg.DISAG_ID
 
     os.makedirs("diagnostics", exist_ok=True)
 
-    for sql_file in sql_files:
-        out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
-        final = pd.DataFrame()
-        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-
-        for t in turnovers:
-            for y in years:
-                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, weather=cfg.WEATHER, version=cfg.VERSION_ID)
-                df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-                df["year"] = y
-
-                final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
-
-        if os.path.exists(out_csv):
-            os.remove(out_csv)
-        final.to_csv(out_csv, index=False)
-        print(f"Saved {out_csv}")
-
-
-def test_multipliers(s3_client, athena_client, cfg: Config):
-    sql_dir = "run_check"
-    test_files = ["test_multipliers_annual.sql", 
-                  "test_multipliers_hourly_com.sql",
-                  "test_multipliers_hourly_res.sql"]
-    out_csv = "./diagnostics/test_multipliers.csv"
-    os.makedirs("diagnostics", exist_ok=True)
-
+    # test energy reaggregates to Scout results
+    sql_file = "test_scout_disagg.sql"
+    out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
     final = pd.DataFrame()
-    for sql_file in test_files:
-        result_col = sql_file.split(".")[0]
-        sectors = ["res", "com"] if "annual" in sql_file else (["com"] if "com" in sql_file else ["res"])
-        for s in sectors:
-            template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-            q = template.format(version=cfg.VERSION_ID, sector=s)
-            print(q)
+    template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+
+    for t in turnovers:
+        for y in years:
+            q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-            df["test_name"] = f"{result_col}_{s}"
-            final = pd.concat([final, df], ignore_index=True)
+            df["year"] = y
+
+            final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
 
     if os.path.exists(out_csv):
         os.remove(out_csv)
     final.to_csv(out_csv, index=False)
     print(f"Saved {out_csv}")
 
+    bad_aggregation = final.loc[((final['per_diff_ann'] > 0.001) | (final['per_diff_ann'] < -0.001) | (final['per_diff_hr'] > 0.001) | (final['per_diff_hr'] < -0.001))]
+    if len(bad_aggregation.index) > 0:
+        print("FAILED: some re-aggregations are off by more than 0.1%.")
+        print(bad_aggregation.head())
+    else:
+        print("PASSED: all re-aggregations are within 0.1% of Scout results.")
 
+
+    # test energy reaggregates to Scout results at the measure level
+    sql_file = "test_county_annual_meas.sql"
+    out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
+    final = pd.DataFrame()
+    template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+
+    for t in turnovers:
+        q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
+        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+
+        final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
+
+    if os.path.exists(out_csv):
+        os.remove(out_csv)
+    final.to_csv(out_csv, index=False)
+    print(f"Saved {out_csv}")
+
+    bad_aggregation = final.loc[((final['diff_commercial'] > 0.001) | (final['diff_commercial'] < -0.001) | (final['diff_residential'] > 0.001) | (final['diff_residential'] < -0.001))]
+    if len(bad_aggregation.index) > 0:
+        print("FAILED: some re-aggregations are off by more than 0.1%.")
+        print(bad_aggregation.head())
+    else:
+        print("PASSED: all re-aggregations are within 0.1% of Scout results.")
+
+
+def test_multipliers(s3_client, athena_client, cfg: Config):
     sql_dir = "run_check"
     os.makedirs("diagnostics", exist_ok=True)
 
@@ -1295,78 +1297,42 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
     final = pd.DataFrame()
     for s in ["res", "com"]:
         template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
-        q = template.format(version=cfg.VERSION_ID, sector=s)
-        print(q)
+        q = template.format(version=cfg.MULT_VERSION_ID, sector=s)
+        # print(q)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+        final = pd.concat([final, df], ignore_index=True)
     out_csv = "./diagnostics/test_multipliers_annual.csv"
     if os.path.exists(out_csv):
         os.remove(out_csv)
     final.to_csv(out_csv, index=False)
     print(f"Saved {out_csv}")
 
-    bad_sum = sum((final['multiplier_sum'] > 1.01) | (final['multiplier_sum'] > 0.99))
-    print(f"{bad_sum} group_ann's do not sum to 1.")
+    bad_group_ann = final.loc[((final['multiplier_sum'] > 1.01) | (final['multiplier_sum'] < 0.99) | (final['multiplier_sum'].isna()))]
+    if len(bad_group_ann.index) > 0:
+        print("FAILED: some group_ann's do not sum to 1.")
+        print(bad_group_ann.head())
+    else:
+        print("PASSED: all group_ann's sum to 1.")
 
     # hourly disaggregation multipliers sum to 1
     hourly_test_files = ["test_multipliers_hourly_com.sql",
                         "test_multipliers_hourly_res.sql"]
     for sql_file in hourly_test_files:
         template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-        q = template.format(version=cfg.VERSION_ID)
-        print(q)
+        q = template.format(version=cfg.MULT_VERSION_ID)
+        # print(q)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
         out_csv = "./diagnostics/" + sql_file.split(".")[0] + ".csv"
         if os.path.exists(out_csv):
             os.remove(out_csv)
         df.to_csv(out_csv, index=False)
-        print(f"Saved {out_csv}")
-        bad_sum = sum((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] > 0.99))
-        print(f"{bad_sum} shape_ts's do not sum to 1 in {sql_file}.")
 
-
-def test_compare_measures(s3_client, athena_client, cfg: Config):
-    out_dir = "diagnostics"
-    os.makedirs(out_dir, exist_ok=True)
-    out_txt = os.path.join(out_dir, "test_measures-set.txt")
-
-    years = cfg.YEARS
-    turnovers = cfg.TURNOVERS
-
-    query_county_annual = """
-        SELECT DISTINCT meas FROM county_annual_com_{year}_{turnover}
-        UNION ALL
-        SELECT DISTINCT meas FROM county_annual_res_{year}_{turnover}
-    """
-    query_scout = "SELECT DISTINCT meas FROM scout_annual_state_{turnover} WHERE fuel = 'Electric'"
-    query_measure_map = "SELECT DISTINCT meas FROM measure_map"
-
-    with open(out_txt, "w") as fh:
-        # Measure map baseline
-        lst_measure_map = execute_athena_query_to_df(s3_client, athena_client, query_measure_map, cfg).dropna(how="all")["meas"].tolist()
-        for t in turnovers:
-            for y in years:
-                q1 = query_county_annual.format(turnover=t, year=y)
-                q2 = query_scout.format(turnover=t)
-
-                county_annual_lst = execute_athena_query_to_df(s3_client, athena_client, q1, cfg).dropna(how="all")["meas"].tolist()
-                scout_lst = execute_athena_query_to_df(s3_client, athena_client, q2, cfg).dropna(how="all")["meas"].tolist()
-
-                print(f"Measure map has {len(lst_measure_map)} measures.", file=fh)
-                print(f"County annual data ({y} {t}) has {len(county_annual_lst)} measures.", file=fh)
-                print(f"Scout ({t}) has {len(scout_lst)} measures.", file=fh)
-
-                if len(scout_lst) > len(lst_measure_map):
-                    print("Measures in Scout BUT NOT in Measure map:", file=fh)
-                    print(set(scout_lst) - set(lst_measure_map), file=fh)
-                else:
-                    if set(county_annual_lst) == set(scout_lst):
-                        print(f"Both county annual data ({y} {t}) and Scout ({t}) have the same measures-set.", file=fh)
-                    else:
-                        print("Measures in Scout BUT NOT in County annual:", file=fh)
-                        print(set(scout_lst) - set(county_annual_lst), file=fh)
-                print("=" * 62, file=fh)
-
-    print(f"Saved {out_txt}")
+        bad_shape_ts = df.loc[((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] < 0.99) | (df['multiplier_sum'].isna()))]
+        if len(bad_shape_ts.index) > 0:
+            print(f"FAILED: some shape_ts's do not sum to 1 in {sql_file}.")
+            print(bad_shape_ts.head())
+        else:
+            print(f"PASSED: all shape_ts's sum to 1 in {sql_file}.")
 
 
 # ----------------------------
@@ -1726,15 +1692,14 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
             missing = meas_enduse_in_scout - meas_enduse_in_map
             
             if missing:
-                print(f"Missing measure-end_use combinations in {mfile}:")
+                print(f"FAILED: Some measure-end_use combinations from scout are missing in {mfile}.")
                 for combo in missing:
                     if isinstance(combo, tuple):
                         print(f"  Measure: '{combo[0]}', End Use: '{combo[1]}'")
                     else:
                         print(f"  Measure: '{combo}'")
-                print(f"Warning: Some measure-end_use combinations from scout are missing in {mfile}.")
             else:
-                print(f"All measure-end_use combinations in scout are present in {mfile}.")
+                print(f"PASSED: All measure-end_use combinations in scout are present in {mfile}.")
                 
         except Exception as e:
             print(f"Error processing {mfile}: {e}")
@@ -1800,6 +1765,45 @@ def test(s3_client, athena_client, cfg: Config):
     s3_create_table_from_tsv(s3_client, athena_client, fp_gap, cfg)
 
 
+# check for missing group_ann and shape_ts
+def test_missing_mults(s3_client, athena_client, cfg: Config):
+    sql_dir = "run_check"
+    years = cfg.YEARS
+    turnovers = cfg.TURNOVERS
+    disag_id = cfg.DISAG_ID
+
+    os.makedirs("diagnostics", exist_ok=True)
+
+    sql_files = [
+        "test_missing_group_ann.sql",
+        "test_missing_shape_ts_res.sql",
+        "test_missing_shape_ts_com.sql"
+    ]
+
+    for sql_file in sql_files:
+        out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
+        final = pd.DataFrame()
+        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+
+        for t in turnovers:
+            for y in years:
+                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
+                df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+                # df["year"] = y
+
+                final = pd.concat([final, df], ignore_index=True)
+
+        if os.path.exists(out_csv):
+            os.remove(out_csv)
+        final.to_csv(out_csv, index=False)
+        print(f"Saved {out_csv}")
+
+        missing_mults = final[((final['mult_sum'] > 1.01) | (final['mult_sum'] < 0.99) | (final['mult_sum'].isna()))]
+        if len(missing_mults.index) > 0:
+            print(f"FAILED: some multipliers are missing or do not sum to 1 in {sql_file}.")
+            print(missing_mults.head())
+        else:
+            print(f"PASSED: all multipliers are present and sum to 1 in {sql_file}.")
 
 # ----------------------------
 # CLI & main entry
@@ -1815,7 +1819,7 @@ def main(opts):
         s3, athena = get_boto3_clients()
         # s3_create_tables_from_csvdir(s3, athena, cfg)
         gen_multipliers(s3, athena, cfg)
-        # test_multipliers(s3, athena, cfg)
+        test_multipliers(s3, athena, cfg)
 
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
@@ -1824,6 +1828,7 @@ def main(opts):
 
     if opts.gen_county:
         _, athena = get_boto3_clients()
+        test_missing_mults(s3, athena, cfg)
         gen_countydata(athena, cfg)
 
     if opts.combine_county:
@@ -1871,9 +1876,9 @@ def main(opts):
         s3, athena = get_boto3_clients()
         # test_county(s3, athena, cfg)
         # test_multipliers(s3, athena, cfg)
-        # test_compare_measures(s3, athena, cfg)
+        test_missing_mults(s3, athena, cfg)
 
-        test(s3, athena, cfg)
+        # test(s3, athena, cfg)
 
     if opts.county_partition_mults:
         _, athena = get_boto3_clients()
@@ -1885,11 +1890,13 @@ if __name__ == "__main__":
 
     parser = ArgumentParser()
     parser.add_argument("--create_json", action="store_true", help="Create json/input.json from CSV files in csv_raw/")
-    parser.add_argument("--gen_mults", action="store_true", help="Generate stock tables")
-    parser.add_argument("--gen_county", action="store_true", help="Generate County Data")
-    parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
-    parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
-    parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
+    parser.add_argument("--gen_scoutdata", action="store_true", help="Process and upload Scout data")
+    parser.add_argument("--gen_mults", action="store_true", help="Generate disaggregation multipliers from BuildStock")
+    parser.add_argument("--gen_county", action="store_true", help="Generate county hourly data")
+    parser.add_argument("--combine_county", action="store_true", help="Combine county hourly tables")
+    parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
+    parser.add_argument("--convert_wide", action="store_true", help="Convert to wide format for publication")
+    parser.add_argument("--gen_countyall", action="store_true", help="Process Scout data and disaggregate")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")

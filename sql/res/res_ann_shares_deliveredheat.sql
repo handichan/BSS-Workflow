@@ -62,6 +62,7 @@ SELECT
 	"in.state",
 	'Heating (Equip.)' AS end_use,
 	'Electric' AS fuel
+FROM meta_filtered
 
 UNION ALL
 
