@@ -58,8 +58,24 @@ class Config:
     DEST_BUCKET = "bss-workflow"
     BUCKET_NAME = "margaretbucket" 
     SCOUT_RUN_DATE = "2025-10-01"
-    MULT_VERSION_ID = "20260203" #version of disaggregation multipliers to use
+    # MULT_VERSION_ID = "20260206" #version of disaggregation multipliers to use
     DISAG_ID = "20260130" #identifier for disaggregated data
+
+
+    MULTIPLIERS_TABLES = [
+        "com_annual_disaggregation_multipliers_20260206",   # mult_com_annual
+        "res_annual_disaggregation_multipliers_20260206",   # mult_res_annual
+        "com_hourly_disaggregation_multipliers_20260206",   # mult_com_hourly
+        "res_hourly_disaggregation_multipliers_20260206"    # mult_res_hourly
+    ]
+
+    BLDSTOCK_TABLES = [
+        "comstock_2025.1_parquet",                  # meta_com Commercial metadata
+        "comstock_2025.1_by_state",                 # ts_com Commercial hourly data
+        "comstock_2025.1_upgrade_0",                # gap_com Gap model
+        "resstock_amy2018_release_2024.2_metadata", # meta_res Residential metadata
+        "resstock_amy2018_release_2024.2_by_state"  # ts_res Residential hourly data
+    ]
 
     # Scenarios to process
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
@@ -86,16 +102,13 @@ class Config:
 
     # Auxiliary constants
     US_STATES = [
-        'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-        'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-        'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NH', 'NJ', 'NM', 'NV',
-        'NY', 'NC', 'ND', 
-        'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
-        'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI'
-        #, 'WY'
+        'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
+        'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME',
+        'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 
+        'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD',
+        'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY',
     ]
     # US_STATES = ['WY']
-    # US_STATES = ['CO', 'ID', 'MT', 'NM', 'NV', 'UT']
 
 # ----------------------------
 # Utilities
@@ -706,7 +719,18 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         scout_version=cfg.SCOUT_RUN_DATE,
         sectorlong=sectorlong,
         disag_id=cfg.DISAG_ID,
-        baseyear=cfg.BASE_YEAR
+        baseyear=cfg.BASE_YEAR,
+    
+        mult_com_annual=cfg.MULTIPLIERS_TABLES[0],
+        mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
+        mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
+        mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+
+        meta_com=cfg.BLDSTOCK_TABLES[0],
+        ts_com=cfg.BLDSTOCK_TABLES[1],
+        gap_com=cfg.BLDSTOCK_TABLES[2],
+        meta_res=cfg.BLDSTOCK_TABLES[3],
+        ts_res=cfg.BLDSTOCK_TABLES[4]
     )
 
     contains_state = "{state}" in template_raw
@@ -760,61 +784,61 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     tbl_res = [
         # "tbl_ann_mult.sql",
         # "res_ann_shares_cook.sql",
-        # "res_ann_shares_lighting.sql",
-        # "res_ann_shares_refrig.sql",
-        # "res_ann_shares_wh.sql",
-        # "res_ann_shares_hvac.sql",
-        # "res_ann_shares_deliveredheat.sql",
-        # "res_ann_shares_deliveredcooling.sql",
-        # "res_ann_shares_deliveredwh.sql",
         # "res_ann_shares_cw.sql",
         # "res_ann_shares_dry.sql",
         # "res_ann_shares_dw.sql",
         # "res_ann_shares_fanspumps.sql",
+        # "res_ann_shares_hvac.sql",
+        # "res_ann_shares_deliveredheat.sql",
+        # "res_ann_shares_deliveredcooling.sql",
+        # "res_ann_shares_lighting.sql",
         # "res_ann_shares_misc.sql",
         # "res_ann_shares_poolpump.sql",
+        # "res_ann_shares_refrig.sql",
+        # "res_ann_shares_wh.sql",
+        # "res_ann_shares_deliveredwh.sql",
         # "tbl_hr_mult.sql",
-        # "res_hourly_shares_refrig.sql",
-        # "res_hourly_shares_lighting.sql",
         # "res_hourly_shares_cook.sql",
-        # "res_hourly_shares_wh.sql",
-        # "res_hourly_shares_fanspumps.sql",
-        # "res_hourly_shares_dw.sql",
-        # "res_hourly_shares_dry.sql",
         # "res_hourly_shares_cw.sql",
-        # "res_hourly_shares_poolpump.sql",
+        # "res_hourly_shares_dry.sql",
+        # "res_hourly_shares_dw.sql",
+        # "res_hourly_shares_fanspumps.sql",
+        # # "res_hourly_shares_gap.sql",       
+        # "res_hourly_shares_lighting.sql",
         # "res_hourly_shares_misc.sql",
-        # "res_hourly_shares_gap.sql",       
+        # "res_hourly_shares_poolpump.sql",
+        # "res_hourly_shares_refrig.sql",
+        # "res_hourly_shares_wh.sql",
         # "tbl_hr_mult_hvac_temp.sql",
-        "res_hourly_shares_cooling.sql",
-        "res_hourly_shares_heating.sql",
-        "res_hourly_hvac_norm.sql",
+        # "res_hourly_shares_cooling.sql",
+        # "res_hourly_shares_heating.sql",
+        # "res_hourly_hvac_norm.sql",
     ]
     tbl_com = [
         # "tbl_ann_mult.sql",
         # "com_ann_shares_cook.sql",
-        # "com_ann_shares_deliveredcool.sql",
         # "com_ann_shares_gap.sql",
-        # "com_ann_shares_heat_agnostic.sql",
         # "com_ann_shares_hvac.sql",
+        # "com_ann_shares_deliveredcool.sql",
+        # "com_ann_shares_heat_agnostic.sql",
         # "com_ann_shares_lighting.sql",
         # "com_ann_shares_misc.sql",
         # "com_ann_shares_refrig.sql",
         # "com_ann_shares_ventilation_ref.sql",
         # "com_ann_shares_wh.sql",
         # "tbl_hr_mult.sql",
-        "com_hourly_shares_lighting.sql",
-        "com_hourly_shares_refrig.sql",
-        "com_hourly_shares_wh.sql",
-        "com_hourly_shares_misc.sql",
-        "com_hourly_shares_gap.sql",
         # "com_hourly_shares_cooking.sql",
-        "tbl_hr_mult_hvac_temp.sql",
-        "com_hourly_shares_cooling.sql",
-        "com_hourly_shares_heating.sql",
-        "com_hourly_shares_ventilation.sql",
-        "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_hvac_norm.sql",
+        # "com_hourly_shares_gap.sql",
+        "com_hourly_shares_lighting.sql",
+        # "com_hourly_shares_misc.sql",
+        # "com_hourly_shares_refrig.sql",
+        # "com_hourly_shares_wh.sql",
+        # "tbl_hr_mult_hvac_temp.sql",
+        # "com_hourly_shares_cooling.sql",
+        # "com_hourly_shares_heating.sql",
+        # "com_hourly_shares_ventilation.sql",
+        # "com_hourly_shares_ventilation_ref.sql",
+        # "com_hourly_hvac_norm.sql",
     ]
 
     for sectorid in sectors:
@@ -864,7 +888,7 @@ def county_partition_multipliers(athena_client, cfg: Config):
     q_com = """
         UNLOAD (
             SELECT "in.county", shape_ts, "timestamp_hour", multiplier_hourly, "in.state"
-            FROM com_hourly_disaggregation_multipliers_{versionid}
+            FROM {mult_com_hourly}
             WHERE "in.county" = '{county_fips}'
         )
         TO 's3://bss-ief-bucket/multipliers_partitioned/com/in_county={county_fips}/'
@@ -874,7 +898,7 @@ def county_partition_multipliers(athena_client, cfg: Config):
     q_res = """
         UNLOAD (
             SELECT "in.county", shape_ts, "timestamp_hour", multiplier_hourly, "in.state"
-            FROM res_hourly_disaggregation_multipliers_{versionid}_flat
+            FROM {mult_res_hourly}
             WHERE "in.county" = '{county_fips}'
         )
         TO 's3://bss-ief-bucket/multipliers_partitioned/res/in_county={county_fips}/'
@@ -895,7 +919,7 @@ def county_partition_multipliers(athena_client, cfg: Config):
 
         for fips in fips_list:
             template = q_com if "com" in fname else q_res
-            q = template.format(county_fips=fips, versionid=cfg.MULT_VERSION_ID)
+            q = template.format(county_fips=fips, mult_com_hourly=cfg.MULTIPLIERS_TABLES[2], mult_res_hourly=cfg.MULTIPLIERS_TABLES[3])
             print(f"UNLOAD county={fips} ({'com' if 'com' in fname else 'res'})")
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
@@ -982,12 +1006,12 @@ def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
     # scenarios
     template = read_sql_file(f"{sql_dir}/long_to_wide.sql", cfg)
     for t in turnovers:
-        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
+        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
         execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
 def convert_scout_long_to_wide(athena_client, cfg: Config):
-    sql_dir = "data_conversion"
+    # sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     
     # # baseline
@@ -998,7 +1022,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     # scenarios
     scout_header = f"""CREATE TABLE wide_scout_annual_state
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/wide/scout_annual_state/',
+            external_location = 's3://{{dest_bucket}}/{{disag_id}}/wide/scout_annual_state/',
             format = 'Parquet'
         ) AS
         WITH scout_agg AS(
@@ -1036,7 +1060,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
         'SELECT "year", "in.state" AS state, turnover AS scenario, sector, '
         "LOWER(REGEXP_REPLACE(end_use, '[^A-Za-z0-9]+', '_')) AS eu, "
         'sum(county_hourly_cal_kwh) AS cal_elec, sum(county_hourly_uncal_kwh) AS uncal_elec1 '
-        "FROM long_county_hourly_{turnover}_amy "
+        "FROM long_county_hourly_{turnover}_{disag_id} "
         "WHERE turnover != 'baseline' "
         'GROUP BY "year", "in.state", turnover, sector, end_use '
     )
@@ -1151,7 +1175,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     all_sql = scout_header + "\nUNION ALL\n".join(scout_parts) + "),\n" + scout_footer + \
                 county_hourly_header + "\nUNION ALL\n".join(county_hourly_parts) + "),\n" + combined_footer
 
-    q = all_sql.format(turnover=turnover, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
+    q = all_sql.format(turnover=turnover, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
 
     # print(q)
     execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
@@ -1167,7 +1191,7 @@ def _combine_countydata(
     # ---- HOURLY ----
     hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{disag_id}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_hourly_{{turnover}}_{{disag_id}}/',
+            external_location = 's3://{{dest_bucket}}/{{disag_id}}/long/county_hourly_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -1188,7 +1212,7 @@ def _combine_countydata(
     # ---- ANNUAL ----
     annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{disag_id}}
         WITH (
-            external_location = 's3://{{dest_bucket}}/{{version}}/long/county_annual_{{turnover}}_{{disag_id}}/',
+            external_location = 's3://{{dest_bucket}}/{{disag_id}}/long/county_annual_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
@@ -1213,7 +1237,7 @@ def _combine_countydata(
 
 
 def combine_countydata(athena_client, cfg: Config):
-    sql_dir = "data_conversion"
+    # sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
     q_combined = _combine_countydata(
@@ -1224,7 +1248,7 @@ def combine_countydata(athena_client, cfg: Config):
     queries = [q_combined["annual"], q_combined["hourly"]]
     for query in queries:
         for t in turnovers:
-            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID, disag_id=cfg.DISAG_ID)
+            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
@@ -1245,7 +1269,7 @@ def test_county(s3_client, athena_client, cfg: Config):
 
     for t in turnovers:
         for y in years:
-            q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
+            q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=cfg.DISAG_ID)
             df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
             df["year"] = y
 
@@ -1271,7 +1295,7 @@ def test_county(s3_client, athena_client, cfg: Config):
     template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
 
     for t in turnovers:
-        q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
+        q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
 
         final = pd.concat([final, df.sort_values(by=["turnover"], ascending=[True])], ignore_index=True)
@@ -1294,17 +1318,14 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
     os.makedirs("diagnostics", exist_ok=True)
 
     # annual disaggregation multipliers sum to 1
-    final = pd.DataFrame()
-    for s in ["res", "com"]:
-        template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
-        q = template.format(version=cfg.MULT_VERSION_ID, sector=s)
-        # print(q)
-        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-        final = pd.concat([final, df], ignore_index=True)
+    template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
+    q = template.format(mult_com_annual=cfg.MULTIPLIERS_TABLES[0], mult_res_annual=cfg.MULTIPLIERS_TABLES[1])
+    # print(q)
+    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
     out_csv = "./diagnostics/test_multipliers_annual.csv"
     if os.path.exists(out_csv):
         os.remove(out_csv)
-    final.to_csv(out_csv, index=False)
+    df.to_csv(out_csv, index=False)
     print(f"Saved {out_csv}")
 
     bad_group_ann = final.loc[((final['multiplier_sum'] > 1.01) | (final['multiplier_sum'] < 0.99) | (final['multiplier_sum'].isna()))]
@@ -1319,7 +1340,7 @@ def test_multipliers(s3_client, athena_client, cfg: Config):
                         "test_multipliers_hourly_res.sql"]
     for sql_file in hourly_test_files:
         template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-        q = template.format(version=cfg.MULT_VERSION_ID)
+        q = template.format(mult_com_hourly=cfg.MULTIPLIERS_TABLES[2], mult_res_hourly=cfg.MULTIPLIERS_TABLES[3])
         # print(q)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
         out_csv = "./diagnostics/" + sql_file.split(".")[0] + ".csv"
@@ -1468,7 +1489,7 @@ def bssiefbucket_parquetmerge(s3_client, cfg: Config):
 def bssbucket_insert(athena_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
-    dest_bucket = 'bss-workflow'
+    dest_bucket = cfg.DEST_BUCKET
 
     sectors = ["res", "com"]
     query_template = """
@@ -1502,7 +1523,7 @@ def bssbucket_insert(athena_client, cfg: Config):
 def bssbucket_parquetmerge(s3_client, cfg: Config):
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
-    dest_bucket = 'bss-workflow'
+    dest_bucket = cfg.DEST_BUCKET
     sectors = ["com", "res"]
 
     for t in turnovers:
@@ -1787,7 +1808,10 @@ def test_missing_mults(s3_client, athena_client, cfg: Config):
 
         for t in turnovers:
             for y in years:
-                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID, version=cfg.MULT_VERSION_ID)
+                q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, year=y, disag_id=cfg.DISAG_ID, 
+                mult_com_annual=cfg.MULTIPLIERS_TABLES[0], mult_res_annual=cfg.MULTIPLIERS_TABLES[1], 
+                mult_com_hourly=cfg.MULTIPLIERS_TABLES[2], mult_res_hourly=cfg.MULTIPLIERS_TABLES[3]
+                )
                 df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
                 # df["year"] = y
 

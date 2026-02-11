@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_hourly}
 SELECT 
 	"in.county",
 	shape_ts,

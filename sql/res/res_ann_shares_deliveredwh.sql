@@ -1,5 +1,5 @@
 
-INSERT INTO res_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_annual}
 
 WITH meta_filtered AS (
 	
@@ -9,7 +9,7 @@ WITH meta_filtered AS (
 	    "in.state",
 	    sum("out.load.hot_water.energy_delivered.kbtu") as delivered_wh,
 	    'res_wh_ann_6' AS group_ann
-	FROM "resstock_amy2018_release_2024.2_metadata" meta
+	FROM "{meta_res}" meta
 	WHERE upgrade = 0
 	GROUP BY 
 		"in.county",

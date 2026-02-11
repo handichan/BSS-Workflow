@@ -1,5 +1,5 @@
 -- Flag counties and shape_ts that have energy assigned but the shape isn't defined
--- Parameters: {year}, {turnover}, {disag_id}, {version}
+-- Parameters: {year}, {turnover}, {disag_id}, {mult_res_hourly}
 
 WITH df AS (
     SELECT
@@ -53,7 +53,7 @@ combos AS (
 
 good_shape_ts AS (
     SELECT shape_ts, "in.weather_file_city", "in.weather_file_longitude", end_use, fuel, sum(multiplier_hourly) as mult_sum
-    FROM res_hourly_disaggregation_multipliers_{version}
+    FROM {mult_res_hourly}
     WHERE multiplier_hourly = multiplier_hourly
     GROUP BY shape_ts, "in.weather_file_city", "in.weather_file_longitude", end_use, fuel
 )

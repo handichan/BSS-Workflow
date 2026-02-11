@@ -1,5 +1,5 @@
 -- to hold hourly disaggregation multipliers calculated from BuildStock
-CREATE EXTERNAL TABLE com_hourly_disaggregation_multipliers_{version}(
+CREATE EXTERNAL TABLE {mult_com_hourly}(
     `in.county` string,
     shape_ts string,
     timestamp_hour timestamp,
@@ -11,5 +11,5 @@ CREATE EXTERNAL TABLE com_hourly_disaggregation_multipliers_{version}(
     fuel string
 )
 STORED AS parquet
-LOCATION 's3://{dest_bucket}/com_hourly_multipliers_{version}/'
+LOCATION 's3://{dest_bucket}/{mult_com_hourly}/'
 ;

@@ -1,7 +1,7 @@
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_hourly}
 WITH weather as(
     SELECT "in.weather_file_city", "in.weather_file_longitude", "in.county"
-  FROM "resstock_amy2018_release_2024.2_metadata"
+  FROM "{meta_res}"
   WHERE upgrade = 0
   GROUP BY "in.weather_file_city", "in.weather_file_longitude", "in.county"
 ),
@@ -15,7 +15,7 @@ unformatted as (SELECT "in.weather_file_city",
     "in.weather_file_longitude",
 	'Other' as end_use
 
-FROM "comstock_2025.1_upgrade_0" g 
+FROM "{gap_com}" g 
 LEFT JOIN weather ON weather."in.county" = g."in.county"
 )
 

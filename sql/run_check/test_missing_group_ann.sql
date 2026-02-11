@@ -1,5 +1,5 @@
 -- Flag states and group_ann that have electricity assigned but the disaggregation multipliers aren't defined
--- Parameters: {turnover}, {version}
+-- Parameters: {turnover}, {mult_res_annual}, {mult_com_annual}
 
 WITH df AS (
     SELECT
@@ -50,14 +50,14 @@ combos AS (
 
 good_group_ann AS (
     SELECT group_ann, "in.state", end_use, fuel, sum(multiplier_annual) mult_sum
-    FROM com_annual_disaggregation_multipliers_{version}
+    FROM {mult_com_annual}
     WHERE multiplier_annual = multiplier_annual
     GROUP BY group_ann, "in.state", end_use, fuel
     
     UNION ALL
     
     SELECT group_ann, "in.state", end_use, fuel, sum(multiplier_annual) mult_sum
-    FROM res_annual_disaggregation_multipliers_{version}
+    FROM {mult_res_annual}
     WHERE multiplier_annual = multiplier_annual
     GROUP BY group_ann, "in.state", end_use, fuel
 )

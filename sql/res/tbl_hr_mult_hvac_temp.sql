@@ -1,6 +1,6 @@
 -- to hold hourly consumption by county and shape calculated from BuildStock
 -- will be used to normalize HVAC shapes
-CREATE EXTERNAL TABLE res_hourly_hvac_temp_{version}(
+CREATE EXTERNAL TABLE {mult_res_hourly}_hvac_temp(
     `in.weather_file_city` string,
     `in.weather_file_longitude` double,
     shape_ts string,
@@ -11,5 +11,5 @@ CREATE EXTERNAL TABLE res_hourly_hvac_temp_{version}(
     fuel string
 )
 STORED AS parquet
-LOCATION 's3://{dest_bucket}/res_hourly_hvac_temp_{version}/'
+LOCATION 's3://{dest_bucket}/{mult_res_hourly}_hvac_temp/'
 ;

@@ -1,7 +1,7 @@
 -- rerun if there have been updates to com_ann_hvac
 -- com_ann_hvac defines the grouping characteristics for hvac
     
-INSERT INTO com_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_annual}
 WITH meta_filtered AS (
     SELECT meta."in.nhgis_county_gisjoin",
         meta."in.state",
@@ -11,7 +11,7 @@ WITH meta_filtered AS (
         sum(meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu") as heating_fo,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
-    FROM "comstock_2025.1_parquet" as meta
+    FROM "{meta_com}" as meta
         RIGHT JOIN com_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade

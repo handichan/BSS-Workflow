@@ -1,5 +1,5 @@
 
-INSERT INTO com_hourly_hvac_temp_{version}
+INSERT INTO {mult_com_hourly}_hvac_temp
 WITH meta_shapes AS (
 -- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT 
@@ -10,7 +10,7 @@ WITH meta_shapes AS (
 		chars.upgrade,
         meta.weight
     	FROM (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade, "in.heating_fuel", "in.hvac_heat_type", applicability
-			FROM "comstock_2025.1_parquet" 
+			FROM "{meta_com}" 
 			WHERE state='{state}') as meta 
 		RIGHT JOIN com_ts_heating2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
@@ -28,7 +28,7 @@ ts_not_agg AS (
 		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		(ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heat_recovery.energy_consumption") * meta_shapes.weight as heating_elec,
 		(ts."out.natural_gas.heating.energy_consumption" + ts."out.other_fuel.heating.energy_consumption" + ts."out.district_heating.heating.energy_consumption") * meta_shapes.weight as heating_fossil
-	FROM "comstock_2025.1_by_state" as ts
+	FROM "{ts_com}" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = cast(meta_shapes.upgrade as varchar)
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_heating2)

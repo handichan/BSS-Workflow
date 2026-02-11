@@ -13,4 +13,4 @@ CREATE EXTERNAL TABLE county_hourly_com_{year}_{turnover}_{disag_id} (
     fuel string
 )
 STORED AS parquet
-LOCATION 's3://{dest_bucket}/{version}/county_runs/county_hourly_com_{year}_{turnover}_{disag_id}/'
+LOCATION 's3://{dest_bucket}/{disag_id}/county_runs/county_hourly_com_{year}_{turnover}_{disag_id}/'

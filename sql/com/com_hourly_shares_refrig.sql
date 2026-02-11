@@ -1,4 +1,4 @@
-INSERT INTO com_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_hourly}
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses
@@ -12,9 +12,9 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.refrigeration.energy_consumption" * meta.weight as refrigeration
-	FROM "comstock_2025.1_by_state" as ts
+	FROM "{ts_com}" as ts
 		RIGHT JOIN (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade 
-			FROM "comstock_2025.1_parquet" 
+			FROM "{meta_com}" 
 			WHERE state='{state}') as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.state = meta."in.state"

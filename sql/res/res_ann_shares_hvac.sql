@@ -1,5 +1,5 @@
     
-INSERT INTO res_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_annual}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
     	meta."in.weather_file_city",
@@ -11,7 +11,7 @@ WITH meta_filtered AS (
         sum(meta."out.fuel_oil.heating.energy_consumption") as heating_fo,
         sum(meta."out.propane.heating.energy_consumption") as heating_prop,
 		sum(meta."out.electricity.cooling.energy_consumption") as cooling
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "{meta_res}" as meta
 		RIGHT JOIN res_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_cooling_type" = chars."in.hvac_cooling_type"
 		AND cast(meta.upgrade as varchar) = chars.upgrade

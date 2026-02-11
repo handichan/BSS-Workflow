@@ -8,7 +8,7 @@ res_counts AS (
     SELECT shape_ts,
     end_use,
     sum(multiplier_hourly) AS n_weather
-    FROM res_hourly_disaggregation_multipliers_{version}
+    FROM {mult_res_hourly}
     WHERE multiplier_hourly = multiplier_hourly
     GROUP BY shape_ts, end_use
 ),
@@ -17,7 +17,7 @@ com_counts AS (
     SELECT shape_ts,
     end_use,
     sum(multiplier_hourly) AS n_county
-    FROM com_hourly_disaggregation_multipliers_{version}
+    FROM {mult_com_hourly}
     WHERE multiplier_hourly = multiplier_hourly AND "in.state" NOT IN ('AK', 'HI')
     GROUP BY shape_ts, end_use
 )

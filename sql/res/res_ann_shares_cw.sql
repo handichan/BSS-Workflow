@@ -1,4 +1,4 @@
-INSERT INTO res_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_annual}
 
 WITH meta_filtered AS (
 	SELECT meta."in.county",
@@ -7,7 +7,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 	    'res_cw_ann_1' AS group_ann,
 		sum(meta."out.electricity.clothes_washer.energy_consumption") as cw
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "{meta_res}" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 
 		meta."in.county",

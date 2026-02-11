@@ -1,4 +1,4 @@
-INSERT INTO com_annual_disaggregation_multipliers_{version}
+INSERT INTO {mult_com_annual}
 WITH meta_filtered AS (
 	SELECT meta."in.nhgis_county_gisjoin",
 	    meta."in.state",
@@ -6,7 +6,7 @@ WITH meta_filtered AS (
 		sum(meta."calc.weighted.electricity.water_systems.energy_consumption..tbtu") as wh_elec,
 		sum(meta."calc.weighted.natural_gas.water_systems.energy_consumption..tbtu" + meta."calc.weighted.district_heating.water_systems.energy_consumption..tbtu") as wh_ng,
 		sum(meta."calc.weighted.other_fuel.water_systems.energy_consumption..tbtu") as wh_fo
-	FROM "comstock_2025.1_parquet" as meta
+	FROM "{meta_com}" as meta
 		RIGHT JOIN com_ann_wh2 as chars ON meta."in.service_water_heating_fuel" = chars."in.service_water_heating_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_wh2)

@@ -17,5 +17,5 @@ CREATE EXTERNAL TABLE county_annual_res_{year}_{turnover}_{disag_id} (
     end_use string
 )
 STORED AS parquet
-LOCATION 's3://{dest_bucket}/{version}/county_runs/county_annual_res_{year}_{turnover}_{disag_id}/'
+LOCATION 's3://{dest_bucket}/{disag_id}/county_runs/county_annual_res_{year}_{turnover}_{disag_id}/'
 ;

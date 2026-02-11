@@ -1,5 +1,5 @@
 
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_hourly}
 WITH meta_shapes AS (
 
 	SELECT meta.bldg_id,
@@ -7,7 +7,7 @@ WITH meta_shapes AS (
 		meta."in.weather_file_longitude",
 		chars.shape_ts,
 		chars.upgrade
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
+	FROM "{meta_res}" as meta
 	RIGHT JOIN res_ts_dry2 as chars 
 		ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
@@ -22,7 +22,7 @@ ts_not_agg AS (
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.clothes_dryer.energy_consumption" as drying_elec,
 		ts."out.natural_gas.clothes_dryer.energy_consumption" + ts."out.propane.clothes_dryer.energy_consumption" as drying_fossil
-	FROM "resstock_amy2018_release_2024.2_by_state" as ts
+	FROM "{ts_res}" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry2)

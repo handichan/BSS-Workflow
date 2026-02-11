@@ -1,4 +1,4 @@
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_hourly}
 
 with totals as(
 SELECT
