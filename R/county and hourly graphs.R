@@ -438,14 +438,33 @@ for (i in 1:length(county_hourly_examples_list)){
 }
 
 # example counties - monthly line plots --------------------------------------------------------
+## is this i here intentional? should it just be length(county_hourly_examples_list)
+## moved to inside of the following loop. example label should be compatible with the cities in it 
+## example_labels<-county_hourly_examples_list[[i]]%>% select(in.county,example_type) %>% unique() %>%
+##   left_join(ns %>% select(in.county,county_name),by="in.county") %>%
+##   mutate(example_label=paste0(example_type,": ",county_name))
 
-example_labels<-county_hourly_examples_list[[i]]%>% select(in.county,example_type) %>% unique() %>%
-  left_join(ns %>% select(in.county,county_name),by="in.county") %>%
-  mutate(example_label=paste0(example_type,": ",county_name))
+## checking missing day type
+for (scen in scenarios) {
+  bad.county <- readr::read_csv(sprintf("generated_csvs/%s_county_hourly_examples_60_days.csv", scen), show_col_types = FALSE) %>%
+    dplyr::distinct(in.county, day_type) %>%
+    dplyr::group_by(in.county) %>%
+    dplyr::filter(n() < 3) %>%
+    dplyr::distinct(in.county)%>%
+    .$in.county %>%
+    {.}
+  num.bad.county <- length(bad.county)
+  if (num.bad.county > 0) {
+    print(sprintf("missing day_type found for %s counties in %s", num.bad.county, scen))
+  }
+}
 
 for (i in 1:length(county_hourly_examples_list)){
   for (cty in unique(county_hourly_examples_list[[i]]$in.county)){
-    monthly_examples<-county_hourly_examples_list[[i]] %>%
+    example_labels<-county_hourly_examples_list[[i]]%>% select(in.county,example_type) %>% unique() %>%
+      left_join(ns %>% select(in.county,county_name),by="in.county") %>%
+      mutate(example_label=paste0(example_type,": ",county_name))
+    monthly_examples<- county_hourly_examples_list[[i]] %>%
       filter(in.county==cty, (peak_source_turnover!="baseline" | is.na(peak_source_turnover)), turnover!="baseline") %>%
       pivot_wider(names_from="day_type",values_from="county_hourly_kwh",id_cols=c("year","month","hour_of_day","turnover")) %>%
       ggplot(aes(x=hour_of_day))+
@@ -458,7 +477,7 @@ for (i in 1:length(county_hourly_examples_list)){
       facet_wrap(~month)+
       ggtitle(paste0(to[names(county_hourly_examples_list)[[i]]],": Mean, Day with Highest Peak, Day with Lowest Peak by Month"),
               subtitle = (example_labels %>% filter(in.county==cty))$example_label)
-    save_plot(paste0(graph_dir,"/example_by_month/",names(county_hourly_examples_list)[i],"_",(example_labels %>% filter(in.county==cty))$county_name,".jpg"),
+    save_plot(paste0(graph_dir,"/example_by_month/",names(county_hourly_examples_list)[i],"_",(example_labels %>% filter(in.county==cty))$county_name[[1]],".jpg"),
               monthly_examples,base_height = 7,base_width = 8,bg="white")
   }
 }
