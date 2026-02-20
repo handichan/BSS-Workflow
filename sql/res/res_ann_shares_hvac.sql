@@ -9,6 +9,7 @@ INSERT INTO {mult_res_annual}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
     	meta."in.weather_file_city",
+        meta."in.weather_file_longitude",
 	    meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.heating.energy_consumption" + meta."out.electricity.heating_hp_bkup.energy_consumption") as heating,
@@ -22,12 +23,14 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann
 ),
 geo_shares AS (
     SELECT "in.county",
     	"in.weather_file_city",
+        "in.weather_file_longitude",
         "in.state",
         group_ann,
         heating,
@@ -39,6 +42,7 @@ FROM meta_filtered
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     heating_mult AS multiplier_annual,
     'res' AS sector,
@@ -52,6 +56,7 @@ UNION ALL
 SELECT 
     "in.county",
     "in.weather_file_city",
+    "in.weather_file_longitude",
     group_ann,
     cooling_mult AS multiplier_annual,
     'res' AS sector,

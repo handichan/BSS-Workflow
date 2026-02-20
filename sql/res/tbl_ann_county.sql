@@ -2,6 +2,7 @@
 CREATE EXTERNAL TABLE county_annual_res_{year}_{turnover}_{weather} (
     `in.county` string,
     `in.weather_file_city` string,
+    `in.weather_file_longitude` double,
     fuel string,
     meas string,
     tech_stage string,

@@ -46,6 +46,7 @@ AND elec.tech_stage = mm.tech_stage
 SELECT 
     ann_disag."in.county",
     ann_disag."in.weather_file_city",
+    ann_disag."in.weather_file_longitude",
     scout_meas.fuel,
     scout_meas.meas,
     scout_meas.tech_stage,
@@ -60,7 +61,7 @@ SELECT
     scout_meas.end_use
 FROM scout_meas
 JOIN (
-    SELECT "in.county", "in.weather_file_city", multiplier_annual, "in.state", group_ann, end_use 
+    SELECT "in.county", "in.weather_file_city", "in.weather_file_longitude", multiplier_annual, "in.state", group_ann, end_use 
     FROM res_annual_disaggregation_multipliers_{weather}
     WHERE end_use = '{enduse}'
 ) as ann_disag

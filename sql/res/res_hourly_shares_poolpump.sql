@@ -5,6 +5,7 @@ WITH
 -- filter to the appropriate partitions
 ts_not_agg AS (
 	SELECT meta."in.weather_file_city",
+	meta."in.weather_file_longitude",
 	meta."in.state",
 		'res_pp_ts_1' AS shape_ts,
 		CASE
@@ -20,6 +21,7 @@ ts_not_agg AS (
 -- aggregate to hourly by weather file, and shape
 ts_agg AS(
 	SELECT "in.weather_file_city",
+	"in.weather_file_longitude",
 	"in.state",
 		shape_ts,
 		timestamp_hour,
@@ -28,14 +30,16 @@ ts_agg AS(
 	GROUP BY timestamp_hour,
 	"in.state",
         "in.weather_file_city",
+		"in.weather_file_longitude",
 		shape_ts
 )
 -- normalize the shapes
 SELECT "in.weather_file_city",
+	"in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
 	poolpump as kwh,
-	poolpump / sum(poolpump) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
+	poolpump / sum(poolpump) OVER (PARTITION BY "in.state", "in.weather_file_city", "in.weather_file_longitude", shape_ts) as multiplier_hourly,
     'res' AS sector,
     "in.state",
 	'Other' as end_use

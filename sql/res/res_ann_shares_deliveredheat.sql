@@ -6,6 +6,7 @@ INSERT INTO {mult_res_annual}
 WITH meta_filtered AS (
 	SELECT "in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_52' AS group_ann
@@ -14,12 +15,14 @@ WITH meta_filtered AS (
 	GROUP BY 
 		"in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 		"in.state"
 		
 	UNION ALL 
 	
 	SELECT "in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_84' AS group_ann
@@ -29,12 +32,14 @@ WITH meta_filtered AS (
 	GROUP BY 
 		"in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 		"in.state"
 
 	UNION ALL 
 	
 	SELECT "in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 	    "in.state",
 	    sum("out.load.heating.energy_delivered.kbtu") as delivered_heat,
 	    'res_hvac_ann_86' AS group_ann
@@ -44,11 +49,13 @@ WITH meta_filtered AS (
 	GROUP BY 
 		"in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
 		"in.state"
 ),
 geo_shares AS (
     SELECT "in.county",
 		"in.weather_file_city",
+		"in.weather_file_longitude",
     	"in.state",
     	group_ann,
     	delivered_heat,
@@ -59,6 +66,7 @@ geo_shares AS (
 SELECT 
 	"in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	heating_mult AS multiplier_annual,
 	'res' AS sector,

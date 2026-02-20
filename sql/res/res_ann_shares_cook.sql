@@ -17,11 +17,13 @@ WITH meta_filtered AS (
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann
 )
 SELECT "in.county",
 	"in.weather_file_city",
+	"in.weather_file_longitude",
 	group_ann,
 	cooking / sum(cooking) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
 	'res' AS sector,
