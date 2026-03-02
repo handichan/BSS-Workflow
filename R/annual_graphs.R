@@ -292,6 +292,159 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
   }
 }
 
+
+
+# master plotting function fossil
+.make_split_plots_fossil <- function(df_in, suffix_tag, mm_long_ref, state_vec, to_lab, sec_lab, eu_lab, colors_vec) {
+  
+  # dynamic sizes for the set
+  scen_levels <- levels(df_in$turnover)
+  nscen <- length(scen_levels)
+  width_set <- (3 + nscen) * 1.8
+  state_height <- length(state_vec) * 1.8
+  
+  # ----- 1a) national, non-Electric by end use -------------------------------------------
+  message(paste0("printing national non-electric enduse ", suffix_tag))
+  df_in %>% filter(fuel!="Electric") %>%
+    group_by(year, sector, end_use, fuel, turnover) %>%
+    summarize(kwh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
+    ggplot(aes(x=year,y=kwh,fill=end_use)) +
+    geom_area() +
+    facet_grid(sector+fuel ~ turnover,
+               labeller = labeller(turnover = to_lab, sector = sec_lab)) +
+    scale_y_continuous("TWh", labels = comma_format(),
+                       expand = expansion(add=0, mult=c(0,.05))) +
+    scale_x_continuous(name = "", expand=c(0,0), breaks = seq(2030,2050,by=10)) +
+    scale_fill_manual(name = "", labels = eu_lab, values = colors_vec) +
+    theme(strip.background = element_blank(),
+          strip.text.y = element_text(angle=-90, size=10),
+          strip.text.x = element_text(size=10))
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil_enduse", suffix_tag, ".jpeg"),
+         device="jpeg", width=width_set, height=h_2, units="in")
+
+  # ----- 1b) national, non-Electric by fuel -------------------------------------------
+  message(paste0("printing national non-electric by fuel ", suffix_tag))
+  df_in %>% filter(fuel!="Electric") %>%
+    group_by(year, sector, fuel, turnover) %>%
+    summarize(kwh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
+    ggplot(aes(x=year,y=kwh,fill=fuel)) +
+    geom_area() +
+    facet_grid(sector ~ turnover,
+               labeller = labeller(turnover = to_lab, sector = sec_lab)) +
+    scale_y_continuous("TWh", labels = comma_format(),
+                       expand = expansion(add=0, mult=c(0,.05))) +
+    scale_x_continuous(name = "", expand=c(0,0), breaks = seq(2030,2050,by=10)) +
+    scale_fill_manual(name = "", labels = eu_lab, values = colors_vec) +
+    theme(strip.background = element_blank(),
+          strip.text.y = element_text(angle=-90, size=10),
+          strip.text.x = element_text(size=10))
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil", suffix_tag, ".jpeg"),
+         device="jpeg", width=width_set, height=h_2, units="in")
+  
+  
+  # ----- 1c) national, non-Electric by fuel and end use -------------------------------------------
+  message(paste0("printing national non-electric enduse ", suffix_tag))
+  df_in %>% filter(fuel!="Electric") %>%
+    group_by(year, sector, end_use, fuel, turnover) %>%
+    summarize(kwh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
+    ggplot(aes(x=year,y=kwh,fill=fuel)) +
+    geom_area() +
+    facet_grid(sector+end_use ~ turnover,
+               labeller = labeller(turnover = to_lab, sector = sec_lab)) +
+    scale_y_continuous("TWh", labels = comma_format(),
+                       expand = expansion(add=0, mult=c(0,.05))) +
+    scale_x_continuous(name = "", expand=c(0,0), breaks = seq(2030,2050,by=10)) +
+    scale_fill_manual(name = "", labels = eu_lab, values = colors_vec) +
+    theme(strip.background = element_blank(),
+          strip.text.y = element_text(angle=-90, size=10),
+          strip.text.x = element_text(size=10))
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil__fuel_enduse", suffix_tag, ".jpeg"),
+         device="jpeg", width=width_set, height=h_2, units="in")
+  
+  # ----- 3) national by tech type ---------------------------------------------
+  with_shapes <- df_in %>%
+    filter(fuel!="Electric") %>%
+    left_join(mm_long_ref,
+              by=c("meas",
+                   "end_use" = "Scout_end_use",
+                   "tech_stage",
+                   "sector"))
+  
+  with_shapes_agg <- with_shapes %>%
+    group_by(year, end_use, fuel, turnover, sector, description) %>%
+    summarize(TWh = sum(state_ann_kwh)/1e9, .groups="drop")
+  
+  # 3a) HVAC (Cooling/Heating/Ventilation)
+  message(paste0("printing hvac fossil ", suffix_tag))
+  for (s in c("com","res")) {
+    h <- ifelse(s=="res", 5, 5)
+    with_shapes_agg %>%
+      group_by(description) %>% filter(sum(TWh) > 1) %>% ungroup() %>%
+      filter(end_use %in% c("Cooling (Equip.)","Heating (Equip.)","Ventilation"),
+             sector == s) %>%
+      ggplot(aes(x=year, y=TWh, fill=paste(description,fuel))) +
+      geom_area() +
+      facet_grid(end_use ~ turnover,
+                 labeller = labeller(turnover = to_lab, end_use = eu_lab)) +
+      scale_y_continuous("TWh",
+                         labels = comma_format(),
+                         expand = expansion(add=0, mult=c(0,.05))) +
+      scale_x_continuous(name="", expand=c(0,0), breaks=seq(2030,2050,by=10)) +
+      scale_fill_manual(values = colors_vec, name = "") +
+      theme(strip.background = element_blank(),
+            strip.text.y = element_text(angle=-90, size=10),
+            strip.text.x = element_text(size=10))
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_hvac_fossil", suffix_tag, ".jpeg"),
+           device="jpeg", width=width_set, height=h, units="in")
+  }
+  
+  # 3b) Water Heating
+  message(paste0("printing water heating fossil ", suffix_tag))
+  for (s in c("com","res")) {
+    h<-if_else(s=="res",h_2,h_3)
+    with_shapes_agg %>%
+      group_by(fuel) %>% filter(sum(TWh) > 1) %>% ungroup() %>%
+      filter(end_use == "Water Heating", sector == s) %>%
+      ggplot(aes(x=year, y=TWh, fill=fuel)) +
+      geom_area() +
+      facet_grid( ~ turnover, labeller = labeller(turnover = to_lab, end_use = eu_lab)) +
+      scale_y_continuous("TWh",
+                         labels = comma_format(),
+                         expand = expansion(add=0, mult=c(0,.05))) +
+      scale_x_continuous(name="", expand=c(0,0), breaks=seq(2030,2050,by=10)) +
+      scale_fill_manual(values = colors_vec, name = "") +
+      theme(strip.background = element_blank(),
+            strip.text.y = element_text(angle=-90, size=10),
+            strip.text.x = element_text(size=10))
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_wh_fossil", suffix_tag, ".jpeg"),
+           device="jpeg", width=width_set, height=h_1, units="in")
+  }
+  
+  # 3c) Non-HVAC, non-WH
+  message(paste0("printing non-mech fossil ", suffix_tag))
+  for (s in c("com","res")) {
+    w_nonmech <- ifelse(s=="res", (2 + nscen) * 1.8, width_set)
+    with_shapes_agg %>%
+      group_by(description,fuel) %>% filter(sum(TWh) > 1) %>% ungroup() %>%
+      filter(!(end_use %in% c("Water Heating","Heating (Equip.)","Cooling (Equip.)","Ventilation")),
+             sector == s) %>%
+      ggplot(aes(x=year, y=TWh, fill=paste(description,fuel))) +
+      geom_area() +
+      facet_grid(end_use ~ turnover, labeller = labeller(turnover = to_lab, end_use = eu_lab)) +
+      scale_y_continuous("TWh",
+                         labels = comma_format(),
+                         expand = expansion(add=0, mult=c(0,.05))) +
+      scale_x_continuous(name="", expand=c(0,0), breaks=seq(2030,2050,by=10)) +
+      guides(fill = guide_legend(nrow = 12)) +
+      scale_fill_manual(values = colors_vec, name = "") +
+      theme(strip.background = element_blank(),
+            strip.text.y = element_text(angle=-90, size=10),
+            strip.text.x = element_text(size=10))
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_non-mech_fossil", suffix_tag, ".jpeg"),
+           device="jpeg", width=w_nonmech, height=h_1, units="in")
+  }
+  
+
 # ---- run all three sets -------------------------------------------------------
 wide_S1 <- .make_factor(wide, set1_codes)
 wide_S2 <- .make_factor(wide, set2_codes)
@@ -300,3 +453,4 @@ wide_all <- .make_factor(wide, setall_codes)
 .make_split_plots_for(wide_S1, "_S1", mm_long, states, to, sec, eu, colors)
 .make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)
 .make_split_plots_for(wide_all, "", mm_long, states, to, sec, eu, colors)
+.make_split_plots_fossil(wide_all, "", mm_long, states, to, sec, eu, colors)
