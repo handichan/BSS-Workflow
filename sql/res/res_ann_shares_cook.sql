@@ -7,6 +7,7 @@ INSERT INTO {mult_res_annual}
 WITH meta_filtered AS (
 	SELECT meta."in.county",
 		meta."in.weather_file_city",
+		meta."in.weather_file_longitude",
 		meta."in.state",
 		chars.group_ann,
 		sum(meta."out.electricity.range_oven.energy_consumption") as cooking

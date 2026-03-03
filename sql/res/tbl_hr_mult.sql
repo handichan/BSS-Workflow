@@ -1,6 +1,7 @@
 -- to hold hourly disaggregation multipliers calculated from BuildStock
 CREATE EXTERNAL TABLE {mult_res_hourly}(
     `in.weather_file_city` string,
+    `in.weather_file_longitude` double,
     shape_ts string,
     timestamp_hour timestamp,
     kwh double,
