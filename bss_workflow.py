@@ -185,7 +185,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name
     """
 
     s3_bucket_target = "bss-workflow"
-    s3_folder = "v2/annual/"
+    s3_folder = "v4/annual/"
     s3_output_prefix = "athena_results/"
     output_location = f"s3://{cfg.BUCKET_NAME}/{s3_output_prefix}/"
     qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
@@ -1602,7 +1602,7 @@ def bssbucket_insert(athena_client, cfg: Config):
     query_template = """
         CREATE TABLE bss_county_hourly_{turnover}_amy_{sector}_{year}
         WITH (
-            external_location = 's3://{dest_bucket}/v2/county_hourly/{turnover}/sector={sector}/year={year}/',
+            external_location = 's3://{dest_bucket}/v4/county_hourly/{turnover}/sector={sector}/year={year}/',
             format = 'PARQUET',
             write_compression = 'SNAPPY',
             partitioned_by = ARRAY['state']
@@ -1632,7 +1632,7 @@ def bssbucket_parquetmerge(s3_client, cfg: Config):
     for t in turnovers:
         for s in sectors:
             for y in years:
-                top = f"v2/county_hourly/{t}/sector={s}/year={y}/"
+                top = f"v4/county_hourly/{t}/sector={s}/year={y}/"
                 print(f"Merging BSS bucket for {t} {s} {y}")
                 merge_and_replace_folders(s3_client, dest_bucket, top)
 
@@ -1970,10 +1970,7 @@ def main(opts):
         # Insert and merge (BSS)
         bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
-        merge_and_replace_folders(s3, 'bss-workflow', 'v2/annual_results/')
-        # # Insert and merge (IEF)
-        bssiefbucket_insert(athena, cfg)
-        bssiefbucket_parquetmerge(s3, cfg)
+        merge_and_replace_folders(s3, 'bss-workflow', 'v4/annual_results/')
         bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
