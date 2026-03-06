@@ -1310,7 +1310,8 @@ def test_county(s3_client, athena_client, cfg: Config):
         "test_county_hourly_total.sql",
         "test_county_hourly_enduse.sql",
         "test_county_hourly_state.sql",
-        "test_missing_shape_ts_hourly.sql",
+        "test_missing_shape_ts_res.sql",
+        "test_missing_shape_ts_com.sql",
         "test_missing_group_ann_hourly.sql"
     ]
     years = cfg.YEARS
