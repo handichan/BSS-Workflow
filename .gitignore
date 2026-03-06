@@ -7,3 +7,9 @@ R/generated_csvs/**
 R/graphs/**
 agg_results/**
 ~$*
+
+# Ignore scout folders
+scout/
+
+# temp cache
+__pycache__/
