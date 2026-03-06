@@ -423,7 +423,7 @@ for (i in 1:length(county_hourly_examples_list)){
   day_labels<-with_ex_labels %>% 
     right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
     select(in.county,year,month,day_of_month,example_label,turnover) %>% unique() %>%
-    mutate(day_label=paste(month,day_of_month,sep="/"),x=if_else(year==2024,3,13))
+    mutate(day_label=paste(month,day_of_month,sep="/"),x=if_else(year==2026,3,13))
   psample<-with_ex_labels %>% 
     right_join(maxes %>% select(year, date, example_label, in.county),by=c("year", "date", "example_label", "in.county")) %>%
     mutate(turnover=factor(turnover,levels=c("baseline",names(to[scenarios])),ordered=T)) %>%
