@@ -1317,10 +1317,10 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     # sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     
-    # # baseline
-    # template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
-    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID)
-    # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+    # baseline
+    template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
+    q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
     # scenarios
     scout_header = f"""CREATE TABLE wide_scout_annual_state
@@ -2280,9 +2280,15 @@ def main(opts):
         _, athena = get_boto3_clients()
         bssbucket_insert(athena, cfg)
 
-    if opts.bssbucket_parquetmerge:
+    if opts.iefbucket_parquetmerge:
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
+        # Insert and merge (IEF)
+        bssiefbucket_insert(athena, cfg)
+        bssiefbucket_parquetmerge(s3, cfg)
+
+    if opts.bssbucket_parquetmerge:
+        s3, athena = get_boto3_clients()
         # Insert and merge (BSS)
         bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
@@ -2318,7 +2324,8 @@ if __name__ == "__main__":
     parser.add_argument("--gen_countyall", action="store_true", help="Process Scout data and disaggregate")
     parser.add_argument("--gen_state_monthly_cal", action="store_true", help="Generate State Monthly Calibration Data")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
-    parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
+    parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bss bucket")
+    parser.add_argument("--iefbucket_parquetmerge", action="store_true", help="Populate + merge parquet under ief bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
     parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
