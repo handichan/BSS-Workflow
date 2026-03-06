@@ -795,6 +795,14 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
 
 def gen_multipliers(s3_client, athena_client, cfg: Config):
     sectors = ["com", "res"]
+    # drop tables before rerunning multipliers
+    drop_tables = [
+        "com_annual_disaggregation_multipliers_amy",
+        "com_hourly_disaggregation_multipliers_amy",
+        f"com_hourly_hvac_temp_{cfg.VERSION_ID}"
+    ]
+    for t in drop_tables:
+        drop_athena_table_if_exists(athena_client, t, cfg)
     # lists as in original
     tbl_res = [
         "tbl_ann_mult.sql",
@@ -1904,6 +1912,7 @@ def main(opts):
 
     if opts.gen_mults:
         s3, athena = get_boto3_clients()
+        s3_create_table_from_tsv(s3, athena, cfg.MEAS_MAP_PATH, cfg)
         s3_create_tables_from_csvdir(s3, athena, cfg)
         gen_multipliers(s3, athena, cfg)
         test_multipliers(s3, athena, cfg)
