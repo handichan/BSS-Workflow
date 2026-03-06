@@ -15,3 +15,7 @@ R/.Rhistory
 # Ignore helper and scout folders
 helper/
 scout/
+
+# temp cache
+__pycache__/
+diagnostics/
