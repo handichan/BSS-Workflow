@@ -2255,7 +2255,7 @@ def main(opts):
         TURNOVERS_backup = cfg.TURNOVERS
         YEARS_backup = cfg.YEARS
         cfg.TURNOVERS = ["aeo"]
-        cfg.YEARS = ['2020','2022','2024']
+        cfg.YEARS = [str(i) for i in range(2020, 2025)]
         gen_scoutdata(s3, athena, cfg)
         # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
         gen_countydata(athena, cfg)
