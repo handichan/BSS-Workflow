@@ -628,6 +628,9 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 - `--gen_hourlyviz`
   - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_countydata`.
 
+- `--calibration`
+  - Generate calibration multipliers using AEO historic data from 2020 to 2024
+
 - `--run_test`
   - Runs diagnostics that are included in `--gen_mults` and `--combine_countydata`: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
   - Use after changes to disaggregation multipliers or county generation templates.
@@ -647,7 +650,7 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
   - Use when you want to publish or republish outputs to the target bucket.
 
 - `--bssbucket_parquetmerge`
-  - Publishes and merges parquet folders in both BSS and IEF buckets; also exports wide Scout parquet.
+  - Publishes and merges parquet folders in BSS buckets; also exports wide Scout parquet.
   - Use when you want fully merged state-level parquet deliverables.
 
 - `--county_partition_mults`
