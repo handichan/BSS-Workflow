@@ -2001,11 +2001,6 @@ def main(opts):
         _, athena = get_boto3_clients()
         county_partition_multipliers(athena, cfg)
 
-    if opts.gen_state_monthly_cal:
-        s3, athena = get_boto3_clients()
-        generate_state_monthly_for_cal(s3, athena, cfg)
-
-
 if __name__ == "__main__":
     start_time = time.time()
 
@@ -2016,7 +2011,6 @@ if __name__ == "__main__":
     parser.add_argument("--gen_countyall", action="store_true", help="Generate County Data and post-process")
     parser.add_argument("--gen_scoutdata", action="store_true", help="Generate Scout Data")
     parser.add_argument("--combine_countydata", action="store_true", help="Combine County Data")
-    parser.add_argument("--gen_state_monthly_cal", action="store_true", help="Generate State Monthly Calibration Data")
     parser.add_argument("--convert_wide", action="store_true", help="Convert datasets as necessary")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bss bucket")

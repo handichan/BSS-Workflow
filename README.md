@@ -604,6 +604,9 @@ Use these to run just the parts of the workflow you need. Typical runs don't req
   - Runs Scout → county → combine → diagnostics → CSVs → R graphs and calibration steps.
   - Use for a full refresh when inputs changed broadly.
 
+- `--calibration`
+  - Generate calibration multipliers using AEO historic data from 2020 to 2024
+
 - `--run_test`
   - Runs diagnostics: multipliers checks, county annual/hourly checks, measure coverage tests.
   - Use after changes to multipliers or county generation templates.
@@ -613,7 +616,7 @@ Use these to run just the parts of the workflow you need. Typical runs don't req
   - Use when you want to publish or republish outputs to the target bucket.
 
 - `--bssbucket_parquetmerge`
-  - Publishes and merges parquet folders in both BSS and IEF buckets; also exports wide Scout parquet.
+  - Publishes and merges parquet folders in both BSS buckets; also exports wide Scout parquet.
   - Use when you want fully merged state-level parquet deliverables.
 
 - `--county_partition_mults`
