@@ -14,7 +14,7 @@ WITH meta_filtered AS (
 		sum(meta."out.natural_gas.range_oven.energy_consumption") as cooking_ng,
 		sum(meta."out.propane.range_oven.energy_consumption") as cooking_prop
 	FROM "{meta_res}" as meta
-	RIGHT JOIN res_ann_cook2 as chars ON meta."in.cooking_range" = chars."in.cooking_range"
+	INNER JOIN res_ann_cook2 as chars ON meta."in.cooking_range" = chars."in.cooking_range"
 	AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_cook2)
 	GROUP BY 

@@ -17,6 +17,7 @@ WITH filtered_annual AS (
     WHERE "year" = {year}
       AND scout_run = '{scout_version}'
       AND end_use = '{enduse}'
+      AND "in.state" = '{state}'
       AND county_ann_kwh = county_ann_kwh
 ),
 
@@ -85,6 +86,28 @@ grouped_disagg AS (
         scout_run
 ),
 
+shape_ts_used AS (
+    SELECT DISTINCT shape_ts
+    FROM grouped_disagg
+),
+
+mult_filtered AS (
+    SELECT 
+        h."in.weather_file_city",
+        h."in.weather_file_longitude",
+        h.end_use,
+        h.fuel,
+        h.shape_ts,
+        h.timestamp_hour,
+        h.sector,
+        h.multiplier_hourly
+    FROM {mult_res_hourly} h
+    JOIN shape_ts_used s
+      ON h.shape_ts = s.shape_ts
+    WHERE h.multiplier_hourly >= 0
+      AND h.end_use = '{enduse}'
+),
+
 hourly_ungrouped AS (
     SELECT 
         gd."in.state",
@@ -98,30 +121,25 @@ hourly_ungrouped AS (
         gd.county_ann_kwh * h.multiplier_hourly AS county_hourly_kwh,
         gd.scout_run
     FROM grouped_disagg AS gd
-    LEFT JOIN (SELECT 
-        "in.weather_file_city", "in.weather_file_longitude", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
-        FROM {mult_res_hourly}
-        WHERE multiplier_hourly >= 0
-        AND end_use = '{enduse}') AS h
+    LEFT JOIN mult_filtered AS h
     ON gd."in.weather_file_city" = h."in.weather_file_city"
     AND gd."in.weather_file_longitude" = h."in.weather_file_longitude"
     AND gd.end_use = h.end_use
     AND gd.shape_ts = h.shape_ts
     AND gd.fuel = h.fuel
-),
+)
 
-hourly_grouped AS (
     SELECT
-        "in.state",
         "in.county",
-        "year",
-        end_use,
-        fuel,
         timestamp_hour,
         turnover,
-        sector,
         SUM(county_hourly_kwh) AS county_hourly_uncal_kwh,
-        scout_run
+        scout_run,
+        sector,
+        "in.state",
+        "year",
+        end_use,
+        fuel
     FROM hourly_ungrouped
     GROUP BY
         "in.state",
@@ -133,43 +151,3 @@ hourly_grouped AS (
         turnover,
         scout_run,
         sector
-),
-
-hourly_calibrated AS (
-    SELECT
-        hg."in.state",
-        hg."in.county",
-        hg."year",
-        month(hg.timestamp_hour) AS "month",
-        hg.end_use,
-        hg.fuel,
-        hg.timestamp_hour,
-        hg.turnover,
-        hg.sector,
-        county_hourly_uncal_kwh,
-        county_hourly_uncal_kwh * COALESCE(cm.calibration_multiplier, 1) AS county_hourly_cal_kwh,
-        hg.scout_run
-    FROM hourly_grouped AS hg
-    LEFT JOIN calibration_multipliers AS cm
-      ON cm."in.state" = hg."in.state"
-     AND cm."month"    = CAST(month(hg.timestamp_hour) AS INTEGER)
-     AND cm.sector     = hg.sector
-     AND hg.fuel = 'Electric'
-    WHERE hg.sector = 'res'
-)
-
-SELECT 
-    "in.county",
-    timestamp_hour,
-    turnover,
-    county_hourly_uncal_kwh,
-    county_hourly_cal_kwh,
-    scout_run,
-    sector,
-    "in.state",
-    "year",
-    end_use,
-    fuel
-FROM hourly_calibrated
-WHERE timestamp_hour IS NOT NULL
-;

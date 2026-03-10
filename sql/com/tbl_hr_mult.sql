@@ -6,10 +6,9 @@ CREATE EXTERNAL TABLE {mult_com_hourly}(
     kwh double,
     multiplier_hourly double,
     sector string,
-    `in.state` string,
-    end_use string,
     fuel string
 )
+PARTITIONED BY (end_use string, `in.state` string)
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/{mult_com_hourly}/'
 ;

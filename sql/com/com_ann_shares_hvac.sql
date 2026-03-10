@@ -7,12 +7,12 @@ WITH meta_filtered AS (
         meta."in.state",
         chars.group_ann,
         sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec,
-		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu") as heating_ng,
+		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu" + meta."calc.weighted.district_heating.heating.energy_consumption..tbtu") as heating_ng,
         sum(meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu") as heating_fo,
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
     FROM "{meta_com}" as meta
-        RIGHT JOIN com_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
+        INNER JOIN com_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade
     WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac2)

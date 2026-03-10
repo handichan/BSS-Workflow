@@ -1,4 +1,4 @@
-INSERT INTO {mult_res_hourly}
+INSERT INTO {mult_res_hourly}_temp
 
 WITH meta_shapes AS (
 	SELECT meta.bldg_id,
@@ -25,6 +25,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook2)
+	AND ts.state='{state}'
 ),
 
 ts_agg AS(
@@ -39,58 +40,19 @@ ts_agg AS(
 		"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
-),
-
-ts_totals AS(
-	SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	cooking_elec as cooking_elec,
-	sum(cooking_elec) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as cooking_elec_total,
-	cooking_fossil as cooking_fossil,
-	sum(cooking_fossil) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as cooking_fossil_total,
-    'res' AS sector,
-    "in.weather_file_longitude"
-FROM ts_agg
 )
 
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	cooking_elec as kwh,
-	cooking_elec / cooking_elec_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Cooking' as end_use,
-	'Electric' as fuel
-FROM ts_totals
-WHERE cooking_elec_total > 0
-
-UNION ALL
 
 SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
-	cooking_fossil as kwh,
-	cooking_fossil / cooking_fossil_total as multiplier_hourly,
+	u.kwh as kwh,
     'res' AS sector,
-    "in.weather_file_longitude",
 	'Cooking' as end_use,
-	'Natural Gas' as fuel
-FROM ts_totals
-WHERE cooking_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	cooking_fossil as kwh,
-	cooking_fossil / cooking_fossil_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Cooking' as end_use,
-	'Propane' as fuel
-FROM ts_totals
-WHERE cooking_fossil > 0
-;
+	u.fuel
+FROM ts_agg a 
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas', 'Propane'],
+	ARRAY[a.cooking_elec, a.cooking_fossil, a.cooking_fossil]
+) AS u(fuel, kwh);

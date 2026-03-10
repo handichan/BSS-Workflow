@@ -12,7 +12,7 @@ WITH meta_filtered AS (
         sum(meta."out.propane.heating.energy_consumption") as heating_prop,
 		sum(meta."out.electricity.cooling.energy_consumption") as cooling
 	FROM "{meta_res}" as meta
-		RIGHT JOIN res_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
+		INNER JOIN res_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
 		AND meta."in.hvac_cooling_type" = chars."in.hvac_cooling_type"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_hvac2)

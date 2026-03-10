@@ -12,7 +12,7 @@ WITH meta_filtered AS (
 		sum(meta."out.fuel_oil.hot_water.energy_consumption") as wh_fo,
 		sum(meta."out.propane.hot_water.energy_consumption") as wh_prop
 	FROM "{meta_res}" as meta
-		RIGHT JOIN res_ann_wh2 as chars ON meta."in.water_heater_efficiency" = chars."in.water_heater_efficiency"
+		INNER JOIN res_ann_wh2 as chars ON meta."in.water_heater_efficiency" = chars."in.water_heater_efficiency"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_wh2)
 	AND group_ann NOT IN ('res_wh_ann_6')

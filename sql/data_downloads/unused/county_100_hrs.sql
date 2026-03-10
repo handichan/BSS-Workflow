@@ -2,7 +2,8 @@
 
 with county_totals as(
 SELECT "in.county",timestamp_hour,turnover,"in.state","year",sum(county_hourly_cal_kwh) as county_total_hourly_kwh 
-FROM long_county_hourly_{turnover}_{weather}
+FROM long_county_hourly_{turnover}_{disag_id}
+WHERE fuel = 'Electric'
 GROUP BY "in.county",timestamp_hour,turnover,"in.state","year"
 )
 

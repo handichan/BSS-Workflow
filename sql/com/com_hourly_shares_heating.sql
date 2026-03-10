@@ -1,85 +1,103 @@
-
 INSERT INTO {mult_com_hourly}_hvac_temp
-WITH meta_shapes AS (
--- assign each building id and upgrade combo to the appropriate shape based on the characteristics
-	SELECT 
-        meta.bldg_id,
-		meta."in.nhgis_county_gisjoin" as "in.county",
-		meta."in.state",
-		chars.shape_ts,
-		chars.upgrade,
-        meta.weight
-    	FROM (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade, "in.heating_fuel", "in.hvac_heat_type", applicability
-			FROM "{meta_com}" 
-			WHERE state='{state}') as meta 
-		RIGHT JOIN com_ts_heating2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
-		AND meta."in.hvac_heat_type" = chars."in.hvac_heat_type"
-        AND meta.applicability = chars.applicability
-		AND cast(meta.upgrade as varchar) = chars.upgrade
-        ),
 
-ts_not_agg AS (
-	SELECT meta_shapes."in.county",
-	meta_shapes."in.state",
-		meta_shapes.shape_ts,
-		-- make sure all the hours are 2018
-		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
-		(ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heat_recovery.energy_consumption") * meta_shapes.weight as heating_elec,
-		(ts."out.natural_gas.heating.energy_consumption" + ts."out.other_fuel.heating.energy_consumption" + ts."out.district_heating.heating.energy_consumption") * meta_shapes.weight as heating_fossil
-	FROM "{ts_com}" as ts
-		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
-		AND ts.upgrade = cast(meta_shapes.upgrade as varchar)
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_heating2)
-	AND ts.state='{state}'
+WITH
+heating_upgrades AS (
+    SELECT DISTINCT upgrade
+    FROM com_ts_heating2
 ),
--- aggregate to hourly by county, and shape
-ts_agg AS(
-	SELECT "in.county",
-	"in.state",
-		shape_ts,
-		timestamp_hour,
-		sum(heating_elec) as heating_elec,
-		sum(heating_fossil) as heating_fossil
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-	"in.state",
+
+meta_filtered AS (
+    SELECT
+        bldg_id,
+        "in.nhgis_county_gisjoin" AS "in.county",
+        "in.state",
+        weight,
+        "in.heating_fuel", 
+        "in.hvac_heat_type",
+        applicability,
+        CAST(upgrade AS varchar) AS upgrade
+    FROM "{meta_com}"
+    WHERE state = '{state}'
+),
+
+meta_shapes AS (
+    SELECT
+        mf.bldg_id,
+        mf."in.county",
+        mf."in.state",
+        h.shape_ts,
+        h.upgrade,
+        mf.weight
+    FROM meta_filtered mf
+    JOIN com_ts_heating2 h
+      ON mf."in.heating_fuel" = h."in.heating_fuel"
+     AND mf."in.hvac_heat_type" = h."in.hvac_heat_type"
+     AND mf.applicability = h.applicability
+     AND mf.upgrade = h.upgrade
+),
+
+-- Pre-filter timeseries for partition pruning
+ts_filtered AS (
+    SELECT
+        bldg_id,
+        state,
+        upgrade,
+        DATE_TRUNC('hour', "timestamp") AS ts_hour,
+        "out.electricity.heating.energy_consumption" 
+        + "out.electricity.heat_recovery.energy_consumption" as heating_elec,
+		"out.natural_gas.heating.energy_consumption" 
+        + "out.other_fuel.heating.energy_consumption" 
+        + "out.district_heating.heating.energy_consumption" as heating_fossil
+    FROM "{ts_com}"
+    WHERE state = '{state}'
+      AND upgrade IN (SELECT upgrade FROM heating_upgrades)
+),
+
+ts_joined AS (
+    SELECT
+        ms."in.county",
+        ms."in.state",
+        ms.shape_ts,
+        CASE
+            WHEN extract(YEAR FROM ts.ts_hour + INTERVAL '1' HOUR) = 2019
+            THEN ts.ts_hour - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+            ELSE ts.ts_hour + INTERVAL '1' HOUR
+        END AS timestamp_hour,
+        ts.heating_elec * ms.weight AS heating_elec,
+        ts.heating_fossil * ms.weight AS heating_fossil
+    FROM ts_filtered ts
+    JOIN meta_shapes ms
+      ON ts.bldg_id = ms.bldg_id
+     AND ts.upgrade = ms.upgrade
+),
+
+ts_agg AS (
+    SELECT
         "in.county",
-		shape_ts
+        "in.state",
+        shape_ts,
+        timestamp_hour,
+        SUM(heating_elec) AS heating_elec,
+        SUM(heating_fossil) AS heating_fossil
+    FROM ts_joined
+    GROUP BY
+        "in.county",
+        "in.state",
+        shape_ts,
+        timestamp_hour
 )
--- don't normalize the shapes
-SELECT "in.county",
-	shape_ts,
-	timestamp_hour,
-	heating_elec as kwh,
+
+SELECT
+    a."in.county",
+    a.shape_ts,
+    a.timestamp_hour,
+    u.kwh,
     'com' AS sector,
-    "in.state",
-	'Heating (Equip.)' as end_use,
-	'Electric' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.county",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'com' AS sector,
-    "in.state",
-	'Heating (Equip.)' as end_use,
-	'Natural Gas' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.county",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'com' AS sector,
-    "in.state",
-	'Heating (Equip.)' as end_use,
-	'Distillate/Other' as fuel
-FROM ts_agg
-;
+    a."in.state",
+    'Heating (Equip.)' AS end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas', 'Distillate/Other'],
+    ARRAY[a.heating_elec, a.heating_fossil, a.heating_fossil]
+) AS u(fuel, kwh);

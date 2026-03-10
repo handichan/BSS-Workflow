@@ -1,5 +1,5 @@
 
-INSERT INTO {mult_res_hourly}
+INSERT INTO {mult_res_hourly}_temp
 WITH meta_shapes AS (
 
 	SELECT meta.bldg_id,
@@ -26,6 +26,7 @@ ts_not_agg AS (
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_wh2)
+	AND ts.state='{state}'
 ),
 
 ts_agg AS(
@@ -40,72 +41,19 @@ ts_agg AS(
 	"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
-),
-
-ts_totals AS(
-	SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	wh_elec as wh_elec,
-	sum(wh_elec) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as wh_elec_total,
-	wh_fossil as wh_fossil,
-	sum(wh_fossil) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as wh_fossil_total,
-    'res' AS sector,
-    "in.weather_file_longitude"
-FROM ts_agg
 )
 
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	wh_elec as kwh,
-	wh_elec / wh_elec_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Water Heating' as end_use,
-	'Electric' as fuel
-FROM ts_totals
-WHERE wh_elec_total > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	wh_fossil as kwh,
-	wh_fossil / wh_fossil_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Water Heating' as end_use,
-	'Natural Gas' as fuel
-FROM ts_totals
-WHERE wh_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	wh_fossil as kwh,
-	wh_fossil / wh_fossil_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Water Heating' as end_use,
-	'Distillate/Other' as fuel
-FROM ts_totals
-WHERE wh_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	wh_fossil as kwh,
-	wh_fossil / wh_fossil_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Water Heating' as end_use,
-	'Propane' as fuel
-FROM ts_totals
-WHERE wh_fossil > 0
-;
+SELECT
+    a."in.weather_file_city",
+    a."in.weather_file_longitude",
+    a.shape_ts,
+    a.timestamp_hour,
+    u.kwh,
+    'res'              AS sector,
+    'Water Heating' AS end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas', 'Distillate/Other', 'Propane'],
+	ARRAY[a.wh_elec, a.wh_fossil, a.wh_fossil, a.wh_fossil]
+) AS u(fuel, kwh);

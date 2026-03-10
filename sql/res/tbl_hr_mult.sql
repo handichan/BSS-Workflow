@@ -7,9 +7,9 @@ CREATE EXTERNAL TABLE {mult_res_hourly}(
     multiplier_hourly double,
     sector string,
     `in.weather_file_longitude` double,
-    end_use string,
     fuel string
 )
+PARTITIONED BY (end_use string)
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/{mult_res_hourly}/'
 ;

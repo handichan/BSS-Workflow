@@ -1,48 +1,86 @@
 INSERT INTO {mult_com_hourly}
-WITH 
--- get the timeseries data for the building ids
--- calculate simplified end uses
--- filter to the appropriate partitions
-ts_not_agg AS (
-	SELECT 	meta."in.nhgis_county_gisjoin" as "in.county",
-	    meta."in.state",
-		'com_light_ts_1' AS shape_ts,
-		-- make sure all the hours are 2018
-		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', ts."timestamp") - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', ts."timestamp") + INTERVAL '1' HOUR END as timestamp_hour,
-		(ts."out.electricity.interior_lighting.energy_consumption" + ts."out.electricity.exterior_lighting.energy_consumption") * meta.weight as lights
-	FROM "{ts_com}" as ts
-		RIGHT JOIN (SELECT "in.nhgis_county_gisjoin", "in.state", weight, bldg_id, upgrade 
-			FROM "{meta_com}" 
-			WHERE state='{state}') as meta 
-		ON ts.bldg_id = meta.bldg_id
-		AND ts.upgrade = cast(meta.upgrade as varchar)
-	WHERE ts.upgrade = '0'
-	AND ts.state='{state}'
+
+WITH meta_filtered AS (
+    SELECT 
+        "in.nhgis_county_gisjoin" AS "in.county",
+        "in.state",
+        weight,
+        bldg_id,
+        upgrade
+    FROM "{meta_com}"
+    WHERE state = '{state}'
+    AND upgrade = 0
 ),
--- aggregate to hourly by county, and shape
-ts_agg AS(
-	SELECT "in.county",
-	"in.state",
-		shape_ts,
-		timestamp_hour,
-		sum(lights) as lights
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-	"in.state",
+
+ts_filtered AS (
+    SELECT 
+        bldg_id,
+        state,
+        upgrade,
+        DATE_TRUNC('hour', "timestamp") AS ts_hour,
+        "out.electricity.interior_lighting.energy_consumption" 
+        + "out.electricity.exterior_lighting.energy_consumption" AS lights
+    FROM "{ts_com}"
+    WHERE state = '{state}'
+      AND upgrade = '0'
+),
+
+-- join only filtered data
+ts_joined AS (
+    SELECT
+        m."in.county",
+        m."in.state",
+        'com_light_ts_1' AS shape_ts,
+        CASE
+            WHEN extract(YEAR FROM tf.ts_hour + INTERVAL '1' HOUR) = 2019
+            THEN tf.ts_hour - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+            ELSE tf.ts_hour + INTERVAL '1' HOUR
+        END AS timestamp_hour,
+        tf.lights * m.weight AS lights
+    FROM ts_filtered tf
+    JOIN meta_filtered m
+      ON tf.bldg_id = m.bldg_id
+     AND tf.state = m."in.state"
+),
+
+-- aggregate once
+ts_agg AS (
+    SELECT 
         "in.county",
-		shape_ts
+        "in.state",
+        shape_ts,
+        timestamp_hour,
+        SUM(lights) AS lights
+    FROM ts_joined
+    GROUP BY
+        "in.county",
+        "in.state",
+        shape_ts,
+        timestamp_hour
+),
+
+county_totals AS (
+    SELECT
+        "in.county",
+        shape_ts,
+        SUM(lights) AS lights_total
+    FROM ts_agg
+    GROUP BY
+        "in.county",
+        shape_ts
 )
--- normalize the shapes
-SELECT "in.county",
-	shape_ts,
-	timestamp_hour,
-	lights as kwh,
-	lights / sum(lights) OVER (PARTITION BY "in.county", shape_ts) as multiplier_hourly,
+
+SELECT 
+    a."in.county",
+    a.shape_ts,
+    a.timestamp_hour,
+    a.lights AS kwh,
+    a.lights / t.lights_total AS multiplier_hourly,
     'com' AS sector,
-    "in.state",
-	'Lighting' as end_use,
-	'Electric' AS fuel
-FROM ts_agg
-;
+    'Electric' AS fuel,
+    'Lighting' AS end_use,
+    a."in.state"
+FROM ts_agg a
+JOIN county_totals t
+  ON a."in.county" = t."in.county"
+ AND a.shape_ts = t.shape_ts;

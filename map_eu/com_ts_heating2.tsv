@@ -14,7 +14,9 @@ com_heating_ts_3	"Variable Speed HP RTU, Electric Backup, Energy Recovery"	Propa
 com_heating_ts_4	"HP Boiler, Electric Backup"	FuelOil	Boiler 	TRUE	14	heating
 com_heating_ts_4	"HP Boiler, Electric Backup"	NaturalGas	Boiler 	TRUE	14	heating
 com_heating_ts_4	"HP Boiler, Electric Backup"	Propane	Boiler 	TRUE	14	heating
+com_heating_ts_4	"HP Boiler, Electric Backup"	NaturalGas	WSHP 	TRUE	14	heating
 com_heating_ts_5	"HP Boiler, Gas Backup"	NaturalGas	Boiler 	TRUE	15	heating
+com_heating_ts_5	"HP Boiler, Gas Backup"	NaturalGas	WSHP 	TRUE	15	heating
 com_heating_ts_6	GSHP heating	DistrictHeating	District	TRUE	55	heating
 com_heating_ts_6	GSHP heating	Electricity	Electric Resistance	TRUE	55	heating
 com_heating_ts_6	GSHP heating	Electricity	ASHP	TRUE	55	heating
@@ -38,6 +40,7 @@ com_heating_ts_10	"Variable Speed HP RTU, Electric Backup, Envelope"	Propane	Fur
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	FuelOil	Boiler 	TRUE	50	heating
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	NaturalGas	Boiler 	TRUE	50	heating
 com_heating_ts_11	"HP Boiler, Electric Backup, Envelope"	Propane	Boiler 	TRUE	50	heating
+com_heating_ts_11	"HP Boiler, Electric Backup"	NaturalGas	WSHP 	TRUE	50	heating
 com_heating_ts_8	Fossil Furnace	FuelOil	Furnace	TRUE	0	heating
 com_heating_ts_8	Fossil Furnace	Propane	Furnace	TRUE	0	heating
 com_heating_ts_9	Fossil Boiler 	FuelOil	Boiler 	TRUE	0	heating

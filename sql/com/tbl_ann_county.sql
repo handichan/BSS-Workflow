@@ -10,10 +10,9 @@ CREATE EXTERNAL TABLE county_annual_com_{year}_{turnover}_{disag_id} (
     county_ann_kwh double,
     scout_run string,
     sector string,
-    `in.state` string,
-    year int,
-    end_use string
+    year int
 )
+PARTITIONED BY (end_use string, `in.state` string)
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/{disag_id}/county_runs/county_annual_com_{year}_{turnover}_{disag_id}/'
 ;

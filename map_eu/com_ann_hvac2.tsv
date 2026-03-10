@@ -75,15 +75,57 @@ com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOi
 com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Central Single-zone RTU_Boiler _DX	0
 com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Zone terminal equipment_Boiler _DX	0
 com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Central Multi-zone VAV RTU_Boiler _DX	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	FuelOil	Central Single-zone RTU_Furnace_DX	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	Propane	Central Single-zone RTU_Furnace_DX	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	FuelOil	Residential forced air_Furnace_DX	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	Propane	Residential forced air_Furnace_DX	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	FuelOil	Residential forced air_Furnace_None	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	Propane	Residential forced air_Furnace_None	0
-com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling+cooling	FuelOil	Zone terminal equipment_Furnace_None	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOil	Central Single-zone RTU_Furnace_DX	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Central Single-zone RTU_Furnace_DX	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOil	Residential forced air_Furnace_DX	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Residential forced air_Furnace_DX	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOil	Residential forced air_Furnace_None	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	Propane	Residential forced air_Furnace_None	0
+com_hvac_ann_25	other fossil heating+cooling	other fossil heating+cooling	FuelOil	Zone terminal equipment_Furnace_None	0
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	DOAS+Zone terminal equipment_Boiler _ACC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	DOAS+Zone terminal equipment_Boiler _WCC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Multi-zone VAV RTU_Boiler _ACC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Multi-zone VAV RTU_Boiler _WCC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	DOAS+Zone terminal equipment_Boiler _WCC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Central Multi-zone VAV RTU_Boiler _WCC	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Single-zone RTU_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Zone terminal equipment_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Multi-zone VAV RTU_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Central Single-zone RTU_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Zone terminal equipment_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Central Multi-zone VAV RTU_Boiler _DX	14
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Single-zone RTU_Furnace_DX	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Central Single-zone RTU_Furnace_DX	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Residential forced air_Furnace_DX	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Residential forced air_Furnace_DX	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Residential forced air_Furnace_None	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	Propane	Residential forced air_Furnace_None	1
+com_hvac_ann_26	other fossil heating+cooling	other fossil heating+cooling to HP	FuelOil	Zone terminal equipment_Furnace_None	1
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	DOAS+Zone terminal equipment_Boiler _ACC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	DOAS+Zone terminal equipment_Boiler _WCC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Multi-zone VAV RTU_Boiler _ACC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Multi-zone VAV RTU_Boiler _WCC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	DOAS+Zone terminal equipment_Boiler _WCC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Central Multi-zone VAV RTU_Boiler _WCC	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Single-zone RTU_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Zone terminal equipment_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Multi-zone VAV RTU_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Central Single-zone RTU_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Zone terminal equipment_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Central Multi-zone VAV RTU_Boiler _DX	15
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Single-zone RTU_Furnace_DX	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Central Single-zone RTU_Furnace_DX	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Central Single-zone RTU_Furnace_Evaporative Cooling	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Residential forced air_Furnace_DX	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Residential forced air_Furnace_DX	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Residential forced air_Furnace_None	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	Propane	Residential forced air_Furnace_None	2
+com_hvac_ann_27	other fossil heating+cooling	other fossil heating+cooling to HP, Original Heating Fuel Backup	FuelOil	Zone terminal equipment_Furnace_None	1
 com_hvac_ann_29	other fossil furnace+cooling	other fossil furnace+cooling to Variable Speed HP RTU, Electric Backup	FuelOil	Central Single-zone RTU_Furnace_DX	1
 com_hvac_ann_29	other fossil furnace+cooling	other fossil furnace+cooling to Variable Speed HP RTU, Electric Backup	Propane	Central Single-zone RTU_Furnace_DX	1
 com_hvac_ann_29	other fossil furnace+cooling	other fossil furnace+cooling to Variable Speed HP RTU, Electric Backup	FuelOil	Central Single-zone RTU_Furnace_Evaporative Cooling	1

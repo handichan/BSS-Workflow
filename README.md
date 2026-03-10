@@ -498,6 +498,8 @@ Custom disaggregation multipliers are defined by [mapping files](#mapping-files)
 Before running, check that
 - BuildStock SDR tables are Glued.
 - `BLDSTOCK_TABLES` in the `Config` class contains the correct table names.
+- The multiplier definition files in `map_eu/` use the upgrade numbers in the SDR version that the `Config` class points to.
+- The SQL templates under `sql/res` and `sql/com` use the column names in the SDR version that the `Config` class points to.
 - The tables created by `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` do not already exist on AWS. This might happen if the command has previously failed partway through or if you want to replace the tables. See [troubleshooting](#troubleshooting-1) for more information.
 
 ### Automated Quality Checks
@@ -514,7 +516,7 @@ If the AWS tables already exist and you just want to add more data to them, comm
 
 If you want to create new multipliers in tables whose names already exist, use the AWS console to remove those tables and data first. In Athena, run `DROP TABLE table_name` for all the tables that were created with `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql`. Then navigate to your S3 bucket and delete the contents of the folders with the same table names.
 
-The SDR versions do not all have consistent data types, particularly for the timestamp field. If the hourly disaggregation multipliers are not generating correctly, check the data types, especially for `upgrade` and `timestamp`.
+The SDR versions do not all have consistent data types, particularly for the timestamp field. If the hourly disaggregation multipliers are not generating correctly, check the data types, especially for `upgrade` and `timestamp`. 
 
 Check that the S3 tables based on the TSVs in `map_eu/` (e.g. `com_ann_hvac`, `res_ts_cook`) were created correctly. Some text editors use white space characters or quotation marks that Athena cannot parse. These tables are created as the first step of `gen_multipliers`, `s3_create_tables_from_csvdir`.
 
@@ -554,12 +556,8 @@ Gross consumption by month, state, and sector for 2018-2024 is located in `map_m
 In addition to the EIA data, the calibration requires data from historical years that has been disaggregated by the BSS workflow. To do this,
 
 1. Run Scout using historical years (2020-2024 for AEO 2025). This can be a simple scenario to keep computation and file sizes down.
-2. Disaggregate the Scout results.
-3. In the Athena browser, run `data_downloads/state_monthly.sql` on the appropriate table and save the result as "diagnostics/state_monthly_for_cal.csv".
-
-### Calibration Multipliers
-
-Calculate the calibration multipliers using `R/calibration.R`. This script will calculate the new multipliers and create some visualizations of their impacts. It will automatically save the new multipliers to "map_meas/calibration_multipliers.tsv". If you want to save them somewhere else, for example to enable easy comparison between two sets of calibration multipliers, change the filepath and update `CALIB_MULT_PATH` in the `Config` class to point to the new file.
+2. Disaggregate the Scout results to county hourly.
+3. Run `--calibrate` to calculate the calibration multipliers.
 
 ## Visualization
 
@@ -593,6 +591,9 @@ These graphs are generated with `--gen_hourlyviz` and as part of `--gen_countyal
 
 When this script is run using `bss_workflow.py`, the CSV files that are needed as input will be automatically created by several SQL files in `SQL/data_downloads/` and saved to `R/generated_csvs/`.
 
+### Calibration (`calibration.R`)
+
+
 ## Summary of Command Line Arguments
 
 The command line arguments for `bss_workflow.py` specify which parts of the workflow to run.
@@ -610,13 +611,19 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
   - Use when you have new Scout JSONs or updated the measure or envelope maps.
 
 - `--gen_county`
-  - Disaggregates annual state-level data to county hourly. Each year and sector combination will be a separate S3 table.
+  - Disaggregates annual state-level data to county annual and then to county hourly. Each year and sector combination will be a separate S3 table. These results are uncalibrated.
+  - Checks that all the necessary disaggregation multipliers are present and sum to 1.
   - Use if you are disaggregating a new scenario, have new disaggregation multipliers, or updated the measure or envelope maps.
+
+- `--calibrate`
+  - Calculate new calibration multipliers for electricity and natural gas. Requires `YEARS` to have years with data in `map_meas/eia_gross_consumption_by_state_sector_year_month.csv`.
+  - Run after `--gen_county` if there have been significant changes to disaggregation multipliers or the measure or envelope maps.
 
 - `--combine_countydata`
   - Consolidates the tables for the year and sector combinations created by `--gen_county` into two tables per scenario: one with annual county-level results and one with hourly county-level results. See [Tables 1 and 2](#output-schema) for the variables present in each.
+  - Applies calibration multipliers to the hourly results.
   - Runs diagnostics.
-  - Run after `gen_county`.
+  - Run after `--gen_county`.
 
 - `--gen_hourlyviz`
   - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_countydata`.

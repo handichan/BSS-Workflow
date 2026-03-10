@@ -170,9 +170,9 @@ SELECT
 		ELSE ts END as timestamp_hour,
 	kwh,
 	multiplier_hourly,
-		sector,
-	 "in.state",
+	sector,
+	'Electric' AS fuel,
 	CAST('Cooking' AS varchar) as end_use,
-	'Electric' AS fuel
+	"in.state"
 FROM unformatted
 ;

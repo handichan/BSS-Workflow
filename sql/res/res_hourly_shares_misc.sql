@@ -1,4 +1,4 @@
-INSERT INTO {mult_res_hourly}
+INSERT INTO {mult_res_hourly}_temp
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses
@@ -17,6 +17,7 @@ ts_not_agg AS (
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
+	AND ts.state='{state}'
 ),
 -- aggregate to hourly by weather file, and shape
 ts_agg AS(
@@ -32,68 +33,19 @@ ts_agg AS(
         "in.weather_file_city",
 		shape_ts
 )
--- normalize the shapes
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	misc as kwh,
-	misc / sum(misc) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
+
+SELECT
+    a."in.weather_file_city",
+    a."in.weather_file_longitude",
+    a.shape_ts,
+    a.timestamp_hour,
+    u.kwh,
     'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Electric' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	misc as kwh,
-	misc / sum(misc) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Computers and Electronics' as end_use,
-	'Electric' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	misc_ng as kwh,
-	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Natural Gas' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	misc_ng as kwh,
-	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Propane' as fuel
-FROM ts_agg
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	misc_ng as kwh,
-	misc_ng / sum(misc_ng) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Distillate/Other' as fuel
-FROM ts_agg
-
-;
+    u.end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Electric', 'Natural Gas', 'Propane', 'Distillate/Other'],
+	ARRAY[a.misc, a.misc, a.misc_ng, a.misc_ng, a.misc_ng],
+	ARRAY['Other', 'Computers and Electronics', 'Other', 'Other', 'Other']
+) AS u(fuel, kwh, end_use);

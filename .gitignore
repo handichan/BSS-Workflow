@@ -9,8 +9,10 @@ R/.Rhistory
 R/.Rhistory
 agg_results
 scout_results
+scout_tsv
 R/generated_csvs
 R/.Rhistory
+diagnostics
 
 # Ignore helper and scout folders
 helper/

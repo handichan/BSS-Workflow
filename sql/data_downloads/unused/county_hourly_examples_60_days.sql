@@ -6,7 +6,7 @@
 
 WITH ns AS (
   SELECT "in.county"
-  FROM "resstock_amy2018_release_2024.2_metadata"
+  FROM "{meta_res}"
   WHERE upgrade = 0
   GROUP BY "in.county"
   HAVING COUNT("in.state") >= 50
@@ -14,7 +14,7 @@ WITH ns AS (
 county_totals as(
 SELECT lch."in.county",lch.turnover,lch."in.state",lch."year", sum(lch.county_hourly_cal_kwh) as county_total_ann_kwh 
 FROM ns
-LEFT JOIN long_county_hourly_{turnover}_{weather} lch ON ns."in.county" = lch."in.county"
+LEFT JOIN long_county_hourly_{turnover}_{disag_id} lch ON ns."in.county" = lch."in.county"
 WHERE turnover!='baseline'
 AND lch.county_hourly_cal_kwh = lch.county_hourly_cal_kwh
 AND "year" IN (2024, 2050)
@@ -84,7 +84,7 @@ hourly_data AS (
         lch.year,
         lch.timestamp_hour,
         sum(lch.county_hourly_cal_kwh) as county_hourly_kwh
-    FROM long_county_hourly_{turnover}_{weather} lch
+    FROM long_county_hourly_{turnover}_{disag_id} lch
     INNER JOIN example_counties ec
         ON lch."in.county" = ec."in.county"
     WHERE lch.year IN (2024, 2050)

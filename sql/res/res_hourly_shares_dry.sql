@@ -1,5 +1,5 @@
 
-INSERT INTO {mult_res_hourly}
+INSERT INTO {mult_res_hourly}_temp
 WITH meta_shapes AS (
 
 	SELECT meta.bldg_id,
@@ -8,7 +8,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "{meta_res}" as meta
-	RIGHT JOIN res_ts_dry2 as chars 
+	INNER JOIN res_ts_dry2 as chars 
 		ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -23,62 +23,35 @@ ts_not_agg AS (
 		ts."out.electricity.clothes_dryer.energy_consumption" as drying_elec,
 		ts."out.natural_gas.clothes_dryer.energy_consumption" + ts."out.propane.clothes_dryer.energy_consumption" as drying_fossil
 	FROM "{ts_res}" as ts
-		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
+		INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry2)
+	AND ts.state='{state}'
 ),
 
-ts_agg AS(
-	SELECT "in.weather_file_city",
-		"in.weather_file_longitude",
-		shape_ts,
-		timestamp_hour,
-		sum(drying_elec) as drying_elec,
-		sum(drying_fossil) as drying_fossil
-
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-	"in.weather_file_longitude",
+ts_agg AS (
+    SELECT
         "in.weather_file_city",
-		shape_ts
-),
-
-ts_totals AS(
-	SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	drying_elec as drying_elec,
-	sum(drying_elec) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as drying_elec_total,
-	drying_fossil as drying_fossil,
-	sum(drying_fossil) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as drying_fossil_total,
-    'res' AS sector,
-    "in.weather_file_longitude"
-FROM ts_agg
+        "in.weather_file_longitude",
+        shape_ts,
+        timestamp_hour,
+        SUM(drying_elec) AS drying_elec,
+		sum(drying_fossil) AS drying_fossil
+    FROM ts_not_agg
+    GROUP BY "in.weather_file_city", "in.weather_file_longitude", shape_ts, timestamp_hour
 )
 
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	drying_elec as kwh,
-	drying_elec / drying_elec_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Electric' as fuel
-FROM ts_totals
-WHERE drying_elec_total > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	drying_fossil as kwh,
-	drying_fossil / drying_fossil_total as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
-	'Other' as end_use,
-	'Natural Gas' as fuel
-FROM ts_totals
-WHERE drying_fossil > 0
-;
+SELECT
+    a."in.weather_file_city",
+    a."in.weather_file_longitude",
+    a.shape_ts,
+    a.timestamp_hour,
+    u.kwh,
+    'res'              AS sector,
+    'Other' AS end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas'],
+	ARRAY[a.drying_elec, a.drying_fossil]
+) AS u(fuel, kwh);

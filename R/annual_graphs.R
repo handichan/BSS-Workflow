@@ -154,15 +154,16 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
     theme(strip.background = element_blank(),
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
-  ggsave(paste0(graph_dir,"/national_annual_sector_scenario", suffix_tag, ".jpeg"),
+  ggsave(paste0(graph_dir,"/national_annual_sector_eu_scenario_elec", suffix_tag, ".jpeg"),
          device="jpeg", width=width_set, height=h_2, units="in")
 
-  # ----- 1b) national, non-Electric -------------------------------------------
-  message(paste0("printing national non-electric ", suffix_tag))
-  df_in %>% filter(fuel!="Electric") %>%
-    group_by(year, sector, end_use, turnover) %>%
+
+  # ----- 1b) national, by fuel -------------------------------------------
+  message(paste0("printing national by fuel ", suffix_tag))
+  df_in %>%
+    group_by(year, sector, fuel, turnover) %>%
     summarize(kwh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
-    ggplot(aes(x=year,y=kwh,fill=end_use)) +
+    ggplot(aes(x=year,y=kwh,fill=fuel)) +
     geom_area() +
     facet_grid(sector ~ turnover,
                labeller = labeller(turnover = to_lab, sector = sec_lab)) +
@@ -173,7 +174,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
     theme(strip.background = element_blank(),
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
-  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil", suffix_tag, ".jpeg"),
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_all_fuels", suffix_tag, ".jpeg"),
          device="jpeg", width=width_set, height=h_2, units="in")
 
 
@@ -210,7 +211,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
       theme(strip.background = element_blank(),
             strip.text.y = element_text(angle=-90, size=10),
             strip.text.x = element_text(size=10))
-    ggsave(paste0(graph_dir,"/national_annual_", s, "_hvac", suffix_tag, ".jpeg"),
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_hvac_elec", suffix_tag, ".jpeg"),
            device="jpeg", width=width_set, height=h, units="in")
   }
 
@@ -232,7 +233,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
       theme(strip.background = element_blank(),
             strip.text.y = element_text(angle=-90, size=10),
             strip.text.x = element_text(size=10))
-    ggsave(paste0(graph_dir,"/national_annual_", s, "_wh", suffix_tag, ".jpeg"),
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_wh_elec", suffix_tag, ".jpeg"),
            device="jpeg", width=width_set, height=h_1, units="in")
   }
 
@@ -256,7 +257,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
       theme(strip.background = element_blank(),
             strip.text.y = element_text(angle=-90, size=10),
             strip.text.x = element_text(size=10))
-    ggsave(paste0(graph_dir,"/national_annual_", s, "_non-mech", suffix_tag, ".jpeg"),
+    ggsave(paste0(graph_dir,"/national_annual_", s, "_non-mech_elec", suffix_tag, ".jpeg"),
            device="jpeg", width=w_nonmech, height=h_1, units="in")
   }
 
@@ -285,7 +286,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
               strip.text.y = element_text(angle=-90, size=10),
               strip.text.x = element_text(size=10))
       ggsave(
-        paste0(graph_dir,"/state_annual_", s, "_", eu_lab[u], suffix_tag, ".jpeg"),
+        paste0(graph_dir,"/state_annual_", s, "_", eu_lab[u], suffix_tag, "_elec.jpeg"),
         device="jpeg", width=width_set, height=state_height, units="in"
       )
     }
@@ -306,11 +307,11 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
   # ----- 1a) national, non-Electric by end use -------------------------------------------
   message(paste0("printing national non-electric enduse ", suffix_tag))
   df_in %>% filter(fuel!="Electric") %>%
-    group_by(year, sector, end_use, fuel, turnover) %>%
+    group_by(year, sector, end_use, turnover) %>%
     summarize(kwh = sum(state_ann_kwh)/1e9, .groups="drop") %>%
     ggplot(aes(x=year,y=kwh,fill=end_use)) +
     geom_area() +
-    facet_grid(sector+fuel ~ turnover,
+    facet_grid(sector ~ turnover,
                labeller = labeller(turnover = to_lab, sector = sec_lab)) +
     scale_y_continuous("TWh", labels = comma_format(),
                        expand = expansion(add=0, mult=c(0,.05))) +
@@ -319,7 +320,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
     theme(strip.background = element_blank(),
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
-  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil_enduse", suffix_tag, ".jpeg"),
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_eu_fossil", suffix_tag, ".jpeg"),
          device="jpeg", width=width_set, height=h_2, units="in")
 
   # ----- 1b) national, non-Electric by fuel -------------------------------------------
@@ -358,7 +359,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
     theme(strip.background = element_blank(),
           strip.text.y = element_text(angle=-90, size=10),
           strip.text.x = element_text(size=10))
-  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil__fuel_enduse", suffix_tag, ".jpeg"),
+  ggsave(paste0(graph_dir,"/national_annual_sector_scenario_fossil_eu_fuel", suffix_tag, ".jpeg"),
          device="jpeg", width=width_set, height=h_2, units="in")
   
   # ----- 3) national by tech type ---------------------------------------------
@@ -403,8 +404,8 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
   for (s in c("com","res")) {
     h<-if_else(s=="res",h_2,h_3)
     with_shapes_agg %>%
-      group_by(fuel) %>% filter(sum(TWh) > 1) %>% ungroup() %>%
       filter(end_use == "Water Heating", sector == s) %>%
+      group_by(year,fuel,turnover) %>% summarize(TWh=sum(TWh), .groups="drop") %>%
       ggplot(aes(x=year, y=TWh, fill=fuel)) +
       geom_area() +
       facet_grid( ~ turnover, labeller = labeller(turnover = to_lab, end_use = eu_lab)) +
@@ -430,7 +431,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
              sector == s) %>%
       ggplot(aes(x=year, y=TWh, fill=paste(description,fuel))) +
       geom_area() +
-      facet_grid(end_use ~ turnover, labeller = labeller(turnover = to_lab, end_use = eu_lab)) +
+      facet_grid( ~ turnover, labeller = labeller(turnover = to_lab)) +
       scale_y_continuous("TWh",
                          labels = comma_format(),
                          expand = expansion(add=0, mult=c(0,.05))) +

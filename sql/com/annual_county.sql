@@ -58,9 +58,9 @@ SELECT
     (scout_meas.state_ann_kwh * ann_disag.multiplier_annual) AS county_ann_kwh,
     scout_meas.scout_run,
     scout_meas.sector,
-    ann_disag."in.state",
     scout_meas."year",
-    scout_meas.end_use
+    scout_meas.end_use,
+    ann_disag."in.state"
 FROM scout_meas
 JOIN (
     SELECT "in.county", multiplier_annual, "in.state", group_ann, end_use, fuel 

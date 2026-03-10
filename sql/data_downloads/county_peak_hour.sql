@@ -11,7 +11,8 @@ WITH ranked AS (
             PARTITION BY "in.county", turnover, "year"
             ORDER BY SUM(county_hourly_cal_kwh) DESC
         ) AS rank_num
-    FROM long_county_hourly_{turnover}_{weather}
+    FROM long_county_hourly_{turnover}_{disag_id}
+    WHERE fuel = 'Electric'
     GROUP BY "in.county", turnover, "year", timestamp_hour
 ),
 max_hours AS (

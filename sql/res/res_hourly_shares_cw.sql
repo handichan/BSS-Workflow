@@ -1,4 +1,4 @@
-INSERT INTO {mult_res_hourly}
+INSERT INTO {mult_res_hourly}_temp
 WITH 
 -- get the timeseries data for the building ids
 -- calculate simplified end uses
@@ -12,33 +12,24 @@ ts_not_agg AS (
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.clothes_washer.energy_consumption" as cw
 	FROM "{ts_res}" as ts
-		RIGHT JOIN "{meta_res}" as meta 
+		INNER JOIN "{meta_res}" as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'
-),
--- aggregate to hourly by weather file, and shape
-ts_agg AS(
-	SELECT "in.weather_file_city",
-		"in.weather_file_longitude",
-		shape_ts,
-		timestamp_hour,
-		sum(cw) as cw
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-		"in.weather_file_longitude",
-        "in.weather_file_city",
-		shape_ts
+	AND ts.state='{state}'
 )
--- normalize the shapes
+
 SELECT "in.weather_file_city",
+	"in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
-	cw as kwh,
-	cw / sum(cw) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as multiplier_hourly,
-    'res' AS sector,
-    "in.weather_file_longitude",
+	sum(cw) as kwh,
+	'res' AS sector,
 	'Other' as end_use,
 	'Electric' as fuel
-FROM ts_agg
+FROM ts_not_agg
+GROUP BY timestamp_hour,
+	"in.weather_file_longitude",
+	"in.weather_file_city",
+	shape_ts
 ;

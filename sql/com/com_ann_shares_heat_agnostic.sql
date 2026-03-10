@@ -7,7 +7,7 @@ WITH meta_filtered AS (
 	    meta."in.state",
 		sum(meta."calc.weighted.natural_gas.heating.energy_consumption..tbtu") as heating_ng,
         sum(meta."calc.weighted.other_fuel.heating.energy_consumption..tbtu") as heating_fo,
-        sum(meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec
+        sum(meta."calc.weighted.electricity.heating.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_recovery.energy_consumption..tbtu") as heating_elec
 	FROM "{meta_com}" as meta
 	WHERE meta.upgrade = 0
 	GROUP BY 

@@ -4,7 +4,6 @@ CREATE EXTERNAL TABLE county_hourly_com_{year}_{turnover}_{disag_id} (
     timestamp_hour timestamp,
     turnover string,
     county_hourly_uncal_kwh double,
-    county_hourly_cal_kwh double,
     scout_run string,
     sector string,
     `in.state` string,

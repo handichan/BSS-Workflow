@@ -1,7 +1,7 @@
 -- put into a temp table because weather files cross states, but it times out to do all the states at the same time
 -- res_hourly_hvac_norm combines the states
 
-INSERT INTO {mult_res_hourly}_hvac_temp
+INSERT INTO {mult_res_hourly}_temp
 WITH meta_shapes AS (
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
@@ -9,7 +9,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "{meta_res}" as meta
-	RIGHT JOIN res_ts_heating2 as chars 
+	INNER JOIN res_ts_heating2 as chars 
 		ON meta."in.hvac_heating_type_and_fuel" = chars."in.hvac_heating_type_and_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -24,7 +24,7 @@ ts_not_agg AS (
 		ts."out.electricity.heating.energy_consumption" + ts."out.electricity.heating_hp_bkup.energy_consumption" as heating_elec,
 		ts."out.fuel_oil.heating.energy_consumption" + ts."out.natural_gas.heating.energy_consumption" + ts."out.propane.heating.energy_consumption" as heating_fossil
 	FROM "{ts_res}" as ts
-	RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
+	INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_heating2)
 	AND ts.state='{state}'
@@ -42,80 +42,19 @@ ts_agg AS(
 	"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
-),
-
-ts_totals AS(
-	SELECT "in.weather_file_city",
-	shape_ts,
-	timestamp_hour,
-	heating_elec as heating_elec,
-	sum(heating_elec) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as heating_elec_total,
-	heating_fossil as heating_fossil,
-	sum(heating_fossil) OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts) as heating_fossil_total,
-    'res' AS sector,
-    "in.weather_file_longitude"
-FROM ts_agg
 )
 
-SELECT "in.weather_file_city",
-    "in.weather_file_longitude",
-	shape_ts,
-	timestamp_hour,
-	heating_elec as kwh,
-    'res' AS sector,
-	'Heating (Equip.)' as end_use,
-	'Electric' as fuel
-FROM ts_totals
-WHERE heating_elec_total > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-    "in.weather_file_longitude",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'res' AS sector,
-	'Heating (Equip.)' as end_use,
-	'Natural Gas' as fuel
-FROM ts_totals
-WHERE heating_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-    "in.weather_file_longitude",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'res' AS sector,
-	'Heating (Equip.)' as end_use,
-	'Propane' as fuel
-FROM ts_totals
-WHERE heating_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-    "in.weather_file_longitude",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'res' AS sector,
-	'Heating (Equip.)' as end_use,
-	'Distillate/Other' as fuel
-FROM ts_totals
-WHERE heating_fossil > 0
-
-UNION ALL
-
-SELECT "in.weather_file_city",
-    "in.weather_file_longitude",
-	shape_ts,
-	timestamp_hour,
-	heating_fossil as kwh,
-    'res' AS sector,
-	'Heating (Equip.)' as end_use,
-	'Biomass' as fuel
-FROM ts_totals
-WHERE heating_fossil > 0;
+SELECT
+    a."in.weather_file_city",
+    a."in.weather_file_longitude",
+    a.shape_ts,
+    a.timestamp_hour,
+    u.kwh,
+    'res'              AS sector,
+    'Heating (Equip.)' AS end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas', 'Propane', 'Distillate/Other', 'Biomass'],
+	ARRAY[a.heating_elec, a.heating_fossil, a.heating_fossil, a.heating_fossil, a.heating_fossil]
+) AS u(fuel, kwh);

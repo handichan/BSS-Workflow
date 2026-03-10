@@ -1,16 +1,17 @@
 INSERT INTO county_hourly_com_{year}_{turnover}_{disag_id}
+
 WITH filtered_annual AS (
-    SELECT "in.county",
-    meas,
-    tech_stage,
-    turnover,
-    county_ann_kwh,
-    scout_run,
-    sector,
-    "in.state",
-    "year",
-    end_use,
-    fuel
+    SELECT 
+        "in.county",
+        meas,
+        tech_stage,
+        turnover,
+        county_ann_kwh,
+        scout_run,
+        "in.state",
+        "year",
+        end_use,
+        fuel
     FROM county_annual_com_{year}_{turnover}_{disag_id}
     WHERE "year" = {year}
       AND scout_run = '{scout_version}'
@@ -20,21 +21,21 @@ WITH filtered_annual AS (
 ),
 
 measure_map_ts_long AS (
-SELECT 
-    meas,
-    Scout_end_use,
-    'original_ann' AS tech_stage,
-    original_ts AS shape_ts
-FROM measure_map2
+    SELECT 
+        meas,
+        Scout_end_use,
+        'original_ann' AS tech_stage,
+        original_ts AS shape_ts
+    FROM measure_map2
 
-UNION ALL
+    UNION ALL
 
-SELECT 
-    meas,
-    Scout_end_use,
-    'measure_ann' AS tech_stage,
-    measure_ts AS shape_ts
-FROM measure_map2
+    SELECT 
+        meas,
+        Scout_end_use,
+        'measure_ann' AS tech_stage,
+        measure_ts AS shape_ts
+    FROM measure_map2
 ),
 
 to_disagg AS (
@@ -44,15 +45,15 @@ to_disagg AS (
         fa."in.county",
         fa.end_use,
         fa.fuel,
-        mmtsl.shape_ts,
+        mm.shape_ts,
         fa.turnover,
         fa.county_ann_kwh,
         fa.scout_run
-    FROM filtered_annual AS fa
-    JOIN measure_map_ts_long AS mmtsl
-      ON fa.meas = mmtsl.meas
-      AND fa.end_use = mmtsl.Scout_end_use
-      AND fa.tech_stage = mmtsl.tech_stage
+    FROM filtered_annual fa
+    JOIN measure_map_ts_long mm
+      ON fa.meas = mm.meas
+     AND fa.end_use = mm.Scout_end_use
+     AND fa.tech_stage = mm.tech_stage
 ),
 
 grouped_disagg AS (
@@ -78,6 +79,29 @@ grouped_disagg AS (
         scout_run
 ),
 
+shape_ts_used AS (
+    SELECT DISTINCT shape_ts
+    FROM grouped_disagg
+),
+
+
+mult_filtered AS (
+    SELECT 
+        h."in.county",
+        h.end_use,
+        h.fuel,
+        h.shape_ts,
+        h.timestamp_hour,
+        h.sector,
+        h.multiplier_hourly
+    FROM {mult_com_hourly} h
+    JOIN shape_ts_used s
+      ON h.shape_ts = s.shape_ts
+    WHERE h.multiplier_hourly >= 0
+      AND h."in.state" = '{state}'
+      AND h.end_use = '{enduse}'
+),
+
 hourly_ungrouped AS (
     SELECT 
         gd."in.state",
@@ -85,83 +109,39 @@ hourly_ungrouped AS (
         gd."in.county",
         gd.end_use,
         gd.fuel,
-        h.timestamp_hour,
-        h.sector,
+        mf.timestamp_hour,
+        mf.sector,
         gd.turnover,
-        gd.county_ann_kwh * h.multiplier_hourly AS county_hourly_kwh,
+        gd.county_ann_kwh * mf.multiplier_hourly AS county_hourly_kwh,
         gd.scout_run
-        FROM grouped_disagg as gd
-    LEFT JOIN (SELECT 
-        "in.county", end_use, fuel, shape_ts, timestamp_hour, sector, multiplier_hourly 
-        FROM {mult_com_hourly}
-        WHERE multiplier_hourly >= 0
-        AND end_use = '{enduse}') AS h
-    ON gd."in.county" = h."in.county"
-    AND gd.end_use = h.end_use
-    AND gd.shape_ts = h.shape_ts
-    AND gd.fuel = h.fuel
-),
-
-hourly_grouped AS (
-    SELECT
-        "in.state",
-        "in.county",
-        "year",
-        end_use,
-        fuel,
-        timestamp_hour,
-        turnover,
-        sector,
-        SUM(county_hourly_kwh) AS county_hourly_uncal_kwh,
-        scout_run
-    FROM hourly_ungrouped
-    GROUP BY
-        "in.state",
-        "in.county",
-        "year",
-        end_use,
-        fuel,
-        timestamp_hour,
-        turnover,
-        scout_run,
-        sector
-),
-
-hourly_calibrated AS (
-    SELECT
-        hg."in.state",
-        hg."in.county",
-        hg."year",
-        month(hg.timestamp_hour) AS "month",
-        hg.end_use,
-        hg.fuel,
-        hg.timestamp_hour,
-        hg.turnover,
-        hg.sector,
-        county_hourly_uncal_kwh,
-        county_hourly_uncal_kwh * COALESCE(cm.calibration_multiplier, 1) AS county_hourly_cal_kwh,
-        hg.scout_run
-    FROM hourly_grouped AS hg
-    LEFT JOIN calibration_multipliers AS cm
-      ON cm."in.state" = hg."in.state"
-     AND cm."month"    = CAST(month(hg.timestamp_hour) AS INTEGER)
-     AND cm.sector     = hg.sector
-     AND hg.fuel = 'Electric'
-    WHERE hg.sector = 'com'
+    FROM grouped_disagg gd
+    LEFT JOIN mult_filtered mf
+      ON gd."in.county" = mf."in.county"
+     AND gd.end_use = mf.end_use
+     AND gd.shape_ts = mf.shape_ts
+     AND gd.fuel = mf.fuel
 )
 
-SELECT 
+SELECT
     "in.county",
     timestamp_hour,
     turnover,
-    county_hourly_uncal_kwh,
-    county_hourly_cal_kwh,
+    SUM(county_hourly_kwh) AS county_hourly_uncal_kwh,
     scout_run,
     sector,
     "in.state",
     "year",
     end_use,
     fuel
-FROM hourly_calibrated
-WHERE timestamp_hour IS NOT NULL
+FROM hourly_ungrouped
+GROUP BY
+    "in.state",
+    "in.county",
+    "year",
+    end_use,
+    fuel,
+    timestamp_hour,
+    turnover,
+    scout_run,
+    sector
 ;
