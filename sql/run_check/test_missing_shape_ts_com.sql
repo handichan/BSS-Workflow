@@ -1,5 +1,5 @@
 -- Flag counties and shape_ts that have energy assigned but the shape isn't defined
--- Parameters: {turnover}, {disag_id}, {mult_com_hourly}
+-- Parameters: {year}, {turnover}, {disag_id}, {mult_com_hourly}
 
 WITH df AS (
     SELECT

@@ -58,12 +58,6 @@ class Config:
         "com_hourly_disaggregation_multipliers_20260304",   # mult_com_hourly
         "res_hourly_disaggregation_multipliers_20260212"    # mult_res_hourly
     ]
-    # MULTIPLIERS_TABLES = [
-    #     "com_annual_disaggregation_multipliers_20260206",   # mult_com_annual
-    #     "res_annual_disaggregation_multipliers_20260206",   # mult_res_annual
-    #     "com_hourly_disaggregation_multipliers_20260206",   # mult_com_hourly
-    #     "res_hourly_disaggregation_multipliers_20260206"    # mult_res_hourly
-    # ]
 
     # names of tables that contain BuildStock data - required to calculate disaggregation multipliers
     BLDSTOCK_TABLES = [
@@ -127,6 +121,7 @@ class Config:
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map2.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
+    EIA_GROSS_PATH = "map_meas/eia_gross_consumption_by_state_sector_year_month.csv"    # file with monthly EIA electricity and gas consumption
     SCOUT_OUT_TSV = "scout_tsv"         # location where transformed Scout files will be saved as TSV
     SCOUT_IN_JSON = "scout_results"     # location of raw JSON files from Scout
 
@@ -533,7 +528,6 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
     dflong["scout_run"] = cfg.SCOUT_RUN_DATE
 
     dflong_before_split = dflong.copy()
-    # dflong_before_split = dflong.copy()
     # --- GAP SPLIT: commercial-electric only, using mirrored gap_weights ---
     if not gap_weights.empty:
         subset_mask = (dflong.get("sector") == "com") & (dflong.get("fuel") == "Electric")
@@ -916,19 +910,19 @@ def county_hourly_examples_60_days(s3_client, athena_client, cfg: Config, turnov
 
     # Step 2: combine with hardcoded counties
     hardcoded = [
-        ('G1200110', 'Hot'),
-        ('G0400130', 'Hot'),
-        ('G3800170', 'Cold'),
-        ('G2700530', 'Cold'),
-        ('G3600810', 'High fossil heat'),
-        ('G1700310', 'High fossil heat'),
-        ('G1200310', 'High electric heat'),
-        ('G4500510', 'High electric heat'),
+        ('G1200110', 'Hot'),                # Boward County, FL
+        ('G0400130', 'Hot'),                # Maricopa County, AZ
+        ('G3800170', 'Cold'),               # Cass County, ND
+        ('G2700530', 'Cold'),               # Hennepin County, MN
+        ('G3600810', 'High fossil heat'),   # Queens, NY
+        ('G1700310', 'High fossil heat'),   # Cook County, IL
+        ('G1200310', 'High electric heat'), # Duval County, FL
+        ('G4500510', 'High electric heat'), # Horry County, SC
     ]
     dynamic = [(row['in.county'], row['example_type']) for _, row in dynamic_results.iterrows()]
     values_clause = ",\n        ".join(f"('{c}', '{t}')" for c, t in hardcoded + dynamic)
 
-    # Step 3: main query hits long_county_hourly exactly once
+    # Step 3: find hourly consumption for example counties
     main_sql = """
     WITH example_counties AS (
         SELECT "in.county", example_type FROM (VALUES
@@ -1057,7 +1051,7 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
             df.to_csv(out, index=False)
             print(f"Saved {out}")
 
-    # find the example days differently
+    # find the example days
     for t in turnovers:
         q = county_hourly_examples_60_days(s3_client, athena_client, cfg, turnover=t)
         df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
@@ -1082,7 +1076,7 @@ def get_csv_for_calibration(s3_client, athena_client, cfg: Config):
 
 def calc_calibration_multipliers(cfg: Config):
     state_monthly = pd.read_csv("diagnostics/state_monthly_for_cal.csv")
-    eia_gross = pd.read_csv("map_meas/eia_gross_consumption_by_state_sector_year_month.csv")
+    eia_gross = pd.read_csv(EIA_GROSS_PATH)
 
     monthly_ratios = (
     state_monthly
@@ -1149,7 +1143,7 @@ def county_partition_multipliers(athena_client, cfg: Config):
             print(f"UNLOAD county={fips} ({'com' if 'com' in fname else 'res'})")
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
-
+# process Scout json from SCOUT_IN_JSON, register to Athena, and save as TSV to SCOUT_OUT_TSV
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
 
     # Ensure measure_map exists in Athena
@@ -1198,6 +1192,7 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
         print(f"Finished adding scout data {scout_file}")
 
+# disaggregate to county, hourly; one table per sector, year, and scenario combination
 def gen_countydata(s3, athena_client, cfg: Config):
     sectors = ["res", "com"]
     # sectors = ["res"]
@@ -1499,7 +1494,8 @@ def _combine_countydata(
 
     return {"hourly": hourly_sql, "annual": annual_sql}
 
-
+# combine the tables for each year and sector combination (output of gen_countydata) into one per scenario
+# apply electricity and gas calibration multipliers
 def combine_countydata(s3_client, athena_client, cfg: Config):
 
     # Ensure the calibration multipliers exist in Athena
@@ -1520,127 +1516,6 @@ def combine_countydata(s3_client, athena_client, cfg: Config):
         for t in turnovers:
             q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
-
-def test_county(s3_client, athena_client, cfg: Config):
-
-    sql_dir = "run_check"
-    years = cfg.YEARS
-    turnovers = cfg.TURNOVERS
-    disag_id = cfg.DISAG_ID
-    years_sql = ", ".join(cfg.YEARS)
-
-    os.makedirs("diagnostics", exist_ok=True)
-
-    # test energy reaggregates to Scout results at end use and fuel level
-    sql_files = ["test_scout_disagg_fuel.sql","test_scout_disagg_enduse.sql"]
-    for sql_file in sql_files:
-        out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
-        dfs = []
-        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-
-        for t in turnovers:
-            q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=disag_id, years=years_sql)
-            df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-            dfs.append(df)
-
-        final = pd.concat(dfs, ignore_index=True).drop_duplicates()
-        if os.path.exists(out_csv):
-            os.remove(out_csv)
-        final.to_csv(out_csv, index=False)
-        print(f"Saved {out_csv}")
-
-        bad_aggregation = final.loc[
-            ((final['per_diff_ann'] > 0.001) | 
-            (final['per_diff_ann'] < -0.001) | 
-            (final['bss_ann_kwh'].notna() & (final['scout_kwh'].isna())) | 
-            (final['bss_ann_kwh'].isna() & (final['scout_kwh'] != 0)) |
-            (final['per_diff_hr'] > 0.001) | 
-            (final['per_diff_hr'] < -0.001) |
-            (final['bss_hr_kwh'].notna() & (final['scout_kwh'].isna())) | 
-            (final['bss_hr_kwh'].isna() & (final['scout_kwh'] != 0)))]
-        n_bad = len(bad_aggregation.index)
-        if n_bad > 0:
-            print(f"FAILED: {n_bad} re-aggregations are off by more than 0.1% in {sql_file}. Check {out_csv} for details.")
-            print(bad_aggregation.head())
-        else:
-            print(f"PASSED: all re-aggregations are within 0.1% of Scout results in {sql_file}.")
-
-
-    # test energy reaggregates to Scout results at the measure level
-    sql_file = "test_scout_disagg_meas.sql"
-    out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
-    dfs = []
-    template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-
-    for t in turnovers:
-        q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=disag_id, years=years_sql)
-        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-        dfs.append(df.sort_values(by=["turnover"], ascending=[True]))
-
-    final = pd.concat(dfs, ignore_index=True).drop_duplicates()
-
-    if os.path.exists(out_csv):
-        os.remove(out_csv)
-    final.to_csv(out_csv, index=False)
-    print(f"Saved {out_csv}")
-
-    bad_aggregation = final.loc[
-        ((final['per_diff_ann'] > 0.001) | 
-        (final['per_diff_ann'] < -0.001) | 
-        (final['bss_ann_kwh'].notna() & (final['scout_kwh'].isna())) | 
-        (final['bss_ann_kwh'].isna() & (final['scout_kwh'] != 0)))]
-    n_bad = len(bad_aggregation.index)
-    if n_bad > 0:
-        print(f"WARNING: {n_bad} re-aggregations are off by more than 0.1% in {sql_file}. Check {out_csv} for details.")
-        print(bad_aggregation.head())
-    else:
-        print(f"PASSED: all re-aggregations are within 0.1% of Scout results in {sql_file}.")
-
-
-def test_multipliers(s3_client, athena_client, cfg: Config):
-    sql_dir = "run_check"
-    os.makedirs("diagnostics", exist_ok=True)
-
-    # annual disaggregation multipliers sum to 1
-    template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
-    q = template.format(mult_com_annual=cfg.MULTIPLIERS_TABLES[0], mult_res_annual=cfg.MULTIPLIERS_TABLES[1])
-    # print(q)
-    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-    out_csv = "./diagnostics/test_multipliers_annual.csv"
-    if os.path.exists(out_csv):
-        os.remove(out_csv)
-    df.to_csv(out_csv, index=False)
-    print(f"Saved {out_csv}")
-
-    bad_group_ann = df.loc[((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] < 0.99) | (df['multiplier_sum'].isna()))]
-    n_missing = len(bad_group_ann.index)
-    if len(bad_group_ann.index) > 0:
-        print(f"WARNING: {n_missing} multipliers in group_ann's do not sum to 1. Check {out_csv} for details.")
-        print(bad_group_ann.head())
-    else:
-        print("PASSED: all group_ann's sum to 1.")
-
-    # hourly disaggregation multipliers sum to 1
-    hourly_test_files = ["test_multipliers_hourly_com.sql",
-                        "test_multipliers_hourly_res.sql"]
-    for sql_file in hourly_test_files:
-        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
-        q = template.format(mult_com_hourly=cfg.MULTIPLIERS_TABLES[2], mult_res_hourly=cfg.MULTIPLIERS_TABLES[3])
-        # print(q)
-        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
-        out_csv = "./diagnostics/" + sql_file.split(".")[0] + ".csv"
-        if os.path.exists(out_csv):
-            os.remove(out_csv)
-        df.to_csv(out_csv, index=False)
-
-        bad_shape_ts = df.loc[((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] < 0.99) | (df['multiplier_sum'].isna()))]
-        n_missing = len(bad_shape_ts.index)
-        if len(bad_shape_ts.index) > 0:
-            print(f"WARNING: {n_missing} shape_ts's do not sum to 1 in {sql_file}. Check {out_csv} for details.")
-            print(bad_shape_ts.head())
-        else:
-            print(f"PASSED: all shape_ts's sum to 1 in {sql_file}.")
 
 
 # ----------------------------
@@ -1969,6 +1844,7 @@ def delete_folder_from_s3(s3_client, bucket_name: str, folder_prefix: str):
 # Diagnostics & checks
 # ----------------------------
 
+# check that all measures in Scout json are in measure_map.tsv
 def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
     meas_files = [cfg.MEAS_MAP_PATH, cfg.ENVELOPE_MAP_PATH]
     for mfile in meas_files:
@@ -2013,14 +1889,10 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
         except Exception as e:
             print(f"Error processing {mfile}: {e}")
 
-
-# ----------------------------
-# Envelope packages check
-# ----------------------------
-
+# check that all packages in Scout json are in envelope_map.tsv
 def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
     """
-    Ensure all envelope package measures present in Scout are defined in envelope_map.tsv.
+    Ensure all envelope package measures present in Scout json are defined in envelope_map.tsv.
 
     Logic:
     - Detect envelope-capable measures in Scout by presence of the metric
@@ -2068,13 +1940,52 @@ def check_missing_packages(scout_df: pd.DataFrame, cfg: Config):
         print(f"Error during envelope packages check: {e}")
 
 
-def test(s3_client, athena_client, cfg: Config):
+# check that all multipliers sum to 1
+def test_multipliers(s3_client, athena_client, cfg: Config):
+    sql_dir = "run_check"
+    os.makedirs("diagnostics", exist_ok=True)
 
-    fp_gap = os.path.join("helper", "gap_complete_modified.csv")
-    s3_create_table_from_tsv(s3_client, athena_client, fp_gap, cfg)
+    # annual disaggregation multipliers sum to 1
+    template = read_sql_file(f"{sql_dir}/test_multipliers_annual.sql", cfg)
+    q = template.format(mult_com_annual=cfg.MULTIPLIERS_TABLES[0], mult_res_annual=cfg.MULTIPLIERS_TABLES[1])
+    # print(q)
+    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+    out_csv = "./diagnostics/test_multipliers_annual.csv"
+    if os.path.exists(out_csv):
+        os.remove(out_csv)
+    df.to_csv(out_csv, index=False)
+    print(f"Saved {out_csv}")
 
+    bad_group_ann = df.loc[((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] < 0.99) | (df['multiplier_sum'].isna()))]
+    n_missing = len(bad_group_ann.index)
+    if len(bad_group_ann.index) > 0:
+        print(f"WARNING: {n_missing} multipliers in group_ann's do not sum to 1. Check {out_csv} for details.")
+        print(bad_group_ann.head())
+    else:
+        print("PASSED: all group_ann's sum to 1.")
 
-# check for missing group_ann and shape_ts
+    # hourly disaggregation multipliers sum to 1
+    hourly_test_files = ["test_multipliers_hourly_com.sql",
+                        "test_multipliers_hourly_res.sql"]
+    for sql_file in hourly_test_files:
+        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+        q = template.format(mult_com_hourly=cfg.MULTIPLIERS_TABLES[2], mult_res_hourly=cfg.MULTIPLIERS_TABLES[3])
+        # print(q)
+        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+        out_csv = "./diagnostics/" + sql_file.split(".")[0] + ".csv"
+        if os.path.exists(out_csv):
+            os.remove(out_csv)
+        df.to_csv(out_csv, index=False)
+
+        bad_shape_ts = df.loc[((df['multiplier_sum'] > 1.01) | (df['multiplier_sum'] < 0.99) | (df['multiplier_sum'].isna()))]
+        n_missing = len(bad_shape_ts.index)
+        if len(bad_shape_ts.index) > 0:
+            print(f"WARNING: {n_missing} shape_ts's do not sum to 1 in {sql_file}. Check {out_csv} for details.")
+            print(bad_shape_ts.head())
+        else:
+            print(f"PASSED: all shape_ts's sum to 1 in {sql_file}.")
+
+# check that all group_ann and shape_ts required for the scenarios are defined
 def test_missing_mults(s3_client, athena_client, cfg: Config, sql_file):
     sql_dir = "run_check"
     years = cfg.YEARS
@@ -2111,6 +2022,82 @@ def test_missing_mults(s3_client, athena_client, cfg: Config, sql_file):
     else:
         print(f"PASSED: all multipliers are present and sum to 1 in {sql_file}.")
 
+# check that county hourly results re-aggregate correctly
+def test_county(s3_client, athena_client, cfg: Config):
+
+    sql_dir = "run_check"
+    years = cfg.YEARS
+    turnovers = cfg.TURNOVERS
+    disag_id = cfg.DISAG_ID
+    years_sql = ", ".join(cfg.YEARS)
+
+    os.makedirs("diagnostics", exist_ok=True)
+
+    # test energy reaggregates to Scout results at end use and fuel level
+    sql_files = ["test_scout_disagg_fuel.sql","test_scout_disagg_enduse.sql"]
+    for sql_file in sql_files:
+        out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
+        dfs = []
+        template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+
+        for t in turnovers:
+            q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=disag_id, years=years_sql)
+            df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+            dfs.append(df)
+
+        final = pd.concat(dfs, ignore_index=True).drop_duplicates()
+        if os.path.exists(out_csv):
+            os.remove(out_csv)
+        final.to_csv(out_csv, index=False)
+        print(f"Saved {out_csv}")
+
+        bad_aggregation = final.loc[
+            ((final['per_diff_ann'] > 0.001) | 
+            (final['per_diff_ann'] < -0.001) | 
+            (final['bss_ann_kwh'].notna() & (final['scout_kwh'].isna())) | 
+            (final['bss_ann_kwh'].isna() & (final['scout_kwh'] != 0)) |
+            (final['per_diff_hr'] > 0.001) | 
+            (final['per_diff_hr'] < -0.001) |
+            (final['bss_hr_kwh'].notna() & (final['scout_kwh'].isna())) | 
+            (final['bss_hr_kwh'].isna() & (final['scout_kwh'] != 0)))]
+        n_bad = len(bad_aggregation.index)
+        if n_bad > 0:
+            print(f"FAILED: {n_bad} re-aggregations are off by more than 0.1% in {sql_file}. Check {out_csv} for details.")
+            print(bad_aggregation.head())
+        else:
+            print(f"PASSED: all re-aggregations are within 0.1% of Scout results in {sql_file}.")
+
+
+    # test energy reaggregates to Scout results at the measure level
+    sql_file = "test_scout_disagg_meas.sql"
+    out_csv = f"./diagnostics/{sql_file.split('.')[0]}.csv"
+    dfs = []
+    template = read_sql_file(f"{sql_dir}/{sql_file}", cfg)
+
+    for t in turnovers:
+        q = template.format(dest_bucket=cfg.BUCKET_NAME, turnover=t, disag_id=disag_id, years=years_sql)
+        df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+        dfs.append(df.sort_values(by=["turnover"], ascending=[True]))
+
+    final = pd.concat(dfs, ignore_index=True).drop_duplicates()
+
+    if os.path.exists(out_csv):
+        os.remove(out_csv)
+    final.to_csv(out_csv, index=False)
+    print(f"Saved {out_csv}")
+
+    bad_aggregation = final.loc[
+        ((final['per_diff_ann'] > 0.001) | 
+        (final['per_diff_ann'] < -0.001) | 
+        (final['bss_ann_kwh'].notna() & (final['scout_kwh'].isna())) | 
+        (final['bss_ann_kwh'].isna() & (final['scout_kwh'] != 0)))]
+    n_bad = len(bad_aggregation.index)
+    if n_bad > 0:
+        print(f"WARNING: {n_bad} re-aggregations are off by more than 0.1% in {sql_file}. Check {out_csv} for details.")
+        print(bad_aggregation.head())
+    else:
+        print(f"PASSED: all re-aggregations are within 0.1% of Scout results in {sql_file}.")
+
 # ----------------------------
 # CLI & main entry
 # ----------------------------
@@ -2121,31 +2108,37 @@ def main(opts):
     if opts.create_json:
         convert_csv_folder_to_json("csv_raw", cfg.JSON_PATH)
 
+    # calculate disaggregation multipliers
     if opts.gen_mults:
         s3, athena = get_boto3_clients()
         s3_create_tables_from_csvdir(s3, athena, cfg)
         gen_multipliers(s3, athena, cfg)
         test_multipliers(s3, athena, cfg)
 
+    # process and upload Scout results
     if opts.gen_scoutdata:
         s3, athena = get_boto3_clients()
         gen_scoutdata(s3, athena, cfg)
         # run_r_script("annual_graphs.R")
 
+    # disaggregate to county hourly; one table per sector, year, scenario combination
     if opts.gen_county:
         s3, athena = get_boto3_clients()
         gen_countydata(s3, athena, cfg)
 
+    # calculate calibration multipliers
     if opts.calibrate:
         s3, athena = get_boto3_clients()
         get_csv_for_calibration(s3, athena, cfg)
         calc_calibration_multipliers(cfg)
 
+    # combine tables from gen_county into one long table per scenario
     if opts.combine_county:
         s3, athena = get_boto3_clients()
         combine_countydata(s3, athena, cfg)
         test_county(s3, athena, cfg)
 
+    # download required csvs, create county and hourly graphs
     if opts.gen_hourlyviz:
         s3, athena = get_boto3_clients()
         get_csvs_for_R(s3, athena, cfg)
