@@ -9,7 +9,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "{meta_res}" as meta
-	INNER JOIN res_ts_heating2 as chars 
+	INNER JOIN res_ts_heating as chars 
 		ON meta."in.hvac_heating_type_and_fuel" = chars."in.hvac_heating_type_and_fuel"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -26,7 +26,7 @@ ts_not_agg AS (
 	FROM "{ts_res}" as ts
 	INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_heating2)
+	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_heating)
 	AND ts.state='{state}'
 ),
 

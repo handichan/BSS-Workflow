@@ -8,7 +8,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "{meta_res}" as meta
-	INNER JOIN res_ts_dry2 as chars 
+	INNER JOIN res_ts_dry as chars 
 		ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -25,7 +25,7 @@ ts_not_agg AS (
 	FROM "{ts_res}" as ts
 		INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry2)
+	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_dry)
 	AND ts.state='{state}'
 ),
 

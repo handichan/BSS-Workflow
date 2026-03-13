@@ -3,7 +3,7 @@ INSERT INTO {mult_com_hourly}_hvac_temp
 WITH
 cooling_upgrades AS (
     SELECT DISTINCT upgrade
-    FROM com_ts_cooling2
+    FROM com_ts_cooling
 ),
 
 meta_filtered AS (
@@ -30,7 +30,7 @@ meta_shapes AS (
         c.upgrade,
         mf.weight
     FROM meta_filtered mf
-    JOIN com_ts_cooling2 c
+    JOIN com_ts_cooling c
       ON mf."in.hvac_cool_type" = c."in.hvac_cool_type"
      AND mf."in.hvac_category" = c."in.hvac_category"
      AND mf.applicability = c.applicability

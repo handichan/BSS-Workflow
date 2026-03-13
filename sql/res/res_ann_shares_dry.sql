@@ -11,9 +11,9 @@ WITH meta_filtered AS (
 		sum(meta."out.natural_gas.clothes_dryer.energy_consumption") as drying_ng,
 		sum(meta."out.propane.clothes_dryer.energy_consumption") as drying_prop
 	FROM "{meta_res}" as meta
-	INNER JOIN res_ann_dry2 as chars ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
+	INNER JOIN res_ann_dry as chars ON meta."in.clothes_dryer" = chars."in.clothes_dryer"
 	AND cast(meta.upgrade as varchar) = chars.upgrade
-	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_dry2)
+	WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM res_ann_dry)
 	GROUP BY 
 		meta."in.county",
 		meta."in.weather_file_city",

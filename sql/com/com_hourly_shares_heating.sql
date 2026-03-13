@@ -3,7 +3,7 @@ INSERT INTO {mult_com_hourly}_hvac_temp
 WITH
 heating_upgrades AS (
     SELECT DISTINCT upgrade
-    FROM com_ts_heating2
+    FROM com_ts_heating
 ),
 
 meta_filtered AS (
@@ -29,7 +29,7 @@ meta_shapes AS (
         h.upgrade,
         mf.weight
     FROM meta_filtered mf
-    JOIN com_ts_heating2 h
+    JOIN com_ts_heating h
       ON mf."in.heating_fuel" = h."in.heating_fuel"
      AND mf."in.hvac_heat_type" = h."in.hvac_heat_type"
      AND mf.applicability = h.applicability

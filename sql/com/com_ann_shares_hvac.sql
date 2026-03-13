@@ -12,10 +12,10 @@ WITH meta_filtered AS (
         sum(meta."calc.weighted.electricity.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.heat_rejection.energy_consumption..tbtu" + meta."calc.weighted.district_cooling.cooling.energy_consumption..tbtu" + meta."calc.weighted.electricity.pumps.energy_consumption..tbtu") as cooling,
         sum(meta."calc.weighted.electricity.fans.energy_consumption..tbtu") as ventilation
     FROM "{meta_com}" as meta
-        INNER JOIN com_ann_hvac2 as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
+        INNER JOIN com_ann_hvac as chars ON meta."in.heating_fuel" = chars."in.heating_fuel"
         AND meta."in.hvac_combined_type" = chars."in.hvac_combined_type"
         AND cast(meta.upgrade as varchar) = chars.upgrade
-    WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac2)
+    WHERE cast(meta.upgrade as varchar) IN (SELECT DISTINCT upgrade FROM com_ann_hvac)
     GROUP BY 
         meta."in.nhgis_county_gisjoin",
         meta."in.state",

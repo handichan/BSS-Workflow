@@ -24,7 +24,6 @@ ts_filtered AS (
       AND upgrade = '0'
 ),
 
--- join only filtered data
 ts_joined AS (
     SELECT
         m."in.county",
@@ -42,7 +41,6 @@ ts_joined AS (
      AND tf.state = m."in.state"
 ),
 
--- aggregate once
 ts_agg AS (
     SELECT 
         "in.county",
@@ -58,7 +56,6 @@ ts_agg AS (
         timestamp_hour
 ),
 
--- compute totals once instead of window function
 county_totals AS (
     SELECT
         "in.county",

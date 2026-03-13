@@ -20,7 +20,7 @@ measure_map_ann AS (
         Scout_end_use,
         'original_ann' AS tech_stage,
         original_ann AS group_ann
-    FROM measure_map2
+    FROM measure_map
 
     UNION ALL
 
@@ -29,7 +29,7 @@ measure_map_ann AS (
         Scout_end_use,
         'measure_ann' AS tech_stage,
         measure_ann AS group_ann
-    FROM measure_map2
+    FROM measure_map
 ),
 
 combos AS (

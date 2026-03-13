@@ -26,7 +26,7 @@ measure_map_ts_long AS (
         Scout_end_use,
         'original_ann' AS tech_stage,
         original_ts AS shape_ts
-    FROM measure_map2
+    FROM measure_map
 
     UNION ALL
 
@@ -35,7 +35,7 @@ measure_map_ts_long AS (
         Scout_end_use,
         'measure_ann' AS tech_stage,
         measure_ts AS shape_ts
-    FROM measure_map2
+    FROM measure_map
 ),
 
 to_disagg AS (

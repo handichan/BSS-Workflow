@@ -7,7 +7,7 @@ WITH meta_shapes AS (
 		chars.shape_ts,
 		chars.upgrade
 	FROM "{meta_res}" as meta
-	RIGHT JOIN res_ts_cook2 as chars 
+	RIGHT JOIN res_ts_cook as chars 
 		ON meta."in.cooking_range" = chars."in.cooking_range"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -24,7 +24,7 @@ ts_not_agg AS (
 	FROM "{ts_res}" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook2)
+	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook)
 	AND ts.state='{state}'
 ),
 
