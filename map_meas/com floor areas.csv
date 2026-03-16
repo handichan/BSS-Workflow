@@ -1,0 +1,3169 @@
+﻿in.census_division_name,Floor area (sf),year,Scout building type,N_bldgs_CDIV
+New England,503167725,2019,Assembly,36909.99432
+Middle Atlantic,1198269531,2019,Assembly,87899.36117
+East North Central,2346238769,2019,Assembly,172108.9318
+West North Central,993321350,2019,Assembly,72865.33609
+South Atlantic,2917774170,2019,Assembly,214034.0541
+East South Central,794483154,2019,Assembly,58279.51048
+West South Central,1497570191,2019,Assembly,109854.6359
+Mountain,928918090,2019,Assembly,68141.01884
+Pacific,1452060913,2019,Assembly,106516.2915
+New England,625865478,2019,Education,19235.05267
+Middle Atlantic,1933779907,2019,Education,59431.87421
+East North Central,2456495606,2019,Education,75496.77051
+West North Central,1419560669,2019,Education,43628.10411
+South Atlantic,2373668701,2019,Education,72951.2077
+East South Central,828595887,2019,Education,25465.67288
+West South Central,1840433715,2019,Education,56563.01663
+Mountain,907289246,2019,Education,27884.19724
+Pacific,1392204589,2019,Education,42787.35533
+New England,84853111,2019,Food Sales ,28284.37033
+Middle Atlantic,54970905,2019,Food Sales ,18323.635
+East North Central,281082977,2019,Food Sales ,93694.32567
+West North Central,122880783,2019,Food Sales ,40960.261
+South Atlantic,85018906,2019,Food Sales ,28339.63533
+East South Central,38258213,2019,Food Sales ,12752.73767
+West South Central,127104736,2019,Food Sales ,42368.24533
+Mountain,96206512,2019,Food Sales ,32068.83733
+Pacific,117587967,2019,Food Sales ,39195.989
+New England,60833923,2019,Food Services ,14117.57707
+Middle Atlantic,77161263,2019,Food Services ,17906.62222
+East North Central,216335403,2019,Food Services ,50204.41842
+West North Central,63355075,2019,Food Services ,14702.65454
+South Atlantic,262370483,2019,Food Services ,60887.66483
+East South Central,108956665,2019,Food Services ,25285.302
+West South Central,194792648,2019,Food Services ,45205.04489
+Mountain,210717560,2019,Food Services ,48900.69958
+Pacific,194403809,2019,Food Services ,45114.808
+New England,91284050,2019,Health Care,3396.844789
+Middle Atlantic,266680481,2019,Health Care,9923.663578
+East North Central,578792359,2019,Health Care,21537.9117
+West North Central,140956924,2019,Health Care,5245.262373
+South Atlantic,388359711,2019,Health Care,14451.56805
+East South Central,115284134,2019,Health Care,4289.931372
+West South Central,235279449,2019,Health Care,8755.174319
+Mountain,179717972,2019,Health Care,6687.631154
+Pacific,334972931,2019,Health Care,12464.9493
+New England,327826660,2019,Lodging,5672.559366
+Middle Atlantic,901420776,2019,Lodging,15597.76397
+East North Central,1088375977,2019,Lodging,18832.74942
+West North Central,598656922,2019,Lodging,10358.87969
+South Atlantic,1328248413,2019,Lodging,22983.38999
+East South Central,332493591,2019,Lodging,5753.313759
+West South Central,781835816,2019,Lodging,13528.52169
+Mountain,708411438,2019,Lodging,12258.02056
+Pacific,917994080,2019,Lodging,15884.54068
+New England,323952148,2019,Office,18741.99244
+Middle Atlantic,2060955566,2019,Office,119234.936
+East North Central,1596502075,2019,Office,92364.35075
+West North Central,713552551,2019,Office,41282.01217
+South Atlantic,2337207520,2019,Office,135217.2719
+East South Central,299412293,2019,Office,17322.25876
+West South Central,1012995972,2019,Office,58606.07182
+Mountain,897641297,2019,Office,51932.31935
+Pacific,1424424438,2019,Office,82408.93668
+New England,241195343,2019,Office,13954.16367
+Middle Atlantic,979304383,2019,Office,56656.87188
+East North Central,1481041382,2019,Office,85684.46469
+West North Central,805950623,2019,Office,46627.62874
+South Atlantic,1178615967,2019,Office,68187.88417
+East South Central,373364837,2019,Office,21600.72405
+West South Central,1044794677,2019,Office,60445.76046
+Mountain,723506347,2019,Office,41857.88108
+Pacific,975886414,2019,Office,56459.12802
+New England,682608765,2019,Mercantile and Service,52391.80432
+Middle Atlantic,2007531982,2019,Mercantile and Service,154082.7311
+East North Central,3083358399,2019,Mercantile and Service,236654.9013
+West North Central,1815172241,2019,Mercantile and Service,139318.6752
+South Atlantic,2980570313,2019,Mercantile and Service,228765.6775
+East South Central,1024025147,2019,Mercantile and Service,78596.3027
+West South Central,2246591064,2019,Mercantile and Service,172431.0695
+Mountain,1598563598,2019,Mercantile and Service,122693.46
+Pacific,1814726684,2019,Mercantile and Service,139284.4777
+New England,477293579,2019,Warehouse,27550.68004
+Middle Atlantic,2012381958,2019,Warehouse,116160.1452
+East North Central,3531360352,2019,Warehouse,203839.6984
+West North Central,1429521729,2019,Warehouse,82515.87179
+South Atlantic,3131210938,2019,Warehouse,180741.9888
+East South Central,1297733154,2019,Warehouse,74908.67776
+West South Central,2147240967,2019,Warehouse,123944.573
+Mountain,1094088135,2019,Warehouse,63153.73487
+Pacific,3018929443,2019,Warehouse,174260.7963
+New England,375404846,2019,Other,27168.76065
+Middle Atlantic,835777894,2019,Other,60486.83121
+East North Central,962155884,2019,Other,69633.04602
+West North Central,493202209,2019,Other,35693.9792
+South Atlantic,1192978271,2019,Other,86338.09991
+East South Central,272947449,2019,Other,19753.72452
+West South Central,646284546,2019,Other,46772.83825
+Mountain,345188507,2019,Other,24981.94689
+Pacific,543806092,2019,Other,39356.27818
+New England,503333160,2020,Assembly,36922.12985
+Middle Atlantic,1197742310,2020,Assembly,87860.68674
+East North Central,2350945557,2020,Assembly,172454.1994
+West North Central,998511170,2020,Assembly,73246.03663
+South Atlantic,2937888672,2020,Assembly,215509.5584
+East South Central,796072448,2020,Assembly,58396.09354
+West South Central,1511863037,2020,Assembly,110903.0912
+Mountain,936297425,2020,Assembly,68682.33181
+Pacific,1461152588,2020,Assembly,107183.2136
+New England,630315064,2020,Education,19371.80413
+Middle Atlantic,1939472290,2020,Education,59606.82121
+East North Central,2473459717,2020,Education,76018.13744
+West North Central,1437431641,2020,Education,44177.34209
+South Atlantic,2401161133,2020,Education,73796.14707
+East South Central,835706909,2020,Education,25684.21965
+West South Central,1874635864,2020,Education,57614.16925
+Mountain,920666565,2020,Education,28295.32941
+Pacific,1409855957,2020,Education,43329.8441
+New England,84879310,2020,Food Sales ,28293.10333
+Middle Atlantic,54934162,2020,Food Sales ,18311.38733
+East North Central,281170105,2020,Food Sales ,93723.36833
+West North Central,123231339,2020,Food Sales ,41077.113
+South Atlantic,85462052,2020,Food Sales ,28487.35067
+East South Central,38360263,2020,Food Sales ,12786.75433
+West South Central,127800324,2020,Food Sales ,42600.108
+Mountain,96405494,2020,Food Sales ,32135.16467
+Pacific,117690506,2020,Food Sales ,39230.16867
+New England,60852707,2020,Food Services ,14121.93622
+Middle Atlantic,77109688,2020,Food Services ,17894.65333
+East North Central,216402450,2020,Food Services ,50219.97785
+West North Central,63535816,2020,Food Services ,14744.59865
+South Atlantic,263738037,2020,Food Services ,61205.02968
+East South Central,109247299,2020,Food Services ,25352.74871
+West South Central,195858657,2020,Food Services ,45452.43095
+Mountain,211153381,2020,Food Services ,49001.83947
+Pacific,194573333,2020,Food Services ,45154.14901
+New England,92128616,2020,Health Care,3428.272619
+Middle Atlantic,270553010,2020,Health Care,10067.76739
+East North Central,586348145,2020,Health Care,21819.07618
+West North Central,143464279,2020,Health Care,5338.565593
+South Atlantic,395686584,2020,Health Care,14724.21426
+East South Central,116234360,2020,Health Care,4325.291002
+West South Central,239210586,2020,Health Care,8901.459045
+Mountain,183797668,2020,Health Care,6839.44403
+Pacific,338602844,2020,Health Care,12600.02494
+New England,332582703,2020,Lodging,5754.855712
+Middle Atlantic,915810791,2020,Lodging,15846.76206
+East North Central,1105143310,2020,Lodging,19122.88352
+West North Central,609544006,2020,Lodging,10547.2647
+South Atlantic,1358335205,2020,Lodging,23503.99778
+East South Central,337403229,2020,Lodging,5838.267841
+West South Central,795810059,2020,Lodging,13770.32546
+Mountain,721954589,2020,Lodging,12492.36491
+Pacific,936555725,2020,Lodging,16205.72271
+New England,324514710,2020,Office,18774.53902
+Middle Atlantic,2065553711,2020,Office,119500.958
+East North Central,1600938232,2020,Office,92621.00106
+West North Central,719397705,2020,Office,41620.17889
+South Atlantic,2362478027,2020,Office,136679.2769
+East South Central,301134766,2020,Office,17421.91105
+West South Central,1026424316,2020,Office,59382.95792
+Mountain,908122986,2020,Office,52538.72908
+Pacific,1436121216,2020,Office,83085.64441
+New England,241753693,2020,Office,13986.46657
+Middle Atlantic,982415466,2020,Office,56836.8611
+East North Central,1486327637,2020,Office,85990.29675
+West North Central,813147644,2020,Office,47044.00663
+South Atlantic,1192089966,2020,Office,68967.41161
+East South Central,375584198,2020,Office,21729.1234
+West South Central,1058922119,2020,Office,61263.09232
+Mountain,732568420,2020,Office,42382.16007
+Pacific,984097229,2020,Office,56934.15815
+New England,687821045,2020,Mercantile and Service,52791.85888
+Middle Atlantic,2016639892,2020,Mercantile and Service,154781.7843
+East North Central,3094094971,2020,Mercantile and Service,237478.958
+West North Central,1830841797,2020,Mercantile and Service,140521.35
+South Atlantic,3013477051,2020,Mercantile and Service,231291.3459
+East South Central,1033383301,2020,Mercantile and Service,79314.5627
+West South Central,2273215332,2020,Mercantile and Service,174474.5438
+Mountain,1609795288,2020,Mercantile and Service,123555.5182
+Pacific,1829010498,2020,Mercantile and Service,140380.7935
+New England,484091217,2020,Warehouse,27943.05815
+Middle Atlantic,2062814942,2020,Warehouse,119071.2739
+East North Central,3595313721,2020,Warehouse,207531.2603
+West North Central,1466167847,2020,Warehouse,84631.18512
+South Atlantic,3226091553,2020,Warehouse,186218.7552
+East South Central,1327187500,2020,Warehouse,76608.86251
+West South Central,2217579834,2020,Warehouse,128004.7232
+Mountain,1120976807,2020,Warehouse,64705.82196
+Pacific,3075216064,2020,Warehouse,177509.8128
+New England,381121307,2020,Other,27582.47177
+Middle Atlantic,845919556,2020,Other,61220.80252
+East North Central,971850830,2020,Other,70334.68764
+West North Central,501431366,2020,Other,36289.5389
+South Atlantic,1208729615,2020,Other,87478.05455
+East South Central,275463990,2020,Other,19935.85136
+West South Central,655492798,2020,Other,47439.25691
+Mountain,348782471,2020,Other,25242.04888
+Pacific,549262817,2020,Other,39751.19172
+New England,503833771,2021,Assembly,36958.8523
+Middle Atlantic,1195245239,2021,Assembly,87677.51347
+East North Central,2352743164,2021,Assembly,172586.0633
+West North Central,1002583252,2021,Assembly,73544.74523
+South Atlantic,2956108398,2021,Assembly,216846.0709
+East South Central,798438843,2021,Assembly,58569.68104
+West South Central,1523724975,2021,Assembly,111773.2267
+Mountain,948235229,2021,Assembly,69558.0324
+Pacific,1465156738,2021,Assembly,107476.939
+New England,636312378,2021,Education,19556.12274
+Middle Atlantic,1947118653,2021,Education,59841.8209
+East North Central,2489151611,2021,Education,76500.40467
+West North Central,1455933350,2021,Education,44745.96483
+South Atlantic,2423854004,2021,Education,74493.579
+East South Central,844080505,2021,Education,25941.56978
+West South Central,1907834106,2021,Education,58634.46827
+Mountain,933540588,2021,Education,28690.99353
+Pacific,1426416870,2021,Education,43838.81934
+New England,84820572,2021,Food Sales ,28273.524
+Middle Atlantic,54845829,2021,Food Sales ,18281.943
+East North Central,280869812,2021,Food Sales ,93623.27067
+West North Central,123322357,2021,Food Sales ,41107.45233
+South Atlantic,85801224,2021,Food Sales ,28600.408
+East South Central,38482776,2021,Food Sales ,12827.592
+West South Central,128370423,2021,Food Sales ,42790.141
+Mountain,96635620,2021,Food Sales ,32211.87333
+Pacific,117660408,2021,Food Sales ,39220.136
+New England,60810592,2021,Food Services ,14112.1627
+Middle Atlantic,76985695,2021,Food Services ,17865.87859
+East North Central,216171340,2021,Food Services ,50166.34473
+West North Central,63582745,2021,Food Services ,14755.48935
+South Atlantic,264784729,2021,Food Services ,61447.93289
+East South Central,109596207,2021,Food Services ,25433.71892
+West South Central,196732345,2021,Food Services ,45655.18555
+Mountain,211657409,2021,Food Services ,49118.808
+Pacific,194523575,2021,Food Services ,45142.60179
+New England,92937942,2021,Health Care,3458.389105
+Middle Atlantic,273357331,2021,Health Care,10172.12126
+East North Central,593536866,2021,Health Care,22086.5815
+West North Central,145508011,2021,Health Care,5414.616561
+South Atlantic,403500549,2021,Health Care,15014.98605
+East South Central,117286629,2021,Health Care,4364.447837
+West South Central,242814316,2021,Health Care,9035.560363
+Mountain,187973968,2021,Health Care,6994.851715
+Pacific,341440155,2021,Health Care,12705.60641
+New England,335599885,2021,Lodging,5807.063619
+Middle Atlantic,926563172,2021,Lodging,16032.81624
+East North Central,1119084107,2021,Lodging,19364.10856
+West North Central,617067078,2021,Lodging,10677.44043
+South Atlantic,1388612793,2021,Lodging,24027.90702
+East South Central,342397796,2021,Lodging,5924.691495
+West South Central,810148682,2021,Lodging,14018.4343
+Mountain,734287842,2021,Lodging,12705.77376
+Pacific,951576355,2021,Lodging,16465.63267
+New England,326360962,2021,Office,18881.35245
+Middle Atlantic,2070197510,2021,Office,119769.6213
+East North Central,1605672363,2021,Office,92894.89043
+West North Central,725598754,2021,Office,41978.93562
+South Atlantic,2389649902,2021,Office,138251.284
+East South Central,303644043,2021,Office,17567.08327
+West South Central,1042027710,2021,Office,60285.6798
+Mountain,922133789,2021,Office,53349.31289
+Pacific,1446522217,2021,Office,83687.38601
+New England,243186706,2021,Office,14069.37239
+Middle Atlantic,985237548,2021,Office,57000.1304
+East North Central,1491786621,2021,Office,86306.1219
+West North Central,820508789,2021,Office,47469.87979
+South Atlantic,1206557251,2021,Office,69804.40481
+East South Central,378734650,2021,Office,21911.39028
+West South Central,1075008544,2021,Office,62193.75958
+Mountain,744281921,2021,Office,43059.8353
+Pacific,991310608,2021,Office,57351.48243
+New England,691856750,2021,Mercantile and Service,53101.60859
+Middle Atlantic,2024875366,2021,Mercantile and Service,155413.876
+East North Central,3100553711,2021,Mercantile and Service,237974.6813
+West North Central,1841136840,2021,Mercantile and Service,141311.5184
+South Atlantic,3047282715,2021,Mercantile and Service,233886.0089
+East South Central,1041944946,2021,Mercantile and Service,79971.68879
+West South Central,2301382324,2021,Mercantile and Service,176636.4257
+Mountain,1623523560,2021,Mercantile and Service,124609.1949
+Pacific,1841493408,2021,Mercantile and Service,141338.8858
+New England,491617675,2021,Warehouse,28377.50572
+Middle Atlantic,2117726562,2021,Warehouse,122240.9215
+East North Central,3665818847,2021,Warehouse,211601.0074
+West North Central,1498473145,2021,Warehouse,86495.93455
+South Atlantic,3326637695,2021,Warehouse,192022.5513
+East South Central,1356316162,2021,Warehouse,78290.24789
+West South Central,2288746826,2021,Warehouse,132112.675
+Mountain,1155653321,2021,Warehouse,66707.44441
+Pacific,3135248047,2021,Warehouse,180975.0217
+New England,385343292,2021,Other,27888.02483
+Middle Atlantic,854532044,2021,Other,61844.10461
+East North Central,982322510,2021,Other,71092.54298
+West North Central,509201263,2021,Other,36851.86108
+South Atlantic,1225670654,2021,Other,88704.10967
+East South Central,278272980,2021,Other,20139.1433
+West South Central,666312439,2021,Other,48222.29485
+Mountain,354535095,2021,Other,25658.37719
+Pacific,554032959,2021,Other,40096.41594
+New England,503263366,2022,Assembly,36917.01009
+Middle Atlantic,1192408935,2022,Assembly,87469.45568
+East North Central,2353498535,2022,Assembly,172641.4737
+West North Central,1004595093,2022,Assembly,73692.32433
+South Atlantic,2969146729,2022,Assembly,217802.501
+East South Central,800058838,2022,Assembly,58688.51618
+West South Central,1530572144,2022,Assembly,112275.5025
+Mountain,954698303,2022,Assembly,70032.13281
+Pacific,1467048706,2022,Assembly,107615.7248
+New England,643991333,2022,Education,19792.1241
+Middle Atlantic,1952515747,2022,Education,60007.69263
+East North Central,2504129394,2022,Education,76960.72475
+West North Central,1476647338,2022,Education,45382.57871
+South Atlantic,2449715821,2022,Education,75288.40381
+East South Central,849990967,2022,Education,26123.21911
+West South Central,1943445068,2022,Education,59728.91868
+Mountain,944535828,2022,Education,29028.91602
+Pacific,1438562622,2022,Education,44212.10112
+New England,84771667,2022,Food Sales ,28257.22233
+Middle Atlantic,54732506,2022,Food Sales ,18244.16867
+East North Central,280421326,2022,Food Sales ,93473.77533
+West North Central,123271653,2022,Food Sales ,41090.551
+South Atlantic,86104607,2022,Food Sales ,28701.53567
+East South Central,38518269,2022,Food Sales ,12839.423
+West South Central,128880035,2022,Food Sales ,42960.01167
+Mountain,96809822,2022,Food Sales ,32269.94067
+Pacific,117619812,2022,Food Sales ,39206.604
+New England,60775532,2022,Food Services ,14104.02641
+Middle Atlantic,76826629,2022,Food Services ,17828.96454
+East North Central,215826172,2022,Food Services ,50086.24245
+West North Central,63556602,2022,Food Services ,14749.42241
+South Atlantic,265720978,2022,Food Services ,61665.20586
+East South Central,109697289,2022,Food Services ,25457.17677
+West South Central,197513352,2022,Food Services ,45836.4319
+Mountain,212038956,2022,Food Services ,49207.35266
+Pacific,194456452,2022,Food Services ,45127.02473
+New England,93762909,2022,Health Care,3489.087621
+Middle Atlantic,275737244,2022,Health Care,10260.68213
+East North Central,599676209,2022,Health Care,22315.03757
+West North Central,147252564,2022,Health Care,5479.534537
+South Atlantic,409952759,2022,Health Care,15255.08447
+East South Central,117963302,2022,Health Care,4389.628064
+West South Central,246489791,2022,Health Care,9172.331443
+Mountain,191005875,2022,Health Care,7107.674464
+Pacific,344046265,2022,Health Care,12802.58449
+New England,337196991,2022,Lodging,5834.699195
+Middle Atlantic,932446472,2022,Lodging,16134.61812
+East North Central,1126183838,2022,Lodging,19486.95898
+West North Central,619926209,2022,Lodging,10726.91349
+South Atlantic,1403817505,2022,Lodging,24291.00225
+East South Central,345400177,2022,Lodging,5976.643293
+West South Central,816749084,2022,Lodging,14132.64457
+Mountain,740991516,2022,Lodging,12821.77101
+Pacific,959436157,2022,Lodging,16601.63502
+New England,327621490,2022,Office,18954.27929
+Middle Atlantic,2071935303,2022,Office,119870.1599
+East North Central,1610085327,2022,Office,93150.19893
+West North Central,729649109,2022,Office,42213.26566
+South Atlantic,2412052978,2022,Office,139547.396
+East South Central,305277619,2022,Office,17661.5925
+West South Central,1054072632,2022,Office,60982.52913
+Mountain,932233337,2022,Office,53933.61416
+Pacific,1455395020,2022,Office,84200.71493
+New England,244219833,2022,Office,14129.14312
+Middle Atlantic,986661011,2022,Office,57082.48371
+East North Central,1496758545,2022,Office,86593.76859
+West North Central,825493469,2022,Office,47758.26446
+South Atlantic,1218483032,2022,Office,70494.36134
+East South Central,380783600,2022,Office,22029.93065
+West South Central,1087730591,2022,Office,62929.78343
+Mountain,752729981,2022,Office,43548.59106
+Pacific,997505615,2022,Office,57709.8896
+New England,694176880,2022,Mercantile and Service,53279.68395
+Middle Atlantic,2030440430,2022,Mercantile and Service,155841.0075
+East North Central,3104118896,2022,Mercantile and Service,238248.3175
+West North Central,1850797730,2022,Mercantile and Service,142053.0141
+South Atlantic,3074170899,2022,Mercantile and Service,235949.7393
+East South Central,1047277954,2022,Mercantile and Service,80381.00951
+West South Central,2323263428,2022,Mercantile and Service,178315.8511
+Mountain,1633533935,2022,Mercantile and Service,125377.5144
+Pacific,1852039306,2022,Mercantile and Service,142148.3079
+New England,500926148,2022,Warehouse,28914.81603
+Middle Atlantic,2178718505,2022,Warehouse,125761.5419
+East North Central,3744482666,2022,Warehouse,216141.6964
+West North Central,1531834595,2022,Warehouse,88421.64794
+South Atlantic,3432094971,2022,Warehouse,198109.8313
+East South Central,1395293213,2022,Warehouse,80540.109
+West South Central,2374406494,2022,Warehouse,137057.1834
+Mountain,1192805175,2022,Warehouse,68851.95019
+Pacific,3193261231,2022,Warehouse,184323.7
+New England,390466919,2022,Other,28258.83143
+Middle Atlantic,865122864,2022,Other,62610.58234
+East North Central,994421509,2022,Other,71968.17049
+West North Central,517683167,2022,Other,37465.71256
+South Atlantic,1237299926,2022,Other,89545.74214
+East South Central,282505768,2022,Other,20445.47819
+West South Central,673108704,2022,Other,48714.15343
+Mountain,360120788,2022,Other,26062.62438
+Pacific,560383606,2022,Other,40556.02431
+New England,501917511,2023,Assembly,36818.28456
+Middle Atlantic,1188760864,2023,Assembly,87201.85052
+East North Central,2351418701,2023,Assembly,172488.907
+West North Central,1006300415,2023,Assembly,73817.41865
+South Atlantic,2980331543,2023,Assembly,218622.9658
+East South Central,801164245,2023,Assembly,58769.60359
+West South Central,1534817017,2023,Assembly,112586.8862
+Mountain,958610840,2023,Assembly,70319.13794
+Pacific,1470848755,2023,Assembly,107894.4783
+New England,651198792,2023,Education,20013.63472
+Middle Atlantic,1959406494,2023,Education,60219.46957
+East North Central,2520340576,2023,Education,77458.95152
+West North Central,1500328125,2023,Education,46110.37278
+South Atlantic,2473471192,2023,Education,76018.49011
+East South Central,856523681,2023,Education,26323.99245
+West South Central,1975295532,2023,Education,60707.79573
+Mountain,954501465,2023,Education,29335.19518
+Pacific,1451246582,2023,Education,44601.92393
+New England,84809105,2023,Food Sales ,28269.70167
+Middle Atlantic,54677299,2023,Food Sales ,18225.76633
+East North Central,280053803,2023,Food Sales ,93351.26767
+West North Central,123271888,2023,Food Sales ,41090.62933
+South Atlantic,86440361,2023,Food Sales ,28813.45367
+East South Central,38578457,2023,Food Sales ,12859.48567
+West South Central,129487473,2023,Food Sales ,43162.491
+Mountain,97047348,2023,Food Sales ,32349.116
+Pacific,117623581,2023,Food Sales ,39207.86033
+New England,60802376,2023,Food Services ,14110.25603
+Middle Atlantic,76749137,2023,Food Services ,17810.98116
+East North Central,215543304,2023,Food Services ,50020.59797
+West North Central,63556725,2023,Food Services ,14749.45095
+South Atlantic,266757110,2023,Food Services ,61905.65844
+East South Central,109868698,2023,Food Services ,25496.95523
+West South Central,198444260,2023,Food Services ,46052.4654
+Mountain,212559204,2023,Food Services ,49328.08532
+Pacific,194462692,2023,Food Services ,45128.47283
+New England,94628968,2023,Health Care,3521.315244
+Middle Atlantic,278013458,2023,Health Care,10345.38417
+East North Central,604470154,2023,Health Care,22493.42895
+West North Central,148772293,2023,Health Care,5536.086405
+South Atlantic,416453278,2023,Health Care,15496.98055
+East South Central,118838348,2023,Health Care,4422.19011
+West South Central,249454239,2023,Health Care,9282.643921
+Mountain,194536193,2023,Health Care,7239.043989
+Pacific,348192048,2023,Health Care,12956.85658
+New England,339534057,2023,Lodging,5875.138694
+Middle Atlantic,937984192,2023,Lodging,16230.44024
+East North Central,1132419067,2023,Lodging,19594.85047
+West North Central,623953675,2023,Lodging,10796.60288
+South Atlantic,1419133179,2023,Lodging,24556.01752
+East South Central,348370239,2023,Lodging,6028.035859
+West South Central,825840942,2023,Lodging,14289.96583
+Mountain,749237610,2023,Lodging,12964.45756
+Pacific,969555359,2023,Lodging,16776.73296
+New England,328979493,2023,Office,19032.84547
+Middle Atlantic,2078420654,2023,Office,120245.3647
+East North Central,1613640015,2023,Office,93355.85256
+West North Central,731299133,2023,Office,42308.72648
+South Atlantic,2434310547,2023,Office,140835.0899
+East South Central,306584198,2023,Office,17737.18358
+West South Central,1064644165,2023,Office,61594.13672
+Mountain,942545960,2023,Office,54530.24272
+Pacific,1463271362,2023,Office,84656.3944
+New England,245327804,2023,Office,14193.2439
+Middle Atlantic,990138428,2023,Office,57283.66689
+East North Central,1500729492,2023,Office,86823.50455
+West North Central,827872132,2023,Office,47895.88011
+South Atlantic,1230348267,2023,Office,71180.81502
+East South Central,382505310,2023,Office,22129.5388
+West South Central,1098806885,2023,Office,63570.59356
+Mountain,761486695,2023,Office,44055.20374
+Pacific,1003413514,2023,Office,58051.68637
+New England,696504944,2023,Mercantile and Service,53458.36825
+Middle Atlantic,2036094116,2023,Mercantile and Service,156274.941
+East North Central,3106389160,2023,Mercantile and Service,238422.5655
+West North Central,1857726074,2023,Mercantile and Service,142584.7805
+South Atlantic,3099145019,2023,Mercantile and Service,237866.5609
+East South Central,1052751954,2023,Mercantile and Service,80801.15169
+West South Central,2344803222,2023,Mercantile and Service,179969.0802
+Mountain,1643739136,2023,Mercantile and Service,126160.7872
+Pacific,1860904541,2023,Mercantile and Service,142828.7352
+New England,518947143,2023,Warehouse,29955.03674
+Middle Atlantic,2257176025,2023,Warehouse,130290.3228
+East North Central,3833576904,2023,Warehouse,221284.4575
+West North Central,1586772461,2023,Warehouse,91592.81058
+South Atlantic,3537902832,2023,Warehouse,204217.3481
+East South Central,1444624390,2023,Warehouse,83387.63835
+West South Central,2468530761,2023,Warehouse,142490.2914
+Mountain,1243035034,2023,Warehouse,71751.3539
+Pacific,3249520264,2023,Warehouse,187571.124
+New England,396539673,2023,Other,28698.32816
+Middle Atlantic,877947082,2023,Other,63538.69532
+East North Central,1003375855,2023,Other,72616.21349
+West North Central,525488648,2023,Other,38030.61002
+South Atlantic,1252223633,2023,Other,90625.79911
+East South Central,286222778,2023,Other,20714.48525
+West South Central,683048218,2023,Other,49433.49491
+Mountain,364131622,2023,Other,26352.89605
+Pacific,566482422,2023,Other,40997.40719
+New England,500909515,2024,Assembly,36744.34276
+Middle Atlantic,1185150757,2024,Assembly,86937.03022
+East North Central,2350202393,2024,Assembly,172399.6844
+West North Central,1008348023,2024,Assembly,73967.62144
+South Atlantic,2993023682,2024,Assembly,219554.0008
+East South Central,801987122,2024,Assembly,58829.96593
+West South Central,1540257446,2024,Assembly,112985.9702
+Mountain,962847840,2024,Assembly,70629.94414
+Pacific,1474741088,2024,Assembly,108180.0014
+New England,657429687,2024,Education,20205.13209
+Middle Atlantic,1966352173,2024,Education,60432.93478
+East North Central,2535209473,2024,Education,77915.92515
+West North Central,1520473754,2024,Education,46729.51899
+South Atlantic,2498720703,2024,Education,76794.4966
+East South Central,862815002,2024,Education,26517.34692
+West South Central,2007088501,2024,Education,61684.90576
+Mountain,964802002,2024,Education,29651.76699
+Pacific,1464334717,2024,Education,45004.16846
+New England,84843163,2024,Food Sales ,28281.05433
+Middle Atlantic,54616333,2024,Food Sales ,18205.44433
+East North Central,279770416,2024,Food Sales ,93256.80533
+West North Central,123318176,2024,Food Sales ,41106.05867
+South Atlantic,86809692,2024,Food Sales ,28936.564
+East South Central,38654393,2024,Food Sales ,12884.79767
+West South Central,130193634,2024,Food Sales ,43397.878
+Mountain,97296394,2024,Food Sales ,32432.13133
+Pacific,117661987,2024,Food Sales ,39220.66233
+New England,60826794,2024,Food Services ,14115.92266
+Middle Atlantic,76663559,2024,Food Services ,17791.12129
+East North Central,215325195,2024,Food Services ,49969.98196
+West North Central,63580589,2024,Food Services ,14754.98901
+South Atlantic,267896881,2024,Food Services ,62170.16226
+East South Central,110084961,2024,Food Services ,25547.14285
+West South Central,199526474,2024,Food Services ,46303.61211
+Mountain,213104675,2024,Food Services ,49454.67141
+Pacific,194526185,2024,Food Services ,45143.20749
+New England,95503853,2024,Health Care,3553.871299
+Middle Atlantic,280463501,2024,Health Care,10436.55471
+East North Central,612076355,2024,Health Care,22776.46946
+West North Central,150445465,2024,Health Care,5598.348165
+South Atlantic,422908387,2024,Health Care,15737.18684
+East South Central,119747368,2024,Health Care,4456.01639
+West South Central,252869232,2024,Health Care,9409.721994
+Mountain,197455536,2024,Health Care,7347.678028
+Pacific,351928650,2024,Health Care,13095.90231
+New England,341757721,2024,Lodging,5913.615937
+Middle Atlantic,945324402,2024,Lodging,16357.4518
+East North Central,1142914673,2024,Lodging,19776.46154
+West North Central,629751038,2024,Lodging,10896.91774
+South Atlantic,1435527465,2024,Lodging,24839.69658
+East South Central,351430481,2024,Lodging,6080.988857
+West South Central,834985657,2024,Lodging,14448.20171
+Mountain,756543762,2024,Lodging,13090.8798
+Pacific,979899780,2024,Lodging,16955.72799
+New England,330627533,2024,Office,19128.1915
+Middle Atlantic,2084244873,2024,Office,120582.3203
+East North Central,1616795166,2024,Office,93538.3913
+West North Central,734130127,2024,Office,42472.51138
+South Atlantic,2459585938,2024,Office,142297.3774
+East South Central,307965851,2024,Office,17817.11801
+West South Central,1076310669,2024,Office,62269.09298
+Mountain,952591980,2024,Office,55111.44717
+Pacific,1472122803,2024,Office,85168.48744
+New England,246636734,2024,Office,14268.971
+Middle Atlantic,993370911,2024,Office,57470.67961
+East North Central,1504891235,2024,Office,87064.27887
+West North Central,831546753,2024,Office,48108.47237
+South Atlantic,1243607544,2024,Office,71947.91988
+East South Central,384321625,2024,Office,22234.62025
+West South Central,1111078613,2024,Office,64280.56457
+Mountain,769857727,2024,Office,44539.5031
+Pacific,1009844787,2024,Office,58423.76253
+New England,699287110,2024,Mercantile and Service,53671.90594
+Middle Atlantic,2041894409,2024,Mercantile and Service,156720.127
+East North Central,3110583984,2024,Mercantile and Service,238744.528
+West North Central,1866733032,2024,Mercantile and Service,143276.0854
+South Atlantic,3126681641,2024,Mercantile and Service,239980.0605
+East South Central,1059062622,2024,Mercantile and Service,81285.51009
+West South Central,2369859863,2024,Mercantile and Service,181892.2354
+Mountain,1653736206,2024,Mercantile and Service,126928.0855
+Pacific,1869949341,2024,Mercantile and Service,143522.9446
+New England,540024658,2024,Warehouse,31171.68808
+Middle Atlantic,2345963379,2024,Warehouse,135415.3697
+East North Central,3937336914,2024,Warehouse,227273.7667
+West North Central,1643377441,2024,Warehouse,94860.20357
+South Atlantic,3660094239,2024,Warehouse,211270.5675
+East South Central,1496172974,2024,Warehouse,86363.16244
+West South Central,2577149903,2024,Warehouse,148760.0829
+Mountain,1292013306,2024,Warehouse,74578.51262
+Pacific,3318903809,2024,Warehouse,191576.1304
+New England,403238617,2024,Other,29183.14344
+Middle Atlantic,889678345,2024,Other,64387.70907
+East North Central,1011650085,2024,Other,73215.03521
+West North Central,532174255,2024,Other,38514.46008
+South Atlantic,1266302612,2024,Other,91644.72152
+East South Central,288374969,2024,Other,20870.2434
+West South Central,689786988,2024,Other,49921.19248
+Mountain,368445313,2024,Other,26665.08604
+Pacific,572927796,2024,Other,41463.87113
+New England,506236511,2025,Assembly,37135.10589
+Middle Atlantic,1198222412,2025,Assembly,87895.90474
+East North Central,2391263428,2025,Assembly,175411.7269
+West North Central,1026413941,2025,Assembly,75292.85138
+South Atlantic,3045834961,2025,Assembly,223427.9854
+East South Central,816042419,2025,Assembly,59860.99576
+West South Central,1560347656,2025,Assembly,114459.6926
+Mountain,980867310,2025,Assembly,71951.76687
+Pacific,1499326416,2025,Assembly,109983.4643
+New England,664051087,2025,Education,20408.63106
+Middle Atlantic,1998314087,2025,Education,61415.23708
+East North Central,2562437011,2025,Education,78752.72338
+West North Central,1538369385,2025,Education,47279.51482
+South Atlantic,2540969238,2025,Education,78092.94303
+East South Central,877173767,2025,Education,26958.64239
+West South Central,2024929931,2025,Education,62233.2358
+Mountain,980185852,2025,Education,30124.56694
+Pacific,1482969971,2025,Education,45576.89551
+New England,86230637,2025,Food Sales ,28743.54567
+Middle Atlantic,55607124,2025,Food Sales ,18535.708
+East North Central,283528564,2025,Food Sales ,94509.52133
+West North Central,125880516,2025,Food Sales ,41960.172
+South Atlantic,88393273,2025,Food Sales ,29464.42433
+East South Central,39250244,2025,Food Sales ,13083.41467
+West South Central,132156082,2025,Food Sales ,44052.02733
+Mountain,99370255,2025,Food Sales ,33123.41833
+Pacific,120585563,2025,Food Sales ,40195.18767
+New England,61821517,2025,Food Services ,14346.76555
+Middle Atlantic,78054306,2025,Food Services ,18113.86848
+East North Central,218217651,2025,Food Services ,50641.22703
+West North Central,64901688,2025,Food Services ,15061.57316
+South Atlantic,272783844,2025,Food Services ,63304.26759
+East South Central,111781906,2025,Food Services ,25940.94865
+West South Central,202533996,2025,Food Services ,47001.56025
+Mountain,217646972,2025,Food Services ,50508.79097
+Pacific,199359634,2025,Food Services ,46264.89397
+New England,96542709,2025,Health Care,3592.529012
+Middle Atlantic,286619537,2025,Health Care,10665.63196
+East North Central,622663574,2025,Health Care,23170.43905
+West North Central,152871536,2025,Health Care,5688.62666
+South Atlantic,433827423,2025,Health Care,16143.50394
+East South Central,122017319,2025,Health Care,4540.485377
+West South Central,255342575,2025,Health Care,9501.759566
+Mountain,202175812,2025,Health Care,7523.328045
+Pacific,357647827,2025,Health Care,13308.72324
+New England,347653626,2025,Lodging,6015.635922
+Middle Atlantic,970870301,2025,Lodging,16799.4861
+East North Central,1176076904,2025,Lodging,20350.28529
+West North Central,641246154,2025,Lodging,11095.82386
+South Atlantic,1472284302,2025,Lodging,25475.71972
+East South Central,361371490,2025,Lodging,6253.003432
+West South Central,850171204,2025,Lodging,14710.96532
+Mountain,770320984,2025,Lodging,13329.27442
+Pacific,994065003,2025,Lodging,17200.83639
+New England,333692109,2025,Office,19305.4901
+Middle Atlantic,2111657959,2025,Office,122168.2824
+East North Central,1635408569,2025,Office,94615.25484
+West North Central,745911316,2025,Office,43154.10265
+South Atlantic,2493757080,2025,Office,144274.3215
+East South Central,311220246,2025,Office,18005.39843
+West South Central,1086353027,2025,Office,62850.08557
+Mountain,962571350,2025,Office,55688.79564
+Pacific,1490218994,2025,Office,86215.4281
+New England,248953354,2025,Office,14402.9972
+Middle Atlantic,1007108460,2025,Office,58265.45452
+East North Central,1522886231,2025,Office,88105.36497
+West North Central,844896240,2025,Office,48880.79626
+South Atlantic,1262026245,2025,Office,73013.5191
+East South Central,388631012,2025,Office,22483.93639
+West South Central,1121484131,2025,Office,64882.56749
+Mountain,778718261,2025,Office,45052.12221
+Pacific,1022565857,2025,Office,59159.72986
+New England,708825501,2025,Mercantile and Service,54403.99955
+Middle Atlantic,2076027588,2025,Mercantile and Service,159339.9275
+East North Central,3152447998,2025,Mercantile and Service,241957.6881
+West North Central,1900410523,2025,Mercantile and Service,145860.9109
+South Atlantic,3179071045,2025,Mercantile and Service,244001.0686
+East South Central,1076169190,2025,Mercantile and Service,82598.47882
+West South Central,2396916016,2025,Mercantile and Service,183968.8579
+Mountain,1687312622,2025,Mercantile and Service,129505.1532
+Pacific,1909987548,2025,Mercantile and Service,146595.9697
+New England,531894775,2025,Warehouse,30702.40918
+Middle Atlantic,2313275146,2025,Warehouse,133528.5162
+East North Central,3936917969,2025,Warehouse,227249.5841
+West North Central,1620373291,2025,Warehouse,93532.34163
+South Atlantic,3647908203,2025,Warehouse,210567.1565
+East South Central,1483794434,2025,Warehouse,85648.63953
+West South Central,2537570801,2025,Warehouse,146475.4698
+Mountain,1279797730,2025,Warehouse,73873.39644
+Pacific,3336735595,2025,Warehouse,192605.4295
+New England,404997833,2025,Other,29310.46124
+Middle Atlantic,895327759,2025,Other,64796.56787
+East North Central,1023357605,2025,Other,74062.33063
+West North Central,536650696,2025,Other,38838.42861
+South Atlantic,1298499268,2025,Other,93974.85458
+East South Central,295381745,2025,Other,21377.33707
+West South Central,699373413,2025,Other,50614.98023
+Mountain,376020417,2025,Other,27213.31069
+Pacific,583013733,2025,Other,42193.80952
+New England,508573730,2026,Assembly,37306.55317
+Middle Atlantic,1203264892,2026,Assembly,88265.79712
+East North Central,2410958008,2026,Assembly,176856.4277
+West North Central,1036703858,2026,Assembly,76047.67081
+South Atlantic,3080392578,2026,Assembly,225962.9681
+East South Central,823695434,2026,Assembly,60422.38459
+West South Central,1574342529,2026,Assembly,115486.29
+Mountain,992679749,2026,Assembly,72818.27129
+Pacific,1514410279,2026,Assembly,111089.9448
+New England,671792481,2026,Education,20646.55139
+Middle Atlantic,2018999756,2026,Education,62050.98062
+East North Central,2587998047,2026,Education,79538.30414
+West North Central,1561580078,2026,Education,47992.86125
+South Atlantic,2578415040,2026,Education,79243.78455
+East South Central,888430420,2026,Education,27304.59903
+West South Central,2056506103,2026,Education,63203.68289
+Mountain,994652832,2026,Education,30569.18824
+Pacific,1501629151,2026,Education,46150.3579
+New England,86958969,2026,Food Sales ,28986.323
+Middle Atlantic,56070809,2026,Food Sales ,18690.26967
+East North Central,285344269,2026,Food Sales ,95114.75633
+West North Central,127155090,2026,Food Sales ,42385.03
+South Atlantic,89416885,2026,Food Sales ,29805.62833
+East South Central,39604245,2026,Food Sales ,13201.415
+West South Central,133612838,2026,Food Sales ,44537.61267
+Mountain,100534737,2026,Food Sales ,33511.579
+Pacific,121988266,2026,Food Sales ,40662.75533
+New England,62343685,2026,Food Services ,14467.94378
+Middle Atlantic,78705170,2026,Food Services ,18264.91287
+East North Central,219615097,2026,Food Services ,50965.52884
+West North Central,65558838,2026,Food Services ,15214.07633
+South Atlantic,275942749,2026,Food Services ,64037.34681
+East South Central,112790070,2026,Food Services ,26174.91076
+West South Central,204766540,2026,Food Services ,47519.66118
+Mountain,220197494,2026,Food Services ,51100.68426
+Pacific,201678680,2026,Food Services ,46803.0692
+New England,97716194,2026,Health Care,3636.196514
+Middle Atlantic,291066651,2026,Health Care,10831.11712
+East North Central,632305542,2026,Health Care,23529.23414
+West North Central,155165863,2026,Health Care,5774.002722
+South Atlantic,443196868,2026,Health Care,16492.15796
+East South Central,123741814,2026,Health Care,4604.656959
+West South Central,258870117,2026,Health Care,9633.025791
+Mountain,206398728,2026,Health Care,7680.470396
+Pacific,363279358,2026,Health Care,13518.2827
+New England,352119079,2026,Lodging,6092.904035
+Middle Atlantic,987054016,2026,Lodging,17079.52155
+East North Central,1197309326,2026,Lodging,20717.6812
+West North Central,650396484,2026,Lodging,11254.1569
+South Atlantic,1499783569,2026,Lodging,25951.55419
+East South Central,367895507,2026,Lodging,6365.891974
+West South Central,863640319,2026,Lodging,14944.02859
+Mountain,782001404,2026,Lodging,13531.38695
+Pacific,1008187927,2026,Lodging,17445.21287
+New England,336605255,2026,Office,19474.02783
+Middle Atlantic,2129612549,2026,Office,123207.0309
+East North Central,1647544434,2026,Office,95317.36561
+West North Central,753578735,2026,Office,43597.69504
+South Atlantic,2527913574,2026,Office,146250.4181
+East South Central,314023437,2026,Office,18167.57481
+West South Central,1099722168,2026,Office,63623.54653
+Mountain,974871154,2026,Office,56400.39096
+Pacific,1505860352,2026,Office,87120.34635
+New England,251192353,2026,Office,14532.53269
+Middle Atlantic,1016214905,2026,Office,58792.30061
+East North Central,1535132202,2026,Office,88813.84583
+West North Central,853888549,2026,Office,49401.03911
+South Atlantic,1280079223,2026,Office,74057.9597
+East South Central,392284790,2026,Office,22695.3228
+West South Central,1135416015,2026,Office,65688.5855
+Mountain,789154602,2026,Office,45655.90837
+Pacific,1033711792,2026,Office,59804.56902
+New England,715599610,2026,Mercantile and Service,54923.92811
+Middle Atlantic,2097083984,2026,Mercantile and Service,160956.0547
+East North Central,3177076904,2026,Mercantile and Service,243848.0137
+West North Central,1922696411,2026,Mercantile and Service,147571.4044
+South Atlantic,3222821533,2026,Mercantile and Service,247359.0199
+East South Central,1088743164,2026,Mercantile and Service,83563.56045
+West South Central,2427591308,2026,Mercantile and Service,186323.2576
+Mountain,1709957519,2026,Mercantile and Service,131243.2016
+Pacific,1934752685,2026,Mercantile and Service,148496.7514
+New England,541799194,2026,Warehouse,31274.11911
+Middle Atlantic,2356982666,2026,Warehouse,136051.4328
+East North Central,4006511963,2026,Warehouse,231266.7382
+West North Central,1652940064,2026,Warehouse,95412.18411
+South Atlantic,3724831787,2026,Warehouse,215007.3944
+East South Central,1514718750,2026,Warehouse,87433.67494
+West South Central,2590720459,2026,Warehouse,149543.4122
+Mountain,1309995850,2026,Warehouse,75616.51384
+Pacific,3392181885,2026,Warehouse,195805.9397
+New England,410724213,2026,Other,29724.89022
+Middle Atlantic,906568604,2026,Other,65610.08914
+East North Central,1035297607,2026,Other,74926.45122
+West North Central,543506409,2026,Other,39334.58956
+South Atlantic,1322954102,2026,Other,95744.69729
+East South Central,299933380,2026,Other,21706.74752
+West South Central,710222900,2026,Other,51400.17818
+Mountain,382291931,2026,Other,27667.19205
+Pacific,592274720,2026,Other,42864.04471
+New England,511620758,2027,Assembly,37530.06867
+Middle Atlantic,1209974488,2027,Assembly,88757.98122
+East North Central,2434237060,2027,Assembly,178564.0684
+West North Central,1048581177,2027,Assembly,76918.93452
+South Atlantic,3119767578,2027,Assembly,228851.331
+East South Central,832596374,2027,Assembly,61075.31527
+West South Central,1590706543,2027,Assembly,116686.6763
+Mountain,1006061707,2027,Assembly,73799.90816
+Pacific,1531814209,2027,Assembly,112366.6145
+New England,680589722,2027,Education,20916.92162
+Middle Atlantic,2042792968,2027,Education,62782.2299
+East North Central,2617518799,2027,Education,80445.58092
+West North Central,1587376709,2027,Education,48785.68267
+South Atlantic,2620108399,2027,Education,80525.16846
+East South Central,901109131,2027,Education,27694.26051
+West South Central,2091513672,2027,Education,64279.58891
+Mountain,1010759033,2027,Education,31064.18858
+Pacific,1522682861,2027,Education,46797.41263
+New England,87817032,2027,Food Sales ,29272.344
+Middle Atlantic,56617988,2027,Food Sales ,18872.66267
+East North Central,287571075,2027,Food Sales ,95857.025
+West North Central,128624680,2027,Food Sales ,42874.89333
+South Atlantic,90580864,2027,Food Sales ,30193.62133
+East South Central,40017891,2027,Food Sales ,13339.297
+West South Central,135277496,2027,Food Sales ,45092.49867
+Mountain,101857376,2027,Food Sales ,33952.45867
+Pacific,123582618,2027,Food Sales ,41194.206
+New England,62958859,2027,Food Services ,14610.70568
+Middle Atlantic,79473229,2027,Food Services ,18443.15441
+East North Central,221328949,2027,Food Services ,51363.25821
+West North Central,66316528,2027,Food Services ,15389.91156
+South Atlantic,279534820,2027,Food Services ,64870.94979
+East South Central,113968110,2027,Food Services ,26448.29557
+West South Central,207317688,2027,Food Services ,48111.69975
+Mountain,223094421,2027,Food Services ,51772.9669
+Pacific,204314575,2027,Food Services ,47414.77479
+New England,99044449,2027,Health Care,3685.623288
+Middle Atlantic,295998810,2027,Health Care,11014.65169
+East North Central,643000794,2027,Health Care,23927.22383
+West North Central,157716827,2027,Health Care,5868.928711
+South Atlantic,453370209,2027,Health Care,16870.7264
+East South Central,125668351,2027,Health Care,4676.346889
+West South Central,262818207,2027,Health Care,9779.941369
+Mountain,210992508,2027,Health Care,7851.413268
+Pacific,369518372,2027,Health Care,13750.44771
+New England,357148194,2027,Lodging,6179.925491
+Middle Atlantic,1004910095,2027,Lodging,17388.49479
+East North Central,1220608887,2027,Lodging,21120.84592
+West North Central,660610657,2027,Lodging,11430.89817
+South Atlantic,1529894043,2027,Lodging,26472.57176
+East South Central,375053833,2027,Lodging,6489.756303
+West South Central,878554626,2027,Lodging,15202.09879
+Mountain,794971070,2027,Lodging,13755.80799
+Pacific,1023957947,2027,Lodging,17718.08993
+New England,340022675,2027,Office,19671.73993
+Middle Atlantic,2150739502,2027,Office,124429.3138
+East North Central,1662088379,2027,Office,96158.79391
+West North Central,762403565,2027,Office,44108.24852
+South Atlantic,2566159180,2027,Office,148463.0871
+East South Central,317298920,2027,Office,18357.07526
+West South Central,1114837158,2027,Office,64498.01219
+Mountain,988725708,2027,Office,57201.9351
+Pacific,1523822144,2027,Office,88159.51147
+New England,253809143,2027,Office,14683.92498
+Middle Atlantic,1026845581,2027,Office,59407.32987
+East North Central,1549639160,2027,Office,89653.13428
+West North Central,864198791,2027,Office,49997.52991
+South Atlantic,1300216553,2027,Office,75222.98883
+East South Central,396531707,2027,Office,22941.02478
+West South Central,1151153199,2027,Office,66599.04769
+Mountain,800858337,2027,Office,46333.0186
+Pacific,1046459107,2027,Office,60542.05473
+New England,723458679,2027,Mercantile and Service,55527.12987
+Middle Atlantic,2121339355,2027,Mercantile and Service,162817.7106
+East North Central,3206378174,2027,Mercantile and Service,246096.954
+West North Central,1947994263,2027,Mercantile and Service,149513.0732
+South Atlantic,3271764405,2027,Mercantile and Service,251115.4988
+East South Central,1103008789,2027,Mercantile and Service,84658.48023
+West South Central,2462130371,2027,Mercantile and Service,188974.2107
+Mountain,1735351196,2027,Mercantile and Service,133192.2251
+Pacific,1962611938,2027,Mercantile and Service,150635.0136
+New England,552647461,2027,Warehouse,31900.31051
+Middle Atlantic,2404811768,2027,Warehouse,138812.2583
+East North Central,4082994141,2027,Warehouse,235681.497
+West North Central,1688445312,2027,Warehouse,97461.64333
+South Atlantic,3808466065,2027,Warehouse,219834.9918
+East South Central,1548363159,2027,Warehouse,89375.72148
+West South Central,2648528809,2027,Warehouse,152880.267
+Mountain,1342632813,2027,Warehouse,77500.40787
+Pacific,3453372559,2027,Warehouse,199338.0314
+New England,417121216,2027,Other,30187.85346
+Middle Atlantic,919254334,2027,Other,66528.17948
+East North Central,1048865113,2027,Other,75908.35736
+West North Central,551231262,2027,Other,39893.65182
+South Atlantic,1349720337,2027,Other,97681.82048
+East South Central,304984070,2027,Other,22072.27554
+West South Central,722255921,2027,Other,52271.03073
+Mountain,389211426,2027,Other,28167.96902
+Pacific,602528076,2027,Other,43606.09953
+New England,514977661,2028,Assembly,37776.31513
+Middle Atlantic,1217402710,2028,Assembly,89302.8803
+East North Central,2459239014,2028,Assembly,180398.093
+West North Central,1061252930,2028,Assembly,77848.47413
+South Atlantic,3161620362,2028,Assembly,231921.4525
+East South Central,842113160,2028,Assembly,61773.42149
+West South Central,1608229248,2028,Assembly,117972.0588
+Mountain,1020262024,2028,Assembly,74841.57597
+Pacific,1550380371,2028,Assembly,113728.5399
+New England,689933289,2028,Education,21204.08238
+Middle Atlantic,2068152588,2028,Education,63561.62043
+East North Central,2649019043,2028,Education,81413.69448
+West North Central,1614596069,2028,Education,49622.22956
+South Atlantic,2664125000,2028,Education,81877.95379
+East South Central,914540222,2028,Education,28107.04529
+West South Central,2128424072,2028,Education,65413.97563
+Mountain,1027762085,2028,Education,31586.75231
+Pacific,1544997437,2028,Education,47483.21823
+New England,88737770,2028,Food Sales ,29579.25667
+Middle Atlantic,57205410,2028,Food Sales ,19068.47
+East North Central,289986633,2028,Food Sales ,96662.211
+West North Central,130192077,2028,Food Sales ,43397.359
+South Atlantic,91817352,2028,Food Sales ,30605.784
+East South Central,40460735,2028,Food Sales ,13486.91167
+West South Central,137048370,2028,Food Sales ,45682.79
+Mountain,103261956,2028,Food Sales ,34420.652
+Pacific,125276085,2028,Food Sales ,41758.695
+New England,63618962,2028,Food Services ,14763.89414
+Middle Atlantic,80297776,2028,Food Services ,18634.50498
+East North Central,223188079,2028,Food Services ,51794.70188
+West North Central,67124649,2028,Food Services ,15577.45019
+South Atlantic,283350647,2028,Food Services ,65756.47926
+East South Central,115229301,2028,Food Services ,26740.97703
+West South Central,210031631,2028,Food Services ,48741.51774
+Mountain,226170822,2028,Food Services ,52486.89962
+Pacific,207114318,2028,Food Services ,48064.50418
+New England,100453568,2028,Health Care,3738.059157
+Middle Atlantic,301199676,2028,Health Care,11208.18533
+East North Central,654279236,2028,Health Care,24346.91508
+West North Central,160408844,2028,Health Care,5969.103538
+South Atlantic,464028382,2028,Health Care,17267.33631
+East South Central,127704262,2028,Health Care,4752.106824
+West South Central,266992829,2028,Health Care,9935.286612
+Mountain,215808013,2028,Health Care,8030.606928
+Pacific,376095123,2028,Health Care,13995.18052
+New England,362475647,2028,Lodging,6272.109249
+Middle Atlantic,1023709351,2028,Lodging,17713.78834
+East North Central,1245097412,2028,Lodging,21544.58391
+West North Central,671402282,2028,Lodging,11617.63141
+South Atlantic,1561519409,2028,Lodging,27019.80232
+East South Central,382576508,2028,Lodging,6619.925156
+West South Central,894273315,2028,Lodging,15474.08764
+Mountain,808647400,2028,Lodging,13992.45681
+Pacific,1040620727,2028,Lodging,18006.41489
+New England,343685180,2028,Office,19883.63123
+Middle Atlantic,2173397461,2028,Office,125740.1719
+East North Central,1677762939,2028,Office,97065.63305
+West North Central,771810242,2028,Office,44652.4643
+South Atlantic,2606596924,2028,Office,150802.5804
+East South Central,320805267,2028,Office,18559.93216
+West South Central,1130866822,2028,Office,65425.39558
+Mountain,1003399597,2028,Office,58050.88122
+Pacific,1542955322,2028,Office,89266.44618
+New England,256610504,2028,Office,14845.99548
+Middle Atlantic,1038219116,2028,Office,60065.33664
+East North Central,1565220337,2028,Office,90554.57081
+West North Central,875175965,2028,Office,50632.60553
+South Atlantic,1321480835,2028,Office,76453.21686
+East South Central,401070739,2028,Office,23203.62685
+West South Central,1167838379,2028,Office,67564.35544
+Mountain,813235962,2028,Office,47049.1162
+Pacific,1060020508,2028,Office,61326.63874
+New England,731854065,2028,Mercantile and Service,56171.49519
+Middle Atlantic,2147190674,2028,Mercantile and Service,164801.8593
+East North Central,3237893798,2028,Mercantile and Service,248515.8512
+West North Central,1974846192,2028,Mercantile and Service,151574.021
+South Atlantic,3323480469,2028,Mercantile and Service,255084.8265
+East South Central,1118139771,2028,Mercantile and Service,85819.81815
+West South Central,2498702393,2028,Mercantile and Service,191781.1982
+Mountain,1762208496,2028,Mercantile and Service,135253.5851
+Pacific,1992107910,2028,Mercantile and Service,152898.8978
+New England,564043396,2028,Warehouse,32558.11479
+Middle Atlantic,2455041504,2028,Warehouse,141711.6549
+East North Central,4163419922,2028,Warehouse,240323.8912
+West North Central,1725689819,2028,Warehouse,99611.4973
+South Atlantic,3896122558,2028,Warehouse,224894.7623
+East South Central,1583632690,2028,Warehouse,91411.57448
+West South Central,2709124268,2028,Warehouse,156378.0013
+Mountain,1376775635,2028,Warehouse,79471.22417
+Pacific,3517800293,2028,Warehouse,203056.975
+New England,423881348,2028,Other,30677.09703
+Middle Atlantic,932700561,2028,Other,67501.30843
+East North Central,1063274780,2028,Other,76951.21229
+West North Central,559415466,2028,Other,40485.95818
+South Atlantic,1377831787,2028,Other,99716.29943
+East South Central,310310761,2028,Other,22457.77827
+West South Central,734944580,2028,Other,53189.33305
+Mountain,396496399,2028,Other,28695.19634
+Pacific,613334412,2028,Other,44388.17456
+New England,518178650,2029,Assembly,38011.12448
+Middle Atlantic,1224447266,2029,Assembly,89819.63547
+East North Central,2483762207,2029,Assembly,182196.998
+West North Central,1073773926,2029,Assembly,78766.95492
+South Atlantic,3203144775,2029,Assembly,234967.4862
+East South Central,851494385,2029,Assembly,62461.58359
+West South Central,1625473755,2029,Assembly,119237.0339
+Mountain,1034376831,2029,Assembly,75876.97117
+Pacific,1568727784,2029,Assembly,115074.419
+New England,699211365,2029,Education,21489.23036
+Middle Atlantic,2093237793,2029,Education,64332.57722
+East North Central,2680138916,2029,Education,82370.11789
+West North Central,1641819946,2029,Education,50458.91528
+South Atlantic,2708122803,2029,Education,83230.1614
+East South Central,927915344,2029,Education,28518.10995
+West South Central,2165370849,2029,Education,66549.48034
+Mountain,1044758545,2029,Education,32109.11345
+Pacific,1567206421,2029,Education,48165.7786
+New England,89641784,2029,Food Sales ,29880.59467
+Middle Atlantic,57781868,2029,Food Sales ,19260.62267
+East North Central,292329956,2029,Food Sales ,97443.31867
+West North Central,131741364,2029,Food Sales ,43913.788
+South Atlantic,93044929,2029,Food Sales ,31014.97633
+East South Central,40896644,2029,Food Sales ,13632.21467
+West South Central,138803741,2029,Food Sales ,46267.91367
+Mountain,104656922,2029,Food Sales ,34885.64067
+Pacific,126957573,2029,Food Sales ,42319.191
+New England,64267082,2029,Food Services ,14914.30173
+Middle Atlantic,81106933,2029,Food Services ,18822.28403
+East North Central,224991623,2029,Food Services ,52213.24584
+West North Central,67923431,2029,Food Services ,15762.82154
+South Atlantic,287138977,2029,Food Services ,66635.62757
+East South Central,116470741,2029,Food Services ,27029.07492
+West South Central,212721817,2029,Food Services ,49365.82251
+Mountain,229226165,2029,Food Services ,53195.94546
+Pacific,209894257,2029,Food Services ,48709.6377
+New England,101854591,2029,Health Care,3790.19376
+Middle Atlantic,306404999,2029,Health Care,11401.88482
+East North Central,665566773,2029,Health Care,24766.94477
+West North Central,163100921,2029,Health Care,6069.280598
+South Atlantic,474770965,2029,Health Care,17667.08728
+East South Central,129737091,2029,Health Care,4827.752072
+West South Central,271158569,2029,Health Care,10090.30134
+Mountain,220658615,2029,Health Care,8211.106612
+Pacific,382679840,2029,Health Care,14240.20977
+New England,367780975,2029,Lodging,6363.910166
+Middle Atlantic,1042556274,2029,Lodging,18039.90669
+East North Central,1269689819,2029,Lodging,21970.11943
+West North Central,682180115,2029,Lodging,11804.126
+South Atlantic,1593300903,2029,Lodging,27569.73444
+East South Central,390130127,2029,Lodging,6750.629451
+West South Central,910012268,2029,Lodging,15746.42713
+Mountain,822320130,2029,Lodging,14229.04335
+Pacific,1057259765,2029,Lodging,18294.32903
+New England,347285492,2029,Office,20091.9244
+Middle Atlantic,2195641358,2029,Office,127027.0748
+East North Central,1693062500,2029,Office,97950.77691
+West North Central,781111572,2029,Office,45190.5853
+South Atlantic,2646927979,2029,Office,153135.9013
+East South Central,324255829,2029,Office,18759.56166
+West South Central,1146810058,2029,Office,66347.77875
+Mountain,1018005982,2029,Office,58895.92194
+Pacific,1561887207,2029,Office,90361.73524
+New England,259367218,2029,Office,15005.48297
+Middle Atlantic,1049407959,2029,Office,60712.6582
+East North Central,1580473022,2029,Office,91437.00271
+West North Central,886041626,2029,Office,51261.22966
+South Atlantic,1342708374,2029,Office,77681.31915
+East South Central,405543914,2029,Office,23462.41881
+West South Central,1184437988,2029,Office,68524.71254
+Mountain,825569641,2029,Office,47762.67133
+Pacific,1073454101,2029,Office,62103.82852
+New England,740132874,2029,Mercantile and Service,56806.91297
+Middle Atlantic,2172724121,2029,Mercantile and Service,166761.6105
+East North Central,3268719970,2029,Mercantile and Service,250881.8313
+West North Central,2001500732,2029,Mercantile and Service,153619.8187
+South Atlantic,3375039062,2029,Mercantile and Service,259042.068
+East South Central,1133143799,2029,Mercantile and Service,86971.41207
+West South Central,2535097656,2029,Mercantile and Service,194574.6189
+Mountain,1788973877,2029,Mercantile and Service,137307.8901
+Pacific,2021480102,2029,Mercantile and Service,155153.2816
+New England,575496277,2029,Warehouse,33219.20615
+Middle Atlantic,2505537354,2029,Warehouse,144626.4124
+East North Central,4244158203,2029,Warehouse,244984.3238
+West North Central,1763178101,2029,Warehouse,101775.4226
+South Atlantic,3984433349,2029,Warehouse,229992.3007
+East South Central,1619157959,2029,Warehouse,93462.18937
+West South Central,2770164551,2029,Warehouse,159901.412
+Mountain,1411242309,2029,Warehouse,81460.73408
+Pacific,3582388427,2029,Warehouse,206785.1773
+New England,430631318,2029,Other,31165.60516
+Middle Atlantic,946082398,2029,Other,68469.77735
+East North Central,1077583984,2029,Other,77986.79652
+West North Central,567564575,2029,Other,41075.72466
+South Atlantic,1406090210,2029,Other,101761.4151
+East South Central,315641113,2029,Other,22843.54595
+West South Central,747644043,2029,Other,54108.41727
+Mountain,403800141,2029,Other,29223.782
+Pacific,624156189,2029,Other,45171.36709
+New England,521046448,2030,Assembly,38221.49252
+Middle Atlantic,1230689454,2030,Assembly,90277.53273
+East North Central,2506955811,2030,Assembly,183898.3706
+West North Central,1085775879,2030,Assembly,79647.36119
+South Atlantic,3243241944,2030,Assembly,237908.824
+East South Central,860448059,2030,Assembly,63118.38259
+West South Central,1641882690,2030,Assembly,120440.7154
+Mountain,1048051270,2030,Assembly,76880.06306
+Pacific,1586318359,2030,Assembly,116364.78
+New England,708184082,2030,Education,21764.99359
+Middle Atlantic,2117331055,2030,Education,65073.04811
+East North Central,2709959473,2030,Education,83286.60874
+West North Central,1668484131,2030,Education,51278.39969
+South Atlantic,2751171386,2030,Education,84553.19612
+East South Central,940916077,2030,Education,28917.66831
+West South Central,2201609619,2030,Education,67663.22551
+Mountain,1061389282,2030,Education,32620.23463
+Pacific,1588772095,2030,Education,48828.5678
+New England,90498368,2030,Food Sales ,30166.12267
+Middle Atlantic,58327572,2030,Food Sales ,19442.524
+East North Central,294501007,2030,Food Sales ,98167.00233
+West North Central,133227340,2030,Food Sales ,44409.11333
+South Atlantic,94231666,2030,Food Sales ,31410.55533
+East South Central,41311592,2030,Food Sales ,13770.53067
+West South Central,140495987,2030,Food Sales ,46831.99567
+Mountain,106006355,2030,Food Sales ,35335.45167
+Pacific,128583542,2030,Food Sales ,42861.18067
+New England,64881195,2030,Food Services ,15056.81741
+Middle Atlantic,81872925,2030,Food Services ,19000.04589
+East North Central,226662582,2030,Food Services ,52601.02114
+West North Central,68689567,2030,Food Services ,15940.61681
+South Atlantic,290801269,2030,Food Services ,67485.52656
+East South Central,117652481,2030,Food Services ,27303.31838
+West South Central,215315246,2030,Food Services ,49967.67312
+Mountain,232181794,2030,Food Services ,53881.85093
+Pacific,212582398,2030,Food Services ,49333.46789
+New England,103212562,2030,Health Care,3840.72632
+Middle Atlantic,311509491,2030,Health Care,11591.83221
+East North Central,676634704,2030,Health Care,25178.80252
+West North Central,165737045,2030,Health Care,6167.375545
+South Atlantic,485434326,2030,Health Care,18063.89025
+East South Central,131722275,2030,Health Care,4901.624363
+West South Central,275222320,2030,Health Care,10241.52087
+Mountain,225468293,2030,Health Care,8390.083439
+Pacific,389141052,2030,Health Care,14480.64316
+New England,372937958,2030,Lodging,6453.14419
+Middle Atlantic,1061092529,2030,Lodging,18360.64938
+East North Central,1293949097,2030,Lodging,22389.89065
+West North Central,692709778,2030,Lodging,11986.32637
+South Atlantic,1624690307,2030,Lodging,28112.88202
+East South Central,397580383,2030,Lodging,6879.5452
+West South Central,925458679,2030,Lodging,16013.70461
+Mountain,835706360,2030,Lodging,14460.67242
+Pacific,1073511840,2030,Lodging,18575.54734
+New England,350704620,2030,Office,20289.73531
+Middle Atlantic,2216718505,2030,Office,128246.4763
+East North Central,1707406494,2030,Office,98780.63721
+West North Central,790039672,2030,Office,45707.11339
+South Atlantic,2686242919,2030,Office,155410.4358
+East South Central,327539398,2030,Office,18949.52992
+West South Central,1162273194,2030,Office,67242.38611
+Mountain,1032195190,2030,Office,59716.82722
+Pacific,1580081787,2030,Office,91414.36812
+New England,261990357,2030,Office,15157.24258
+Middle Atlantic,1060051880,2030,Office,61328.45374
+East North Central,1594855103,2030,Office,92269.0665
+West North Central,896491699,2030,Office,51865.81028
+South Atlantic,1363437500,2030,Office,78880.58615
+East South Central,409812164,2030,Office,23709.355
+West South Central,1200545532,2030,Office,69456.60162
+Mountain,837575744,2030,Office,48457.27482
+Pacific,1086391480,2030,Office,62852.31023
+New England,748041199,2030,Mercantile and Service,57413.89523
+Middle Atlantic,2197194580,2030,Mercantile and Service,168639.7749
+East North Central,3297736572,2030,Mercantile and Service,253108.9228
+West North Central,2027270752,2030,Mercantile and Service,155597.7274
+South Atlantic,3425279053,2030,Mercantile and Service,262898.1037
+East South Central,1147631225,2030,Mercantile and Service,88083.35558
+West South Central,2570445312,2030,Mercantile and Service,197287.6334
+Mountain,1815032348,2030,Mercantile and Service,139307.9381
+Pacific,2050033935,2030,Mercantile and Service,157344.8544
+New England,586807983,2030,Warehouse,33872.1485
+Middle Atlantic,2555436767,2030,Warehouse,147506.7418
+East North Central,4323748046,2030,Warehouse,249578.4654
+West North Central,1800303101,2030,Warehouse,103918.3783
+South Atlantic,4072026611,2030,Warehouse,235048.4214
+East South Central,1654380982,2030,Warehouse,95495.3578
+West South Central,2830695556,2030,Warehouse,163395.4258
+Mountain,1445545898,2030,Warehouse,83440.83029
+Pacific,3645905030,2030,Warehouse,210451.5279
+New England,437223175,2030,Other,31642.67035
+Middle Atlantic,959075073,2030,Other,69410.08188
+East North Central,1091422729,2030,Other,78988.33274
+West North Central,575483703,2030,Other,41648.84697
+South Atlantic,1434011841,2030,Other,103782.1565
+East South Central,320866638,2030,Other,23221.7271
+West South Central,760097351,2030,Other,55009.68679
+Mountain,410983764,2030,Other,29743.67442
+Pacific,634778808,2030,Other,45940.14617
+New England,523653381,2031,Assembly,38412.72474
+Middle Atlantic,1236300537,2031,Assembly,90689.13513
+East North Central,2529156250,2031,Assembly,185526.8893
+West North Central,1097402099,2031,Assembly,80500.20546
+South Atlantic,3282334717,2031,Assembly,240776.4842
+East South Central,869088562,2031,Assembly,63752.20885
+West South Central,1657675171,2031,Assembly,121599.1768
+Mountain,1061421021,2031,Assembly,77860.80449
+Pacific,1603361572,2031,Assembly,117614.9892
+New England,716943542,2031,Education,22034.20268
+Middle Atlantic,2140710694,2031,Education,65791.58684
+East North Central,2738838623,2031,Education,84174.16684
+West North Central,1694798828,2031,Education,52087.14311
+South Atlantic,2793618164,2031,Education,85857.73526
+East South Central,953663391,2031,Education,29309.43821
+West South Central,2237416504,2031,Education,68763.69732
+Mountain,1077788818,2031,Education,33124.25019
+Pacific,1609898926,2031,Education,49477.8698
+New England,91319634,2031,Food Sales ,30439.878
+Middle Atlantic,58850342,2031,Food Sales ,19616.78067
+East North Central,296539978,2031,Food Sales ,98846.65933
+West North Central,134667587,2031,Food Sales ,44889.19567
+South Atlantic,95389832,2031,Food Sales ,31796.61067
+East South Central,41711086,2031,Food Sales ,13903.69533
+West South Central,142143494,2031,Food Sales ,47381.16467
+Mountain,107324051,2031,Food Sales ,35774.68367
+Pacific,130170685,2031,Food Sales ,43390.22833
+New England,65469986,2031,Food Services ,15193.45667
+Middle Atlantic,82606720,2031,Food Services ,19170.33586
+East North Central,228231873,2031,Food Services ,52965.20259
+West North Central,69432137,2031,Food Services ,16112.94319
+South Atlantic,294375397,2031,Food Services ,68314.96555
+East South Central,118790214,2031,Food Services ,27567.34924
+West South Central,217840119,2031,Food Services ,50553.61411
+Mountain,235067887,2031,Food Services ,54551.61935
+Pacific,215206360,2031,Food Services ,49942.40422
+New England,104540855,2031,Health Care,3890.154507
+Middle Atlantic,316552216,2031,Health Care,11779.48114
+East North Central,687567994,2031,Health Care,25585.65004
+West North Central,168338120,2031,Health Care,6264.166256
+South Atlantic,496076141,2031,Health Care,18459.89145
+East South Central,133676559,2031,Health Care,4974.346809
+West South Central,279219177,2031,Health Care,10390.25116
+Mountain,230264069,2031,Health Care,8568.542948
+Pacific,395527466,2031,Health Care,14718.29319
+New England,377994568,2031,Lodging,6540.641407
+Middle Atlantic,1079449829,2031,Lodging,18678.29553
+East North Central,1318034057,2031,Lodging,22806.64554
+West North Central,703079468,2031,Lodging,12165.75864
+South Atlantic,1655886109,2031,Lodging,28652.67961
+East South Central,404976074,2031,Lodging,7007.516782
+West South Central,940728393,2031,Lodging,16277.92461
+Mountain,848911194,2031,Lodging,14689.16269
+Pacific,1089513549,2031,Lodging,18852.43344
+New England,353989380,2031,Office,20479.77248
+Middle Atlantic,2236925781,2031,Office,129415.5521
+East North Central,1721025635,2031,Office,99568.56172
+West North Central,798698608,2031,Office,46208.06921
+South Atlantic,2724884521,2031,Office,157646.0147
+East South Central,330699646,2031,Office,19132.36354
+West South Central,1177406738,2031,Office,68117.9252
+Mountain,1046099854,2031,Office,60521.27044
+Pacific,1597746949,2031,Office,92436.37194
+New England,264514801,2031,Office,15303.29227
+Middle Atlantic,1070291992,2031,Office,61920.88723
+East North Central,1608580566,2031,Office,93063.14218
+West North Central,906643920,2031,Office,52453.1589
+South Atlantic,1383841308,2031,Office,80061.03215
+East South Central,413929871,2031,Office,23947.58165
+West South Central,1216316162,2031,Office,70368.9988
+Mountain,849361389,2031,Office,49139.12388
+Pacific,1098974610,2031,Office,63580.29716
+New England,755678283,2031,Mercantile and Service,58000.05913
+Middle Atlantic,2220890381,2031,Mercantile and Service,170458.4825
+East North Central,3325386719,2031,Mercantile and Service,255231.1356
+West North Central,2052418945,2031,Mercantile and Service,157527.9095
+South Atlantic,3474636963,2031,Mercantile and Service,266686.4376
+East South Central,1161750854,2031,Mercantile and Service,89167.06982
+West South Central,2605075439,2031,Mercantile and Service,199945.5759
+Mountain,1840615845,2031,Mercantile and Service,141271.5308
+Pacific,2078032715,2031,Mercantile and Service,159493.8257
+New England,598050171,2031,Warehouse,34521.07809
+Middle Atlantic,2605051514,2031,Warehouse,150370.6396
+East North Central,4402722168,2031,Warehouse,254137.066
+West North Central,1837281738,2031,Warehouse,106052.8856
+South Atlantic,4159388183,2031,Warehouse,240091.1683
+East South Central,1689499878,2031,Warehouse,97522.51574
+West South Central,2891055664,2031,Warehouse,166879.5749
+Mountain,1479855468,2031,Warehouse,85421.27173
+Pacific,3708803223,2031,Warehouse,214082.1822
+New England,443712555,2031,Other,32112.31909
+Middle Atlantic,971802246,2031,Other,70331.17153
+East North Central,1104933228,2031,Other,79966.11317
+West North Central,583246948,2031,Other,42210.68773
+South Atlantic,1461771484,2031,Other,105791.1745
+East South Central,326027679,2031,Other,23595.24143
+West South Central,772400025,2031,Other,55900.05464
+Mountain,418098358,2031,Other,30258.57108
+Pacific,645281739,2031,Other,46700.2632
+New England,526161926,2032,Assembly,38596.73969
+Middle Atlantic,1241664673,2032,Assembly,91082.62266
+East North Central,2551140625,2032,Assembly,187139.5587
+West North Central,1108988037,2032,Assembly,81350.09484
+South Atlantic,3321423340,2032,Assembly,243643.8399
+East South Central,877681946,2032,Assembly,64382.57868
+West South Central,1673359497,2032,Assembly,122749.7045
+Mountain,1074808960,2032,Assembly,78842.8801
+Pacific,1620347656,2032,Assembly,118861.0076
+New England,725708008,2032,Education,22303.56562
+Middle Atlantic,2164030517,2032,Education,66508.28722
+East North Central,2767614014,2032,Education,85058.53605
+West North Central,1721275635,2032,Education,52900.86873
+South Atlantic,2836306885,2032,Education,87169.71016
+East South Central,966446656,2032,Education,29702.31301
+West South Central,2273465332,2032,Education,69871.6049
+Mountain,1094282227,2032,Education,33631.1508
+Pacific,1631075927,2032,Education,50128.7137
+New England,92133637,2032,Food Sales ,30711.21233
+Middle Atlantic,59368241,2032,Food Sales ,19789.41367
+East North Central,298538360,2032,Food Sales ,99512.78667
+West North Central,136103256,2032,Food Sales ,45367.752
+South Atlantic,96548462,2032,Food Sales ,32182.82067
+East South Central,42107914,2032,Food Sales ,14035.97133
+West South Central,143789581,2032,Food Sales ,47929.86033
+Mountain,108642654,2032,Food Sales ,36214.218
+Pacific,131758651,2032,Food Sales ,43919.55033
+New England,66053566,2032,Food Services ,15328.88662
+Middle Atlantic,83333680,2032,Food Services ,19339.03966
+East North Central,229769928,2032,Food Services ,53322.13519
+West North Central,70172348,2032,Food Services ,16284.72211
+South Atlantic,297950958,2032,Food Services ,69144.73709
+East South Central,119920357,2032,Food Services ,27829.61871
+West South Central,220362809,2032,Food Services ,51139.0485
+Mountain,237955978,2032,Food Services ,55221.85143
+Pacific,217831695,2032,Food Services ,50551.65918
+New England,105871238,2032,Health Care,3939.660468
+Middle Atlantic,321628571,2032,Health Care,11968.3815
+East North Central,698573853,2032,Health Care,25995.19798
+West North Central,170954910,2032,Health Care,6361.54175
+South Atlantic,506843597,2032,Health Care,18860.56799
+East South Central,135640351,2032,Health Care,5047.423065
+West South Central,283233642,2032,Health Care,10539.63667
+Mountain,235114334,2032,Health Care,8749.030091
+Pacific,401958191,2032,Health Care,14957.59211
+New England,383065491,2032,Lodging,6628.38629
+Middle Atlantic,1097952393,2032,Lodging,18998.45525
+East North Central,1342339355,2032,Lodging,23227.21306
+West North Central,713501526,2032,Lodging,12346.09706
+South Atlantic,1687382569,2032,Lodging,29197.67964
+East South Central,412438385,2032,Lodging,7136.641125
+West South Central,956104614,2032,Lodging,16543.98755
+Mountain,862190613,2032,Lodging,14918.94356
+Pacific,1105593994,2032,Lodging,19130.68194
+New England,357248322,2032,Office,20668.31596
+Middle Atlantic,2256949463,2032,Office,130574.0062
+East North Central,1734449341,2032,Office,100345.1795
+West North Central,807332336,2032,Office,46707.56664
+South Atlantic,2763677246,2032,Office,159890.3368
+East South Central,333837952,2032,Office,19313.92773
+West South Central,1192568359,2032,Office,68995.08865
+Mountain,1060037354,2032,Office,61327.61335
+Pacific,1615370361,2032,Office,93455.96034
+New England,267021667,2032,Office,15448.32499
+Middle Atlantic,1080456054,2032,Office,62508.92091
+East North Central,1622143066,2032,Office,93847.78978
+West North Central,916774841,2032,Office,53039.27524
+South Atlantic,1404337768,2032,Office,81246.83845
+East South Central,418023682,2032,Office,24184.42581
+West South Central,1232119140,2032,Office,71283.26746
+Mountain,861183654,2032,Office,49823.09157
+Pacific,1111538575,2032,Office,64307.1753
+New England,763275146,2032,Mercantile and Service,58583.13596
+Middle Atlantic,2244489990,2032,Mercantile and Service,172269.8072
+East North Central,3352692627,2032,Mercantile and Service,257326.9273
+West North Central,2077569580,2032,Mercantile and Service,159458.279
+South Atlantic,3524163574,2032,Mercantile and Service,270487.7198
+East South Central,1175855469,2032,Mercantile and Service,90249.6317
+West South Central,2639777832,2032,Mercantile and Service,202609.065
+Mountain,1866281860,2032,Mercantile and Service,143241.4569
+Pacific,2106106445,2032,Mercantile and Service,161648.5495
+New England,609401733,2032,Warehouse,35176.32104
+Middle Atlantic,2655159424,2032,Warehouse,153263.0041
+East North Central,4482399902,2032,Warehouse,258736.2809
+West North Central,1874661010,2032,Warehouse,108210.5185
+South Atlantic,4247753906,2032,Warehouse,245191.8775
+East South Central,1725017090,2032,Warehouse,99572.66556
+West South Central,2952104004,2032,Warehouse,170403.4507
+Mountain,1514608033,2032,Warehouse,87427.28405
+Pacific,3772197510,2032,Warehouse,217741.4724
+New England,450233612,2032,Other,32584.26035
+Middle Atlantic,984559082,2032,Other,71254.40794
+East North Central,1118451660,2032,Other,80944.46773
+West North Central,591031311,2032,Other,42774.05684
+South Atlantic,1489805542,2032,Other,107820.0524
+East South Central,331222474,2032,Other,23971.19859
+West South Central,784784668,2032,Other,56796.35474
+Mountain,425269501,2032,Other,30777.56029
+Pacific,655859191,2032,Other,47465.77346
+New England,528617187,2033,Assembly,38776.84597
+Middle Atlantic,1246888061,2033,Assembly,91465.7856
+East North Central,2573128418,2033,Assembly,188752.4787
+West North Central,1120629395,2033,Assembly,82204.04957
+South Atlantic,3360794190,2033,Assembly,246531.8984
+East South Central,886303833,2033,Assembly,65015.03936
+West South Central,1689079468,2033,Assembly,123902.8469
+Mountain,1088307617,2033,Assembly,79833.07746
+Pacific,1637416138,2033,Assembly,120113.0704
+New England,734540100,2033,Education,22575.00694
+Middle Atlantic,2187477295,2033,Education,67228.88937
+East North Central,2796523682,2033,Education,85947.03207
+West North Central,1748062988,2033,Education,53724.13853
+South Atlantic,2879483155,2033,Education,88496.66916
+East South Central,979349305,2033,Education,30098.8569
+West South Central,2309953369,2033,Education,70993.01092
+Mountain,1110964233,2033,Education,34143.84766
+Pacific,1652444214,2033,Education,50785.43649
+New England,92948280,2033,Food Sales ,30982.76
+Middle Atlantic,59886387,2033,Food Sales ,19962.129
+East North Central,300521850,2033,Food Sales ,100173.95
+West North Central,137546097,2033,Food Sales ,45848.699
+South Atlantic,97715889,2033,Food Sales ,32571.963
+East South Central,42505695,2033,Food Sales ,14168.565
+West South Central,145446671,2033,Food Sales ,48482.22367
+Mountain,109971550,2033,Food Sales ,36657.18333
+Pacific,133358811,2033,Food Sales ,44452.937
+New England,66637612,2033,Food Services ,15464.42473
+Middle Atlantic,84060989,2033,Food Services ,19507.82445
+East North Central,231296524,2033,Food Services ,53676.40852
+West North Central,70916244,2033,Food Services ,16457.3562
+South Atlantic,301553681,2033,Food Services ,69980.81205
+East South Central,121053215,2033,Food Services ,28092.51825
+West South Central,222902359,2033,Food Services ,51728.39555
+Mountain,240866608,2033,Food Services ,55897.31409
+Pacific,220477173,2033,Food Services ,51165.58867
+New England,107212860,2033,Health Care,3989.584651
+Middle Atlantic,326766418,2033,Health Care,12159.57009
+East North Central,709712646,2033,Health Care,26409.69264
+West North Central,173602264,2033,Health Care,6460.054586
+South Atlantic,517780762,2033,Health Care,19267.5597
+East South Central,137625412,2033,Health Care,5121.29078
+West South Central,287290222,2033,Health Care,10690.58936
+Mountain,240039520,2033,Health Care,8932.30518
+Pacific,408468017,2033,Health Care,15199.83453
+New England,388183746,2033,Lodging,6716.950183
+Middle Atlantic,1116695312,2033,Lodging,19322.77396
+East North Central,1366981323,2033,Lodging,23653.60617
+West North Central,724037659,2033,Lodging,12528.40938
+South Atlantic,1719326416,2033,Lodging,29750.42104
+East South Central,420003052,2033,Lodging,7267.536588
+West South Central,971670044,2033,Lodging,16813.32448
+Mountain,875618957,2033,Lodging,15151.30135
+Pacific,1121848877,2033,Lodging,19411.94884
+New England,360512207,2033,Office,20857.14542
+Middle Atlantic,2276983398,2033,Office,131733.0535
+East North Central,1747826416,2033,Office,101119.0995
+West North Central,816010315,2033,Office,47209.62417
+South Atlantic,2802860107,2033,Office,162157.2299
+East South Central,336983002,2033,Office,19495.88208
+West South Central,1207860962,2033,Office,69879.82997
+Mountain,1074099243,2033,Office,62141.15269
+Pacific,1633090943,2033,Office,94481.17044
+New England,269533875,2033,Office,15593.66678
+Middle Atlantic,1090636840,2033,Office,63097.92214
+East North Central,1635681763,2033,Office,94631.06026
+West North Central,926963440,2033,Office,53628.72848
+South Atlantic,1425047852,2033,Office,82445.0038
+East South Central,422129517,2033,Office,24421.96561
+West South Central,1248060913,2033,Office,72205.56599
+Mountain,873116761,2033,Office,50513.47193
+Pacific,1124179077,2033,Office,65038.48144
+New England,770897522,2033,Mercantile and Service,59168.17098
+Middle Atlantic,2268186035,2033,Mercantile and Service,174088.5336
+East North Central,3379941162,2033,Mercantile and Service,259418.3155
+West North Central,2102901611,2033,Mercantile and Service,161402.5711
+South Atlantic,3574162109,2033,Mercantile and Service,274325.2232
+East South Central,1190045776,2033,Mercantile and Service,91338.77064
+West South Central,2674780029,2033,Mercantile and Service,205295.5647
+Mountain,1892191040,2033,Mercantile and Service,145230.0465
+Pacific,2134437011,2033,Mercantile and Service,163822.9861
+New England,620915466,2033,Warehouse,35840.92494
+Middle Atlantic,2705990967,2033,Warehouse,156197.1386
+East North Central,4563170410,2033,Warehouse,263398.5737
+West North Central,1912603882,2033,Warehouse,110400.684
+South Atlantic,4337493164,2033,Warehouse,250371.8709
+East South Central,1761082275,2033,Warehouse,101654.4459
+West South Central,3014097168,2033,Warehouse,173981.8643
+Mountain,1549935303,2033,Warehouse,89466.4699
+Pacific,3836414551,2033,Warehouse,221448.2542
+New England,456825287,2033,Other,33061.31237
+Middle Atlantic,997430542,2033,Other,72185.93991
+East North Central,1132074463,2033,Other,81930.37582
+West North Central,598887817,2033,Other,43342.64708
+South Atlantic,1518243652,2033,Other,109878.1724
+East South Central,336479706,2033,Other,24351.67444
+West South Central,797319336,2033,Other,57703.51243
+Mountain,432533997,2033,Other,31303.30565
+Pacific,666567993,2033,Other,48240.78977
+New England,530979675,2034,Assembly,38950.14687
+Middle Atlantic,1251877686,2034,Assembly,91831.80079
+East North Central,2594930909,2034,Assembly,190351.8059
+West North Central,1132244751,2034,Assembly,83056.09692
+South Atlantic,3400204590,2034,Assembly,249422.8582
+East South Central,894889648,2034,Assembly,65644.85397
+West South Central,1704712036,2034,Assembly,125049.5778
+Mountain,1101838990,2034,Assembly,80825.67471
+Pacific,1654448120,2034,Assembly,121362.4557
+New England,743386779,2034,Education,22846.89658
+Middle Atlantic,2210892334,2034,Education,67948.51607
+East North Central,2825364746,2034,Education,86833.41965
+West North Central,1775037231,2034,Education,54553.15212
+South Atlantic,2922942139,2034,Education,89832.31695
+East South Central,992301269,2034,Education,30496.91642
+West South Central,2346716552,2034,Education,72122.87314
+Mountain,1127755981,2034,Education,34659.91727
+Pacific,1673884887,2034,Education,51444.38397
+New England,93756775,2034,Food Sales ,31252.25833
+Middle Atlantic,60400387,2034,Food Sales ,20133.46233
+East North Central,302468231,2034,Food Sales ,100822.7437
+West North Central,138986114,2034,Food Sales ,46328.70467
+South Atlantic,98885063,2034,Food Sales ,32961.68767
+East South Central,42901337,2034,Food Sales ,14300.44567
+West South Central,147104233,2034,Food Sales ,49034.74433
+Mountain,111302819,2034,Food Sales ,37100.93967
+Pacific,134961532,2034,Food Sales ,44987.17733
+New England,67217247,2034,Food Services ,15598.93918
+Middle Atlantic,84782478,2034,Food Services ,19675.25861
+East North Central,232794556,2034,Food Services ,54024.05308
+West North Central,71658692,2034,Food Services ,16629.65426
+South Atlantic,305161774,2034,Food Services ,70818.13321
+East South Central,122179978,2034,Food Services ,28354.00333
+West South Central,225442642,2034,Food Services ,52317.9127
+Mountain,243782441,2034,Food Services ,56573.9842
+Pacific,223126892,2034,Food Services ,51780.50236
+New England,108557998,2034,Health Care,4039.639672
+Middle Atlantic,331942596,2034,Health Care,12352.18505
+East North Central,720934204,2034,Health Care,26827.26713
+West North Central,176267822,2034,Health Care,6559.244826
+South Atlantic,528851990,2034,Health Care,19679.54014
+East South Central,139621918,2034,Health Care,5195.584383
+West South Central,291368409,2034,Health Care,10842.34608
+Mountain,245023071,2034,Health Care,9117.752136
+Pacific,415028046,2034,Health Care,15443.94509
+New England,393321625,2034,Lodging,6805.853641
+Middle Atlantic,1135600098,2034,Lodging,19649.89355
+East North Central,1391864014,2034,Lodging,24084.16463
+West North Central,734636352,2034,Lodging,12711.80422
+South Atlantic,1751597534,2034,Lodging,30308.82539
+East South Central,427640564,2034,Lodging,7399.692528
+West South Central,987356140,2034,Lodging,17084.74936
+Mountain,889134034,2034,Lodging,15385.15993
+Pacific,1138198364,2034,Lodging,19694.85273
+New England,363754639,2034,Office,21044.73373
+Middle Atlantic,2296860595,2034,Office,132883.0328
+East North Central,1761028076,2034,Office,101882.871
+West North Central,824673401,2034,Office,47710.82008
+South Atlantic,2842232666,2034,Office,164435.0978
+East South Central,340110199,2034,Office,19676.80356
+West South Central,1223197754,2034,Office,70767.12781
+Mountain,1088208496,2034,Office,62957.43224
+Pacific,1650790649,2034,Office,95505.17278
+New England,272031769,2034,Office,15738.18044
+Middle Atlantic,1100754395,2034,Office,63683.2652
+East North Central,1649075683,2034,Office,95405.95479
+West North Central,937142395,2034,Office,54217.62378
+South Atlantic,1445870239,2034,Office,83649.66634
+East South Central,426216644,2034,Office,24658.42307
+West South Central,1264051880,2034,Office,73130.71059
+Mountain,885098266,2034,Office,51206.65232
+Pacific,1136814698,2034,Office,65769.50519
+New England,778489014,2034,Mercantile and Service,59750.83558
+Middle Atlantic,2291812988,2034,Mercantile and Service,175901.957
+East North Central,3406883545,2034,Mercantile and Service,261486.2058
+West North Central,2128262696,2034,Mercantile and Service,163349.0931
+South Atlantic,3624376221,2034,Mercantile and Service,278179.2726
+East South Central,1204235229,2034,Mercantile and Service,92427.84404
+West South Central,2709889648,2034,Mercantile and Service,207990.3093
+Mountain,1918207886,2034,Mercantile and Service,147226.8997
+Pacific,2162870605,2034,Mercantile and Service,166005.3303
+New England,632547974,2034,Warehouse,36512.38485
+Middle Atlantic,2757357422,2034,Warehouse,159162.1498
+East North Central,4644713379,2034,Warehouse,268105.4551
+West North Central,1950977661,2034,Warehouse,112615.7226
+South Atlantic,4428306153,2034,Warehouse,255613.843
+East South Central,1797573608,2034,Warehouse,103760.8246
+West South Central,3076826904,2034,Warehouse,177602.7948
+Mountain,1585731446,2034,Warehouse,91532.72037
+Pacific,3901184326,2034,Warehouse,225186.9413
+New England,463455048,2034,Other,33541.12075
+Middle Atlantic,1010345093,2034,Other,73120.59046
+East North Central,1145720215,2034,Other,82917.94477
+West North Central,606773621,2034,Other,43913.35767
+South Atlantic,1546979736,2034,Other,111957.8573
+East South Central,341775573,2034,Other,24734.94638
+West South Central,809947510,2034,Other,58617.43733
+Mountain,439861481,2034,Other,31833.60956
+Pacific,677361023,2034,Other,49021.90182
+New England,533183411,2035,Assembly,39111.80248
+Middle Atlantic,1256477539,2035,Assembly,92169.22415
+East North Central,2616227051,2035,Assembly,191913.9897
+West North Central,1143694213,2035,Assembly,83895.97507
+South Atlantic,3439235107,2035,Assembly,252285.9515
+East South Central,903328796,2035,Assembly,66263.90978
+West South Central,1720046020,2035,Assembly,126174.406
+Mountain,1115267090,2035,Assembly,81810.69635
+Pacific,1671239258,2035,Assembly,122594.1738
+New England,752156494,2035,Education,23116.42084
+Middle Atlantic,2234002686,2035,Education,68658.77866
+East North Central,2853787842,2035,Education,87706.9616
+West North Central,1801980224,2035,Education,55381.20528
+South Atlantic,2966324463,2035,Education,91165.60872
+East South Central,1005180237,2035,Education,30892.73251
+West South Central,2383467285,2035,Education,73252.35274
+Mountain,1144518799,2035,Education,35175.09777
+Pacific,1695191895,2035,Education,52099.22344
+New England,94547516,2035,Food Sales ,31515.83867
+Middle Atlantic,60902779,2035,Food Sales ,20300.92633
+East North Central,304339966,2035,Food Sales ,101446.6553
+West North Central,140406128,2035,Food Sales ,46802.04267
+South Atlantic,100043793,2035,Food Sales ,33347.931
+East South Central,43289528,2035,Food Sales ,14429.84267
+West South Central,148744125,2035,Food Sales ,49581.375
+Mountain,112622726,2035,Food Sales ,37540.90867
+Pacific,136550186,2035,Food Sales ,45516.72867
+New England,67784157,2035,Food Services ,15730.50057
+Middle Atlantic,85487671,2035,Food Services ,19838.91099
+East North Central,234235123,2035,Food Services ,54358.36188
+West North Central,72390823,2035,Food Services ,16799.55808
+South Atlantic,308737640,2035,Food Services ,71647.97553
+East South Central,123285515,2035,Food Services ,28610.56255
+West South Central,227955841,2035,Food Services ,52901.14454
+Mountain,246673386,2035,Food Services ,57244.87861
+Pacific,225753357,2035,Food Services ,52390.01956
+New England,109893288,2035,Health Care,4089.328231
+Middle Atlantic,337116364,2035,Health Care,12544.71032
+East North Central,732149964,2035,Health Care,27244.62587
+West North Central,178929901,2035,Health Care,6658.305606
+South Atlantic,539992676,2035,Health Care,20094.10524
+East South Central,141612702,2035,Health Care,5269.66506
+West South Central,295432373,2035,Health Care,10993.57354
+Mountain,250035019,2035,Health Care,9304.255797
+Pacific,421587432,2035,Health Care,15688.03172
+New England,398430694,2035,Lodging,6894.258584
+Middle Atlantic,1154527466,2035,Lodging,19977.40388
+East North Central,1416816895,2035,Lodging,24515.93762
+West North Central,745207337,2035,Lodging,12894.7196
+South Atlantic,1783981323,2035,Lodging,30869.17935
+East South Central,435298523,2035,Lodging,7532.202273
+West South Central,1003041442,2035,Lodging,17356.1605
+Mountain,902626281,2035,Lodging,15618.62346
+Pacific,1154502564,2035,Lodging,19976.97299
+New England,366930664,2035,Office,21228.48011
+Middle Atlantic,2316296143,2035,Office,134007.4609
+East North Central,1773835693,2035,Office,102623.8454
+West North Central,833219666,2035,Office,48205.25741
+South Atlantic,2881444825,2035,Office,166703.6859
+East South Central,343177368,2035,Office,19854.25217
+West South Central,1238427856,2035,Office,71648.25318
+Mountain,1102230834,2035,Office,63768.68339
+Pacific,1668265137,2035,Office,96516.14531
+New England,274481629,2035,Office,15879.91513
+Middle Atlantic,1110672241,2035,Office,64257.05424
+East North Central,1662120483,2035,Office,96160.65126
+West North Central,947195923,2035,Office,54799.26261
+South Atlantic,1466626709,2035,Office,84850.51532
+East South Central,430232239,2035,Office,24890.74211
+West South Central,1279936402,2035,Office,74049.69691
+Mountain,897018921,2035,Office,51896.31228
+Pacific,1149305176,2035,Office,66492.1318
+New England,785953430,2035,Mercantile and Service,60323.74681
+Middle Atlantic,2315086914,2035,Mercantile and Service,177688.2847
+East North Central,3433096436,2035,Mercantile and Service,263498.1059
+West North Central,2153390137,2035,Mercantile and Service,165277.6824
+South Atlantic,3674358643,2035,Mercantile and Service,282015.5393
+East South Central,1218274780,2035,Mercantile and Service,93505.41211
+West South Central,2744771728,2035,Mercantile and Service,210667.5898
+Mountain,1944095581,2035,Mercantile and Service,149213.8403
+Pacific,2191140869,2035,Mercantile and Service,168175.1386
+New England,644221863,2035,Warehouse,37186.23339
+Middle Atlantic,2808921386,2035,Warehouse,162138.5616
+East North Central,4726459472,2035,Warehouse,272824.0613
+West North Central,1989543702,2035,Warehouse,114841.8591
+South Atlantic,4519651367,2035,Warehouse,260886.5365
+East South Central,1834271606,2035,Warehouse,105879.1326
+West South Central,3139917480,2035,Warehouse,181244.554
+Mountain,1621803101,2035,Warehouse,93614.87414
+Pacific,3966028320,2035,Warehouse,228929.9125
+New England,470065826,2035,Other,34019.55529
+Middle Atlantic,1023178100,2035,Other,74049.33951
+East North Central,1159247558,2035,Other,83896.94424
+West North Central,614613891,2035,Other,44480.77288
+South Atlantic,1575824341,2035,Other,114045.396
+East South Central,347068055,2035,Other,25117.97334
+West South Central,822569702,2035,Other,59530.9293
+Mountain,447197937,2035,Other,32364.56279
+Pacific,688155029,2035,Other,49803.08451
+New England,535156433,2036,Assembly,39256.534
+Middle Atlantic,1260518676,2036,Assembly,92465.66277
+East North Central,2636661621,2036,Assembly,193412.9727
+West North Central,1154821899,2036,Assembly,84712.24926
+South Atlantic,3477416504,2036,Assembly,255086.7575
+East South Central,911498413,2036,Assembly,66863.19408
+West South Central,1734848022,2036,Assembly,127260.2106
+Mountain,1128439698,2036,Assembly,82776.9763
+Pacific,1687561890,2036,Assembly,123791.5245
+New England,760746460,2036,Education,23380.42078
+Middle Atlantic,2256503907,2036,Education,69350.32051
+East North Central,2881404785,2036,Education,88555.72762
+West North Central,1828644531,2036,Education,56200.69344
+South Atlantic,3009223388,2036,Education,92484.04392
+East South Central,1017848815,2036,Education,31282.08258
+West South Central,2419877930,2036,Education,74371.38022
+Mountain,1161095704,2036,Education,35684.5645
+Pacific,1716133300,2036,Education,52742.82665
+New England,95307670,2036,Food Sales ,31769.22333
+Middle Atlantic,61385285,2036,Food Sales ,20461.76167
+East North Central,306095887,2036,Food Sales ,102031.9623
+West North Central,141787018,2036,Food Sales ,47262.33933
+South Atlantic,101178436,2036,Food Sales ,33726.14533
+East South Central,43664382,2036,Food Sales ,14554.794
+West South Central,150346069,2036,Food Sales ,50115.35633
+Mountain,113915901,2036,Food Sales ,37971.967
+Pacific,138106125,2036,Food Sales ,46035.375
+New England,68329139,2036,Food Services ,15856.97319
+Middle Atlantic,86164947,2036,Food Services ,19996.08475
+East North Central,235586563,2036,Food Services ,54671.98719
+West North Central,73102790,2036,Food Services ,16964.78249
+South Atlantic,312239166,2036,Food Services ,72460.56595
+East South Central,124353073,2036,Food Services ,28858.30808
+West South Central,230410888,2036,Food Services ,53470.88118
+Mountain,249505783,2036,Food Services ,57902.18593
+Pacific,228325729,2036,Food Services ,52986.98352
+New England,111203698,2036,Health Care,4138.09096
+Middle Atlantic,342241425,2036,Health Care,12735.42312
+East North Central,743259338,2036,Health Care,27658.02579
+West North Central,181563996,2036,Health Care,6756.32505
+South Atlantic,551127991,2036,Health Care,20508.47048
+East South Central,143578338,2036,Health Care,5342.809935
+West South Central,299441589,2036,Health Care,11142.76373
+Mountain,255040756,2036,Health Care,9490.528334
+Pacific,428088105,2036,Health Care,15929.93353
+New England,403456299,2036,Lodging,6981.219305
+Middle Atlantic,1173318237,2036,Lodging,20302.5506
+East North Central,1441644531,2036,Lodging,24945.54343
+West North Central,755648376,2036,Lodging,13075.38646
+South Atlantic,1816231445,2036,Lodging,31427.22039
+East South Central,442916840,2036,Lodging,7664.026071
+West South Central,1018588074,2036,Lodging,17625.17215
+Mountain,915971740,2036,Lodging,15849.54705
+Pacific,1170602906,2036,Lodging,20255.56579
+New England,369990418,2036,Office,21405.49973
+Middle Atlantic,2334975586,2036,Office,135088.1451
+East North Central,1786008667,2036,Office,103328.1031
+West North Central,841535584,2036,Office,48686.36819
+South Atlantic,2920102051,2036,Office,168940.1688
+East South Central,346137909,2036,Office,20025.5319
+West South Central,1253382202,2036,Office,72513.42491
+Mountain,1116015503,2036,Office,64566.18439
+Pacific,1685287232,2036,Office,97500.945
+New England,276846191,2036,Office,16016.71497
+Middle Atlantic,1120239258,2036,Office,64810.54636
+East North Central,1674589600,2036,Office,96882.04206
+West North Central,956994873,2036,Office,55366.17302
+South Atlantic,1487115845,2036,Office,86035.89789
+East South Central,434117736,2036,Office,25115.53443
+West South Central,1295539306,2036,Office,74952.39044
+Mountain,908755798,2036,Office,52575.33992
+Pacific,1161493286,2036,Office,67197.26516
+New England,793183716,2036,Mercantile and Service,60878.68801
+Middle Atlantic,2337691650,2036,Mercantile and Service,179423.2506
+East North Central,3458113525,2036,Mercantile and Service,265418.2255
+West North Central,2177989501,2036,Mercantile and Service,167165.7406
+South Atlantic,3723604980,2036,Mercantile and Service,285795.3098
+East South Central,1231997193,2036,Mercantile and Service,94558.6391
+West South Central,2779050782,2036,Mercantile and Service,213298.5866
+Mountain,1969587891,2036,Mercantile and Service,151170.4342
+Pacific,2218947754,2036,Mercantile and Service,170309.3814
+New England,655848206,2036,Warehouse,37857.33744
+Middle Atlantic,2860294678,2036,Warehouse,165103.9674
+East North Central,4807756836,2036,Warehouse,277516.7657
+West North Central,2028026489,2036,Warehouse,117063.19
+South Atlantic,4610903320,2036,Warehouse,266153.8467
+East South Central,1870921997,2036,Warehouse,107994.6926
+West South Central,3202933593,2036,Warehouse,184882.015
+Mountain,1657924683,2036,Warehouse,95699.90984
+Pacific,4030400147,2036,Warehouse,232645.629
+New England,476593262,2036,Other,34491.95821
+Middle Atlantic,1035789795,2036,Other,74962.0718
+East North Central,1172498169,2036,Other,84855.91609
+West North Central,622324585,2036,Other,45038.81043
+South Atlantic,1604560059,2036,Other,116125.0545
+East South Central,352309540,2036,Other,25497.30955
+West South Central,835072999,2036,Other,60435.81662
+Mountain,454481812,2036,Other,32891.71064
+Pacific,698855530,2036,Other,50577.50006
+New England,536866333,2037,Assembly,39381.96414
+Middle Atlantic,1263924927,2037,Assembly,92715.52916
+East North Central,2656068116,2037,Assembly,194836.541
+West North Central,1165553588,2037,Assembly,85499.47499
+South Atlantic,3514521484,2037,Assembly,257808.6025
+East South Central,919340149,2037,Assembly,67438.42658
+West South Central,1749007324,2037,Assembly,128298.8697
+Mountain,1141282471,2037,Assembly,83719.06113
+Pacific,1703307251,2037,Assembly,124946.5294
+New England,769106873,2037,Education,23637.36574
+Middle Atlantic,2278250488,2037,Education,70018.66962
+East North Central,2908029785,2037,Education,89374.00774
+West North Central,1854906372,2037,Education,57007.8124
+South Atlantic,3051436035,2037,Education,93781.38739
+East South Central,1030239502,2037,Education,31662.89207
+West South Central,2455783692,2037,Education,75474.89088
+Mountain,1177408325,2037,Education,36185.90886
+Pacific,1736595948,2037,Education,53371.71596
+New England,96031188,2037,Food Sales ,32010.396
+Middle Atlantic,61844017,2037,Food Sales ,20614.67233
+East North Central,307717011,2037,Food Sales ,102572.337
+West North Central,143119660,2037,Food Sales ,47706.55333
+South Atlantic,102282341,2037,Food Sales ,34094.11367
+East South Central,44023121,2037,Food Sales ,14674.37367
+West South Central,151900269,2037,Food Sales ,50633.423
+Mountain,115174873,2037,Food Sales ,38391.62433
+Pacific,139620315,2037,Food Sales ,46540.105
+New England,68847855,2037,Food Services ,15977.35032
+Middle Atlantic,86808861,2037,Food Services ,20145.51627
+East North Central,236834259,2037,Food Services ,54961.5369
+West North Central,73789879,2037,Food Services ,17124.23352
+South Atlantic,315645844,2037,Food Services ,73251.14523
+East South Central,125374733,2037,Food Services ,29095.40217
+West South Central,232792755,2037,Food Services ,54023.63513
+Mountain,252263260,2037,Food Services ,58542.10675
+Pacific,230829071,2037,Food Services ,53567.92787
+New England,112481919,2037,Health Care,4185.655878
+Middle Atlantic,347294495,2037,Health Care,12923.45701
+East North Central,754211975,2037,Health Care,28065.59325
+West North Central,184157806,2037,Health Care,6852.845417
+South Atlantic,562218628,2037,Health Care,20921.17316
+East South Central,145509216,2037,Health Care,5414.661402
+West South Central,303376068,2037,Health Care,11289.17281
+Mountain,260022217,2037,Health Care,9675.897518
+Pacific,434501007,2037,Health Care,16168.56922
+New England,408371826,2037,Lodging,7066.275288
+Middle Atlantic,1191892212,2037,Lodging,20623.94599
+East North Central,1466247071,2037,Lodging,25371.25429
+West North Central,765908630,2037,Lodging,13252.9251
+South Atlantic,1848221436,2037,Lodging,31980.76025
+East South Central,450464783,2037,Lodging,7794.63215
+West South Central,1033926758,2037,Lodging,17890.58557
+Mountain,929108337,2037,Lodging,16076.85659
+Pacific,1186420898,2037,Lodging,20529.27293
+New England,372910339,2037,Office,21574.42943
+Middle Atlantic,2352750733,2037,Office,136116.512
+East North Central,1797434814,2037,Office,103989.1537
+West North Central,849566712,2037,Office,49151.00268
+South Atlantic,2958008789,2037,Office,171133.2328
+East South Central,348969727,2037,Office,20189.36447
+West South Central,1267978027,2037,Office,73357.85469
+Mountain,1129488281,2037,Office,65345.64119
+Pacific,1701747681,2037,Office,98453.25111
+New England,279107757,2037,Office,16147.55607
+Middle Atlantic,1129383789,2037,Office,65339.59589
+East North Central,1686377319,2037,Office,97564.01111
+West North Central,966477112,2037,Office,55914.76038
+South Atlantic,1507237793,2037,Office,87200.0371
+East South Central,437845307,2037,Office,25331.19007
+West South Central,1310775024,2037,Office,75833.84072
+Mountain,920248230,2037,Office,53240.22538
+Pacific,1173303711,2037,Office,67880.54785
+New England,800128845,2037,Mercantile and Service,61411.74275
+Middle Atlantic,2359475586,2037,Mercantile and Service,181095.2181
+East North Central,3481716309,2037,Mercantile and Service,267229.7938
+West North Central,2201917236,2037,Mercantile and Service,169002.2497
+South Atlantic,3771865479,2037,Mercantile and Service,289499.4149
+East South Central,1245321289,2037,Mercantile and Service,95581.29434
+West South Central,2812541748,2037,Mercantile and Service,215869.0958
+Mountain,1994552978,2037,Mercantile and Service,153086.5624
+Pacific,2246143799,2037,Mercantile and Service,172396.7409
+New England,667381348,2037,Warehouse,38523.06168
+Middle Atlantic,2911278076,2037,Warehouse,168046.8674
+East North Central,4888273437,2037,Warehouse,282164.4023
+West North Central,2066283692,2037,Warehouse,119271.4995
+South Atlantic,4701734375,2037,Warehouse,271396.8616
+East South Central,1907392578,2037,Warehouse,110099.8734
+West South Central,3265648193,2037,Warehouse,188502.0718
+Mountain,1693976562,2037,Warehouse,97780.92208
+Pacific,4094023682,2037,Warehouse,236318.152
+New England,483005340,2037,Other,34956.01246
+Middle Atlantic,1048111816,2037,Other,75853.83983
+East North Central,1185395263,2037,Other,85789.30324
+West North Central,629864502,2037,Other,45584.48852
+South Atlantic,1633074951,2037,Other,118188.7313
+East South Central,357476074,2037,Other,25871.22141
+West South Central,847400695,2037,Other,61327.99536
+Mountain,461681976,2037,Other,33412.80016
+Pacific,709414917,2037,Other,51341.70292
+New England,538328064,2038,Assembly,39489.18979
+Middle Atlantic,1266731812,2038,Assembly,92921.42892
+East North Central,2674510986,2038,Assembly,196189.4224
+West North Central,1175915893,2038,Assembly,86259.60446
+South Atlantic,3550626954,2038,Assembly,260457.1283
+East South Central,926875488,2038,Assembly,67991.18326
+West South Central,1762565552,2038,Assembly,129293.4369
+Mountain,1153819580,2038,Assembly,84638.72389
+Pacific,1718514526,2038,Assembly,126062.0629
+New England,777254272,2038,Education,23887.76404
+Middle Atlantic,2299293213,2038,Education,70665.38674
+East North Central,2933729736,2038,Education,90163.85784
+West North Central,1880800659,2038,Education,57803.63513
+South Atlantic,3093020020,2038,Education,95059.40986
+East South Central,1042373413,2038,Education,32035.80994
+West South Central,2491230224,2038,Education,76564.28778
+Mountain,1193479004,2038,Education,36679.81748
+Pacific,1756615600,2038,Education,53986.99045
+New England,96720406,2038,Food Sales ,32240.13533
+Middle Atlantic,62280484,2038,Food Sales ,20760.16133
+East North Central,309211426,2038,Food Sales ,103070.4753
+West North Central,144407302,2038,Food Sales ,48135.76733
+South Atlantic,103357727,2038,Food Sales ,34452.57567
+East South Central,44366783,2038,Food Sales ,14788.92767
+West South Central,153410065,2038,Food Sales ,51136.68833
+Mountain,116402123,2038,Food Sales ,38800.70767
+Pacific,141095749,2038,Food Sales ,47031.91633
+New England,69341973,2038,Food Services ,16092.01905
+Middle Atlantic,87421516,2038,Food Services ,20287.69359
+East North Central,237984436,2038,Food Services ,55228.45561
+West North Central,74453766,2038,Food Services ,17278.30013
+South Atlantic,318964508,2038,Food Services ,74021.29932
+East South Central,126353462,2038,Food Services ,29322.53338
+West South Central,235106583,2038,Food Services ,54560.59943
+Mountain,254951263,2038,Food Services ,59165.90492
+Pacific,233268341,2038,Food Services ,54134.00319
+New England,113730316,2038,Health Care,4232.11099
+Middle Atlantic,352282013,2038,Health Care,13109.05158
+East North Central,765021728,2038,Health Care,28467.84373
+West North Central,186714782,2038,Health Care,6947.995124
+South Atlantic,573272522,2038,Health Care,21332.50857
+East South Central,147408158,2038,Health Care,5485.324472
+West South Central,307241822,2038,Health Care,11433.02452
+Mountain,264983154,2038,Health Care,9860.502967
+Pacific,440834015,2038,Health Care,16404.23192
+New England,413185669,2038,Lodging,7149.571778
+Middle Atlantic,1210270142,2038,Lodging,20941.9491
+East North Central,1490648682,2038,Lodging,25793.48837
+West North Central,776003052,2038,Lodging,13427.59427
+South Atlantic,1879980835,2038,Lodging,32530.31005
+East South Central,457949768,2038,Lodging,7924.148833
+West South Central,1049076294,2038,Lodging,18152.72607
+Mountain,942053345,2038,Lodging,16300.85096
+Pacific,1201979614,2038,Lodging,20798.49368
+New England,375699402,2038,Office,21735.78844
+Middle Atlantic,2369678222,2038,Office,137095.8384
+East North Central,1808158814,2038,Office,104609.5821
+West North Central,857332275,2038,Office,49600.27312
+South Atlantic,2995223389,2038,Office,173286.2537
+East South Central,351681091,2038,Office,20346.22826
+West South Central,1282242066,2038,Office,74183.08926
+Mountain,1142672608,2038,Office,66108.40988
+Pacific,1717684692,2038,Office,99375.27414
+New England,281272979,2038,Office,16272.82325
+Middle Atlantic,1138132080,2038,Office,65845.72127
+East North Central,1697524537,2038,Office,98208.92449
+West North Central,975664063,2038,Office,56446.26408
+South Atlantic,1527021607,2038,Office,88344.61384
+East South Central,441425171,2038,Office,25538.30024
+West South Central,1325671020,2038,Office,76695.63666
+Mountain,931514527,2038,Office,53892.02798
+Pacific,1184762207,2038,Office,68543.46997
+New England,806807373,2038,Mercantile and Service,61924.33525
+Middle Atlantic,2380492187,2038,Mercantile and Service,182708.2909
+East North Central,3503990967,2038,Mercantile and Service,268939.4255
+West North Central,2225220459,2038,Mercantile and Service,170790.8261
+South Atlantic,3819214111,2038,Mercantile and Service,293133.5321
+East South Central,1258273437,2038,Mercantile and Service,96575.40171
+West South Central,2845302001,2038,Mercantile and Service,218383.5211
+Mountain,2019030884,2038,Mercantile and Service,154965.2984
+Pacific,2272774414,2038,Mercantile and Service,174440.7023
+New England,678831970,2038,Warehouse,39184.02265
+Middle Atlantic,2961917481,2038,Warehouse,170969.9112
+East North Central,4968091308,2038,Warehouse,286771.7063
+West North Central,2104346436,2038,Warehouse,121468.5843
+South Atlantic,4792212890,2038,Warehouse,276619.5269
+East South Central,1943710938,2038,Warehouse,112196.2677
+West South Central,3328108643,2038,Warehouse,192107.4584
+Mountain,1729980468,2038,Warehouse,99859.1652
+Pacific,4156971191,2038,Warehouse,239951.653
+New England,489311524,2038,Other,35412.40295
+Middle Atlantic,1060165894,2038,Other,76726.21631
+East North Central,1197964355,2038,Other,86698.95226
+West North Central,637246582,2038,Other,46118.74365
+South Atlantic,1661394898,2038,Other,120238.2995
+East South Central,362574310,2038,Other,26240.19042
+West South Central,859568238,2038,Other,62208.58352
+Mountain,468806488,2038,Other,33928.41461
+Pacific,719846069,2038,Other,52096.62517
+New England,539566956,2039,Assembly,39580.06902
+Middle Atlantic,1268999511,2039,Assembly,93087.77654
+East North Central,2692107666,2039,Assembly,197480.2312
+West North Central,1185958496,2039,Assembly,86996.28212
+South Atlantic,3585878906,2039,Assembly,263043.0441
+East South Central,934144226,2039,Assembly,68524.38335
+West South Central,1775598755,2039,Assembly,130249.4908
+Mountain,1166098145,2039,Assembly,85539.4211
+Pacific,1733256103,2039,Assembly,127143.435
+New England,785220581,2039,Education,24132.5968
+Middle Atlantic,2319729004,2039,Education,71293.45065
+East North Central,2958628662,2039,Education,90929.08962
+West North Central,1906399659,2039,Education,58590.38266
+South Atlantic,3134095703,2039,Education,96321.81041
+East South Central,1054292359,2039,Education,32402.12117
+West South Central,2526312256,2039,Education,77642.4823
+Mountain,1209354248,2039,Education,37167.7197
+Pacific,1776263062,2039,Education,54590.82623
+New England,97379540,2039,Food Sales ,32459.84667
+Middle Atlantic,62697407,2039,Food Sales ,20899.13567
+East North Central,310593109,2039,Food Sales ,103531.0363
+West North Central,145656037,2039,Food Sales ,48552.01233
+South Atlantic,104408852,2039,Food Sales ,34802.95067
+East South Central,44697284,2039,Food Sales ,14899.09467
+West South Central,154881821,2039,Food Sales ,51627.27367
+Mountain,117602402,2039,Food Sales ,39200.80067
+Pacific,142538208,2039,Food Sales ,47512.736
+New England,69814529,2039,Food Services ,16201.68395
+Middle Atlantic,88006744,2039,Food Services ,20423.50599
+East North Central,239047851,2039,Food Services ,55475.23968
+West North Central,75097595,2039,Food Services ,17427.71192
+South Atlantic,322208282,2039,Food Services ,74774.07388
+East South Central,127294701,2039,Food Services ,29540.96437
+West South Central,237362107,2039,Food Services ,55084.03327
+Mountain,257580200,2039,Food Services ,59775.99578
+Pacific,235653107,2039,Food Services ,54687.42989
+New England,114953522,2039,Health Care,4277.628701
+Middle Atlantic,357217438,2039,Health Care,13292.70768
+East North Central,775717834,2039,Health Care,28865.8652
+West North Central,189242172,2039,Health Care,7042.043882
+South Atlantic,584309387,2039,Health Care,21743.2103
+East South Central,149280960,2039,Health Care,5555.014825
+West South Central,311050903,2039,Health Care,11574.76732
+Mountain,269932770,2039,Health Care,10044.68714
+Pacific,447103943,2039,Health Care,16637.54729
+New England,417914307,2039,Lodging,7231.393921
+Middle Atlantic,1228497437,2039,Lodging,21257.3457
+East North Central,1514903564,2039,Lodging,26213.18352
+West North Central,785961975,2039,Lodging,13599.91882
+South Atlantic,1911578003,2039,Lodging,33077.05268
+East South Central,465388519,2039,Lodging,8052.865505
+West South Central,1064076294,2039,Lodging,18412.27906
+Mountain,954842774,2039,Lodging,16522.15326
+Pacific,1217326294,2039,Lodging,21064.04546
+New England,378373809,2039,Office,21890.51412
+Middle Atlantic,2385860840,2039,Office,138032.0708
+East North Central,1818261230,2039,Office,105194.0493
+West North Central,864868347,2039,Office,50036.26654
+South Atlantic,3031864746,2039,Office,175406.1101
+East South Central,354287139,2039,Office,20496.99909
+West South Central,1296226196,2039,Office,74992.12991
+Mountain,1155614136,2039,Office,66857.13164
+Pacific,1733169922,2039,Office,100271.1597
+New England,283353912,2039,Office,16393.21397
+Middle Atlantic,1146533325,2039,Office,66331.76858
+East North Central,1708105347,2039,Office,98821.06879
+West North Central,984596558,2039,Office,56963.04643
+South Atlantic,1546526733,2039,Office,89473.0673
+East South Central,444876068,2039,Office,25737.94912
+West South Central,1340281006,2039,Office,77540.88571
+Mountain,942591736,2039,Office,54532.89105
+Pacific,1195917724,2039,Office,69188.86349
+New England,813253785,2039,Mercantile and Service,62419.11231
+Middle Atlantic,2400841309,2039,Mercantile and Service,184270.1332
+East North Central,3525090576,2039,Mercantile and Service,270558.8693
+West North Central,2247989991,2039,Mercantile and Service,172538.4404
+South Atlantic,3865800781,2039,Mercantile and Service,296709.167
+East South Central,1270904663,2039,Mercantile and Service,97544.87757
+West South Central,2877446045,2039,Mercantile and Service,220850.651
+Mountain,2043101074,2039,Mercantile and Service,156812.7413
+Pacific,2298930908,2039,Mercantile and Service,176448.2738
+New England,690224671,2039,Warehouse,39841.64025
+Middle Atlantic,3012320068,2039,Warehouse,173879.2853
+East North Central,5047393555,2039,Warehouse,291349.2471
+West North Central,2142288575,2039,Warehouse,123658.7075
+South Atlantic,4882504883,2039,Warehouse,281831.4257
+East South Central,1979945068,2039,Warehouse,114287.7999
+West South Central,3390431153,2039,Warehouse,195704.8827
+Mountain,1765993775,2039,Warehouse,101937.951
+Pacific,4219398926,2039,Warehouse,243555.1512
+New England,495530945,2039,Other,35862.51424
+Middle Atlantic,1071994751,2039,Other,77582.29313
+East North Central,1210254639,2039,Other,87588.42342
+West North Central,644496460,2039,Other,46643.43107
+South Atlantic,1689579956,2039,Other,122278.1056
+East South Central,367618072,2039,Other,26605.21704
+West South Central,871608704,2039,Other,63079.97488
+Mountain,475872955,2039,Other,34439.82823
+Pacific,730176330,2039,Other,52844.24575
+New England,540609192,2040,Assembly,39656.5225
+Middle Atlantic,1270790039,2040,Assembly,93219.12117
+East North Central,2708981934,2040,Assembly,198718.0474
+West North Central,1195734619,2040,Assembly,87713.41206
+South Atlantic,3620435059,2040,Assembly,265577.9193
+East South Central,941188416,2040,Assembly,69041.11167
+West South Central,1788187500,2040,Assembly,131172.9413
+Mountain,1178168823,2040,Assembly,86424.86871
+Pacific,1747609375,2040,Assembly,128196.3228
+New England,793040040,2040,Education,24372.91634
+Middle Atlantic,2339661132,2040,Education,71906.03521
+East North Central,2982858887,2040,Education,91673.76986
+West North Central,1931783081,2040,Education,59370.5047
+South Atlantic,3174793701,2040,Education,97572.60337
+East South Central,1066041748,2040,Education,32763.22131
+West South Central,2561134522,2040,Education,78712.69331
+Mountain,1225084229,2040,Education,37651.15747
+Pacific,1795614990,2040,Education,55185.5792
+New England,98013038,2040,Food Sales ,32671.01267
+Middle Atlantic,63097660,2040,Food Sales ,21032.55333
+East North Central,311876739,2040,Food Sales ,103958.913
+West North Central,146872375,2040,Food Sales ,48957.45833
+South Atlantic,105440269,2040,Food Sales ,35146.75633
+East South Central,45016658,2040,Food Sales ,15005.55267
+West South Central,156322388,2040,Food Sales ,52107.46267
+Mountain,118780853,2040,Food Sales ,39593.61767
+Pacific,143953934,2040,Food Sales ,47984.64467
+New England,70268707,2040,Food Services ,16307.0839
+Middle Atlantic,88568573,2040,Food Services ,20553.88825
+East North Central,240035797,2040,Food Services ,55704.50985
+West North Central,75724716,2040,Food Services ,17573.24633
+South Atlantic,325391266,2040,Food Services ,75512.74105
+East South Central,128204254,2040,Food Services ,29752.04207
+West South Central,239569825,2040,Food Services ,55596.37289
+Mountain,260161315,2040,Food Services ,60374.98871
+Pacific,237993683,2040,Food Services ,55230.60154
+New England,116156517,2040,Health Care,4322.394323
+Middle Atlantic,362115539,2040,Health Care,13474.97489
+East North Central,786332398,2040,Health Care,29260.85235
+West North Central,191747803,2040,Health Care,7135.282948
+South Atlantic,595351562,2040,Health Care,22154.10963
+East South Central,151133896,2040,Health Care,5623.965929
+West South Central,314816497,2040,Health Care,11714.89189
+Mountain,274881500,2040,Health Care,10228.83834
+Pacific,453329254,2040,Health Care,16869.20239
+New England,422575745,2040,Lodging,7312.053266
+Middle Atlantic,1246624267,2040,Lodging,21571.0039
+East North Central,1539072387,2040,Lodging,26631.38954
+West North Central,795818482,2040,Lodging,13770.47121
+South Atlantic,1943088257,2040,Lodging,33622.2914
+East South Central,472799621,2040,Lodging,8181.103752
+West South Central,1078970703,2040,Lodging,18670.00495
+Mountain,967516419,2040,Lodging,16741.4521
+Pacific,1232511719,2040,Lodging,21326.80696
+New England,380950867,2040,Office,22039.60775
+Middle Atlantic,2401407715,2040,Office,138931.5228
+East North Central,1827826172,2040,Office,105747.4214
+West North Central,872213440,2040,Office,50461.21102
+South Atlantic,3068060791,2040,Office,177500.2034
+East South Central,356803955,2040,Office,20642.60746
+West South Central,1309986572,2040,Office,75788.22546
+Mountain,1168362793,2040,Office,67594.69499
+Pacific,1748280518,2040,Office,101145.3712
+New England,285363494,2040,Office,16509.47673
+Middle Atlantic,1154639282,2040,Office,66800.73224
+East North Central,1718197876,2040,Office,99404.96399
+West North Central,993318055,2040,Office,57467.62167
+South Atlantic,1565818238,2040,Office,90589.1619
+East South Central,448218170,2040,Office,25931.30376
+West South Central,1354662720,2040,Office,78372.92828
+Mountain,953519837,2040,Office,55165.12759
+Pacific,1206823364,2040,Office,69819.80057
+New England,819504394,2040,Mercantile and Service,62898.86103
+Middle Atlantic,2420629395,2040,Mercantile and Service,185788.9147
+East North Central,3545177246,2040,Mercantile and Service,272100.5678
+West North Central,2270323486,2040,Mercantile and Service,174252.5879
+South Atlantic,3911788818,2040,Mercantile and Service,300238.8554
+East South Central,1283270141,2040,Mercantile and Service,98493.95666
+West South Central,2909096436,2040,Mercantile and Service,223279.8918
+Mountain,2066850830,2040,Mercantile and Service,158635.5901
+Pacific,2324711182,2040,Mercantile and Service,178426.9696
+New England,701586792,2040,Warehouse,40497.49269
+Middle Atlantic,3062604736,2040,Warehouse,176781.8527
+East North Central,5126382813,2040,Warehouse,295908.7213
+West North Central,2180193604,2040,Warehouse,125846.6886
+South Atlantic,4972797363,2040,Warehouse,287043.3525
+East South Central,2016170898,2040,Warehouse,116378.8531
+West South Central,3452745850,2040,Warehouse,199301.8561
+Mountain,1802082276,2040,Warehouse,104021.0771
+Pacific,4281478027,2040,Warehouse,247138.5253
+New England,501684509,2040,Other,36307.85934
+Middle Atlantic,1083644531,2040,Other,78425.4098
+East North Central,1222318848,2040,Other,88461.53311
+West North Central,651641784,2040,Other,47160.55172
+South Atlantic,1717696900,2040,Other,124312.9822
+East South Central,372622620,2040,Other,26967.40567
+West South Central,883557983,2040,Other,63944.76686
+Mountain,482900696,2040,Other,34948.43917
+Pacific,740435669,2040,Other,53586.73357
+New England,541479981,2041,Assembly,39720.39945
+Middle Atlantic,1272162964,2041,Assembly,93319.83243
+East North Central,2725253906,2041,Assembly,199911.6819
+West North Central,1205296143,2041,Assembly,88414.80005
+South Atlantic,3654450440,2041,Assembly,268073.1261
+East South Central,948049439,2041,Assembly,69544.40373
+West South Central,1800410767,2041,Assembly,132069.5821
+Mountain,1190081543,2041,Assembly,87298.72926
+Pacific,1761650513,2041,Assembly,129226.314
+New England,800746460,2041,Education,24609.7618
+Middle Atlantic,2359191162,2041,Education,72506.26189
+East North Central,3006550293,2041,Education,92401.89029
+West North Central,1957029907,2041,Education,60146.42868
+South Atlantic,3215245117,2041,Education,98815.818
+East South Central,1077666382,2041,Education,33120.4873
+West South Central,2595801026,2041,Education,79778.11719
+Mountain,1240719605,2041,Education,38131.6877
+Pacific,1814747314,2041,Education,55773.58297
+New England,98625260,2041,Food Sales ,32875.08667
+Middle Atlantic,63484047,2041,Food Sales ,21161.349
+East North Central,313076569,2041,Food Sales ,104358.8563
+West North Central,148062698,2041,Food Sales ,49354.23267
+South Atlantic,106456475,2041,Food Sales ,35485.49167
+East South Central,45326886,2041,Food Sales ,15108.962
+West South Central,157738449,2041,Food Sales ,52579.483
+Mountain,119942535,2041,Food Sales ,39980.845
+Pacific,145349075,2041,Food Sales ,48449.69167
+New England,70707626,2041,Food Services ,16408.94274
+Middle Atlantic,89110939,2041,Food Services ,20679.75378
+East North Central,240959244,2041,Food Services ,55918.8119
+West North Central,76338425,2041,Food Services ,17715.66825
+South Atlantic,328527283,2041,Food Services ,76240.50871
+East South Central,129087754,2041,Food Services ,29957.07371
+West South Central,241739990,2041,Food Services ,56099.99768
+Mountain,262705719,2041,Food Services ,60965.46222
+Pacific,240300217,2041,Food Services ,55765.87314
+New England,117344224,2041,Health Care,4366.591051
+Middle Atlantic,366991058,2041,Health Care,13656.40178
+East North Central,796897522,2041,Health Care,29653.99974
+West North Central,194239563,2041,Health Care,7228.00585
+South Atlantic,606421753,2041,Health Care,22566.05148
+East South Central,152973236,2041,Health Care,5692.411101
+West South Central,318551727,2041,Health Care,11853.88656
+Mountain,279839966,2041,Health Care,10413.35184
+Pacific,459528351,2041,Health Care,17099.88201
+New England,427187775,2041,Lodging,7391.857678
+Middle Atlantic,1264700683,2041,Lodging,21883.78976
+East North Central,1563216187,2041,Lodging,27049.16257
+West North Central,805605469,2041,Lodging,13939.82066
+South Atlantic,1974588379,2041,Lodging,34167.35479
+East South Central,480201783,2041,Lodging,8309.187305
+West South Central,1093803467,2041,Lodging,18926.66417
+Mountain,980113770,2041,Lodging,16959.43077
+Pacific,1247587281,2041,Lodging,21587.66744
+New England,383447388,2041,Office,22184.04197
+Middle Atlantic,2416424805,2041,Office,139800.3246
+East North Central,1836935669,2041,Office,106274.444
+West North Central,879405273,2041,Office,50877.28877
+South Atlantic,3103939697,2041,Office,179575.9488
+East South Central,359247253,2041,Office,20783.96251
+West South Central,1323578491,2041,Office,76574.57507
+Mountain,1180967407,2041,Office,68323.92485
+Pacific,1763091919,2041,Office,102002.2729
+New England,287314179,2041,Office,16622.33205
+Middle Atlantic,1162500488,2041,Office,67255.53602
+East North Central,1727878296,2041,Office,99965.01695
+West North Central,1001871460,2041,Office,57962.47207
+South Atlantic,1584960815,2041,Office,91696.64038
+East South Central,451471039,2041,Office,26119.4959
+West South Central,1368873413,2041,Office,79195.07655
+Mountain,964338684,2041,Office,55791.04333
+Pacific,1217530761,2041,Office,70439.26846
+New England,825594910,2041,Mercantile and Service,63366.32224
+Middle Atlantic,2439960938,2041,Mercantile and Service,187272.6554
+East North Central,3564409424,2041,Mercantile and Service,273576.682
+West North Central,2292317627,2041,Mercantile and Service,175940.6892
+South Atlantic,3957340576,2041,Mercantile and Service,303735.0584
+East South Central,1295423950,2041,Mercantile and Service,99426.78966
+West South Central,2940375244,2041,Mercantile and Service,225680.6128
+Mountain,2090365723,2041,Mercantile and Service,160440.4126
+Pacific,2350212891,2041,Mercantile and Service,180384.2848
+New England,712946167,2041,Warehouse,41153.18663
+Middle Atlantic,3112891602,2041,Warehouse,179684.547
+East North Central,5205264161,2041,Warehouse,300461.9667
+West North Central,2218146484,2041,Warehouse,128037.4318
+South Atlantic,5063281738,2041,Warehouse,292266.3561
+East South Central,2052466308,2041,Warehouse,118473.9226
+West South Central,3515185791,2041,Warehouse,202906.0588
+Mountain,1838313354,2041,Warehouse,106112.4332
+Pacific,4343381836,2041,Warehouse,250711.781
+New England,507793030,2041,Other,36749.94459
+Middle Atlantic,1095161011,2041,Other,79258.8793
+East North Central,1234209106,2041,Other,89322.05363
+West North Central,658710022,2041,Other,47672.09351
+South Atlantic,1745813232,2041,Other,126347.8145
+East South Central,377603210,2041,Other,27327.86042
+West South Central,895452209,2041,Other,64805.57456
+Mountain,489909210,2041,Other,35455.65862
+Pacific,750654236,2041,Other,54326.27065
+New England,542195679,2042,Assembly,39772.89965
+Middle Atlantic,1273156860,2042,Assembly,93392.73992
+East North Central,2741001709,2042,Assembly,201066.866
+West North Central,1214676635,2042,Assembly,89102.90839
+South Atlantic,3688024658,2042,Assembly,270535.9713
+East South Central,954753906,2042,Assembly,70036.21159
+West South Central,1812319214,2042,Assembly,132943.1293
+Mountain,1201868530,2042,Assembly,88163.36664
+Pacific,1775428467,2042,Assembly,130236.9993
+New England,808361694,2042,Education,24843.80479
+Middle Atlantic,2378384521,2042,Education,73096.14148
+East North Central,3029786621,2042,Education,93116.02457
+West North Central,1982190918,2042,Education,60919.71525
+South Atlantic,3255533935,2042,Education,100054.0354
+East South Central,1089195068,2042,Education,33474.80447
+West South Central,2630379151,2042,Education,80840.82488
+Mountain,1256292846,2042,Education,38610.3083
+Pacific,1833708374,2042,Education,56356.32319
+New England,99219018,2042,Food Sales ,33073.006
+Middle Atlantic,63858383,2042,Food Sales ,21286.12767
+East North Central,314201751,2042,Food Sales ,104733.917
+West North Central,149231125,2042,Food Sales ,49743.70833
+South Atlantic,107460380,2042,Food Sales ,35820.12667
+East South Central,45629238,2042,Food Sales ,15209.746
+West South Central,159134369,2042,Food Sales ,53044.78967
+Mountain,121090713,2042,Food Sales ,40363.571
+Pacific,146727570,2042,Food Sales ,48909.19
+New England,71133308,2042,Food Services ,16507.7297
+Middle Atlantic,89636390,2042,Food Services ,20801.69388
+East North Central,241825226,2042,Food Services ,56119.77819
+West North Central,76940841,2042,Food Services ,17855.46943
+South Atlantic,331625336,2042,Food Services ,76959.46616
+East South Central,129948837,2042,Food Services ,30156.9031
+West South Central,243879303,2042,Food Services ,56596.46272
+Mountain,265220520,2042,Food Services ,61549.06582
+Pacific,242579239,2042,Food Services ,56294.76011
+New England,118519806,2042,Health Care,4410.336586
+Middle Atlantic,371853546,2042,Health Care,13837.34376
+East North Central,807433899,2042,Health Care,30046.07741
+West North Central,196722565,2042,Health Care,7320.40285
+South Atlantic,617534546,2042,Health Care,22979.57863
+East South Central,154803024,2042,Health Care,5760.500826
+West South Central,322265015,2042,Health Care,11992.06474
+Mountain,284814911,2042,Health Care,10598.47855
+Pacific,465713135,2042,Health Care,17330.02902
+New England,431761780,2042,Lodging,7471.004124
+Middle Atlantic,1282758911,2042,Lodging,22196.2609
+East North Central,1587374390,2042,Lodging,27467.18483
+West North Central,815344178,2042,Lodging,14108.33473
+South Atlantic,2006127442,2042,Lodging,34713.092
+East South Central,487607056,2042,Lodging,8437.324689
+West South Central,1108602783,2042,Lodging,19182.74462
+Mountain,992660401,2042,Lodging,17176.53181
+Pacific,1262585694,2042,Lodging,21847.19297
+New England,385874238,2042,Office,22324.44544
+Middle Atlantic,2430980957,2042,Office,140642.4591
+East North Central,1845642334,2042,Office,106778.1612
+West North Central,886468200,2042,Office,51285.90876
+South Atlantic,3139583496,2042,Office,181638.0923
+East South Central,361627106,2042,Office,20921.64701
+West South Central,1337037842,2042,Office,77353.25505
+Mountain,1193459839,2042,Office,69046.66452
+Pacific,1777652954,2042,Office,102844.69
+New England,289214172,2042,Office,16732.25462
+Middle Atlantic,1170149658,2042,Office,67698.07264
+East North Central,1737195801,2042,Office,100504.0737
+West North Central,1010284302,2042,Office,58449.19032
+South Atlantic,1603995972,2042,Office,92797.90417
+East South Central,454647308,2042,Office,26303.2564
+West South Central,1382950073,2042,Office,80009.47046
+Mountain,975073730,2042,Office,56412.11083
+Pacific,1228073364,2042,Office,71049.20232
+New England,831548645,2042,Mercantile and Service,63823.2852
+Middle Atlantic,2458903320,2042,Mercantile and Service,188726.5271
+East North Central,3582887939,2042,Mercantile and Service,274994.9509
+West North Central,2314033936,2042,Mercantile and Service,177607.4662
+South Atlantic,4002560303,2042,Mercantile and Service,307205.7772
+East South Central,1307400757,2042,Mercantile and Service,100346.0373
+West South Central,2971360840,2042,Mercantile and Service,228058.8291
+Mountain,2113701660,2042,Mercantile and Service,162231.4998
+Pacific,2375498535,2042,Mercantile and Service,182325.0166
+New England,724320374,2042,Warehouse,41809.73671
+Middle Atlantic,3163258789,2042,Warehouse,182591.8777
+East North Central,5284167481,2042,Warehouse,305016.4803
+West North Central,2256201172,2042,Warehouse,130234.0516
+South Atlantic,5154081054,2042,Warehouse,297507.5389
+East South Central,2088881348,2042,Warehouse,120575.8975
+West South Central,3577835937,2042,Warehouse,206522.3952
+Mountain,1874730468,2042,Warehouse,108214.5278
+Pacific,4405220703,2042,Warehouse,254281.2882
+New England,513869873,2042,Other,37189.73724
+Middle Atlantic,1106573730,2042,Other,80084.83941
+East North Central,1245958984,2042,Other,90172.41458
+West North Central,665718933,2042,Other,48179.34169
+South Atlantic,1773972778,2042,Other,128385.7742
+East South Central,382569641,2042,Other,27687.29045
+West South Central,907314575,2042,Other,65664.07648
+Mountain,496910980,2042,Other,35962.38999
+Pacific,760851379,2042,Other,55064.25722
+New England,542770997,2043,Assembly,39815.10225
+Middle Atlantic,1273806641,2043,Assembly,93440.40477
+East North Central,2756296143,2043,Assembly,202188.793
+West North Central,1223906860,2043,Assembly,89779.99385
+South Atlantic,3721250000,2043,Assembly,272973.2245
+East South Central,961326172,2043,Assembly,70518.3218
+West South Central,1823959717,2043,Assembly,133797.0213
+Mountain,1213559571,2043,Assembly,89020.96588
+Pacific,1788988037,2043,Assembly,131231.6649
+New England,815905884,2043,Education,25075.66434
+Middle Atlantic,2397300781,2043,Education,73677.50484
+East North Central,3052645020,2043,Education,93818.54376
+West North Central,2007313843,2043,Education,61691.83131
+South Atlantic,3295738038,2043,Education,101289.6492
+East South Central,1100654541,2043,Education,33826.99447
+West South Central,2664931640,2043,Education,81902.74469
+Mountain,1271833985,2043,Education,39087.94229
+Pacific,1852543579,2043,Education,56935.19544
+New England,99796867,2043,Food Sales ,33265.62233
+Middle Atlantic,64222313,2043,Food Sales ,21407.43767
+East North Central,315260589,2043,Food Sales ,105086.863
+West North Central,150381424,2043,Food Sales ,50127.14133
+South Atlantic,108454651,2043,Food Sales ,36151.55033
+East South Central,45924900,2043,Food Sales ,15308.3
+West South Central,160514114,2043,Food Sales ,53504.70467
+Mountain,122228401,2043,Food Sales ,40742.80033
+Pacific,148093079,2043,Food Sales ,49364.35967
+New England,71547584,2043,Food Services ,16603.8697
+Middle Atlantic,90147232,2043,Food Services ,20920.24371
+East North Central,242640152,2043,Food Services ,56308.89603
+West North Central,77533913,2043,Food Services ,17993.10217
+South Atlantic,334693665,2043,Food Services ,77671.52563
+East South Central,130790863,2043,Food Services ,30352.30998
+West South Central,245993821,2043,Food Services ,57087.17365
+Mountain,267712372,2043,Food Services ,62127.34371
+Pacific,244836792,2043,Food Services ,56818.66481
+New England,119686210,2043,Health Care,4453.740591
+Middle Atlantic,376711853,2043,Health Care,14018.13016
+East North Central,817960694,2043,Health Care,30437.79851
+West North Central,199201447,2043,Health Care,7412.646538
+South Atlantic,628703857,2043,Health Care,23395.20892
+East South Central,156626984,2043,Health Care,5828.37368
+West South Central,325964172,2043,Health Care,12129.71707
+Mountain,289812775,2043,Health Care,10784.45812
+Pacific,471894653,2043,Health Care,17560.0545
+New England,436308381,2043,Lodging,7549.676384
+Middle Atlantic,1300829224,2043,Lodging,22508.94115
+East North Central,1611583740,2043,Lodging,27886.09211
+West North Central,825054199,2043,Lodging,14276.3524
+South Atlantic,2037752076,2043,Lodging,35260.30989
+East South Central,495026703,2043,Lodging,8565.710795
+West South Central,1123394653,2043,Lodging,19438.69623
+Mountain,1005179688,2043,Lodging,17393.15971
+Pacific,1277537353,2043,Lodging,22105.9095
+New England,388241302,2043,Office,22461.39003
+Middle Atlantic,2445138671,2043,Office,141461.5423
+East North Central,1853994385,2043,Office,107261.3624
+West North Central,893424682,2043,Office,51688.37046
+South Atlantic,3175068115,2043,Office,183691.0265
+East South Central,363952850,2043,Office,21056.20107
+West South Central,1350397583,2043,Office,78126.17219
+Mountain,1205869140,2043,Office,69764.5947
+Pacific,1792008179,2043,Office,103675.2
+New England,291070801,2043,Office,16839.66841
+Middle Atlantic,1177616455,2043,Office,68130.05821
+East North Central,1746195068,2043,Office,101024.7191
+West North Central,1018581909,2043,Office,58929.24174
+South Atlantic,1622962402,2043,Office,93895.1918
+East South Central,457758453,2043,Office,26483.24921
+West South Central,1396926636,2043,Office,80818.07333
+Mountain,985748779,2043,Office,57029.70726
+Pacific,1238481811,2043,Office,71651.3747
+New England,837386536,2043,Mercantile and Service,64271.35686
+Middle Atlantic,2477517822,2043,Mercantile and Service,190155.2332
+East North Central,3600705322,2043,Mercantile and Service,276362.4763
+West North Central,2335529786,2043,Mercantile and Service,179257.3225
+South Atlantic,4047543945,2043,Mercantile and Service,310658.3759
+East South Central,1319232788,2043,Mercantile and Service,101254.1731
+West South Central,3002125733,2043,Mercantile and Service,230420.1059
+Mountain,2136909424,2043,Mercantile and Service,164012.7495
+Pacific,2400626465,2043,Mercantile and Service,184253.6434
+New England,735726196,2043,Warehouse,42468.1117
+Middle Atlantic,3213778321,2043,Warehouse,185508.0021
+East North Central,5363216309,2043,Warehouse,309579.3931
+West North Central,2294409424,2043,Warehouse,132439.5356
+South Atlantic,5245311035,2043,Warehouse,302773.5809
+East South Central,2125462646,2043,Warehouse,122687.4693
+West South Central,3640777100,2043,Warehouse,210155.5298
+Mountain,1911374878,2043,Warehouse,110329.7426
+Pacific,4467098145,2043,Warehouse,257853.022
+New England,519927430,2043,Other,37628.13413
+Middle Atlantic,1117909912,2043,Other,80905.2604
+East North Central,1257599609,2043,Other,91014.86869
+West North Central,672684754,2043,Other,48683.47137
+South Atlantic,1802215942,2043,Other,130429.7856
+East South Central,387530975,2043,Other,28046.3516
+West South Central,919166687,2043,Other,66521.8363
+Mountain,503917694,2043,Other,36469.47917
+Pacific,771045105,2043,Other,55801.99651
+New England,543222596,2044,Assembly,39848.22941
+Middle Atlantic,1274151611,2044,Assembly,93465.71013
+East North Central,2771219971,2044,Assembly,203283.5341
+West North Central,1233023072,2044,Assembly,90448.71586
+South Atlantic,3754235352,2044,Assembly,275392.8733
+East South Central,967794800,2044,Assembly,70992.82963
+West South Central,1835386475,2044,Assembly,134635.234
+Mountain,1225189941,2044,Assembly,89874.11458
+Pacific,1802382569,2044,Assembly,132214.2242
+New England,823402771,2044,Education,25306.07011
+Middle Atlantic,2416011230,2044,Education,74252.5429
+East North Central,3075215332,2044,Education,94512.20902
+West North Central,2032455811,2044,Education,62464.53263
+South Atlantic,3335952392,2044,Education,102525.5781
+East South Central,1112076782,2044,Education,34178.04021
+West South Central,2699534179,2044,Education,82966.2027
+Mountain,1287379517,2044,Education,39565.7113
+Pacific,1871306885,2044,Education,57511.85799
+New England,100361794,2044,Food Sales ,33453.93133
+Middle Atlantic,64577767,2044,Food Sales ,21525.92233
+East North Central,316262726,2044,Food Sales ,105420.9087
+West North Central,151518051,2044,Food Sales ,50506.017
+South Atlantic,109442466,2044,Food Sales ,36480.822
+East South Central,46215229,2044,Food Sales ,15405.07633
+West South Central,161882400,2044,Food Sales ,53960.8
+Mountain,123359162,2044,Food Sales ,41119.72067
+Pacific,149449935,2044,Food Sales ,49816.645
+New England,71952598,2044,Food Services ,16697.8603
+Middle Atlantic,90646179,2044,Food Services ,21036.0331
+East North Central,243411438,2044,Food Services ,56487.88646
+West North Central,78119942,2044,Food Services ,18129.10046
+South Atlantic,337742066,2044,Food Services ,78378.96046
+East South Central,131617691,2044,Food Services ,30544.18989
+West South Central,248090775,2044,Food Services ,57573.80854
+Mountain,270189057,2044,Food Services ,62702.10184
+Pacific,247080032,2044,Food Services ,57339.24793
+New England,120846916,2044,Health Care,4496.932562
+Middle Atlantic,381576690,2044,Health Care,14199.15956
+East North Central,828501281,2044,Health Care,30830.03284
+West North Central,201681930,2044,Health Care,7504.949802
+South Atlantic,639946961,2044,Health Care,23813.58517
+East South Central,158449631,2044,Health Care,5896.197675
+West South Central,329658600,2044,Health Care,12267.19342
+Mountain,294841552,2044,Health Care,10971.58802
+Pacific,478086395,2044,Health Care,17790.46043
+New England,440840301,2044,Lodging,7628.09461
+Middle Atlantic,1318948364,2044,Lodging,22822.46628
+East North Central,1635889282,2044,Lodging,28306.66386
+West North Central,834759277,2044,Lodging,14444.28453
+South Atlantic,2069518799,2044,Lodging,35809.98643
+East South Central,502474578,2044,Lodging,8694.585344
+West South Central,1138211304,2044,Lodging,19695.07664
+Mountain,1017700379,2044,Lodging,17609.81189
+Pacific,1292479248,2044,Lodging,22364.45707
+New England,390560211,2044,Office,22595.54866
+Middle Atlantic,2458970703,2044,Office,142261.7835
+East North Central,1862047241,2044,Office,107727.254
+West North Central,900301025,2044,Office,52086.19579
+South Atlantic,3210485595,2044,Office,185740.0765
+East South Central,366235230,2044,Office,21188.24634
+West South Central,1363696899,2044,Office,78895.59348
+Mountain,1218230468,2044,Office,70479.74945
+Pacific,1806210571,2044,Office,104496.8681
+New England,292892762,2044,Office,16945.0765
+Middle Atlantic,1184935791,2044,Office,68553.51254
+East North Central,1754927734,2044,Office,101529.9405
+West North Central,1026794312,2044,Office,59404.36374
+South Atlantic,1641906616,2044,Office,94991.19416
+East South Central,460818085,2044,Office,26660.26177
+West South Central,1410843750,2044,Office,81623.23684
+Mountain,996392151,2044,Office,57645.47103
+Pacific,1248792480,2044,Office,72247.89021
+New England,843133423,2044,Mercantile and Service,64712.44375
+Middle Atlantic,2495877441,2044,Mercantile and Service,191564.3765
+East North Central,3617969238,2044,Mercantile and Service,277687.5218
+West North Central,2356873291,2044,Mercantile and Service,180895.486
+South Atlantic,4092408203,2044,Mercantile and Service,314101.8117
+East South Central,1330958130,2044,Mercantile and Service,102154.1203
+West South Central,3032756836,2044,Mercantile and Service,232771.1141
+Mountain,2160051025,2044,Mercantile and Service,165788.921
+Pacific,2425665527,2044,Mercantile and Service,186175.4495
+New England,747184265,2044,Warehouse,43129.50252
+Middle Atlantic,3264540039,2044,Warehouse,188438.1061
+East North Central,5442561523,2044,Warehouse,314159.4141
+West North Central,2332834473,2044,Warehouse,134657.5336
+South Atlantic,5337117187,2044,Warehouse,308072.881
+East South Central,2162269287,2044,Warehouse,124812.0484
+West South Central,3704110108,2044,Warehouse,213811.2829
+Mountain,1948298828,2044,Warehouse,112461.0931
+Pacific,4529142090,2044,Warehouse,261434.3668
+New England,525980713,2044,Other,38066.2217
+Middle Atlantic,1129202026,2044,Other,81722.49211
+East North Central,1269167603,2044,Other,91852.06636
+West North Central,679627075,2044,Other,49185.9003
+South Atlantic,1830593140,2044,Other,132483.4972
+East South Central,392498291,2044,Other,28405.84568
+West South Central,931034791,2044,Other,67380.7535
+Mountain,510943603,2044,Other,36977.95753
+Pacific,781257385,2044,Other,56541.07858
+New England,543565857,2045,Assembly,39873.4094
+Middle Atlantic,1274227539,2045,Assembly,93471.27984
+East North Central,2785849365,2045,Assembly,204356.677
+West North Central,1242058838,2045,Assembly,91111.53674
+South Atlantic,3787082520,2045,Assembly,277802.3855
+East South Central,974186402,2045,Assembly,71461.68719
+West South Central,1846649658,2045,Assembly,135461.4476
+Mountain,1236792969,2045,Assembly,90725.2576
+Pacific,1815661011,2045,Assembly,133188.2676
+New England,830874695,2045,Education,25535.70868
+Middle Atlantic,2434581298,2045,Education,74823.26656
+East North Central,3097582031,2045,Education,95199.61654
+West North Central,2057671387,2045,Education,63239.49618
+South Atlantic,3376265625,2045,Education,103764.5459
+East South Central,1123491821,2045,Education,34528.8646
+West South Central,2734258790,2045,Education,84033.41242
+Mountain,1302963867,2045,Education,40044.67332
+Pacific,1890048462,2045,Education,58087.85272
+New England,100916565,2045,Food Sales ,33638.855
+Middle Atlantic,64926521,2045,Food Sales ,21642.17367
+East North Central,317216888,2045,Food Sales ,105738.9627
+West North Central,152645126,2045,Food Sales ,50881.70867
+South Atlantic,110426788,2045,Food Sales ,36808.92933
+East South Central,46501492,2045,Food Sales ,15500.49733
+West South Central,163243638,2045,Food Sales ,54414.546
+Mountain,124486343,2045,Food Sales ,41495.44767
+Pacific,150802185,2045,Food Sales ,50267.395
+New England,72350335,2045,Food Services ,16790.16213
+Middle Atlantic,91135720,2045,Food Services ,21149.63966
+East North Central,244145797,2045,Food Services ,56658.30732
+West North Central,78701042,2045,Food Services ,18263.95489
+South Atlantic,340779724,2045,Food Services ,79083.90219
+East South Central,132432953,2045,Food Services ,30733.38572
+West South Central,250176911,2045,Food Services ,58057.93293
+Mountain,272657867,2045,Food Services ,63275.03243
+Pacific,249315674,2045,Food Services ,57858.06781
+New England,122005196,2045,Health Care,4540.034259
+Middle Atlantic,386458283,2045,Health Care,14380.81247
+East North Central,839077637,2045,Health Care,31223.59819
+West North Central,204169419,2045,Health Care,7597.513772
+South Atlantic,651280579,2045,Health Care,24235.32962
+East South Central,160275208,2045,Health Care,5964.130701
+West South Central,333357117,2045,Health Care,12404.82194
+Mountain,299908966,2045,Health Care,11160.15567
+Pacific,484301026,2045,Health Care,18021.7181
+New England,445369293,2045,Lodging,7706.462172
+Middle Atlantic,1337151245,2045,Lodging,23137.44043
+East North Central,1660334228,2045,Lodging,28729.64778
+West North Central,844481689,2045,Lodging,14612.51661
+South Atlantic,2101482178,2045,Lodging,36363.06581
+East South Central,509964020,2045,Lodging,8824.179149
+West South Central,1153083008,2045,Lodging,19952.40966
+Mountain,1030249511,2045,Lodging,17826.95621
+Pacific,1307445801,2045,Lodging,22623.43131
+New England,392841614,2045,Office,22727.5374
+Middle Atlantic,2472544433,2045,Office,143047.0808
+East North Central,1869852539,2045,Office,108178.8232
+West North Central,907121704,2045,Office,52480.80072
+South Atlantic,3245921631,2045,Office,187790.2
+East South Central,368484314,2045,Office,21318.36529
+West South Central,1376972657,2045,Office,79663.65184
+Mountain,1230576416,2045,Office,71194.0144
+Pacific,1820309082,2045,Office,105312.5261
+New England,294688049,2045,Office,17048.9414
+Middle Atlantic,1192139771,2045,Office,68970.29304
+East North Central,1763441650,2045,Office,102022.5063
+West North Central,1034949218,2045,Office,59876.15931
+South Atlantic,1660872314,2045,Office,96088.43945
+East South Central,463838776,2045,Office,26835.02143
+West South Central,1424739624,2045,Office,82427.17151
+Mountain,1007030640,2045,Office,58260.95231
+Pacific,1259039063,2045,Office,72840.69807
+New England,848812194,2045,Mercantile and Service,65148.30259
+Middle Atlantic,2514049560,2045,Mercantile and Service,192959.1288
+East North Central,3634778564,2045,Mercantile and Service,278977.6766
+West North Central,2378127441,2045,Mercantile and Service,182526.7912
+South Atlantic,4137261230,2045,Mercantile and Service,317544.3854
+East South Central,1342612060,2045,Mercantile and Service,103048.5864
+West South Central,3063335205,2045,Mercantile and Service,235118.0747
+Mountain,2183183350,2045,Mercantile and Service,167564.3805
+Pacific,2450681153,2045,Mercantile and Service,188095.4567
+New England,758714294,2045,Warehouse,43795.04707
+Middle Atlantic,3315630127,2045,Warehouse,191387.1646
+East North Central,5522347656,2045,Warehouse,318764.8861
+West North Central,2371537841,2045,Warehouse,136891.597
+South Atlantic,5429637695,2045,Warehouse,313413.4157
+East South Central,2199357910,2045,Warehouse,126952.9043
+West South Central,3767931641,2045,Warehouse,217495.2349
+Mountain,1985552612,2045,Warehouse,114611.4826
+Pacific,4591471191,2045,Warehouse,265032.1715
+New England,532043762,2045,Other,38505.01606
+Middle Atlantic,1140480469,2045,Other,82538.73442
+East North Central,1280697509,2045,Other,92686.50752
+West North Central,686564087,2045,Other,49687.94502
+South Atlantic,1859152955,2045,Other,134550.4252
+East South Central,397482056,2045,Other,28766.5302
+West South Central,942943604,2045,Other,68242.61688
+Mountain,518002319,2045,Other,37488.8102
+Pacific,791509033,2045,Other,57283.00978
+New England,543814087,2046,Assembly,39891.61838
+Middle Atlantic,1274066040,2046,Assembly,93459.43304
+East North Central,2800252930,2046,Assembly,205413.2541
+West North Central,1251044555,2046,Assembly,91770.68625
+South Atlantic,3819884033,2046,Assembly,280208.5487
+East South Central,980524780,2046,Assembly,71926.64049
+West South Central,1857794800,2046,Assembly,136279.0022
+Mountain,1248398681,2046,Assembly,91576.59751
+Pacific,1828867798,2046,Assembly,134157.0548
+New England,838342041,2046,Education,25765.20655
+Middle Atlantic,2453071045,2046,Education,75391.52167
+East North Central,3119820313,2046,Education,95883.07735
+West North Central,2083010254,2046,Education,64018.24889
+South Atlantic,3416760254,2046,Education,105009.0886
+East South Central,1134927002,2046,Education,34880.30803
+West South Central,2769171875,2046,Education,85106.41461
+Mountain,1318618652,2046,Education,40525.80005
+Pacific,1908814698,2046,Education,58664.60532
+New England,101463638,2046,Food Sales ,33821.21267
+Middle Atlantic,65270165,2046,Food Sales ,21756.72167
+East North Central,318130920,2046,Food Sales ,106043.64
+West North Central,153766388,2046,Food Sales ,51255.46267
+South Atlantic,111410317,2046,Food Sales ,37136.77233
+East South Central,46784836,2046,Food Sales ,15594.94533
+West South Central,164601821,2046,Food Sales ,54867.27367
+Mountain,125612991,2046,Food Sales ,41870.997
+Pacific,152153519,2046,Food Sales ,50717.83967
+New England,72742547,2046,Food Services ,16881.18179
+Middle Atlantic,91618080,2046,Food Services ,21261.57975
+East North Central,244849289,2046,Food Services ,56821.56496
+West North Central,79279144,2046,Food Services ,18398.11359
+South Atlantic,343814911,2046,Food Services ,79788.27049
+East South Central,133239899,2046,Food Services ,30920.65167
+West South Central,252258377,2046,Food Services ,58540.97357
+Mountain,275125519,2046,Food Services ,63847.69428
+Pacific,251549789,2046,Food Services ,58376.53331
+New England,123164016,2046,Health Care,4583.156049
+Middle Atlantic,391365967,2046,Health Care,14563.43628
+East North Central,849710266,2046,Health Care,31619.25757
+West North Central,206668853,2046,Health Care,7690.522236
+South Atlantic,662720398,2046,Health Care,24661.026
+East South Central,162107621,2046,Health Care,6032.318107
+West South Central,337067901,2046,Health Care,12542.90693
+Mountain,305022278,2046,Health Care,11350.43127
+Pacific,490550293,2046,Health Care,18254.26464
+New England,449906342,2046,Lodging,7784.969148
+Middle Atlantic,1355470581,2046,Lodging,23454.42966
+East North Central,1684958618,2046,Lodging,29155.73672
+West North Central,854242127,2046,Lodging,14781.40667
+South Atlantic,2133693115,2046,Lodging,36920.42881
+East South Central,517507264,2046,Lodging,8954.703919
+West South Central,1168037475,2046,Lodging,20211.17477
+Mountain,1042852051,2046,Lodging,18045.02467
+Pacific,1322468750,2046,Lodging,22883.3814
+New England,395095245,2046,Office,22857.91942
+Middle Atlantic,2485920166,2046,Office,143820.9231
+East North Central,1877455322,2046,Office,108618.6762
+West North Central,913908935,2046,Office,52873.47054
+South Atlantic,3281455078,2046,Office,189845.9592
+East South Central,370709076,2046,Office,21447.07712
+West South Central,1390258423,2046,Office,80432.2892
+Mountain,1242936889,2046,Office,71909.11968
+Pacific,1834348145,2046,Office,106124.7449
+New England,296463836,2046,Office,17151.67814
+Middle Atlantic,1199257691,2046,Office,69382.09461
+East North Central,1771779541,2046,Office,102504.8884
+West North Central,1043071900,2046,Office,60346.09058
+South Atlantic,1679899658,2046,Office,97189.25122
+East South Central,466831848,2046,Office,27008.18322
+West South Central,1438648682,2046,Office,83231.86894
+Mountain,1017688477,2046,Office,58877.55294
+Pacific,1269252319,2046,Office,73431.57783
+New England,854443543,2046,Mercantile and Service,65580.52167
+Middle Atlantic,2532094482,2046,Mercantile and Service,194344.1184
+East North Central,3651220948,2046,Mercantile and Service,280239.6676
+West North Central,2399350098,2046,Mercantile and Service,184155.6793
+South Atlantic,4182203125,2046,Mercantile and Service,320993.78
+East South Central,1354227051,2046,Mercantile and Service,103940.0639
+West South Central,3093935303,2046,Mercantile and Service,237466.7031
+Mountain,2206360107,2046,Mercantile and Service,169343.2503
+Pacific,2475733155,2046,Mercantile and Service,190018.2559
+New England,770334594,2046,Warehouse,44465.8023
+Middle Atlantic,3367128906,2046,Warehouse,194359.8138
+East North Central,5602708007,2046,Warehouse,323403.5036
+West North Central,2410576660,2046,Warehouse,139145.0235
+South Atlantic,5523005372,2046,Warehouse,318802.8513
+East South Central,2236781494,2046,Warehouse,129113.0951
+West South Central,3832332520,2046,Warehouse,221212.6283
+Mountain,2023183960,2046,Warehouse,116783.6661
+Pacific,4654197754,2046,Warehouse,268652.9189
+New England,538129577,2046,Other,38945.45803
+Middle Atlantic,1151773071,2046,Other,83356.00144
+East North Central,1292220337,2046,Other,93520.43643
+West North Central,693512634,2046,Other,50190.82454
+South Atlantic,1887940063,2046,Other,136633.8028
+East South Central,402491913,2046,Other,29129.10305
+West South Central,954916016,2046,Other,69109.08304
+Mountain,525106384,2046,Other,38002.94485
+Pacific,801819214,2046,Other,58029.17714
+New England,543977784,2047,Assembly,39903.62641
+Middle Atlantic,1273691529,2047,Assembly,93431.9607
+East North Central,2814484863,2047,Assembly,206457.2411
+West North Central,1260005005,2047,Assembly,92427.98231
+South Atlantic,3852715088,2047,Assembly,282616.879
+East South Central,986828979,2047,Assembly,72389.08659
+West South Central,1868857910,2047,Assembly,137090.5394
+Mountain,1260031739,2047,Assembly,92429.94338
+Pacific,1842038696,2047,Assembly,135123.2093
+New England,845821106,2047,Education,25995.06458
+Middle Atlantic,2471528076,2047,Education,75958.77131
+East North Central,3141991699,2047,Education,96564.4822
+West North Central,2108513916,2047,Education,64802.06634
+South Atlantic,3457503418,2047,Education,106261.2697
+East South Central,1146404541,2047,Education,35233.05327
+West South Central,2804328125,2047,Education,86186.89012
+Mountain,1334369995,2047,Education,41009.89435
+Pacific,1927643189,2047,Education,59243.27123
+New England,102005020,2047,Food Sales ,34001.67333
+Middle Atlantic,65609970,2047,Food Sales ,21869.99
+East North Central,319010956,2047,Food Sales ,106336.9853
+West North Central,154884857,2047,Food Sales ,51628.28567
+South Atlantic,112395233,2047,Food Sales ,37465.07767
+East South Central,47066170,2047,Food Sales ,15688.72333
+West South Central,165960144,2047,Food Sales ,55320.048
+Mountain,126741555,2047,Food Sales ,42247.185
+Pacific,153506912,2047,Food Sales ,51168.97067
+New England,73130676,2047,Food Services ,16971.25392
+Middle Atlantic,92095055,2047,Food Services ,21372.27015
+East North Central,245526596,2047,Food Services ,56978.74591
+West North Central,79855804,2047,Food Services ,18531.93764
+South Atlantic,346854400,2047,Food Services ,80493.63713
+East South Central,134041123,2047,Food Services ,31106.58973
+West South Central,254340042,2047,Food Services ,59024.06038
+Mountain,277597382,2047,Food Services ,64421.33338
+Pacific,253787308,2047,Food Services ,58895.78878
+New England,124325798,2047,Health Care,4626.388061
+Middle Atlantic,396307526,2047,Health Care,14747.32064
+East North Central,860415954,2047,Health Care,32017.63561
+West North Central,209184357,2047,Health Care,7784.128695
+South Atlantic,674279663,2047,Health Care,25091.16718
+East South Central,163950058,2047,Health Care,6100.878523
+West South Central,340797547,2047,Health Care,12681.69381
+Mountain,310187530,2047,Health Care,11542.63965
+Pacific,496843933,2047,Health Care,18488.46238
+New England,454460205,2047,Lodging,7863.767066
+Middle Atlantic,1373932983,2047,Lodging,23773.89444
+East North Central,1709795898,2047,Lodging,29585.50941
+West North Central,864057434,2047,Lodging,14951.24615
+South Atlantic,2166193848,2047,Lodging,37482.80631
+East South Central,525114502,2047,Lodging,9086.336012
+West South Central,1183098022,2047,Lodging,20471.77543
+Mountain,1055528564,2047,Lodging,18264.37313
+Pacific,1337574341,2047,Lodging,23144.76149
+New England,397328674,2047,Office,22987.13267
+Middle Atlantic,2499146240,2047,Office,144586.107
+East North Central,1884892334,2047,Office,109048.9385
+West North Central,920680481,2047,Office,53265.23291
+South Atlantic,3317150146,2047,Office,191911.0688
+East South Central,372916779,2047,Office,21574.80201
+West South Central,1403581542,2047,Office,81203.0876
+Mountain,1255336426,2047,Office,72626.48497
+Pacific,1848363404,2047,Office,106935.5865
+New England,298225952,2047,Office,17253.62395
+Middle Atlantic,1206312500,2047,Office,69790.24494
+East North Central,1779975586,2047,Office,102979.064
+West North Central,1051182739,2047,Office,60815.33668
+South Atlantic,1699021851,2047,Office,98295.5504
+East South Central,469806336,2047,Office,27180.26984
+West South Central,1452599487,2047,Office,84038.98161
+Mountain,1028385742,2047,Office,59496.43465
+Pacific,1279456787,2047,Office,74021.94917
+New England,860044006,2047,Mercantile and Service,66010.37018
+Middle Atlantic,2550061035,2047,Mercantile and Service,195723.0929
+East North Central,3667367432,2047,Mercantile and Service,281478.9477
+West North Central,2420587646,2047,Mercantile and Service,185785.7103
+South Atlantic,4227315918,2047,Mercantile and Service,324456.2914
+East South Central,1365828857,2047,Mercantile and Service,104830.5294
+West South Central,3124616699,2047,Mercantile and Service,239821.5714
+Mountain,2229624024,2047,Mercantile and Service,171128.8099
+Pacific,2500869141,2047,Mercantile and Service,191947.5011
+New England,782060425,2047,Warehouse,45142.64908
+Middle Atlantic,3419103272,2047,Warehouse,197359.9152
+East North Central,5683753907,2047,Warehouse,328081.6927
+West North Central,2449998779,2047,Warehouse,141420.5752
+South Atlantic,5617328613,2047,Warehouse,324247.4446
+East South Central,2274584961,2047,Warehouse,131295.2138
+West South Central,3897389649,2047,Warehouse,224967.9022
+Mountain,2061233642,2047,Warehouse,118979.9969
+Pacific,4717413086,2047,Warehouse,272301.8793
+New England,544248779,2047,Other,39388.31628
+Middle Atlantic,1163102539,2047,Other,84175.93653
+East North Central,1303761718,2047,Other,94355.70806
+West North Central,700486390,2047,Other,50695.52849
+South Atlantic,1916991943,2047,Other,138736.3424
+East South Central,407535889,2047,Other,29494.14516
+West South Central,966971008,2047,Other,69981.52567
+Mountain,532266174,2047,Other,38521.11243
+Pacific,812203858,2047,Other,58780.73352
+New England,544062683,2048,Assembly,39909.8542
+Middle Atlantic,1273117188,2048,Assembly,93389.82977
+East North Central,2828576172,2048,Assembly,207490.9126
+West North Central,1268953735,2048,Assembly,93084.41863
+South Atlantic,3885618896,2048,Assembly,285030.546
+East South Central,993109985,2048,Assembly,72849.83136
+West South Central,1879859741,2048,Assembly,137897.5815
+Mountain,1271706299,2048,Assembly,93286.33365
+Pacific,1855194213,2048,Assembly,136088.2355
+New England,853321534,2048,Education,26225.57918
+Middle Atlantic,2489979736,2048,Education,76525.85587
+East North Central,3164130860,2048,Education,97244.89667
+West North Central,2134206299,2048,Education,65591.68385
+South Atlantic,3498535400,2048,Education,107522.3272
+East South Central,1157937622,2048,Education,35587.50551
+West South Central,2839760498,2048,Education,87275.85186
+Mountain,1350233155,2048,Education,41497.42519
+Pacific,1946555664,2048,Education,59824.51826
+New England,102541794,2048,Food Sales ,34180.598
+Middle Atlantic,65946655,2048,Food Sales ,21982.21833
+East North Central,319860413,2048,Food Sales ,106620.1377
+West North Central,156002243,2048,Food Sales ,52000.74767
+South Atlantic,113382813,2048,Food Sales ,37794.271
+East South Central,47346012,2048,Food Sales ,15782.004
+West South Central,167320511,2048,Food Sales ,55773.50367
+Mountain,127873474,2048,Food Sales ,42624.49133
+Pacific,154864105,2048,Food Sales ,51621.36833
+New England,73515510,2048,Food Services ,17060.56139
+Middle Atlantic,92567650,2048,Food Services ,21481.94409
+East North Central,246180374,2048,Food Services ,57130.46654
+West North Central,80431907,2048,Food Services ,18665.63243
+South Atlantic,349902100,2048,Food Services ,81200.90928
+East South Central,134838089,2048,Food Services ,31291.53964
+West South Central,256424866,2048,Food Services ,59507.8803
+Mountain,280076568,2048,Food Services ,64996.6719
+Pacific,256031098,2048,Food Services ,59416.49954
+New England,125491958,2048,Health Care,4669.782986
+Middle Atlantic,401287506,2048,Health Care,14932.63471
+East North Central,871204712,2048,Health Care,32419.10483
+West North Central,211718308,2048,Health Care,7878.4216
+South Atlantic,685966492,2048,Health Care,25526.05525
+East South Central,165804413,2048,Health Care,6169.882431
+West South Central,344550018,2048,Health Care,12821.33005
+Mountain,315408508,2048,Health Care,11736.92169
+Pacific,503187774,2048,Health Care,18724.5282
+New England,459036072,2048,Lodging,7942.94573
+Middle Atlantic,1392554565,2048,Lodging,24096.1136
+East North Central,1734866578,2048,Lodging,30019.32074
+West North Central,873937439,2048,Lodging,15122.20514
+South Atlantic,2199010498,2048,Lodging,38050.65029
+East South Central,532791931,2048,Lodging,9219.182656
+West South Central,1198278442,2048,Lodging,20734.45033
+Mountain,1068291016,2048,Lodging,18485.20864
+Pacific,1352777832,2048,Lodging,23407.83559
+New England,399546356,2048,Office,23115.43489
+Middle Atlantic,2512249756,2048,Office,145344.2005
+East North Central,1892183350,2048,Office,109470.7544
+West North Central,927446656,2048,Office,53656.68456
+South Atlantic,3353045410,2048,Office,193987.7606
+East South Central,375111450,2048,Office,21701.77294
+West South Central,1416957885,2048,Office,81976.96523
+Mountain,1267789063,2048,Office,73346.92233
+Pacific,1862375610,2048,Office,107746.2515
+New England,299977631,2048,Office,17354.96593
+Middle Atlantic,1213317017,2048,Office,70195.48567
+East North Central,1788048340,2048,Office,103446.1067
+West North Central,1059293335,2048,Office,61284.56873
+South Atlantic,1718258423,2048,Office,99408.46689
+East South Central,472767395,2048,Office,27351.57954
+West South Central,1466608520,2048,Office,84849.46301
+Mountain,1039134033,2048,Office,60118.26843
+Pacific,1289666870,2048,Office,74612.64535
+New England,865622802,2048,Mercantile and Service,66438.5557
+Middle Atlantic,2567977051,2048,Mercantile and Service,197098.1887
+East North Central,3683255616,2048,Mercantile and Service,282698.4026
+West North Central,2441867187,2048,Mercantile and Service,187418.9644
+South Atlantic,4272647461,2048,Mercantile and Service,327935.5924
+East South Central,1377432373,2048,Mercantile and Service,105721.1261
+West South Central,3155415039,2048,Mercantile and Service,242185.4153
+Mountain,2253000732,2048,Mercantile and Service,172923.0264
+Pacific,2526118164,2048,Mercantile and Service,193885.4221
+New England,793901123,2048,Warehouse,45826.12628
+Middle Atlantic,3471593750,2048,Warehouse,200389.808
+East North Central,5765551758,2048,Warehouse,332803.2866
+West North Central,2489833740,2048,Warehouse,143719.9572
+South Atlantic,5712676269,2048,Warehouse,329751.1699
+East South Central,2312795166,2048,Warehouse,133500.8105
+West South Central,3963149902,2048,Warehouse,228763.7624
+Mountain,2099726563,2048,Warehouse,121201.9127
+Pacific,4781173340,2048,Warehouse,275982.2942
+New England,550407593,2048,Other,39834.04133
+Middle Atlantic,1174482055,2048,Other,84999.49368
+East North Central,1315336182,2048,Other,95193.37397
+West North Central,707493225,2048,Other,51202.62643
+South Atlantic,1946331543,2048,Other,140859.7049
+East South Central,412618652,2048,Other,29861.99436
+West South Central,979119873,2048,Other,70860.76207
+Mountain,539487915,2048,Other,39043.76353
+Pacific,822672486,2048,Other,59538.36798
+New England,544070496,2049,Assembly,39910.42732
+Middle Atlantic,1272347168,2049,Assembly,93333.34476
+East North Central,2842538086,2049,Assembly,208515.0923
+West North Central,1277896484,2049,Assembly,93740.41622
+South Atlantic,3918612793,2049,Assembly,287450.8216
+East South Central,999371887,2049,Assembly,73309.17474
+West South Central,1890807983,2049,Assembly,138700.6925
+Mountain,1283428100,2049,Assembly,94146.1893
+Pacific,1868342164,2049,Assembly,137052.7068
+New England,860847168,2049,Education,26456.86844
+Middle Atlantic,2508437256,2049,Education,77093.12053
+East North Central,3186251465,2049,Education,97924.74085
+West North Central,2160098388,2049,Education,66387.43903
+South Atlantic,3539873047,2049,Education,108792.7788
+East South Central,1169531494,2049,Education,35943.82607
+West South Central,2875482666,2049,Education,88373.72003
+Mountain,1366214966,2049,Education,41988.60258
+Pacific,1965561035,2049,Education,60408.62032
+New England,103074394,2049,Food Sales ,34358.13133
+Middle Atlantic,66280479,2049,Food Sales ,22093.493
+East North Central,320680481,2049,Food Sales ,106893.4937
+West North Central,157119217,2049,Food Sales ,52373.07233
+South Atlantic,114373558,2049,Food Sales ,38124.51933
+East South Central,47624558,2049,Food Sales ,15874.85267
+West South Central,168683625,2049,Food Sales ,56227.875
+Mountain,129009308,2049,Food Sales ,43003.10267
+Pacific,156225769,2049,Food Sales ,52075.25633
+New England,73897346,2049,Food Services ,17149.17312
+Middle Atlantic,93036225,2049,Food Services ,21590.68513
+East North Central,246811539,2049,Food Services ,57276.93943
+West North Central,81007798,2049,Food Services ,18799.27802
+South Atlantic,352959564,2049,Food Services ,81910.44734
+East South Central,135631378,2049,Food Services ,31475.63624
+West South Central,258513885,2049,Food Services ,59992.67373
+Mountain,282564362,2049,Food Services ,65574.00806
+Pacific,258282288,2049,Food Services ,59938.92759
+New England,126663071,2049,Health Care,4713.362221
+Middle Atlantic,406307922,2049,Health Care,15119.45348
+East North Central,882080811,2049,Health Care,32823.82417
+West North Central,214271759,2049,Health Care,7973.440135
+South Atlantic,697784668,2049,Health Care,25965.83098
+East South Central,167671494,2049,Health Care,6239.359895
+West South Central,348326904,2049,Health Care,12961.87482
+Mountain,320686890,2049,Health Care,11933.33985
+Pacific,509584228,2049,Health Care,18962.55183
+New England,463636108,2049,Lodging,8022.542604
+Middle Atlantic,1411342407,2049,Lodging,24421.20964
+East North Central,1760179321,2049,Lodging,30457.32062
+West North Central,883886474,2049,Lodging,15294.3586
+South Atlantic,2232154297,2049,Lodging,38624.1551
+East South Central,540542359,2049,Lodging,9353.292441
+West South Central,1213584350,2049,Lodging,20999.29661
+Mountain,1081144653,2049,Lodging,18707.62197
+Pacific,1368085816,2049,Lodging,23672.7178
+New England,401749756,2049,Office,23242.91083
+Middle Atlantic,2525240479,2049,Office,146095.7684
+East North Central,1899335327,2049,Office,109884.5264
+West North Central,934211365,2049,Office,54048.05139
+South Atlantic,3389156494,2049,Office,196076.9385
+East South Central,377294647,2049,Office,21828.08006
+West South Central,1430394043,2049,Office,82754.3034
+Mountain,1280300659,2049,Office,74070.77071
+Pacific,1876392578,2049,Office,108557.192
+New England,301720032,2049,Office,17455.77115
+Middle Atlantic,1220276123,2049,Office,70598.09918
+East North Central,1796004273,2049,Office,103906.3909
+West North Central,1067408203,2049,Office,61754.04793
+South Atlantic,1737617310,2049,Office,100528.4598
+East South Central,475716858,2049,Office,27522.21837
+West South Central,1480682373,2049,Office,85663.69452
+Mountain,1049938110,2049,Office,60743.32967
+Pacific,1299887940,2049,Office,75203.97718
+New England,871183716,2049,Mercantile and Service,66865.36873
+Middle Atlantic,2585852783,2049,Mercantile and Service,198470.1925
+East North Central,3698899169,2049,Mercantile and Service,283899.0816
+West North Central,2463199463,2049,Mercantile and Service,189056.266
+South Atlantic,4318215821,2049,Mercantile and Service,331433.0696
+East South Central,1389043091,2049,Mercantile and Service,106612.2756
+West South Central,3186343995,2049,Mercantile and Service,244559.2844
+Mountain,2276500000,2049,Mercantile and Service,174726.6496
+Pacific,2551490966,2049,Mercantile and Service,195832.8434
+New England,805860840,2049,Warehouse,46516.47359
+Middle Atlantic,3524618653,2049,Warehouse,203450.5492
+East North Central,5848132324,2049,Warehouse,337570.0608
+West North Central,2530094971,2049,Warehouse,146043.9446
+South Atlantic,5809079102,2049,Warehouse,335315.8029
+East South Central,2351425048,2049,Warehouse,135730.632
+West South Central,4029634521,2049,Warehouse,232601.435
+Mountain,2138674805,2049,Warehouse,123450.1109
+Pacific,4845502442,2049,Warehouse,279695.5444
+New England,556608643,2049,Other,40282.82308
+Middle Atlantic,1185916992,2049,Other,85827.06176
+East North Central,1326949707,2049,Other,96033.8668
+West North Central,714536438,2049,Other,51712.35711
+South Atlantic,1975968995,2049,Other,143004.6235
+East South Central,417742279,2049,Other,30232.80096
+West South Central,991367309,2049,Other,71747.13224
+Mountain,546774414,2049,Other,39571.10128
+Pacific,833229065,2049,Other,60302.36762
+New England,544000244,2050,Assembly,39905.27397
+Middle Atlantic,1271378906,2050,Assembly,93262.31766
+East North Central,2856366943,2050,Assembly,209529.5116
+West North Central,1286831787,2050,Assembly,94395.86761
+South Atlantic,3951693360,2050,Assembly,289877.4549
+East South Central,1005613709,2050,Assembly,73767.04516
+West South Central,1901700562,2050,Assembly,139499.7204
+Mountain,1295196411,2050,Assembly,95009.45669
+Pacific,1881480591,2050,Assembly,138016.4794
+New England,868397400,2050,Education,26688.91369
+Middle Atlantic,2526898193,2050,Education,77660.49021
+East North Central,3208350342,2050,Education,98603.91726
+West North Central,2186189453,2050,Education,67189.30944
+South Atlantic,3581515869,2050,Education,110072.6095
+East South Central,1181185669,2050,Education,36301.99995
+West South Central,2911494141,2050,Education,89480.47961
+Mountain,1382314819,2050,Education,42483.40783
+Pacific,1984658203,2050,Education,60995.54362
+New England,103602692,2050,Food Sales ,34534.23067
+Middle Atlantic,66611366,2050,Food Sales ,22203.78867
+East North Central,321470642,2050,Food Sales ,107156.8807
+West North Central,158235641,2050,Food Sales ,52745.21367
+South Atlantic,115367393,2050,Food Sales ,38455.79767
+East South Central,47901756,2050,Food Sales ,15967.252
+West South Central,170049346,2050,Food Sales ,56683.11533
+Mountain,130148986,2050,Food Sales ,43382.99533
+Pacific,157591827,2050,Food Sales ,52530.609
+New England,74276100,2050,Food Services ,17237.06962
+Middle Atlantic,93500687,2050,Food Services ,21698.47167
+East North Central,247419693,2050,Food Services ,57418.07222
+West North Central,81583404,2050,Food Services ,18932.85747
+South Atlantic,356026581,2050,Food Services ,82622.20234
+East South Central,136420822,2050,Food Services ,31658.84055
+West South Central,260606903,2050,Food Services ,60478.39521
+Mountain,285060577,2050,Food Services ,66153.29846
+Pacific,260540741,2050,Food Services ,60463.04116
+New England,127839043,2050,Health Care,4757.122269
+Middle Atlantic,411368714,2050,Health Care,15307.77472
+East North Central,893044190,2050,Health Care,33231.79135
+West North Central,216844665,2050,Health Care,8069.182626
+South Atlantic,709734680,2050,Health Care,26410.51256
+East South Central,169551224,2050,Health Care,6309.308052
+West South Central,352128113,2050,Health Care,13103.32468
+Mountain,326022827,2050,Health Care,12131.89972
+Pacific,516033325,2050,Health Care,19202.53441
+New England,468260041,2050,Lodging,8102.552981
+Middle Atlantic,1430296509,2050,Lodging,24749.18256
+East North Central,1785734497,2050,Lodging,30899.51545
+West North Central,893904175,2050,Lodging,15467.70022
+South Atlantic,2265625733,2050,Lodging,39203.32919
+East South Central,548365784,2050,Lodging,9488.665332
+West South Central,1229016113,2050,Lodging,21266.32063
+Mountain,1094089112,2050,Lodging,18931.60684
+Pacific,1383497802,2050,Lodging,23939.3996
+New England,403938537,2050,Office,23369.54101
+Middle Atlantic,2538114746,2050,Office,146840.5988
+East North Central,1906345215,2050,Office,110290.0778
+West North Central,940973633,2050,Office,54439.27699
+South Atlantic,3425481445,2050,Office,198178.4895
+East South Central,379465881,2050,Office,21953.69507
+West South Central,1443889038,2050,Office,83535.04554
+Mountain,1292870483,2050,Office,74797.98782
+Pacific,1890412842,2050,Office,109368.3231
+New England,303452881,2050,Office,17556.02374
+Middle Atlantic,1227188354,2050,Office,70998.00078
+East North Central,1803840332,2050,Office,104359.7398
+West North Central,1075526245,2050,Office,62223.71075
+South Atlantic,1757097778,2050,Office,101655.4867
+East South Central,478654205,2050,Office,27692.15623
+West South Central,1494820434,2050,Office,86481.64073
+Mountain,1060797485,2050,Office,61371.59012
+Pacific,1310119141,2050,Office,75795.89514
+New England,876725646,2050,Mercantile and Service,67290.7247
+Middle Atlantic,2603684570,2050,Mercantile and Service,199838.8235
+East North Central,3714291992,2050,Mercantile and Service,285080.5164
+West North Central,2484582031,2050,Mercantile and Service,190697.4277
+South Atlantic,4364019531,2050,Mercantile and Service,334948.6104
+East South Central,1400659546,2050,Mercantile and Service,107503.8655
+West South Central,3217401855,2050,Mercantile and Service,246943.0471
+Mountain,2300120361,2050,Mercantile and Service,176539.5671
+Pacific,2576986328,2050,Mercantile and Service,197789.6715
+New England,817939820,2050,Warehouse,47213.70508
+Middle Atlantic,3578178955,2050,Warehouse,206542.1951
+East North Central,5931495605,2050,Warehouse,342382.0155
+West North Central,2570783447,2050,Warehouse,148392.5938
+South Atlantic,5906539551,2050,Warehouse,340941.4844
+East South Central,2390475586,2050,Warehouse,137984.735
+West South Central,4096845703,2050,Warehouse,236481.0467
+Mountain,2178080078,2050,Warehouse,125724.6902
+Pacific,4910400390,2050,Warehouse,283441.63
+New England,562851807,2050,Other,40734.6527
+Middle Atlantic,1197406738,2050,Other,86658.59646
+East North Central,1338601440,2050,Other,96877.12482
+West North Central,721615722,2050,Other,52224.69832
+South Atlantic,2005905029,2050,Other,145171.1511
+East South Central,422906647,2050,Other,30606.55607
+West South Central,1003713256,2050,Other,72640.63184
+Mountain,554125610,2050,Other,40103.12127
+Pacific,843873535,2050,Other,61072.7281

@@ -1,6 +1,6 @@
-CREATE TABLE wide_county_hourly_{turnover}_amy
+CREATE TABLE wide_county_hourly_{turnover}_{disag_id}
 WITH (
-    external_location = 's3://{dest_bucket}/{version}/wide/county_hourly_{turnover}_{weather}/',
+    external_location = 's3://{dest_bucket}/{disag_id}/wide/county_hourly_{turnover}_{disag_id}/',
     format = 'Parquet'
     -- partitioned_by = ARRAY['sector', 'year', 'state']
 ) AS
@@ -25,7 +25,7 @@ WITH (
         end_use,
         county_hourly_uncal_kwh,
         county_hourly_cal_kwh
-        FROM long_county_hourly_{turnover}_amy
+        FROM long_county_hourly_{turnover}_{disag_id}
         WHERE turnover != 'baseline'
     )
 

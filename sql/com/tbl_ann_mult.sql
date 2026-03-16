@@ -5,7 +5,8 @@ CREATE EXTERNAL TABLE {mult_com_annual}(
     multiplier_annual double,
     sector string,
     `in.state` string,
-    end_use string
+    end_use string,
+    fuel string
 )
 STORED AS parquet
 LOCATION 's3://{dest_bucket}/{mult_com_annual}/'

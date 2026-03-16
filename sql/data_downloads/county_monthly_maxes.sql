@@ -1,7 +1,8 @@
 -- find top hour per month in each county; sum of res and com
 
 WITH sub as(SELECT "in.county",timestamp_hour,extract(month from timestamp_hour) as "month",turnover,"in.state","year",county_hourly_cal_kwh 
-FROM long_county_hourly_{turnover}_{weather} 
+FROM long_county_hourly_{turnover}_{disag_id}
+WHERE fuel = 'Electric' 
 ),
 
 county_hourly_totals as(

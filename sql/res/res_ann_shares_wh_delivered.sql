@@ -1,0 +1,74 @@
+
+INSERT INTO {mult_res_annual}
+
+WITH meta_filtered AS (
+	
+	SELECT "in.county",
+		"in.weather_file_city",
+		"in.weather_file_longitude",
+	    "in.state",
+	    sum("out.load.hot_water.energy_delivered.kbtu") as delivered_wh,
+	    'res_wh_ann_6' AS group_ann
+	FROM "{meta_res}" meta
+	WHERE upgrade = 0
+	GROUP BY 
+		"in.county",
+		"in.weather_file_city",
+		"in.weather_file_longitude",
+		"in.state"
+)
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Electric' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Natural Gas' AS fuel
+FROM meta_filtered
+
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Propane' AS fuel
+FROM meta_filtered
+	
+UNION ALL
+
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+	"in.weather_file_longitude",
+    group_ann,
+    delivered_wh / sum(delivered_wh) OVER (PARTITION BY "in.state", group_ann) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Water Heating' AS end_use,
+    'Distillate/Other' AS fuel
+
+FROM meta_filtered;

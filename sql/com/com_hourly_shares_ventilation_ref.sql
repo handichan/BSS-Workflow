@@ -1,43 +1,68 @@
-INSERT INTO com_hourly_hvac_temp_{version}
-WITH 
--- get the timeseries data for the building ids
--- calculate simplified end uses
--- filter to the appropriate partitions
-ts_not_agg AS (
-	SELECT 	meta."in.nhgis_county_gisjoin" as "in.county",
-	    meta."in.state",
-		'com_ventilation_11' AS shape_ts,
-		-- make sure all the hours are 2018
-		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.fans.energy_consumption" * meta.weight as ventilation
-	FROM "{ts_com}" as ts
-		RIGHT JOIN "{meta_com}" as meta 
-		ON ts.bldg_id = meta.bldg_id
-		AND ts.upgrade = cast(meta.upgrade as varchar)
-	WHERE ts.upgrade = '0'
+INSERT INTO {mult_com_hourly}_hvac_temp
+
+WITH meta_filtered AS (
+    SELECT 
+        "in.nhgis_county_gisjoin" AS "in.county",
+        "in.state",
+        weight,
+        bldg_id,
+        upgrade
+    FROM "{meta_com}"
+    WHERE state = '{state}'
+    AND upgrade = 0
 ),
--- aggregate to hourly by county, and shape
-ts_agg AS(
-	SELECT "in.county",
-	"in.state",
-		shape_ts,
-		timestamp_hour,
-		sum(ventilation) as ventilation
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-	"in.state",
+
+ts_filtered AS (
+    SELECT 
+        bldg_id,
+        state,
+        upgrade,
+        DATE_TRUNC('hour', "timestamp") AS ts_hour,
+        "out.electricity.fans.energy_consumption" AS ventilation
+    FROM "{ts_com}"
+    WHERE state = '{state}'
+      AND upgrade = '0'
+),
+
+ts_joined AS (
+    SELECT
+        m."in.county",
+        m."in.state",
+        'com_ventilation_11' AS shape_ts,
+        CASE
+            WHEN extract(YEAR FROM tf.ts_hour + INTERVAL '1' HOUR) = 2019
+            THEN tf.ts_hour - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+            ELSE tf.ts_hour + INTERVAL '1' HOUR
+        END AS timestamp_hour,
+        tf.ventilation * m.weight AS ventilation
+    FROM ts_filtered tf
+    JOIN meta_filtered m
+      ON tf.bldg_id = m.bldg_id
+     AND tf.state = m."in.state"
+),
+
+ts_agg AS (
+    SELECT 
         "in.county",
-		shape_ts
+        "in.state",
+        shape_ts,
+        timestamp_hour,
+        SUM(ventilation) AS ventilation
+    FROM ts_joined
+    GROUP BY
+        "in.county",
+        "in.state",
+        shape_ts,
+        timestamp_hour
 )
--- don't normalize the shapes
+
 SELECT "in.county",
 	shape_ts,
 	timestamp_hour,
 	ventilation as kwh,
     'com' AS sector,
     "in.state",
-	'Ventilation' as end_use
+	'Ventilation' as end_use,
+	'Electric' as fuel
 FROM ts_agg
 ;

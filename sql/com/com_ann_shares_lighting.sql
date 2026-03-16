@@ -17,6 +17,7 @@ WITH meta_filtered AS (
     lights / sum(lights) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
     'com' AS sector,
     "in.state",
-    'Lighting' AS end_use
+    'Lighting' AS end_use,
+	'Electric' AS fuel
 FROM meta_filtered
 ;

@@ -1,69 +1,101 @@
--- rerun if there have been updates to com_ts_cooling
--- com_ts_cooling defines the grouping characteristics for cooling shapes (e.g. ES HP, GSHP with light envelope)
--- potential reasons to update com_ts_cooling
-    -- new ComStock upgrades
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
+INSERT INTO {mult_com_hourly}_hvac_temp
 
-INSERT INTO com_hourly_hvac_temp_{version}
-WITH meta_shapes AS (
--- assign each building id and upgrade combo to the appropriate shape based on the characteristics
-	SELECT 
-        meta.bldg_id,
-		meta."in.nhgis_county_gisjoin" as "in.county",
-		meta."in.state",
-		chars.shape_ts,
-		chars.upgrade,
-        chars."version",
-        meta.weight
-    	FROM "{meta_com}" as meta
-		RIGHT JOIN com_ts_cooling as chars ON meta."in.hvac_cool_type" = chars."in.hvac_cool_type"
-		AND meta."in.hvac_category" = chars."in.hvac_category"
-        AND meta.applicability = chars.applicability
-		AND cast(meta.upgrade as varchar) = chars.upgrade
-        ),
-
--- get the timeseries data for the building ids
--- mostly this step is to make aliases to make the next step nicer
--- calculate simplified end uses
--- filter to the appropriate partitions!!!! doing it here vastly reduces the data scanned and therefore runtime
-ts_not_agg AS (
-	SELECT meta_shapes."in.county",
-	meta_shapes."in.state",
-		meta_shapes.shape_ts,
-		meta_shapes."version",
-		-- make sure all the hours are 2018
-		CASE
-		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
-		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		(ts."out.electricity.cooling.energy_consumption" + ts."out.electricity.heat_rejection.energy_consumption" + ts."out.district_cooling.cooling.energy_consumption" + ts."out.electricity.pumps.energy_consumption") * meta_shapes.weight as cooling
-	FROM "{ts_com}" as ts
-		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
-		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM com_ts_cooling)
-	AND ts.state='{state}'
+WITH
+cooling_upgrades AS (
+    SELECT DISTINCT upgrade
+    FROM com_ts_cooling
 ),
--- aggregate to hourly by county, and shape
-ts_agg AS(
-	SELECT "in.county",
-	"in.state",
-		shape_ts,
-		timestamp_hour,
-		"version",
-		sum(cooling) as cooling
-	FROM ts_not_agg
-	GROUP BY timestamp_hour,
-	"in.state",
+
+meta_filtered AS (
+    SELECT
+        bldg_id,
+        "in.nhgis_county_gisjoin" AS "in.county",
+        "in.state",
+        weight,
+        "in.hvac_cool_type",
+        "in.hvac_category",
+        applicability,
+        CAST(upgrade AS varchar) AS upgrade
+    FROM "{meta_com}"
+    WHERE state = '{state}'
+),
+
+-- Join meta to cooling characteristics
+meta_shapes AS (
+    SELECT
+        mf.bldg_id,
+        mf."in.county",
+        mf."in.state",
+        c.shape_ts,
+        c.upgrade,
+        mf.weight
+    FROM meta_filtered mf
+    JOIN com_ts_cooling c
+      ON mf."in.hvac_cool_type" = c."in.hvac_cool_type"
+     AND mf."in.hvac_category" = c."in.hvac_category"
+     AND mf.applicability = c.applicability
+     AND mf.upgrade = c.upgrade
+),
+
+-- Pre-filter timeseries for partition pruning
+ts_filtered AS (
+    SELECT
+        bldg_id,
+        state,
+        upgrade,
+        DATE_TRUNC('hour', "timestamp") AS ts_hour,
+        "out.electricity.cooling.energy_consumption"
+      + "out.electricity.heat_rejection.energy_consumption"
+      + "out.district_cooling.cooling.energy_consumption"
+      + "out.electricity.pumps.energy_consumption"
+        AS cooling
+    FROM "{ts_com}"
+    WHERE state = '{state}'
+      AND upgrade IN (SELECT upgrade FROM cooling_upgrades)
+),
+
+ts_joined AS (
+    SELECT
+        ms."in.county",
+        ms."in.state",
+        ms.shape_ts,
+        CASE
+            WHEN extract(YEAR FROM ts.ts_hour + INTERVAL '1' HOUR) = 2019
+            THEN ts.ts_hour - INTERVAL '1' YEAR + INTERVAL '1' HOUR
+            ELSE ts.ts_hour + INTERVAL '1' HOUR
+        END AS timestamp_hour,
+        ts.cooling * ms.weight AS cooling
+    FROM ts_filtered ts
+    JOIN meta_shapes ms
+      ON ts.bldg_id = ms.bldg_id
+     AND ts.upgrade = ms.upgrade
+),
+
+ts_agg AS (
+    SELECT
         "in.county",
-		"version",
-		shape_ts
+        "in.state",
+        shape_ts,
+        timestamp_hour,
+        SUM(cooling) AS cooling
+    FROM ts_joined
+    GROUP BY
+        "in.county",
+        "in.state",
+        shape_ts,
+        timestamp_hour
 )
--- don't normalize the shapes
-SELECT "in.county",
-	shape_ts,
-	timestamp_hour,
-	cooling as kwh,
+
+SELECT
+    a."in.county",
+    a.shape_ts,
+    a.timestamp_hour,
+    a.cooling AS kwh,
     'com' AS sector,
-    "in.state",
-	'Cooling (Equip.)' as end_use
-FROM ts_agg
-;
+    a."in.state",
+    'Cooling (Equip.)' AS end_use,
+    u.fuel
+FROM ts_agg a
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas']
+) AS u(fuel);

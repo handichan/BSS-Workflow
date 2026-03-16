@@ -1,17 +1,9 @@
 .DS_Store
-/R/graphs
 R/.Rhistory
-R/.Rhistory
-R/.Rhistory
-R/graphs
-R/.Rhistory
-R/.Rhistory
-R/.Rhistory
-agg_results
-scout_results
-R/generated_csvs
-R/.Rhistory
-
-# Ignore helper and scout folders
-helper/
-scout/
+diagnostics/**
+scout_results/**
+scout_tsv/**
+R/generated_csvs/**
+R/graphs/**
+agg_results/**
+~$*

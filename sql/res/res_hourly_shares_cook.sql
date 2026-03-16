@@ -1,59 +1,58 @@
--- rerun if there have been updates to res_ts_cook
--- res_ts_cook defines the grouping characteristics for cooking shapes
--- potential reasons to update res_ts_cook
-    -- new ResStock upgrades
-    -- disaggregate by new characteristics (e.g. building type, LMI status)
+INSERT INTO {mult_res_hourly}_temp
 
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
 WITH meta_shapes AS (
--- assign each building id and upgrade combo to the appropriate shape based on the characteristics
 	SELECT meta.bldg_id,
 		meta."in.weather_file_city",
-		meta."in.state",
+		meta."in.weather_file_longitude",
 		chars.shape_ts,
 		chars.upgrade
-	FROM "resstock_amy2018_release_2024.2_metadata" as meta
-		RIGHT JOIN res_ts_cook as chars ON meta."in.cooking_range" = chars."in.cooking_range"
+	FROM "{meta_res}" as meta
+	RIGHT JOIN res_ts_cook as chars 
+		ON meta."in.cooking_range" = chars."in.cooking_range"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
--- get the timeseries data for the building ids
--- mostly this step is to make aliases to make the next step nicer
--- calculate simplified end uses
--- filter to the appropriate partitions!!!! doing it here vastly reduces the data scanned and therefore runtime
+
 ts_not_agg AS (
 	SELECT meta_shapes."in.weather_file_city",
-	meta_shapes."in.state",
+		meta_shapes."in.weather_file_longitude",
 		meta_shapes.shape_ts,
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.range_oven.energy_consumption" as cooking
-	FROM "resstock_amy2018_release_2024.2_by_state" as ts
+		ts."out.electricity.range_oven.energy_consumption" as cooking_elec,
+		ts."out.natural_gas.range_oven.energy_consumption" + ts."out.propane.range_oven.energy_consumption" as cooking_fossil
+	FROM "{ts_res}" as ts
 		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
 	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cook)
+	AND ts.state='{state}'
 ),
--- aggregate to hourly by weather file, and shape
+
 ts_agg AS(
 	SELECT "in.weather_file_city",
-	"in.state",
+		"in.weather_file_longitude",
 		shape_ts,
 		timestamp_hour,
-		sum(cooking) as cooking
+		sum(cooking_elec) as cooking_elec,
+		sum(cooking_fossil) as cooking_fossil
 	FROM ts_not_agg
 	GROUP BY timestamp_hour,
-	"in.state",
+		"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
 )
--- normalize the shapes
+
+
 SELECT "in.weather_file_city",
+    "in.weather_file_longitude",
 	shape_ts,
 	timestamp_hour,
-	cooking as kwh,
-	cooking / sum(cooking) OVER (PARTITION BY "in.state", "in.weather_file_city", shape_ts) as multiplier_hourly,
+	u.kwh as kwh,
     'res' AS sector,
-    "in.state",
-	'Cooking' as end_use
-FROM ts_agg
-;
+	'Cooking' as end_use,
+	u.fuel
+FROM ts_agg a 
+CROSS JOIN UNNEST(
+    ARRAY['Electric', 'Natural Gas', 'Propane'],
+	ARRAY[a.cooking_elec, a.cooking_fossil, a.cooking_fossil]
+) AS u(fuel, kwh);

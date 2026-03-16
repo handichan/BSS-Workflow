@@ -1,21 +1,21 @@
-INSERT INTO res_hourly_disaggregation_multipliers_{version}
+INSERT INTO {mult_res_hourly}
 WITH weather as(
-    SELECT "in.weather_file_city", "in.state", "in.county"
-  FROM "resstock_amy2018_release_2024.2_metadata"
+    SELECT "in.weather_file_city", "in.weather_file_longitude", "in.county"
+  FROM "{meta_res}"
   WHERE upgrade = 0
-  GROUP BY "in.weather_file_city", "in.state", "in.county"
+  GROUP BY "in.weather_file_city", "in.weather_file_longitude", "in.county"
 ),
 
 unformatted as (SELECT "in.weather_file_city",
 	'res_gap_ts_1' shape_ts,
 	CAST("timestamp" AS timestamp(3)) as ts,
 	"out.electricity.total.energy_consumption..kwh" as kwh,
-	"out.electricity.total.energy_consumption..kwh" / sum("out.electricity.total.energy_consumption..kwh") OVER (PARTITION BY "in.state", "in.weather_file_city") as multiplier_hourly,
+	"out.electricity.total.energy_consumption..kwh" / sum("out.electricity.total.energy_consumption..kwh") OVER (PARTITION BY "in.weather_file_longitude", "in.weather_file_city") as multiplier_hourly,
     'res' AS sector,
-    "in.state",
+    "in.weather_file_longitude",
 	'Other' as end_use
 
-FROM "comstock_2025.1_upgrade_0" g 
+FROM "{gap_com}" g 
 LEFT JOIN weather ON weather."in.county" = g."in.county"
 )
 
@@ -28,6 +28,7 @@ shape_ts,
 kwh,
 multiplier_hourly,
 sector,
-"in.state",
-end_use
+"in.weather_file_longitude",
+end_use,
+'Electric' as fuel
 FROM unformatted;
