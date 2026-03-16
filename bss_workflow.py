@@ -2169,13 +2169,13 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
         # Insert and merge (BSS)
-        bssbucket_insert(athena, cfg)
-        bssbucket_parquetmerge(s3, cfg)
+        # bssbucket_insert(athena, cfg)
+        # bssbucket_parquetmerge(s3, cfg)
         merge_and_replace_folders(s3, 'bss-workflow', 'v2/annual_results/')
         # # Insert and merge (IEF)
-        bssiefbucket_insert(athena, cfg)
-        bssiefbucket_parquetmerge(s3, cfg)
-        bssbucket_parquet_scout(s3, athena, cfg)
+        # bssiefbucket_insert(athena, cfg)
+        # bssiefbucket_parquetmerge(s3, cfg)
+        # bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
