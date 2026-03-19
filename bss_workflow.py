@@ -119,7 +119,7 @@ class Config:
     MAP_EU_DIR = "map_eu"               # folder that contains the mapping files to define the disaggregation multipliers
     MAP_MEAS_DIR = "map_meas"           # folder that contains the measure map, envelope map, and calibration multipliers
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
-    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map2.tsv")
+    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     EIA_GROSS_PATH = "map_meas/eia_gross_consumption_by_state_sector_year_month.csv"    # file with monthly EIA electricity and gas consumption
     SCOUT_OUT_TSV = "scout_tsv"         # location where transformed Scout files will be saved as TSV
