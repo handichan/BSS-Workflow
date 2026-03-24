@@ -40,6 +40,17 @@ pd.set_option("display.max_columns", None)
 # ----------------------------
 
 class Config:
+    # Files/dirs
+    JSON_PATH = "json/input.json"
+    SQL_DIR = "sql"
+    MAP_EU_DIR = "map_eu"
+    MAP_MEAS_DIR = "map_meas"
+    ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
+    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
+    SCOUT_OUT_TSV = "scout/scout_tsv"
+    SCOUT_IN_JSON = "scout/scout_json"
+    OUTPUT_DIR = "agg_results"
 
     # data version identifiers
     SCOUT_RUN_DATE = "2026-01-09"       # identifier for the Scout result vintage
@@ -71,8 +82,8 @@ class Config:
     # Scenarios to process
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
-    # TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
-    TURNOVERS = ["aeo_010926"]
+    TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    # TURNOVERS = ["aeo_010926"]
     # TURNOVERS = ['brk_010926']
     # TURNOVERS = ['brk_010926','aeo_010926']
 
@@ -91,11 +102,11 @@ class Config:
 
     # years in Scout results to process
     # YEARS = ['2026','2030','2035','2040','2045','2050']
-    # YEARS = ['2026','2030','2040','2050']
+    YEARS = ['2026','2030','2040','2050']
     # YEARS = ['2026']
     # YEARS = ['2022']
     # YEARS = ['2050']
-    YEARS = ['2020','2021','2022','2023','2024']
+    # YEARS = ['2020','2021','2022','2023','2024']
     # YEARS = ['2023','2024']
     # YEARS = ['2026','2030','2040']
     
