@@ -17,7 +17,7 @@ FROM ns
 LEFT JOIN long_county_hourly_{turnover}_{disag_id} lch ON ns."in.county" = lch."in.county"
 WHERE turnover!='baseline'
 AND lch.county_hourly_cal_kwh = lch.county_hourly_cal_kwh
-AND "year" IN (2024, 2050)
+AND "year" IN ({baseyear}, 2050)
 GROUP BY lch."in.county",turnover,"in.state","year"
 ),
 
@@ -25,8 +25,8 @@ county_differences AS (
     SELECT 
     "in.county",turnover,"in.state",
     (MAX(CASE WHEN year = 2050 THEN county_total_ann_kwh END) - 
-     MAX(CASE WHEN year = 2024 THEN county_total_ann_kwh END)) 
-    / NULLIF(MAX(CASE WHEN year = 2024 THEN county_total_ann_kwh END), 0) AS percent_difference
+     MAX(CASE WHEN year = {baseyear} THEN county_total_ann_kwh END)) 
+    / NULLIF(MAX(CASE WHEN year = {baseyear} THEN county_total_ann_kwh END), 0) AS percent_difference
 FROM 
     county_totals
 GROUP BY 
@@ -87,7 +87,7 @@ hourly_data AS (
     FROM long_county_hourly_{turnover}_{disag_id} lch
     INNER JOIN example_counties ec
         ON lch."in.county" = ec."in.county"
-    WHERE lch.year IN (2024, 2050)
+    WHERE lch.year IN ({baseyear}, 2050)
     GROUP BY 
         lch."in.county",
         ec.example_type,

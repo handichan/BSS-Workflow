@@ -40,10 +40,23 @@ pd.set_option("display.max_columns", None)
 # ----------------------------
 
 class Config:
+    # Files/dirs
+    JSON_PATH = "json/input.json"
+    SQL_DIR = "sql"
+    MAP_EU_DIR = "map_eu"
+    MAP_MEAS_DIR = "map_meas"
+    ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
+    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
+    CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
+    SCOUT_OUT_TSV = "scout/scout_tsv"
+    SCOUT_IN_JSON = "scout/scout_json"
+    OUTPUT_DIR = "agg_results"
 
     # data version identifiers
     SCOUT_RUN_DATE = "2026-01-09"       # identifier for the Scout result vintage
+    VERSION_ID = "20260109"
     DISAG_ID = "20260305"               # identifier for disaggregated energy data
+    WEATHER = "amy"
 
     # S3 locations
     DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
@@ -53,13 +66,15 @@ class Config:
 
     # names of tables that contain disaggregation multipliers
     MULTIPLIERS_TABLES = [
-        "com_annual_disaggregation_multipliers_20260304",   # mult_com_annual
-        "res_annual_disaggregation_multipliers_20260206",   # mult_res_annual
-        "com_hourly_disaggregation_multipliers_20260304",   # mult_com_hourly
-        "res_hourly_disaggregation_multipliers_20260212"    # mult_res_hourly
+        f"com_annual_disaggregation_multipliers_{WEATHER}",   # mult_com_annual
+        f"res_annual_disaggregation_multipliers_{WEATHER}",   # mult_res_annual
+        f"com_hourly_disaggregation_multipliers_{WEATHER}",   # mult_com_hourly
+        f"res_hourly_disaggregation_multipliers_{WEATHER}",   # mult_res_hourly
     ]
 
     # names of tables that contain BuildStock data - required to calculate disaggregation multipliers
+    MULTIPLIERS_SUFFIX = "disaggregation_multipliers_" + WEATHER
+
     BLDSTOCK_TABLES = [
         "comstock_2025.1_parquet",                  # meta_com Commercial metadata
         "comstock_2025.1_by_state",                 # ts_com Commercial hourly data
@@ -71,8 +86,9 @@ class Config:
     # Scenarios to process
     # TURNOVERS = ["breakthrough", "ineff", "mid", "high", "stated"]
     # TURNOVERS = ['brk','aeo25_20to50_bytech_indiv','aeo25_20to50_bytech_gap_indiv']
-    # TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
-    TURNOVERS = ["aeo_010926"]
+    # this is used in bss paper
+    TURNOVERS = ["aeo", "ref", "brk", "accel", "fossil", "state","dual_switch", "high_switch", "min_switch"]
+    # TURNOVERS = ["aeo_010926"]
     # TURNOVERS = ['brk_010926']
     # TURNOVERS = ['brk_010926','aeo_010926']
 
@@ -91,11 +107,11 @@ class Config:
 
     # years in Scout results to process
     # YEARS = ['2026','2030','2035','2040','2045','2050']
-    # YEARS = ['2026','2030','2040','2050']
+    YEARS = ['2026','2030','2040','2050']
     # YEARS = ['2026']
     # YEARS = ['2022']
     # YEARS = ['2050']
-    YEARS = ['2020','2021','2022','2023','2024']
+    # YEARS = ['2020','2021','2022','2023','2024']
     # YEARS = ['2023','2024']
     # YEARS = ['2026','2030','2040']
     
@@ -214,7 +230,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name
     """
 
     s3_bucket_target = "bss-workflow"
-    s3_folder = "v2/annual/"
+    s3_folder = "v4/annual/"
     s3_output_prefix = "athena_results/"
     output_location = f"s3://{cfg.BUCKET_NAME}/{s3_output_prefix}/"
     qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
@@ -229,6 +245,20 @@ def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name
     
     s3_client.upload_file(local_parquet_file, s3_bucket_target, f"{s3_folder}{local_parquet_file}")
     print(f"{local_parquet_file} is uploaded to {s3_bucket_target}/{s3_folder}")   
+
+
+def drop_athena_table_if_exists(athena, t, cfg):
+    """
+    Drop an Athena table if it exists.
+    
+    Parameters:
+    - athena: Boto3 Athena client
+    - t: Table name to drop
+    - cfg: Config object containing DATABASE_NAME
+    """
+    query = f"DROP TABLE IF EXISTS {t};"
+    print(f"Dropping table if exists: {t}")
+    execute_athena_query(athena, query, cfg, is_create=True, wait=True)
 
 
 def upload_file_to_s3(s3_client, local_path: str, bucket: str, s3_path: str):
@@ -419,7 +449,7 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
     # Fix measures without a fuel key
     to_shift = all_df[pd.isna(all_df["value"])].copy()
     if not to_shift.empty:
-        to_shift.loc[:, "value"] = to_shift["year"]
+        to_shift.loc[:, "value"] = pd.to_numeric(to_shift["year"], errors="coerce")
         to_shift.loc[:, "year"] = to_shift["fuel"]
         to_shift.loc[:, "fuel"] = "Electric"
         df = pd.concat([all_df[pd.notna(all_df["value"])], to_shift])
@@ -578,8 +608,16 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
+            cmp_all = pre_all.merge(post_all, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_all["kwh_before"] = pd.to_numeric(cmp_all["kwh_before"], errors="coerce")
+            cmp_all["kwh_after"]  = pd.to_numeric(cmp_all["kwh_after"], errors="coerce")
+
+            # Now fill NaNs safely
+            cmp_all = cmp_all.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_all["delta"] = cmp_all["kwh_after"] - cmp_all["kwh_before"]
             cmp_all["pct_delta"] = cmp_all.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
@@ -603,8 +641,14 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
                 .reset_index()
                 .rename(columns={"state_ann_kwh": "kwh_after"})
             )
-            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer") \
-                             .fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+            cmp_sub = pre_sub.merge(post_sub, on=group_keys, how="outer")
+
+            # Explicitly convert to numeric first
+            cmp_sub["kwh_before"] = pd.to_numeric(cmp_sub["kwh_before"], errors="coerce")
+            cmp_sub["kwh_after"]  = pd.to_numeric(cmp_sub["kwh_after"], errors="coerce")
+
+            cmp_sub = cmp_sub.fillna({"kwh_before": 0.0, "kwh_after": 0.0})
+
             cmp_sub["delta"] = cmp_sub["kwh_after"] - cmp_sub["kwh_before"]
             cmp_sub["pct_delta"] = cmp_sub.apply(
                 lambda r: (r["delta"] / r["kwh_before"]) if r["kwh_before"] else (0.0 if r["kwh_after"] == 0 else float("inf")),
@@ -740,6 +784,8 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         mult_res_annual=cfg.MULTIPLIERS_TABLES[1],
         mult_com_hourly=cfg.MULTIPLIERS_TABLES[2],
         mult_res_hourly=cfg.MULTIPLIERS_TABLES[3],
+        # used in test_multipliers functions
+        mult_suffix=cfg.MULTIPLIERS_SUFFIX,
 
         meta_com=cfg.BLDSTOCK_TABLES[0],
         ts_com=cfg.BLDSTOCK_TABLES[1],
@@ -795,6 +841,15 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
 
 def gen_multipliers(s3_client, athena_client, cfg: Config):
     sectors = ["com", "res"]
+    # drop tables before rerunning multipliers
+    drop_tables = [
+        "com_annual_disaggregation_multipliers_amy",
+        "com_hourly_disaggregation_multipliers_amy",
+        f"com_hourly_hvac_temp_{cfg.VERSION_ID}"
+    ]
+    for t in drop_tables:
+        drop_athena_table_if_exists(athena_client, t, cfg)
+    # lists as in original
     tbl_res = [
         "tbl_ann_mult.sql",
         "res_ann_shares_cook.sql",
@@ -1029,7 +1084,7 @@ def county_hourly_examples_60_days(s3_client, athena_client, cfg: Config, turnov
 
     return main_sql
 
-def get_csvs_for_R(s3_client, athena_client, cfg: Config):
+def get_csvs_for_R(s3_client, athena_client, cfg: Config, for_calibration: bool = False):
     turnovers = cfg.TURNOVERS
     sql_files = [
         "county_ann_eu.sql",
@@ -1038,6 +1093,10 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         "county_peak_hour.sql",
         "county_share_winter.sql"
     ]
+    
+    if for_calibration:
+        sql_files = ["state_monthly.sql"]
+    
     out_dir = "R/generated_csvs"
     os.makedirs(out_dir, exist_ok=True)
 
@@ -1058,7 +1117,6 @@ def get_csvs_for_R(s3_client, athena_client, cfg: Config):
         out = os.path.join(out_dir, f"{t}_county_hourly_examples_60_days.csv")
         df.to_csv(out, index=False)
         print(f"Saved {out}")
-
 
 def get_csv_for_calibration(s3_client, athena_client, cfg: Config):
     t = cfg.TURNOVERS[0]
@@ -1095,6 +1153,30 @@ def calc_calibration_multipliers(cfg: Config):
     cmpath = cfg.CALIB_MULT_PATH
     monthly_ratios.to_csv(f"{cmpath}", index=False, sep="\t")
     print(f"Saved {cmpath}")
+
+def generate_state_monthly_for_cal(s3_client, athena_client, cfg: Config):
+    """
+    Generate state monthly for calibration from the long_county_hourly_ref_amy table
+    and save to diagnostics/state_monthly_for_cal.csv
+    """
+    os.makedirs("diagnostics", exist_ok=True)
+    out_path = "diagnostics/state_monthly_for_cal.csv"
+
+    # Using the state_monthly.sql template, but specifically for 'ref' turnover and 'amy' weather
+    sql_path = "data_downloads/state_monthly.sql"
+    template = read_sql_file(sql_path, cfg)
+    
+    # Override the default SQL to use specific table and turnover
+    q = template.format(
+        turnover='aeo', 
+        weather='amy', 
+        dest_bucket=cfg.BUCKET_NAME
+    )
+
+    # Execute the query and save to CSV
+    df = execute_athena_query_to_df(s3_client, athena_client, q, cfg)
+    df.to_csv(out_path, index=False)
+    print(f"Saved {out_path}")
 
 def county_partition_multipliers(athena_client, cfg: Config):
     """
@@ -1244,10 +1326,10 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
     # sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     
-    # # baseline
-    # template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
-    # q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.MULT_VERSION_ID)
-    # execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+    # baseline
+    template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
+    q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
+    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
     # scenarios
     scout_header = f"""CREATE TABLE wide_scout_annual_state
@@ -1517,7 +1599,6 @@ def combine_countydata(s3_client, athena_client, cfg: Config):
             q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
-
 # ----------------------------
 # R runner
 # ----------------------------
@@ -1526,7 +1607,10 @@ def run_r_script(r_file: str):
     if robjects is None:
         print("rpy2 not available; skipping R execution.")
         return
-    r_path = os.path.join("R", r_file)
+    # Get the absolute path to the folder containing THIS Python file
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    # Build the absolute path to the R script
+    r_path = os.path.join(project_root, "R", r_file)
     with open(r_path, "r", encoding="utf-8") as f:
         r_code = f.read()
     try:
@@ -1657,7 +1741,7 @@ def bssbucket_insert(athena_client, cfg: Config):
     query_template = """
         CREATE TABLE bss_county_hourly_{turnover}_amy_{sector}_{year}
         WITH (
-            external_location = 's3://{dest_bucket}/v2/county_hourly/{turnover}/sector={sector}/year={year}/',
+            external_location = 's3://{dest_bucket}/v4/county_hourly/{turnover}/sector={sector}/year={year}/',
             format = 'PARQUET',
             write_compression = 'SNAPPY',
             partitioned_by = ARRAY['state']
@@ -1691,7 +1775,7 @@ def bssbucket_parquetmerge(s3_client, cfg: Config):
     for t in turnovers:
         for s in sectors:
             for y in years:
-                top = f"v2/county_hourly/{t}/sector={s}/year={y}/"
+                top = f"v4/county_hourly/{t}/sector={s}/year={y}/"
                 print(f"Merging BSS bucket for {t} {s} {y}")
                 merge_and_replace_folders(s3_client, dest_bucket, top)
 
@@ -2111,6 +2195,7 @@ def main(opts):
     # calculate disaggregation multipliers
     if opts.gen_mults:
         s3, athena = get_boto3_clients()
+        s3_create_table_from_tsv(s3, athena, cfg.MEAS_MAP_PATH, cfg)
         s3_create_tables_from_csvdir(s3, athena, cfg)
         gen_multipliers(s3, athena, cfg)
         test_multipliers(s3, athena, cfg)
@@ -2144,38 +2229,81 @@ def main(opts):
         get_csvs_for_R(s3, athena, cfg)
         # run_r_script("county and hourly graphs.R")
 
+    if opts.combine_countydata:
+        _, athena = get_boto3_clients()
+        combine_countydata(athena, cfg)
+
     if opts.convert_wide:
         _, athena = get_boto3_clients()
         convert_countyhourly_long_to_wide(athena, cfg)
         convert_scout_long_to_wide(athena, cfg)
 
-    # if opts.gen_countyall:
-    #     s3, athena = get_boto3_clients()
-    #     gen_scoutdata(s3, athena, cfg)
-    #     run_r_script("annual_graphs.R")
-    #     gen_countydata(s3, athena, cfg)
-    #     get_csv_for_calibration(s3, athena, cfg)
-    #     calc_calibration_multipliers(cfg)
-    #     combine_countydata(s3, athena, cfg)
-    #     test_county(s3, athena, cfg)
-    #     get_csvs_for_R(s3, athena, cfg)
-    #     run_r_script("county and hourly graphs.R")
+    if opts.gen_countyall:
+        s3, athena = get_boto3_clients()
+        gen_scoutdata(s3, athena, cfg)
+        run_r_script("annual_graphs.R")
+        gen_countydata(s3, athena, cfg)
+        get_csv_for_calibration(s3, athena, cfg)
+        calc_calibration_multipliers(cfg)
+        combine_countydata(s3, athena, cfg)
+        test_county(s3, athena, cfg)
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
+
+    if opts.calibration:
+        s3, athena = get_boto3_clients()
+        TURNOVERS_backup = cfg.TURNOVERS
+        YEARS_backup = cfg.YEARS
+        cfg.TURNOVERS = ["aeo"]
+        cfg.YEARS = [str(i) for i in range(2020, 2025)]
+        gen_scoutdata(s3, athena, cfg)
+        # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        get_csvs_for_R(s3, athena, cfg, for_calibration=True)
+        generate_state_monthly_for_cal(s3, athena, cfg)
+        run_r_script("calibration.R")
+        cfg.TURNOVERS = TURNOVERS_backup
+        cfg.YEARS = YEARS_backup
+
+    # previous workflow without running calibration
+    if opts.gen_countyall_no_calib:
+        s3, athena = get_boto3_clients()
+        # remove scout_annual_state_aeo (produced from calibration)
+        # also remove long_county_hourly_aeo_amy and long_county_annual_aeo_amy, as 2026 onward data will be generated and concatenated
+        drop_tables = [
+            "scout_annual_state_aeo",
+            "long_county_hourly_aeo_amy",
+            "long_county_annual_aeo_amy"
+        ]
+        for t in drop_tables:
+            drop_athena_table_if_exists(athena, t, cfg)
+        gen_scoutdata(s3, athena, cfg)
+        run_r_script("annual_graphs.R")
+        gen_countydata(athena, cfg)
+        combine_countydata(athena, cfg)
+        test_county(s3, athena, cfg)
+        get_csvs_for_R(s3, athena, cfg)
+        run_r_script("county and hourly graphs.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
         bssbucket_insert(athena, cfg)
 
-    if opts.bssbucket_parquetmerge:
+    if opts.iefbucket_parquetmerge:
         s3, athena = get_boto3_clients()
         s3_bucket = "bss-ief-bucket"
+        # Insert and merge (IEF)
+        bssiefbucket_insert(athena, cfg)
+        bssiefbucket_parquetmerge(s3, cfg)
+
+    if opts.bssbucket_parquetmerge:
+        s3, athena = get_boto3_clients()
         # Insert and merge (BSS)
-        # bssbucket_insert(athena, cfg)
-        # bssbucket_parquetmerge(s3, cfg)
-        merge_and_replace_folders(s3, 'bss-workflow', 'v2/annual_results/')
-        # # Insert and merge (IEF)
-        # bssiefbucket_insert(athena, cfg)
-        # bssiefbucket_parquetmerge(s3, cfg)
-        # bssbucket_parquet_scout(s3, athena, cfg)
+        bssbucket_insert(athena, cfg)
+        bssbucket_parquetmerge(s3, cfg)
+        merge_and_replace_folders(s3, 'bss-workflow', 'v4/annual_results/')
+        bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
         s3, athena = get_boto3_clients()
@@ -2185,6 +2313,10 @@ def main(opts):
     if opts.county_partition_mults:
         _, athena = get_boto3_clients()
         county_partition_multipliers(athena, cfg)
+
+    if opts.gen_state_monthly_cal:
+        s3, athena = get_boto3_clients()
+        generate_state_monthly_for_cal(s3, athena, cfg)
 
 
 if __name__ == "__main__":
@@ -2200,10 +2332,13 @@ if __name__ == "__main__":
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
     parser.add_argument("--convert_wide", action="store_true", help="Convert to wide format for publication")
     parser.add_argument("--gen_countyall", action="store_true", help="Process Scout data and disaggregate")
+    parser.add_argument("--gen_state_monthly_cal", action="store_true", help="Generate State Monthly Calibration Data")
     parser.add_argument("--bssbucket_insert", action="store_true", help="Populate into bss-workflow")
-    parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
+    parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bss bucket")
+    parser.add_argument("--iefbucket_parquetmerge", action="store_true", help="Populate + merge parquet under ief bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
+    parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
     
     opts = parser.parse_args()
     main(opts)

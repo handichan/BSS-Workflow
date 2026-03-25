@@ -14,9 +14,11 @@ WITH meta_filtered AS (
 		meta."in.nhgis_county_gisjoin",
 		meta."in.state",
 		chars.group_ann
-),
-geo_totals AS (
-    SELECT "in.nhgis_county_gisjoin",
+)
+SELECT  "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    wh / sum(wh) OVER (PARTITION BY "in.state", group_ann) as multiplier_annual,
+    'com' AS sector,
     "in.state",
     group_ann,
     wh_elec,

@@ -2,7 +2,31 @@ meas	Scout_end_use	original_ann	measure_ann	original_ts	measure_ts	sector	origin
 (C) Building Codes	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Cooking	Cooking, codes	Cooking	Cooking, codes and BPS
 (C) Building Performance Standards	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Cooking	Cooking, codes	Cooking	Cooking, codes and BPS
 (C) Induction Range FS	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, fossil	Range, induction	Range, fossil	Range, electric
-(C) Ref. Case Electric Range	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
+(C) Min. Efficiency HP FS (NG Furnace)	Cooling (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_cooling_ts_7	com_cooling_ts_7	com	NG furnace + central or room AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (NG Furnace)	Heating (Equip.)	com_hvac_ann_12	com_hvac_ann_12	com_heating_ts_8	com_heating_ts_1	com	NG furnace + central or room AC	ASHP, minimum efficiency	fossil	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (NG Furnace)	Ventilation	com_hvac_ann_12	com_hvac_ann_12	com_ventilation_6	com_ventilation_6	com	NG furnace + central or room AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (Other Fossil Furnace)	Cooling (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_cooling_ts_7	com_cooling_ts_7	com	Other fossil furnace + central or room AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (Other Fossil Furnace)	Heating (Equip.)	com_hvac_ann_24	com_hvac_ann_24	com_heating_ts_8	com_heating_ts_1	com	Other fossil furnace + central or room AC	ASHP, minimum efficiency	fossil	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (Other Fossil Furnace)	Ventilation	com_hvac_ann_24	com_hvac_ann_24	com_ventilation_6	com_ventilation_6	com	Other fossil furnace + central or room AC	ASHP, minimum efficiency	AC	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Cooling (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_cooling_ts_9	com_cooling_ts_1	com	NG RTU + RTAC or chiller	ASHP, minimum efficiency	RTAC or chiller	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Heating (Equip.)	com_hvac_ann_16	com_hvac_ann_17	com_heating_ts_8	com_heating_ts_1	com	NG RTU + RTAC or chiller	ASHP, minimum efficiency	fossil	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, NG Heat)	Ventilation	com_hvac_ann_16	com_hvac_ann_17	com_ventilation_5	com_ventilation_1	com	NG RTU + RTAC or chiller	ASHP, minimum efficiency	RTAC or chiller	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Cooling (Equip.)	com_hvac_ann_28	com_hvac_ann_29	com_cooling_ts_9	com_cooling_ts_1	com	Other fossil RTU + RTAC or chiller	ASHP, minimum efficiency	RTAC or chiller	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Heating (Equip.)	com_hvac_ann_28	com_hvac_ann_29	com_heating_ts_8	com_heating_ts_1	com	Other fossil RTU + RTAC or chiller	ASHP, minimum efficiency	fossil	ASHP, minimum efficiency
+(C) Min. Efficiency HP FS (RTU, Other Fossil Heat)	Ventilation	com_hvac_ann_28	com_hvac_ann_29	com_ventilation_5	com_ventilation_1	com	Other fossil RTU + RTAC or chiller	ASHP, minimum efficiency	RTAC or chiller	ASHP, minimum efficiency
+(C) Ref. Case ASHP	Cooling (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_cooling_ts_1	com_cooling_ts_1	com	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
+(C) Ref. Case ASHP	Heating (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_heating_ts_1	com_heating_ts_1	com	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
+(C) Ref. Case ASHP (RTU)	Cooling (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_cooling_ts_1	com_cooling_ts_1	com	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
+(C) Ref. Case ASHP (RTU)	Heating (Equip.)	com_hvac_ann_1	com_hvac_ann_1	com_heating_ts_1	com_heating_ts_1	com	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
+(C) Ref. Case ASHP (RTU)	Ventilation	com_hvac_ann_1	com_hvac_ann_1	com_ventilation_9	com_ventilation_9	com	ASHP, reference	ASHP, reference	ASHP, reference	ASHP, reference
+(C) Ref. Case Elec. Boiler FS (NG Boiler)	Cooling (Equip.)	com_hvac_ann_9	com_hvac_ann_10	com_cooling_ts_9	com_cooling_ts_9	com	NG boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
+(C) Ref. Case Elec. Boiler FS (NG Boiler)	Heating (Equip.)	com_hvac_ann_9	com_hvac_ann_10	com_heating_ts_9	com_heating_ts_4	com	NG boiler + RTAC or chiller	Boiler, electric	fossil	Boiler, electric
+(C) Ref. Case Elec. Boiler FS (NG Boiler)	Ventilation	com_hvac_ann_9	com_hvac_ann_10	com_ventilation_4	com_ventilation_4	com	NG boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
+(C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Cooling (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_cooling_ts_9	com_cooling_ts_9	com	Other fossil boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
+(C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Heating (Equip.)	com_hvac_ann_22	com_hvac_ann_22	com_heating_ts_9	com_heating_ts_4	com	Other fossil boiler + RTAC or chiller	Boiler, electric	fossil	Boiler, electric
+(C) Ref. Case Elec. Boiler FS (Other Fossil Boiler)	Ventilation	com_hvac_ann_22	com_hvac_ann_22	com_ventilation_4	com_ventilation_4	com	Other fossil boiler + RTAC or chiller	Boiler, electric	RTAC or chiller	Boiler, electric
+(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
+(C) Ref. Case Electric Range	Cooking	com_cook_ann_2	com_cook_ann_2	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
 (C) Ref. Case Electric Range FS	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, fossil	Range, electric	Range, fossil	Range, electric
 (C) Ref. Case Electric Range TS	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, electric	Range, electric	Range, electric	Range, electric
 (C) Ref. Case Gas Range	Cooking	com_cook_ann_1	com_cook_ann_1	com_cook_ts_1	com_cook_ts_1	com	Range, fossil	Range, fossil	Range, fossil	Range, fossil
@@ -195,8 +219,8 @@ Gap	Cooking	com_gap_ann_1	com_gap_ann_1	com_gap_ts_1	com_gap_ts_1	com	Cooking, g
 (C) Building Performance Standards	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, BPS	Computers and electronics	Computers and electronics, codes and BPS
 (C) Building Codes	Computers and Electronics	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Computers and electronics	Computers and electronics, codes	Computers and electronics	Computers and electronics, codes and BPS
 (C) Building Performance Standards	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other, BPS	Other	Other, codes and BPS
-(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
-(C) Ref. Case Electric Other TS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other	Other	Other	Other
+(C) Ref. Case Electric Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
+(C) Ref. Case Electric Other TS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
 (C) Ref. Case Fossil Other	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other, fossil	Other, fossil	Other, fossil
 (C) Ref. Case Fossil Other FS	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Other, fossil	Other	Other, fossil	Other
 (C) Ref. Case Misc. Electric Appliances	Other	com_misc_ann_1	com_misc_ann_1	com_misc_ts_1	com_misc_ts_1	com	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances	Misc. electric appliances
