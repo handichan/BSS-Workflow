@@ -79,7 +79,7 @@ The column names and descriptions for the unformatted disaggregation results are
 | `year` | Projection year | Integer |
 | `in.state` | State abbreviation (e.g. AL, WA) | String |
 
-**Table 1:** Unformatted annual county-level results
+**Table 1:** Unformatted annual county-level results (long_county_annual_<turnover>_amy in the data base. One example is long_county_annual_min_switch_amy)
 
 | Variable Name | Description | Data Type |
 |---------------|-------------|-----------|
@@ -94,7 +94,7 @@ The column names and descriptions for the unformatted disaggregation results are
 | `year` | Projection year | Integer |
 | `end_use` | Building end use: Computers and Electronics, Cooking, Cooling (Equip.), Heating (Equip.), Lighting, Other, Refrigeration, Ventilation, Water Heating | String |
 
-**Table 2:** Unformatted hourly county-level results
+**Table 2:** Unformatted hourly county-level results (long_county_hourly_<turnover>_amy. One example is long_county_hourly_min_switch_amy)
 
 The disaggregated outputs can be converted to wide format for publication (`--convert_wide`). The column names and descriptions of the formatted results are shown in Tables 3 and 4. The allowed values of `end_use` are computers_electronics, cooking, cooling, heating, water_heating, lighting, other, refrigeration, ventilation, water_heating.
 
@@ -105,13 +105,13 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 | `scenario` | Scenario identifier | String |
 | `year` | Projection year | Integer |
 | `natural_gas.{end_use}.kwh` | Annual natural gas for the specified end-use, kWh | Float |
-| `electricity_uncal.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
-| `electricity_cal.{end_use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
+| `electricity_uncalibrated.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
+| `electricity_calibrated.{end_use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
 | `propane.{end_use}.kwh` | Annual propane for the specified end-use, kWh | Float |
 | `biomass.{end_use}.kwh` | Annual biomass for the specified end-use, kWh | Float |
 | `other.{end_use}.kwh` | Annual consumption of other fuels for the specified end-use, kWh | Float |
 
-**Table 3:** Annual state-level results in publication format
+**Table 3:** Annual state-level results in publication format (wide_scout_annual_state_baseline in the database)
 
 | Variable Name | Description | Data Type |
 |---------------|-------------|-----------|
@@ -121,8 +121,8 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 | `sector` | Building sector: com, res | String |
 | `year` | Projection year | Integer |
 | `state` | State abbreviation (e.g. AL, WA) | String |
-| `electricity uncal.{end use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
-| `electricity cal.{end use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
+| `uncal.{end use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
+| `cal.{end use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
 
 **Table 4:** Hourly county-level results in publication format
 
@@ -254,53 +254,45 @@ set AWS_SECRET_ACCESS_KEY=your_secret_access_key
 
 There are two options for disaggregation multipliers in the BSS workflow: using the pre-calculated ones that accompany the BSS dataset or calculating custom ones using the BuildStock Standard Data Release (SDR) tables. In both cases, data that is stored on S3 must be registered to tables with AWS Glue so that it can be accessed using SQL. [This training video](https://www.youtube.com/watch?v=qSR1MFpSiro&list=PLmIn8Hncs7bEYCZiHaoPSovoBrRGR-tRS&index=5&t=2s) from the National Lab of the Rockies demonstrates Gluing the SDR tables. The names of the tables generated in this process will go in the `BLDSTOCK_TABLES` parameter of the [configuration parameters](#configuration-parameters).
 
-The rest of this section describes how to register the pre-calculated multipliers, which are located in `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/`.
+The rest of this section describes how to register the pre-calculated multipliers, which are located in `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/`. 
+<!-- fixme confirm if this is the right link when v1.1 link is available-->
 
 **Data Structure:**
-- **3 Sub-folders** (each containing parquet files):
-  - `com_hourly_multipliers_amy/`
-  - `res_hourly_multipliers_amy/`
-  - `res_hourly_multipliers_tmy/`
-- **3 Parquet files**:
-  - `com_annual_multipliers_amy.parquet`
-  - `res_annual_multipliers_amy.parquet`
-  - `res_annual_multipliers_tmy.parquet`
+- `com_hourly_disaggregation_multipliers_amy/`
+- `res_hourly_disaggregation_multipliers_amy/`
+- `com_annual_disaggregation_multipliers_amy/`
+- `res_annual_disaggregation_multipliers_amy/`
 
 **Setting up Glue Crawlers:**
 
-For each of the 6 resources (3 folders + 3 files), create a separate Glue Crawler:
+For each of the 4 resources, create a separate Glue Crawler:
 
 1. **Navigate to AWS Glue Console** → Crawlers → Create crawler
 
 2. **Set Crawler Properties:**
    - **Crawler name**: Use descriptive names such as:
-     - `com_hourly_multipliers_amy_crawler`
-     - `res_hourly_multipliers_amy_crawler`
-     - `res_hourly_multipliers_tmy_crawler`
-     - `com_annual_multipliers_amy_crawler`
-     - `res_annual_multipliers_amy_crawler`
-     - `res_annual_multipliers_tmy_crawler`
+     - `com_hourly_disaggregation_multipliers_amy_crawler`
+     - `res_hourly_disaggregation_multipliers_amy_crawler`
+     - `com_annual_disaggregation_multipliers_amy_crawler`
+     - `res_annual_disaggregation_multipliers_amy_crawler`
 
 3. **Choose Data Sources and Classifiers:**
    - "Is your data already mapped to Glue tables?" Not yet.
    - Add data source
      - **Data source**: S3
      - **Location of S3 data**: In a different account
-     - S3 path
-        - For **sub-folders**, specify the S3 path:
-            - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/com_hourly_multipliers_amy/`
-            - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/res_hourly_multipliers_amy/`
-            - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/res_hourly_multipliers_tmy/`
-        - For **parquet files**, specify the full file path:
-            -`s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/com_annual_multipliers_amy.parquet`
-         - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/res_annual_multipliers_amy.parquet`
-         - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/res_annual_multipliers_tmy.parquet`
+     - Specify the S3 path
+        <!-- fixme confirm if this is the right link when v1.1 link is available-->
+        - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/com_hourly_disaggregation_multipliers_amy/`
+        - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/res_hourly_disaggregation_multipliers_amy/`
+        - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/com_annual_disaggregation_multipliers_amy/`
+        - `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/res_annual_disaggregation_multipliers_amy/`
      - Crawl all subfolders
      - **Sample only a subset of files**: 1 Files
 
 4. **Configure Security Settings:**
    - Select or create an IAM role that has read access to the S3 bucket
-   - View the service role and check its permissions. For example, under Resource it could say `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.0.0_2025/multipliers/*` or `s3://oedi-data-lake/buildings-sector-scenarios/*`
+   - View the service role and check its permissions. For example, under Resource it could say `s3://oedi-data-lake/buildings-sector-scenarios/dmd_cal_ann_state_county_hourly/v1.1.0_2026/multipliers/*` or `s3://oedi-data-lake/buildings-sector-scenarios/*`
 
 5. **Set Output and Scheduling:**
    - **Target database**: `default` This will be used in the `Config` class of bss_workflow.py 
@@ -309,18 +301,16 @@ For each of the 6 resources (3 folders + 3 files), create a separate Glue Crawle
    - **Crawler schedule**: On demand
 
 6. **Run the Crawler:**
-   - After creating all 6 crawlers, run each one individually
+   - After creating all 4 crawlers, run each one individually
    - Or schedule them to run periodically if the data is updated regularly
 
 **Resulting Athena Tables:**
 
 After running the crawlers, you will have 6 tables in the target database. For example,
-- `com_hourly_disaggregation_multipliers_amy` (from folder)
-- `res_hourly_disaggregation_multipliers_amy` (from folder)
-- `res_hourly_disaggregation_multipliers_tmy` (from folder)
-- `com_annual_disaggregation_multipliers_amy` (from parquet file)
-- `res_annual_disaggregation_multipliers_amy` (from parquet file)
-- `res_annual_disaggregation_multipliers_tmy` (from parquet file)
+- `com_hourly_disaggregation_multipliers_amy`
+- `res_hourly_disaggregation_multipliers_amy`
+- `com_annual_disaggregation_multipliers_amy`
+- `res_annual_disaggregation_multipliers_amy`
 
 These are the table names that will go in the `MULTIPLIERS_TABLES` parameter of the [configuration parameters](#configuration-parameters).
 
@@ -330,7 +320,7 @@ Check that the tables have been correctly created and populated by clicking on D
 
 ```sql
 SELECT * 
-FROM "default"."com_annual_multipliers_amy" 
+FROM "default"."com_annual_disaggregation_multipliers_amy" 
 LIMIT 10;
 ```
 
@@ -469,8 +459,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `DEST_BUCKET` | S3 bucket for bulk workflow outputs. | County results, disaggregation multipliers. |
 | `BUCKET_NAME` | Primary S3 bucket for configs and diagnostic CSVs. | Athena query outputs, staging. |
 | `SCOUT_RUN_DATE` | Tag of the Scout run date (YYYY-MM-DD). | Stamped in outputs as `scout_run`. |
-| `MULT_VERSION_ID` | Version identifier for disaggregation multipliers (e.g., 20250911). | S3 prefixes, table names. |
-| `DISAG_ID` | Version identifier for county annual and hourly results. | S3 prefixes, table names. |
+| `VERSION_ID` | Version identifier (e.g., 20250911). | S3 prefixes, table names. |
 | `MULTIPLIERS_TABLES` | List of Athena table names for the calculated disaggregation multipliers. | County/hourly disaggregation. |
 | `BLDSTOCK_TABLES` | List of Athena table names for the BuildStock SDR. | Calculation of disaggregation multipliers. |
 | `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
@@ -493,10 +482,21 @@ If they are not set, run the following command to set them up.
 
 ## Calculating Disaggregation Multipliers (optional)
 
-Custom disaggregation multipliers are defined by [mapping files](#mapping-files) and calculated with `python bss_workflow.py --calc_mults`. This computation is by far the longest and can take about a day. It is only necessary if you change multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
+Custom disaggregation multipliers are defined by [mapping files](#mapping-files) and calculated with `python bss_workflow.py --gen_mults`. This computation is by far the longest and can take about a day. It is only necessary if you change multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
 
 Before running, check that
 - BuildStock SDR tables are Glued.
+
+For v1.1 data, the following tables are glued. The corresponding crawler setups are as follows:
+
+|Crawler        | Table prefix | Data Source |Output Table in database  | 
+|---------------|-------------|----------------------------------|--------------------------|
+|comstock_2024.2| comstock_amy2018_release_2024.2_ | s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/comstock_amy2018_release_2/timeseries_individual_buildings/by_state/ |comstock_amy2018_release_2024.2_by_state, | 
+|               | | s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/comstock_amy2018_release_2/metadata_and_annual_results_aggregates/by_state_and_county/full/parquet/ |comstock_amy2018_release_2024.2_parquet   | 
+|resstock_2024.2| resstock_amy2018_release_2024.2_ | s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/resstock_amy2018_release_2/timeseries_individual_buildings/by_state/|resstock_amy2018_release_2024.2_by_state, | 
+|               | |s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2024/resstock_amy2018_release_2/metadata/|resstock_amy2018_release_2024.2_metadata| 
+|comstock_gap_2025_1|comstock_2025.1_|s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/comstock_amy2018_release_1/commercial_gap_model/by_county/upgrade=0/|comstock_2025.1_upgrade_0|
+
 - `BLDSTOCK_TABLES` in the `Config` class contains the correct table names.
 - The multiplier definition files in `map_eu/` use the upgrade numbers in the SDR version that the `Config` class points to.
 - The SQL templates under `sql/res` and `sql/com` use the column names in the SDR version that the `Config` class points to.
@@ -510,7 +510,7 @@ For the annual multipliers, the diagnostics also report how many counties within
 
 ### Troubleshooting
 
-The `--calc_mults` argument calls `gen_multipliers`, which in turn calls SQL scripts such as `tbl_ann_mult.sql`, `res_ann_shares_lighting.sql`, and `com_hourly_shares_misc.sql`. If the command fails part way through, you may want to only run a subset of the SQL scripts.
+The `--gen_mults` argument calls `gen_multipliers`, which in turn calls SQL scripts such as `tbl_ann_mult.sql`, `res_ann_shares_lighting.sql`, and `com_hourly_shares_misc.sql`. If the command fails part way through, you may want to only run a subset of the SQL scripts.
 
 If the AWS tables already exist and you just want to add more data to them, comment out `tbl_ann_mult.sql`, `tbl_hr_mult.sql`, and `tb_hr_mult_hvac_temp.sql` from `gen_multipliers`. 
 
@@ -554,10 +554,11 @@ Gross consumption by month, state, and sector for 2018-2024 is located in `map_m
 ### Workflow Data
 
 In addition to the EIA data, the calibration requires data from historical years that has been disaggregated by the BSS workflow. To do this,
-
-1. Run Scout using historical years (2020-2024 for AEO 2025). This can be a simple scenario to keep computation and file sizes down.
+run `--calibration` to calculate the calibration multipliers. This will
+1. Set the TURNOVERS to aeo and YEARS to 2020-2024 (for AEO 2025) then run gen_scoutdata using historical years. This can be a simple scenario to keep computation and file sizes down.
 2. Disaggregate the Scout results to county hourly.
-3. Run `--calibrate` to calculate the calibration multipliers.
+3. Calculate the calibration multipliers
+4. Restore the TURNOVERS and YEARS in the config
 
 ## Visualization
 
@@ -600,7 +601,7 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 
 ### Disaggregation Multipliers
 
-- `--gen_mults` (or `--gen_multipliers`)
+- `--gen_mults`
   - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
   - Use when you changed multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
 
@@ -615,7 +616,7 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
   - Checks that all the necessary disaggregation multipliers are present and sum to 1.
   - Use if you are disaggregating a new scenario, have new disaggregation multipliers, or updated the measure or envelope maps.
 
-- `--calibrate`
+- `--calibration`
   - Calculate new calibration multipliers for electricity and natural gas. Requires `YEARS` to have years with data in `map_meas/eia_gross_consumption_by_state_sector_year_month.csv`.
   - Run after `--gen_county` if there have been significant changes to disaggregation multipliers or the measure or envelope maps.
 
