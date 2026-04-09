@@ -1525,15 +1525,15 @@ def bssiefbucket_insert(athena_client, s3_bucket: str, cfg: Config):
             print(f"bss_ief insert: turnover={t} year={y}")
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
-def bssiefbucket_parquetmerge(s3_client, cfg: Config):
-    turnovers = cfg.TURNOVERS
-    years = cfg.YEARS
-    s3_bucket = "bss-ief-bucket"
-    for t in turnovers:
-        for y in years:
-            top = f"{t}/year={y}/"
-            print(f"Merging IEF bucket for {t} {y}")
-            _merge_parquet_folders(s3_client, top, s3_bucket)
+# def bssiefbucket_parquetmerge(s3_client, cfg: Config):
+#     turnovers = cfg.TURNOVERS
+#     years = cfg.YEARS
+#     s3_bucket = "bss-ief-bucket"
+#     for t in turnovers:
+#         for y in years:
+#             top = f"{t}/year={y}/"
+#             print(f"Merging IEF bucket for {t} {y}")
+#             _merge_parquet_folders(s3_client, top, s3_bucket)
 
 
 # def _merge_parquet_folders(s3_client, top_level_prefix: str, s3_bucket: str):

@@ -297,9 +297,9 @@ wide_S1 <- .make_factor(wide, set1_codes)
 wide_S2 <- .make_factor(wide, set2_codes)
 wide_all <- .make_factor(wide, setall_codes)
 
-.make_split_plots_for(wide_S1, "_S1", mm_long, states, to, sec, eu, colors)
-.make_split_plots_for(wide_S2, "_S2", mm_long, states, to, sec, eu, colors)
-.make_split_plots_for(wide_all, "", mm_long, states, to, sec, eu, colors)
+.make_split_plots_for(wide_S1 %>% filter(year >= 2024), "_S1", mm_long, states, to, sec, eu, colors)
+.make_split_plots_for(wide_S2 %>% filter(year >= 2024), "_S2", mm_long, states, to, sec, eu, colors)
+.make_split_plots_for(wide_all %>% filter(year >= 2024), "", mm_long, states, to, sec, eu, colors)
 
 # restore previous working directory, otherwise will mess up python script calls
 setwd("../")

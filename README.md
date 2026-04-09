@@ -451,7 +451,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `ENVELOPE_MAP_PATH` | Mapping of measures into equipment vs. envelope packages. | `compute_with_package_energy`. |
 | `MEAS_MAP_PATH` | Core measure map linking Scout measures to groupings and time-shapes. | `calc_annual`, county/hourly SQL joins. |
 | `CALIB_MULT_PATH` | Calibration multipliers. | Used in hourly disaggregation. |
-| `SCOUT_OUT_TSV` | Directory for processed state-level TSVs. | Output of `gen_scoutdata`. |
+| `SCOUT_OUT_TSV` | Directory for processed state-level TSVs is cfg.{SCOUT_OUT_TSV}_df. | Output of `gen_scoutdata`. |
 | `SCOUT_IN_JSON` | Directory for raw Scout JSON files. | Input to `scout_to_df`. |
 | `OUTPUT_DIR` | Aggregated results directory. | Downstream combination and QA. |
 | `EXTERNAL_S3_DIR` | S3 prefix for staging external tables. | `s3_create_table_from_tsv`, disaggregation multipliers. |
@@ -465,7 +465,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `TURNOVERS` | List of adoption scenarios. | Looped in `gen_scoutdata`, `gen_countydata`. |
 | `YEARS` | Analysis years to disaggregate. | Looped in county/hourly disaggregation. |
 | `BASE_YEAR` | Base year for calculating percent differences. | Hourly visualizations. |
-| `US_STATES` | List of two-letter U.S. state abbreviations to disaggregate. | SQL templates with `{state}` placeholders. |
+| `US_STATES` | List of two-letter U.S. state abbreviations to disaggregate (DC included). | SQL templates with `{state}` placeholders. |
 
 **Table 9:** Configuration paramters in `bss_workflow.py`
 
@@ -553,7 +553,7 @@ Gross consumption by month, state, and sector for 2018-2024 is located in `map_m
 
 ### Workflow Data
 
-In addition to the EIA data, the calibration requires data from historical years that has been disaggregated by the BSS workflow. To do this,
+In addition to the EIA data, the calibration requires data from historical years (assumem you've run scout with the historic years for AEO) that has been disaggregated by the BSS workflow. To do this,
 run `--calibration` to calculate the calibration multipliers. This will
 1. Set the TURNOVERS to aeo and YEARS to 2020-2024 (for AEO 2025) then run gen_scoutdata using historical years. This can be a simple scenario to keep computation and file sizes down.
 2. Disaggregate the Scout results to county hourly.
@@ -570,7 +570,7 @@ This script produces area plots that show energy consumption over time by scenar
 - Annual timeseries area plots of electricity consumption for individual end uses by sector and technology type (e.g., residential cooling technologies of various efficiencies).
 - Heating and cooling consumption by technology category and sector for selected states. By default the states are WA, CA, MA, and FL; to view other states, change the `states` vector under `states to show`.
 
-These graphs are generated with `--gen_scout` and as part of `--gen_countyall`. Before running, check that the `scenarios` vector contains only the scenarios that you want to visualize.
+These graphs are generated with `--gen_scoutdata` and as part of `--gen_countyall`. Before running, check that the `scenarios` vector contains only the scenarios that you want to visualize.
 
 ### County and Hourly Graphs (`county_and_hourly_graphs.R`)
 
@@ -588,7 +588,7 @@ This script provides comprehensive county-level visualizations:
   - peak days
   - mean, day with the highest peak, and day with the lowest peak by month
 
-These graphs are generated with `--gen_hourlyviz` and as part of `--gen_countyall`. Before running, check that the `scenarios` vector contains only the scenarios that you want to visualize.
+These graphs are generated as part of `--gen_countyall`. Before running, check that the `scenarios` vector contains only the scenarios that you want to visualize.
 
 When this script is run using `bss_workflow.py`, the CSV files that are needed as input will be automatically created by several SQL files in `SQL/data_downloads/` and saved to `R/generated_csvs/`.
 
@@ -616,18 +616,11 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
   - Checks that all the necessary disaggregation multipliers are present and sum to 1.
   - Use if you are disaggregating a new scenario, have new disaggregation multipliers, or updated the measure or envelope maps.
 
-- `--calibration`
-  - Calculate new calibration multipliers for electricity and natural gas. Requires `YEARS` to have years with data in `map_meas/eia_gross_consumption_by_state_sector_year_month.csv`.
-  - Run after `--gen_county` if there have been significant changes to disaggregation multipliers or the measure or envelope maps.
-
 - `--combine_countydata`
   - Consolidates the tables for the year and sector combinations created by `--gen_county` into two tables per scenario: one with annual county-level results and one with hourly county-level results. See [Tables 1 and 2](#output-schema) for the variables present in each.
   - Applies calibration multipliers to the hourly results.
   - Runs diagnostics.
   - Run after `--gen_county`.
-
-- `--gen_hourlyviz`
-  - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_countydata`.
 
 - `--run_test`
   - Runs diagnostics that are included in `--gen_mults` and `--combine_countydata`: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
@@ -635,7 +628,13 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 
 - `--gen_countyall`
   - One-shot pipeline that performs the complete disaggregation.
-  - Equivalent to running `--gen_scoutdata`, `--gen_county`, `--combine_countydata`, and `--gen_hourlyviz` in succession.
+  - Equivalent to running `--gen_scoutdata`, `--gen_county`, `--combine_countydata` in succession with extra testing (test_county) and visualization of county hourly plots produced with `county and hourly graphs.R`. It also drops the aeo tables in case calibration step is run beforehand: "scout_annual_state_aeo", "long_county_hourly_aeo_amy", "long_county_annual_aeo_amy"
+
+### Calibration
+
+- `--calibration`
+  - Calculate new calibration multipliers for electricity and natural gas. Years are set to 2020-2024 for AEO 2025
+  - If there have been significant changes to disaggregation multipliers or the measure or envelope maps, you might consider to run calibration.
 
 ### Publication
 

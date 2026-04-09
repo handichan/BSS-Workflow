@@ -23,9 +23,13 @@ eia_gross<-read_csv("../map_meas/eia_gross_consumption_by_state_sector_year_mont
 state_monthly<-read_csv("../diagnostics/state_monthly_for_cal.csv")
 
 # if you have TMY
+## got from https://drive.google.com/open?id=1bDdEzD19vjXzObCdo6lQNtBOfyHBBG23&usp=drive_fs
+## rename to state_monthly_for_cal_tmy.csv
 if (file.exists("../diagnostics/state_monthly_for_cal_tmy.csv")) {
-  state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
-    mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
+  state_monthly_tmy<- read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
+  mutate(type="state_monthly_tmy_kwh") %>%
+  rename("kwh"="state_monthly_kwh") %>%
+  {.}
 }
 
 type_label<-c(state_monthly_uncal_kwh="BSS uncalibrated",state_monthly_cal_kwh="BSS calibrated",state_monthly_tmy_kwh="BSS uncalibrated, TMY weather")
@@ -55,14 +59,58 @@ if(exists("state_monthly_tmy")){
   bss<-bind_rows(bss,state_monthly_tmy)
 }
 
+## used in p61 of reference slide deck
+years = c(2020, 2022, 2024)
 
 for (st in c(state.abb[!(state.abb %in% c("AK","HI"))],"DC")) {
   for (sct in c("res","com")){
-    eia_gross %>% 
-      filter(in.state==st,sector==sct,year %in% 2020:2024) %>%
+    eia_gross %>%
+      filter(in.state==st,sector==sct,year %in% years) %>%
       ggplot(aes(x=month))+
       geom_col(aes(y=gross.kWh,fill="EIA gross"))+
-      geom_line(data=bss %>% filter(in.state==st,sector==sct,year %in% 2020:2024),
+      geom_line(data=bss %>% filter(in.state==st,sector==sct,year %in% years),
+                aes(y=kwh,color=type,linetype=type),linewidth=1.5)+
+      scale_x_continuous(name="Month",breaks=seq(1,12,by=3))+
+      scale_y_continuous(name="kWh",expand = expansion(mult=c(0,.05),add=0))+
+      scale_color_brewer(name="",labels=type_label,palette = "Dark2",limits=c("state_monthly_cal_kwh", "state_monthly_tmy_kwh", "state_monthly_uncal_kwh"))+
+      scale_fill_manual(name="",values="gray70")+
+      scale_linetype(guide="none")+
+      facet_wrap(~year)+
+      theme_bw() +
+      theme(strip.background = element_blank(),strip.text.y = element_text(angle=0,size=10),strip.text.x = element_text(size=10))+
+      ggtitle(paste(st,sct))
+    ggsave(paste0("graphs/calibration graphs/",st,"_",sct,"_3year.jpg"),
+           device = "jpeg",width = 10, height =4,units = "in")
+  }
+}
+
+## used in paper
+years = c(2020, 2022, 2024)
+eia_gross %>%
+  dplyr::filter(in.state %in% c("CO", "FL", "SD"), sector=="res", year %in% years) %>%
+  ggplot(aes(x=month))+
+  geom_col(aes(y=gross.kWh,fill="EIA gross"))+
+  geom_line(data=bss %>% filter(in.state %in% c("CO", "FL", "SD"), sector=="res", year %in% years),
+            aes(y=kwh,color=type,linetype=type),linewidth=1.5)+
+  scale_x_continuous(name="Month",breaks=seq(1,12,by=3))+
+  scale_y_continuous(name="kWh",expand = expansion(mult=c(0,.05),add=0))+
+  scale_color_brewer(name="",labels=type_label,palette = "Dark2",limits=c("state_monthly_cal_kwh", "state_monthly_tmy_kwh", "state_monthly_uncal_kwh"))+
+  scale_fill_manual(name="",values="gray70")+
+  scale_linetype(guide="none")+
+  facet_grid(in.state~year, scales = "free_y") +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA))
+ggsave(paste0("graphs/calibration graphs/","fig_res_cal_SD_CO_FL.jpg"),
+           device = "jpeg",width = 10, height =6,units = "in")
+
+years = 2020:2024
+for (st in c(state.abb[!(state.abb %in% c("AK","HI"))],"DC")) {
+  for (sct in c("res","com")){
+    eia_gross %>% 
+      filter(in.state==st,sector==sct,year %in% years) %>%
+      ggplot(aes(x=month))+
+      geom_col(aes(y=gross.kWh,fill="EIA gross"))+
+      geom_line(data=bss %>% filter(in.state==st,sector==sct,year %in% years),
                 aes(y=kwh,color=type,linetype=type),linewidth=1.5)+
       scale_x_continuous(name="Month",breaks=seq(1,12,by=3))+
       scale_y_continuous(name="kWh",expand = expansion(mult=c(0,.05),add=0))+
@@ -124,19 +172,126 @@ BSS winter
 EIA summer","Disagree:
 EIA winter
 BSS summer")) %>%
-ggplot(aes(x=x,y=y))+
+  ggplot(aes(x=x,y=y))+
   geom_tile(fill="white",color="gray50")+
   geom_text(aes(label=label,color=label),hjust=.5,fontface="bold")+
   scale_color_manual(values=c("#E69F00", #orange
                               "#56B4E9", #blue 
                               "#009E73", #green,
                               "#CC79A7" #magenta
-  ),guide="none")+
+                              ),guide="none")+
   theme_void()+
   theme(aspect.ratio = 1)
 
-
 save_plot(plot_grid(quadgraph,leg,nrow = 1,rel_widths = c(4,1)),filename = "graphs/fig_max_ratios.jpg",base_height = 7,bg = "white")
+
+quads %>%
+  filter(type!="state_monthly_tmy_kwh") %>%
+  filter(stringr::str_detect(type, "_uncal_")) %>%
+  ggplot(aes(x=eia_ratio,y=bss_ratio,label=in.state,color=peak_diff))+
+  geom_abline(slope=1)+
+  geom_hline(yintercept=1,color="gray80")+
+  geom_vline(xintercept=1,color="gray80")+
+  geom_point(size=1)+
+  scale_colour_manual(values=c("#E69F00", #orange
+                               "#56B4E9", #blue 
+                               "#009E73", #green,
+                               "#CC79A7" #magenta
+                               ),name="Season with peak month",guide="none")+
+  geom_text() +
+  scale_x_continuous(name="EIA",limits=c(.4,1.9))+
+  scale_y_continuous(name="BSS,uncalibrated",limits=c(.4,1.9))+
+  facet_grid(sector~year,labeller = labeller(sector=s_label))+
+  ## ggtitle("Max monthly buildings electricity consumption: ratio of winter to summer")+
+  theme(aspect.ratio = 1.0,strip.background = element_blank(),strip.text.y = element_text(size=10),strip.text.x = element_text(size=10)) +
+  theme_bw()
+  ggsave("graphs/uncalib_fig_max_ratios.jpg", width = 9, height = 4.5)
+
+quads %>%
+  filter(type!="state_monthly_tmy_kwh") %>%
+  filter(stringr::str_detect(type, "_cal_")) %>%
+  ggplot(aes(x=eia_ratio,y=bss_ratio,label=in.state,color=peak_diff))+
+  geom_abline(slope=1)+
+  geom_hline(yintercept=1,color="gray80")+
+  geom_vline(xintercept=1,color="gray80")+
+  geom_point(size=1)+
+  scale_colour_manual(values=c("#E69F00", #orange
+                               "#56B4E9", #blue 
+                               "#009E73", #green,
+                               "#CC79A7" #magenta
+                               ),name="Season with peak month",guide="none")+
+  geom_text() +
+  scale_x_continuous(name="EIA",limits=c(.4,1.9))+
+  scale_y_continuous(name="BSS,calibrated",limits=c(.4,1.9))+
+  facet_grid(sector~year,labeller = labeller(sector=s_label))+
+  ## ggtitle("Max monthly buildings electricity consumption: ratio of winter to summer")+
+  theme(aspect.ratio = 1,strip.background = element_blank(),strip.text.y = element_text(size=10),strip.text.x = element_text(size=10)) +
+  theme_bw()
+  ggsave("graphs/calib_fig_max_ratios.jpg", width = 9, height = 4.5)
+
+## monthly calibration factor plot
+monthly_ratios %>%
+  ggplot2::ggplot(ggplot2::aes(x = month, y = calibration_multiplier, color = sector)) +
+  ggplot2::geom_line() +
+  ggplot2::facet_wrap(.~in.state, ncol=7, scales = "free_y") +
+  ggplot2::geom_hline(yintercept = 1) +
+  scale_x_continuous(name = "Month", breaks = seq(1, 12, by = 3), labels = function(x) as.integer(x)) +
+  ggplot2::theme_bw()
+ggsave("graphs/calibration graphs/calib_mult_by_month.jpg", width = 11, height = 9)
+
+## used in p62 of reference slide deck
+monthly_ratios %>%
+  dplyr::filter(sector == "res") %>%
+  dplyr::select(calibration_multiplier) %>%
+  summary()
+
+monthly_ratios %>%
+  dplyr::filter(sector == "com") %>%
+  dplyr::select(calibration_multiplier) %>%
+  summary()
+
+
+p1 <- bss %>%
+  dplyr::group_by(turnover, sector, in.state, type) %>%
+  dplyr::mutate_at(vars(sector), recode, "res"="Residential", "com"="Commercial") %>%
+  dplyr::summarise(kwh = sum(kwh) / 5) %>%
+  dplyr::ungroup() %>%
+  tidyr::spread(type, kwh) %>%
+  dplyr::mutate(percent.increase = (state_monthly_cal_kwh - state_monthly_uncal_kwh) / state_monthly_uncal_kwh) %>%
+  ggplot2::ggplot(aes(x = in.state, y = percent.increase)) +
+  ggplot2::geom_bar(stat="identity") +
+  ggplot2::facet_wrap(sector~., ncol = 1, strip.position = "right") +
+  ggplot2::scale_y_continuous(labels = percent_format()) +
+  ggplot2::theme_minimal() +
+  ggplot2::ggtitle("Percent increase in annual electricity compared to uncalibrated") +
+  theme(panel.border = element_rect(color = "black", fill = NA),
+        axis.title.x = element_blank(),axis.title.y = element_blank())
+
+df.state.to.census <- tibble::tibble(in.state = c(state.abb, "DC"), census_div = c(state.division, state.division[[8]]))
+
+p2 <- bss %>%
+  dplyr::mutate_at(vars(sector), recode, "res"="Residential", "com"="Commercial") %>%
+  dplyr::left_join(df.state.to.census, by="in.state") %>%
+  dplyr::group_by(turnover, sector, census_div, type) %>%
+  dplyr::summarise(kwh = sum(kwh) / 5) %>%
+  dplyr::ungroup() %>%
+  tidyr::spread(type, kwh) %>%
+  dplyr::mutate(percent.increase = (state_monthly_cal_kwh - state_monthly_uncal_kwh) / state_monthly_uncal_kwh) %>%
+  ggplot2::ggplot(ggplot2::aes(x = census_div, y = percent.increase)) +
+  ggplot2::geom_bar(stat="identity") +
+  ggplot2::facet_wrap(sector~., nrow = 1) +
+  ggplot2::scale_y_continuous(labels = percent_format()) +
+  ggplot2::theme_minimal() +
+  # fixme change xtick label to 45 deg
+  ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1),
+                 panel.border = element_rect(color = "black", fill = NA),
+                 axis.title.x = element_blank(),axis.title.y = element_blank())
+
+library("cowplot")
+
+plots <- align_plots(p1, p2, align = "v", axis = "l")  # align vertically on left axis
+cowplot::plot_grid(plots[[1]], plots[[2]], ncol = 1)
+ggplot2::ggsave("graphs/calibration graphs/fig_ann_cal_uncal.png", width = 13, height = 8)
 
 # restore previous base directory
 setwd("../")
