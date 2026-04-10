@@ -119,7 +119,7 @@ class Config:
     MAP_EU_DIR = "map_eu"               # folder that contains the mapping files to define the disaggregation multipliers
     MAP_MEAS_DIR = "map_meas"           # folder that contains the measure map, envelope map, and calibration multipliers
     ENVELOPE_MAP_PATH = os.path.join(MAP_MEAS_DIR, "envelope_map.tsv")
-    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map2.tsv")
+    MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     EIA_GROSS_PATH = "map_meas/eia_gross_consumption_by_state_sector_year_month.csv"    # file with monthly EIA electricity and gas consumption
     SCOUT_OUT_TSV = "scout_tsv"         # location where transformed Scout files will be saved as TSV
@@ -1195,7 +1195,7 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
 # disaggregate to county, hourly; one table per sector, year, and scenario combination
 def gen_countydata(s3, athena_client, cfg: Config):
     sectors = ["res", "com"]
-    # sectors = ["res"]
+    # sectors = ["com"]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
 
@@ -1808,7 +1808,7 @@ def merge_and_replace_folders(s3_client, bucket_name: str, prefix: str):
             pass
 
 
-def delete_folder_from_s3(s3_client, bucket_name: str, folder_prefix: str):
+def delete_folder_from_s3(s3_client, bucket_name: str):
     """
     Delete all objects in a folder from S3.
     
@@ -1819,13 +1819,16 @@ def delete_folder_from_s3(s3_client, bucket_name: str, folder_prefix: str):
     """
     # List all objects with the folder prefix
     paginator = s3_client.get_paginator('list_objects_v2')
-    pages = paginator.paginate(Bucket=bucket_name, Prefix=folder_prefix)
+    pages = paginator.paginate(Bucket=bucket_name)
+    from datetime import datetime, timezone
+    today = datetime.now().date()
     
     objects_to_delete = []
     for page in pages:
         if 'Contents' in page:
             for obj in page['Contents']:
-                objects_to_delete.append({'Key': obj['Key']})
+                if obj['LastModified'].date() == today:
+                    objects_to_delete.append({'Key': obj['Key']})
     
     if objects_to_delete:
         # Delete all objects in batches
@@ -1835,10 +1838,7 @@ def delete_folder_from_s3(s3_client, bucket_name: str, folder_prefix: str):
                 Bucket=bucket_name,
                 Delete={'Objects': batch}
             )
-        print(f"Deleted {len(objects_to_delete)} objects from s3://{bucket_name}/{folder_prefix}")
-    else:
-        print(f"No objects found to delete in s3://{bucket_name}/{folder_prefix}")
-
+    print(f"Total deleted: {len(objects_to_delete)}")
 
 # ----------------------------
 # Diagnostics & checks
@@ -2186,6 +2186,10 @@ def main(opts):
         _, athena = get_boto3_clients()
         county_partition_multipliers(athena, cfg)
 
+    if opts.delete_folder:
+        s3, athena = get_boto3_clients()
+        delete_folder_from_s3(s3, "margaretbucket")
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -2204,6 +2208,7 @@ if __name__ == "__main__":
     parser.add_argument("--bssbucket_parquetmerge", action="store_true", help="Populate + merge parquet under bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
+    parser.add_argument("--delete_folder", action="store_true", help="Delete today's files")
     
     opts = parser.parse_args()
     main(opts)
