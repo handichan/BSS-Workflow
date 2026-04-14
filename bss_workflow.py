@@ -803,7 +803,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_ann_shares_dry.sql",
         "res_ann_shares_dw.sql",
         "res_ann_shares_fanspumps.sql",
-        "res_ann_shares_heat_delivered.sql",
+        "res_ann_shares_heating_delivered.sql",
         "res_ann_shares_hvac.sql",
         "res_ann_shares_lighting.sql",
         "res_ann_shares_misc.sql",
