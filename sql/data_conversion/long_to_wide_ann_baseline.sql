@@ -169,5 +169,5 @@ WITH (
 
     SELECT *
     FROM wide
-    WHERE "year" IN (2026,2030,2035,2040,2045,2050)
+    WHERE "year" IN (2026,2030,2040,2050)
     ;

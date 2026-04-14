@@ -1217,7 +1217,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
 
         SELECT *
         FROM wide
-        WHERE "year" IN (2026,2030,2035,2040,2045,2050)
+        WHERE "year" IN (2026,2030,2040,2050)
         ;
     """
     scout_parts = []
