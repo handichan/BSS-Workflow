@@ -96,7 +96,7 @@ The column names and descriptions for the unformatted disaggregation results are
 
 **Table 2:** Unformatted hourly county-level results (long_county_hourly_<turnover>_amy. One example is long_county_hourly_min_switch_amy)
 
-The disaggregated outputs can be converted to wide format for publication (`--convert_wide`). The column names and descriptions of the formatted results are shown in Tables 3 and 4. The allowed values of `end_use` are computers_electronics, cooking, cooling, heating, water_heating, lighting, other, refrigeration, ventilation, water_heating.
+The disaggregated outputs can be converted to wide format for publication (`--convert_wide`). The column names and descriptions of the formatted results are shown in Tables 3 and 4. The allowed values of `end_use` are computers_and_electronics, cooking, cooling, heating, lighting, other, refrigeration, ventilation, water_heating.
 
 | Variable Name | Description | Data Type |
 |---------------|-------------|-----------|
@@ -104,12 +104,12 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 | `sector` | Building sector: com, res | String |
 | `scenario` | Scenario identifier | String |
 | `year` | Projection year | Integer |
-| `natural_gas.{end_use}.kwh` | Annual natural gas for the specified end-use, kWh | Float |
-| `electricity_uncalibrated.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
-| `electricity_calibrated.{end_use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
-| `propane.{end_use}.kwh` | Annual propane for the specified end-use, kWh | Float |
-| `biomass.{end_use}.kwh` | Annual biomass for the specified end-use, kWh | Float |
-| `other.{end_use}.kwh` | Annual consumption of other fuels for the specified end-use, kWh | Float |
+| `natural_gas.{end_use}.kwh` | Annual natural gas for the specified end-use, kWh. Present for: cooling, heating, water_heating, cooking, other | Float |
+| `electricity_uncalibrated.{end_use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh. Present for all end-uses | Float |
+| `electricity_calibrated.{end_use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh. Present for all end-uses | Float |
+| `propane.{end_use}.kwh` | Annual propane for the specified end-use, kWh. Present for: heating, water_heating, cooking | Float |
+| `biomass.{end_use}.kwh` | Annual biomass for the specified end-use, kWh. Present for: heating | Float |
+| `other.{end_use}.kwh` | Annual other fuels for the specified end-use, kWh. Present for: heating, water_heating, other | Float |
 
 **Table 3:** Annual state-level results in publication format (wide_scout_annual_state_baseline in the database)
 
@@ -117,12 +117,12 @@ The disaggregated outputs can be converted to wide format for publication (`--co
 |---------------|-------------|-----------|
 | `scenario` | Scenario identifier | String |
 | `county` | County identifier (FIPS codes, e.g. G0400270, G5300010, G5300050) | String |
-| `date_time` | Hourly timestamp (ISO 8601 with ms) | Timestamp |
-| `sector` | Building sector: com, res | String |
-| `year` | Projection year | Integer |
+| `date_time` | hour ending (ISO 8601 with ms) | Timestamp |
+| `sector` | Building sector: Commercial, Residential | String |
+| `year` | Projection year: 2026, 2030, 2040, 2050 | Integer |
 | `state` | State abbreviation (e.g. AL, WA) | String |
-| `uncal.{end use}.kwh` | Annual electricity (uncalibrated) for the specified end-use, kWh | Float |
-| `cal.{end use}.kwh` | Annual electricity (calibrated) for the specified end-use, kWh | Float |
+| `uncal_{end_use}` | Hourly electricity (uncalibrated) for the specified end-use, kWh/h | Float |
+| `cal_{end_use}` | Hourly electricity (calibrated) for the specified end-use, kWh/h | Float |
 
 **Table 4:** Hourly county-level results in publication format
 
