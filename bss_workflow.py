@@ -812,6 +812,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_ann_shares_wh.sql",
         "res_ann_shares_wh_delivered.sql",
         "tbl_hr_mult.sql",
+        "tbl_hr_mult_temp.sql",
         "res_hourly_shares_cook.sql",
         "res_hourly_shares_cw.sql",
         "res_hourly_shares_dry.sql",
@@ -823,10 +824,9 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_hourly_shares_poolpump.sql",
         "res_hourly_shares_refrig.sql",
         "res_hourly_shares_wh.sql",
-        "tbl_hr_mult_hvac_temp.sql",
         "res_hourly_shares_cooling.sql",
         "res_hourly_shares_heating.sql",
-        "res_hourly_hvac_norm.sql",
+        "res_hourly_norm.sql",
     ]
     tbl_com = [
         "tbl_ann_mult.sql",
