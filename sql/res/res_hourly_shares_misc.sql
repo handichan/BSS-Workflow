@@ -11,9 +11,8 @@ ts_not_agg AS (
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.plug_loads.energy_consumption" + ts."out.electricity.permanent_spa_heat.energy_consumption" + ts."out.electricity.permanent_spa_pump.energy_consumption" + ts."out.electricity.pool_heater.energy_consumption" + ts."out.electricity.well_pump.energy_consumption" as misc,
-		ts."out.natural_gas.fireplace.energy_consumption" + ts."out.natural_gas.grill.energy_consumption" + ts."out.natural_gas.lighting.energy_consumption" + ts."out.natural_gas.permanent_spa_heat.energy_consumption" + ts."out.natural_gas.pool_heater.energy_consumption"as misc_ng
-	FROM "{ts_res}" as ts
-		RIGHT JOIN "{meta_res}" as meta 
+		ts."out.natural_gas.fireplace.energy_consumption" + ts."out.natural_gas.grill.energy_consumption" + ts."out.natural_gas.lighting.energy_consumption" + ts."out.natural_gas.permanent_spa_heat.energy_consumption" + ts."out.natural_gas.pool_heater.energy_consumption"as misc_ng	FROM "{ts_res}" as ts
+		INNER JOIN "{meta_res}" as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'

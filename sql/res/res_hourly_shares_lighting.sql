@@ -10,9 +10,8 @@ ts_not_agg AS (
 		CASE
 		WHEN extract(YEAR FROM DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR) = 2019 THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
-		ts."out.electricity.lighting_exterior.energy_consumption" + ts."out.electricity.lighting_interior.energy_consumption" + ts."out.electricity.lighting_garage.energy_consumption" as lighting
-	FROM "{ts_res}" as ts
-		RIGHT JOIN "{meta_res}" as meta 
+		ts."out.electricity.lighting_exterior.energy_consumption" + ts."out.electricity.lighting_interior.energy_consumption" + ts."out.electricity.lighting_garage.energy_consumption" as lighting	FROM "{ts_res}" as ts
+		INNER JOIN "{meta_res}" as meta 
 		ON ts.bldg_id = meta.bldg_id
 		AND ts.upgrade = cast(meta.upgrade as varchar)
 	WHERE ts.upgrade = '0'

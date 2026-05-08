@@ -23,11 +23,9 @@ ts_not_agg AS (
 		THEN DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) - INTERVAL '1' YEAR + INTERVAL '1' HOUR
 		ELSE DATE_TRUNC('hour', from_unixtime(ts."timestamp" / 1000000000)) + INTERVAL '1' HOUR END as timestamp_hour,
 		ts."out.electricity.cooling.energy_consumption" as cooling
-	FROM "{ts_res}" as ts
-		INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
+	FROM "{ts_res}" as ts		INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_cooling)
-	AND ts.state='{state}'
+	WHERE ts.state='{state}'
 ),
 
 ts_agg AS (

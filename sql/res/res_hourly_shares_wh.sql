@@ -6,9 +6,8 @@ WITH meta_shapes AS (
 		meta."in.weather_file_city",
 		meta."in.weather_file_longitude",
 		chars.shape_ts,
-		chars.upgrade
-	FROM "{meta_res}" as meta
-		RIGHT JOIN res_ts_wh as chars 
+		chars.upgrade	FROM "{meta_res}" as meta
+		INNER JOIN res_ts_wh as chars 
 		ON meta."in.water_heater_efficiency" = chars."in.water_heater_efficiency"
 		AND cast(meta.upgrade as varchar) = chars.upgrade
 ),
@@ -23,10 +22,9 @@ ts_not_agg AS (
 		ts."out.electricity.hot_water.energy_consumption" as wh_elec,
 		ts."out.fuel_oil.hot_water.energy_consumption" + ts."out.natural_gas.hot_water.energy_consumption" + ts."out.propane.hot_water.energy_consumption" as wh_fossil
 	FROM "{ts_res}" as ts
-		RIGHT JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
+		INNER JOIN meta_shapes ON ts.bldg_id = meta_shapes.bldg_id
 		AND ts.upgrade = meta_shapes.upgrade
-	WHERE ts.upgrade IN (SELECT DISTINCT upgrade FROM res_ts_wh)
-	AND ts.state='{state}'
+	WHERE ts.state='{state}'
 ),
 
 ts_agg AS(
