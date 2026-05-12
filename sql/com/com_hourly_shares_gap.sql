@@ -33,28 +33,23 @@ formatted AS (
         "in.state"
     FROM unformatted
 )
-SELECT
-    f."in.county",
-    f.shape_ts,
-    f.timestamp_hour,
-    f.kwh,
-    f.multiplier_hourly,
-    f.sector,
-    'Electric' AS fuel,
-    u.end_use,
-    f."in.state"
-FROM formatted f
-CROSS JOIN UNNEST(
-    ARRAY[
-        'Gap',
-        'Other',
-        'Lighting',
-        'Heating (Equip.)',
-        'Cooling (Equip.)',
-        'Ventilation',
-        'Computers and Electronics',
-        'Water Heating',
-        'Refrigeration',
-        'Cooking'
-    ]
-) AS u(end_use);
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Gap' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Other' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Lighting' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Heating (Equip.)' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Cooling (Equip.)' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Ventilation' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Computers and Electronics' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Water Heating' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Refrigeration' AS varchar) AS end_use, "in.state" FROM formatted
+UNION ALL
+SELECT "in.county", shape_ts, timestamp_hour, kwh, multiplier_hourly, sector, CAST('Electric' AS varchar) AS fuel, CAST('Cooking' AS varchar) AS end_use, "in.state" FROM formatted
+;
