@@ -48,11 +48,9 @@ FROM unnormalized)
 
     FROM normalized
 
-    UNION ALL
-
-    SELECT 
+    UNION ALL    SELECT 
         "in.county",
-        'com_cook_ann_1' as group_ann,
+        'com_cook_ann_2' as group_ann,
         elec_share AS multiplier_annual,
         'com' AS sector,
         "in.state",
