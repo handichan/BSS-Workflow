@@ -1274,6 +1274,21 @@ def gen_scoutdata(s3_client, athena_client, cfg: Config):
         s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
         print(f"Finished adding scout data {scout_file}")
 
+def athena_table_exists(athena_client, cfg: Config, table_name: str) -> bool:
+    """Return True if the given table already exists in the Athena database."""
+    try:
+        athena_client.get_table_metadata(
+            CatalogName="AwsDataCatalog",
+            DatabaseName=cfg.DATABASE_NAME,
+            TableName=table_name,
+        )
+        return True
+    except athena_client.exceptions.MetadataException:
+        return False
+    except Exception:
+        return False
+
+
 # disaggregate to county, hourly; one table per sector, year, and scenario combination
 def gen_countydata(s3, athena_client, cfg: Config):
     sectors = ["res", "com"]
@@ -1286,6 +1301,10 @@ def gen_countydata(s3, athena_client, cfg: Config):
     for s in sectors:
         for y in years:
             for t in turnovers:
+                ann_table = f"county_annual_{s}_{y}_{t}_{cfg.DISAG_ID}"
+                if athena_table_exists(athena_client, cfg, ann_table):
+                    print(f"SKIP (already exists): {ann_table}")
+                    continue
                 for name in ["tbl_ann_county.sql", 
                 "annual_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
