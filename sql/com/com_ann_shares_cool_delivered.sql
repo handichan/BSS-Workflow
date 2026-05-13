@@ -3,9 +3,9 @@ INSERT INTO {mult_com_annual}
 WITH meta_filtered AS (
 	SELECT meta."in.nhgis_county_gisjoin",
 	    meta."in.state",
-		sum(meta.weight * (meta."out.params.dx_cooling_load..j" + meta."out.params.heat_pump_cooling_total_load..j" + meta."out.params.vrf_total_cooling_load..j" + meta."out.params.wa_hp_cooling_load..j")) as cooling
-	FROM "{meta_com}" as meta
+		sum(meta.weight * (meta."out.params.dx_cooling_load..j" + meta."out.params.heat_pump_cooling_total_load..j" + meta."out.params.vrf_total_cooling_load..j" + meta."out.params.wa_hp_cooling_load..j")) as cooling	FROM "{meta_com}" as meta
 	WHERE meta.upgrade = 0
+	AND meta."in.state" = '{state}'
 	GROUP BY 
 		meta."in.nhgis_county_gisjoin",
 		meta."in.state"
