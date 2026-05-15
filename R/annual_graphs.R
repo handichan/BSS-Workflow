@@ -444,7 +444,7 @@ setall_codes <- c("aeo","ref","fossil","state","accel","brk","min_switch","dual_
     ggsave(paste0(graph_dir,"/national_annual_", s, "_non-mech_fossil", suffix_tag, ".jpeg"),
            device="jpeg", width=w_nonmech, height=h_1, units="in")
   }
-  
+}
 
 # ---- run all three sets -------------------------------------------------------
 wide_S1 <- .make_factor(wide, set1_codes)
