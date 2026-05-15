@@ -20,7 +20,7 @@ state_monthly<-read_csv("../diagnostics/state_monthly_for_cal.csv")
 # if you have TMY
 if (file.exists("../diagnostics/state_monthly_for_cal_tmy.csv")) {
   state_monthly_tmy<-read_csv("../diagnostics/state_monthly_for_cal_tmy.csv") %>%
-    mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_tmy_kwh")
+    mutate(type="state_monthly_tmy_kwh") %>% rename("kwh"="state_monthly_kwh")
 }
 
 type_label<-c(state_monthly_uncal_kwh="BSS uncalibrated",state_monthly_cal_kwh="BSS calibrated",state_monthly_tmy_kwh="BSS uncalibrated, TMY weather")
@@ -29,10 +29,10 @@ s_label<-c(com="Commercial",res="Residential",all="Buildings")
 # calculate monthly state-level calibration ratios ------------------------
 monthly_ratios<-state_monthly %>%
   dplyr::mutate_at(vars(month, year), as.numeric) %>%
-  inner_join(eia_gross,by=c("in.state","month","sector","year")) %>%
+  inner_join(eia_gross,by=c("in.state","month","sector","year","fuel")) %>%
   mutate(gross_over_bss=gross.kWh/state_monthly_uncal_kwh,
          net_over_bss=sales.kWh/state_monthly_uncal_kwh) %>% 
-  group_by(sector, in.state, month) %>%
+  group_by(sector, in.state, month, fuel) %>%
   summarize(calibration_multiplier=mean(gross_over_bss),.groups="drop")
 
 write_tsv(monthly_ratios, "../map_meas/calibration_multipliers.tsv")
@@ -40,6 +40,9 @@ write_tsv(monthly_ratios, "../map_meas/calibration_multipliers.tsv")
 # post calibration: state level combined bar and line plots -------------------------------------------
 
 bss<-state_monthly %>% 
+  full_join(monthly_ratios,by=c("in.state","month","sector","fuel")) %>%
+  mutate(state_monthly_cal_kwh=state_monthly_uncal_kwh*calibration_multiplier) %>% 
+  select(-calibration_multiplier) %>% 
   pivot_longer(names_to="type",values_to="kwh",state_monthly_uncal_kwh:state_monthly_cal_kwh)
 
 for (st in c(state.abb[!(state.abb %in% c("AK","HI"))],"DC")) {
@@ -67,14 +70,16 @@ for (st in c(state.abb[!(state.abb %in% c("AK","HI"))],"DC")) {
 # post calibration: compare state-level seasonal ratios to EIA ------------------------------
 
 eia_ratios_sector<-eia_gross %>% filter(sector %in% c("res","com")) %>%
-  group_by(in.state,year,season,sector,fuel) %>% summarize(gross.kWh_max=max(gross.kWh)) %>%
+  group_by(in.state,year,season,sector,fuel) %>% summarize(gross.kWh_max=max(gross.kWh),.groups="drop") %>%
   pivot_wider(names_from=season,values_from=c(gross.kWh_max)) %>%
+  filter(!is.na(Summer), !is.na(Winter)) %>%   # drop incomplete years (e.g. partial 2024)
   mutate(max_winter_to_max_summer=Winter/Summer)
 
 bss_ratios_sector<-bss %>%
   mutate(season=case_when(month %in% 5:9 ~ "Summer", month %in% c(11,12,1,2) ~ "Winter", TRUE ~ "Shoulder")) %>%
-  group_by(in.state,year,sector,season,type,fuel) %>% summarize(monthly_max=max(kwh)) %>%
+  group_by(in.state,year,sector,season,type,fuel) %>% summarize(monthly_max=max(kwh),.groups="drop") %>%
   pivot_wider(names_from=season,values_from=monthly_max) %>%
+  filter(!is.na(Summer), !is.na(Winter)) %>%   # drop incomplete years
   mutate(max_winter_to_max_summer=Winter/Summer) %>%
   arrange(max_winter_to_max_summer)
 
@@ -119,8 +124,9 @@ quadgraph_gas<-quads %>%
                                "#009E73", #green,
                                "#CC79A7" #magenta
   ),name="Season with peak month",guide="none")+
-  scale_x_continuous(name="EIA-861M",limits=c(.4,15))+
-  scale_y_continuous(name="BSS",limits=c(.4,15))+
+  scale_x_continuous(name="EIA-861M")+
+  scale_y_continuous(name="BSS")+
+  coord_cartesian(xlim=c(.4,15), ylim=c(.4,15))+
   facet_grid(sector+type~year,labeller = labeller(sector=s_label))+
   ggtitle("Max monthly buildings natural gas consumption: ratio of winter to summer")+
   theme(aspect.ratio = 1,strip.background = element_blank(),strip.text.y = element_text(size=10),strip.text.x = element_text(size=10))
@@ -143,7 +149,8 @@ BSS summer")) %>%
   theme(aspect.ratio = 1)
 
 
-save_plot(plot_grid(quadgraph,leg,nrow = 1,rel_widths = c(4,1)),filename = "graphs/fig_max_ratios.jpg",base_height = 7,bg = "white")
+save_plot(plot_grid(quadgraph_elec, leg, nrow = 1, rel_widths = c(4,1)), filename = "graphs/fig_max_ratios_elec.jpg", base_height = 7, bg = "white")
+save_plot(plot_grid(quadgraph_gas, leg, nrow = 1, rel_widths = c(4,1)), filename = "graphs/fig_max_ratios_gas.jpg", base_height = 7, bg = "white")
 
 # restore previous base directory
 setwd("../")
