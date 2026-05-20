@@ -39,6 +39,7 @@ FROM meta_filtered
 )
 
 
+-- Electric heating multiplier: use direct electric consumption where available
 SELECT 
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
@@ -49,6 +50,23 @@ SELECT
     'Electric' AS fuel
 FROM geo_totals
 WHERE heating_elec_total > 0
+
+UNION ALL
+
+-- Fallback: for state+group_ann combos where BuildStock has no electric heating output
+-- (e.g. fossil->HP upgrade groups in sparse states), use the fossil fuel county
+-- distribution as a proxy. Same homes, so geographic distribution is identical.
+SELECT 
+    "in.nhgis_county_gisjoin" as "in.county",
+    group_ann,
+    (heating_fo + heating_ng) / (heating_fo_total + heating_ng_total) AS multiplier_annual,
+    'com' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE heating_elec_total = 0
+  AND (heating_fo_total + heating_ng_total) > 0
 
 UNION ALL
 

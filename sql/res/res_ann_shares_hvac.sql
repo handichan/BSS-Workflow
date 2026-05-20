@@ -44,6 +44,7 @@ geo_totals AS (
 FROM meta_filtered
 )
 
+-- Electric heating multiplier: use direct electric consumption where available
 SELECT 
     "in.county",
     "in.weather_file_city",
@@ -59,6 +60,26 @@ WHERE heating_elec_total > 0
 
 UNION ALL
 
+-- Fallback: for state+group_ann combos where BuildStock has no electric heating output
+-- (e.g. fossil->ASHP upgrade groups in sparse states, or baseline fossil groups with
+-- near-zero HP backup electricity), use the fossil fuel county distribution as a proxy.
+-- These are the same homes, so their geographic distribution is identical.
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    (heating_fo + heating_ng + heating_prop) / (heating_fo_total + heating_ng_total + heating_prop_total) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE heating_elec_total = 0
+  AND (heating_fo_total + heating_ng_total + heating_prop_total) > 0
+
+UNION ALL
+
 SELECT 
     "in.county",
     "in.weather_file_city",
@@ -71,6 +92,24 @@ SELECT
     'Natural Gas' AS fuel
 FROM geo_totals
 WHERE heating_ng_total > 0
+
+UNION ALL
+
+-- Fallback: NG backup output is zero for this state+group (e.g. ASHP w/ NG backup in warm states
+-- where backup never fires). Use the electric HP county distribution as proxy since it's the same homes.
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    heating_elec / heating_elec_total AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Natural Gas' AS fuel
+FROM geo_totals
+WHERE heating_ng_total = 0
+  AND heating_elec_total > 0  -- only for upgrade groups with HP electricity output
 
 UNION ALL
 

@@ -54,6 +54,24 @@ WHERE wh_elec_total > 0
 
 UNION ALL
 
+-- Fallback: for state+group_ann combos where BuildStock has no electric WH output
+-- (e.g. fossil WH groups in states with near-zero HP WH sample), use the fossil
+-- county distribution as a proxy for the Electric multiplier.
+SELECT "in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	(wh_fo + wh_ng + wh_prop) / (wh_fo_total + wh_ng_total + wh_prop_total) as multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Water Heating' AS end_use,
+	'Electric' AS fuel
+FROM geo_totals
+WHERE wh_elec_total = 0
+  AND (wh_fo_total + wh_ng_total + wh_prop_total) > 0
+
+UNION ALL
+
 SELECT "in.county",
 	"in.weather_file_city",
 	"in.weather_file_longitude",
