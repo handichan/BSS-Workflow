@@ -845,10 +845,15 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     drop_tables = [
         "com_annual_disaggregation_multipliers_amy",
         "com_hourly_disaggregation_multipliers_amy",
-        f"com_hourly_hvac_temp_{cfg.VERSION_ID}"
+        f"com_hourly_hvac_temp_{cfg.VERSION_ID}",
+        "com_hourly_disaggregation_multipliers_amy_hvac_temp",
+        "res_annual_disaggregation_multipliers_amy",
+        "res_hourly_disaggregation_multipliers_amy",
+        "res_hourly_disaggregation_multipliers_amy_temp",
     ]
     for t in drop_tables:
         drop_athena_table_if_exists(athena_client, t, cfg)
+        delete_folder_from_s3(s3_client, cfg.BUCKET_NAME, f"{t}/")
     # lists as in original
     tbl_res = [
         "tbl_ann_mult.sql",
