@@ -10,6 +10,7 @@ import pandas as pd
 from io import StringIO
 from os import getcwd
 from argparse import ArgumentParser
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Optional R support (platform-specific setup)
 import platform
@@ -57,6 +58,10 @@ class Config:
     VERSION_ID = "20260109"
     DISAG_ID = "20260305"               # identifier for disaggregated energy data
     WEATHER = "amy"
+
+    # Max number of Athena queries to run concurrently (bounded by the account's
+    # concurrent-DML-query quota; keep well under it to leave headroom for other jobs)
+    ATHENA_MAX_WORKERS = 15 
 
     # S3 locations
     DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
@@ -212,6 +217,39 @@ def execute_athena_query(athena_client, query: str, cfg: Config, *, is_create: b
     result_loc = qexec["QueryExecution"]["ResultConfiguration"]["OutputLocation"]
     print(f"Results at: {result_loc}")
     return result_loc, (None if is_create else result_loc)
+
+
+def run_queries_concurrently(athena_client, cfg: Config, queries, *, is_create: bool, max_workers: int = None):
+    """
+    Run a batch of independent Athena queries concurrently (each query must write to
+    its own table/partition/state so there's no cross-query dependency).
+
+    `queries` is a list of (label, sql) tuples, where `label` is only used for logging.
+    All queries are submitted before any results are collected, so one failure doesn't
+    stop the others; if any query failed, raises after every query has finished.
+    """
+    if not queries:
+        return
+    max_workers = max_workers or cfg.ATHENA_MAX_WORKERS
+    errors = []
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_to_label = {
+            pool.submit(execute_athena_query, athena_client, sql, cfg, is_create=is_create, wait=True): label
+            for label, sql in queries
+        }
+        for future in as_completed(future_to_label):
+            label = future_to_label[future]
+            try:
+                future.result()
+                print(f"DONE {label}")
+            except Exception as exc:
+                print(f"FAILED {label}: {exc}")
+                errors.append((label, exc))
+    if errors:
+        raise RuntimeError(
+            f"{len(errors)} of {len(queries)} queries failed:\n"
+            + "\n".join(f"  {label}: {exc}" for label, exc in errors)
+        )
 
 
 def execute_athena_query_to_df(s3_client, athena_client, query: str, cfg: Config) -> pd.DataFrame:
@@ -800,34 +838,31 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
     def render(**kw):
         return template_raw.format(**kw)
 
+    def label(**kw):
+        extra = " ".join(f"{k}={v}" for k, v in kw.items())
+        return f"{sql_rel} | sector={sectorid} turnover={turnover} year={yearid} {extra}".strip()
 
-    # Case 1: both {state} and {enduse}
+    # Case 1: both {state} and {enduse} -- independent per (state, enduse), safe to run concurrently
     if contains_state and contains_enduse:
-        for st in cfg.US_STATES:
-            for eu in get_end_uses(sectorid):
-                q = render(**base_kwargs, state=st, enduse=eu)
-                print(
-                    f"RUN {sql_rel} | sector={sectorid} turnover={turnover} "
-                    f"year={yearid} state={st} enduse={eu}"
-                )
-                execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+        queries = [
+            (label(state=st, enduse=eu), render(**base_kwargs, state=st, enduse=eu))
+            for st in cfg.US_STATES
+            for eu in get_end_uses(sectorid)
+        ]
+        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
+        run_queries_concurrently(athena_client, cfg, queries, is_create=False)
         return
-    # Case 2: only {state}
+    # Case 2: only {state} -- independent per state, safe to run concurrently
     if contains_state:
-        for st in cfg.US_STATES:
-            q = render(**base_kwargs, state=st)
-            print(
-                f"RUN {sql_rel} | sector={sectorid} turnover={turnover} "
-                f"year={yearid} state={st}"
-            )
-            execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+        queries = [(label(state=st), render(**base_kwargs, state=st)) for st in cfg.US_STATES]
+        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
+        run_queries_concurrently(athena_client, cfg, queries, is_create=False)
         return
-    # Case 3: only {enduse}
+    # Case 3: only {enduse} -- independent per enduse, safe to run concurrently
     if contains_enduse:
-        for eu in get_end_uses(sectorid):
-            q = render(**base_kwargs, enduse=eu)
-            print(f"RUN {sql_rel} | sector={sectorid} turnover={turnover} year={yearid} enduse={eu}")
-            execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+        queries = [(label(enduse=eu), render(**base_kwargs, enduse=eu)) for eu in get_end_uses(sectorid)]
+        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
+        run_queries_concurrently(athena_client, cfg, queries, is_create=False)
         return
     # Case 4: neither placeholder -> single render
     q = render(**base_kwargs)
@@ -1610,18 +1645,40 @@ def combine_countydata(s3_client, athena_client, cfg: Config):
     # sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
     years = cfg.YEARS
-    q_combined = _combine_countydata(
-        ["res","com"], 
-        # ["res"],
-        years)
 
-    queries = [
-        q_combined["annual"], 
-        q_combined["hourly"]]
-    for query in queries:
-        for t in turnovers:
-            q = query.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
-            execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+    # Per-turnover setup (drop/clean or detect INSERT-vs-CREATE) is quick and has
+    # ordering requirements, so it stays sequential. The actual combine queries are
+    # independent across turnovers (and annual/hourly within a turnover don't depend
+    # on each other), so they're collected here and run concurrently below.
+    all_queries = []
+    for t in turnovers:
+        # When force=True, drop existing combined tables and clean S3 before recreating.
+        # Otherwise for AEO, INSERT into existing tables if they exist.
+        use_insert = False
+        if force:
+            for table_type in ["annual", "hourly"]:
+                table = f"long_county_{table_type}_{t}_{cfg.DISAG_ID}"
+                drop_athena_table_if_exists(athena_client, table, cfg)
+                delete_folder_from_s3(s3_client, cfg.BUCKET_NAME,
+                    f"{cfg.DISAG_ID}/long/county_{table_type}_{t}_{cfg.DISAG_ID}/")
+        elif t == "aeo":
+            annual_table = f"long_county_annual_{t}_{cfg.DISAG_ID}"
+            hourly_table = f"long_county_hourly_{t}_{cfg.DISAG_ID}"
+            if athena_table_exists(athena_client, cfg, annual_table) and \
+               athena_table_exists(athena_client, cfg, hourly_table):
+                use_insert = True
+                print(f"Tables for turnover '{t}' already exist. Data will be appended using INSERT.")
+
+        q_combined = _combine_countydata(
+            ["res","com"],
+            years,
+            use_insert=use_insert)
+
+        for qtype in ["annual", "hourly"]:
+            q = q_combined[qtype].format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
+            all_queries.append((f"combine_countydata turnover={t} type={qtype}", q))
+
+    run_queries_concurrently(athena_client, cfg, all_queries, is_create=False)
 
 # ----------------------------
 # R runner
@@ -2212,6 +2269,8 @@ def test_county(s3_client, athena_client, cfg: Config):
 
 def main(opts):
     cfg = Config()
+    if opts.max_workers:
+        cfg.ATHENA_MAX_WORKERS = opts.max_workers
 
     if opts.create_json:
         convert_csv_folder_to_json("csv_raw", cfg.JSON_PATH)
@@ -2364,6 +2423,7 @@ if __name__ == "__main__":
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
     parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
     
+    parser.add_argument("--max_workers", type=int, default=None, help="Max concurrent Athena queries (default: Config.ATHENA_MAX_WORKERS)")
     opts = parser.parse_args()
     main(opts)
 
