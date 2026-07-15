@@ -802,7 +802,12 @@ def s3_insert_to_table_from_tsv(s3_client, athena_client, local_path: str, dest_
     execute_athena_query(athena_client, sql, cfg, is_create=True, wait=True)
 
 
-def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yearid: str, turnover: str):
+def build_queries_for_sql_file(cfg: Config, sql_file: str, sectorid: str, yearid: str, turnover: str):
+    """
+    Render sql_file into one or more (label, sql) tuples, expanding {state}/{enduse}
+    placeholders into independent per-partition queries. Pure rendering, no execution --
+    lets callers batch queries from multiple files together before running them.
+    """
     sql_rel = f"{sectorid}/{sql_file}"
     template_raw = read_sql_file(sql_rel, cfg)
 
@@ -842,31 +847,31 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
         extra = " ".join(f"{k}={v}" for k, v in kw.items())
         return f"{sql_rel} | sector={sectorid} turnover={turnover} year={yearid} {extra}".strip()
 
-    # Case 1: both {state} and {enduse} -- independent per (state, enduse), safe to run concurrently
+    # both {state} and {enduse} -- independent per (state, enduse)
     if contains_state and contains_enduse:
-        queries = [
+        return [
             (label(state=st, enduse=eu), render(**base_kwargs, state=st, enduse=eu))
             for st in cfg.US_STATES
             for eu in get_end_uses(sectorid)
         ]
-        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
-        run_queries_concurrently(athena_client, cfg, queries, is_create=False)
-        return
-    # Case 2: only {state} -- independent per state, safe to run concurrently
+    # only {state} -- independent per state
     if contains_state:
-        queries = [(label(state=st), render(**base_kwargs, state=st)) for st in cfg.US_STATES]
-        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
-        run_queries_concurrently(athena_client, cfg, queries, is_create=False)
-        return
-    # Case 3: only {enduse} -- independent per enduse, safe to run concurrently
+        return [(label(state=st), render(**base_kwargs, state=st)) for st in cfg.US_STATES]
+    # only {enduse} -- independent per enduse
     if contains_enduse:
-        queries = [(label(enduse=eu), render(**base_kwargs, enduse=eu)) for eu in get_end_uses(sectorid)]
-        print(f"RUN {len(queries)} queries concurrently for {sql_rel} sector={sectorid} turnover={turnover} year={yearid}")
+        return [(label(enduse=eu), render(**base_kwargs, enduse=eu)) for eu in get_end_uses(sectorid)]
+    # neither placeholder -> single render
+    return [(label(), render(**base_kwargs))]
+
+
+def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yearid: str, turnover: str):
+    queries = build_queries_for_sql_file(cfg, sql_file, sectorid, yearid, turnover)
+    if len(queries) > 1:
+        print(f"RUN {len(queries)} queries concurrently for {sectorid}/{sql_file} sector={sectorid} turnover={turnover} year={yearid}")
         run_queries_concurrently(athena_client, cfg, queries, is_create=False)
         return
-    # Case 4: neither placeholder -> single render
-    q = render(**base_kwargs)
-    print(f"RUN {sql_rel} | sector={sectorid} turnover={turnover} year={yearid}")
+    label, q = queries[0]
+    print(f"RUN {label}")
     execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 
@@ -875,7 +880,6 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
 # ----------------------------
 
 def gen_multipliers(s3_client, athena_client, cfg: Config):
-    sectors = ["com", "res"]
     # drop tables before rerunning multipliers
     drop_tables = [
         "com_annual_disaggregation_multipliers_amy",
@@ -889,9 +893,18 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     for t in drop_tables:
         drop_athena_table_if_exists(athena_client, t, cfg)
         delete_folder_from_s3(s3_client, cfg.BUCKET_NAME, f"{t}/")
-    # lists as in original
-    tbl_res = [
-        "tbl_ann_mult.sql",
+
+    # Files are grouped into three execution tiers because the hourly pipeline has real
+    # cross-file dependencies (unlike the annual shares files, which are all independent
+    # of each other and of the destination table):
+    #   tier1 (create): creates the destination/temp tables that tier2 inserts into.
+    #   tier2 (independent inserts): only reads meta/ts/static lookup tables, never the
+    #       multiplier or temp tables -- safe to run fully concurrently.
+    #   tier3 (norm): reads the *_temp tables that tier2 populates (res_hourly_norm.sql
+    #       reads mult_res_hourly_temp; com_hourly_hvac_norm.sql reads
+    #       mult_com_hourly_hvac_temp), so it must wait for all of tier2 to land first.
+    tier1_res = ["tbl_ann_mult.sql", "tbl_hr_mult.sql", "tbl_hr_mult_temp.sql"]
+    tier2_res = [
         "res_ann_shares_cook.sql",
         "res_ann_shares_cooling_delivered.sql",
         "res_ann_shares_cw.sql",
@@ -906,14 +919,12 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_ann_shares_refrig.sql",
         "res_ann_shares_wh.sql",
         "res_ann_shares_wh_delivered.sql",
-        "tbl_hr_mult.sql",
-        "tbl_hr_mult_temp.sql",
         "res_hourly_shares_cook.sql",
         "res_hourly_shares_cw.sql",
         "res_hourly_shares_dry.sql",
         "res_hourly_shares_dw.sql",
         "res_hourly_shares_fanspumps.sql",
-        # "res_hourly_shares_gap.sql",       
+        # "res_hourly_shares_gap.sql",
         "res_hourly_shares_lighting.sql",
         "res_hourly_shares_misc.sql",
         "res_hourly_shares_poolpump.sql",
@@ -921,10 +932,11 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_hourly_shares_wh.sql",
         "res_hourly_shares_cooling.sql",
         "res_hourly_shares_heating.sql",
-        "res_hourly_norm.sql",
     ]
-    tbl_com = [
-        "tbl_ann_mult.sql",
+    tier3_res = ["res_hourly_norm.sql"]
+
+    tier1_com = ["tbl_ann_mult.sql", "tbl_hr_mult.sql", "tbl_hr_mult_hvac_temp.sql"]
+    tier2_com = [
         "com_ann_shares_cook.sql",
         "com_ann_shares_cool_delivered.sql",
         "com_ann_shares_gap.sql",
@@ -936,26 +948,38 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "com_ann_shares_ventilation_ref.sql",
         "com_ann_shares_wh.sql",
         "com_ann_shares_wh_agnostic.sql",
-        "tbl_hr_mult.sql",
         "com_hourly_shares_cooking.sql",
         "com_hourly_shares_gap.sql",
         "com_hourly_shares_lighting.sql",
         "com_hourly_shares_misc.sql",
         "com_hourly_shares_refrig.sql",
         "com_hourly_shares_wh.sql",
-        "tbl_hr_mult_hvac_temp.sql",
         "com_hourly_shares_cooling.sql",
         "com_hourly_shares_heating.sql",
         "com_hourly_shares_ventilation.sql",
         "com_hourly_shares_ventilation_ref.sql",
-        "com_hourly_hvac_norm.sql",
     ]
+    tier3_com = ["com_hourly_hvac_norm.sql"]
 
-    for sectorid in sectors:
-        tbls = tbl_res if sectorid == "res" else tbl_com
-        for tbl_name in tbls:
-            # year/turnover are not used by these create-table templates -> pass placeholders anyway
-            sql_to_s3table(athena_client, cfg, tbl_name, sectorid, yearid="2024", turnover="brk")
+    # year/turnover are not used by these templates -> pass placeholders anyway
+    yearid, turnover = "2024", "brk"
+
+    tiers = [
+        ("tier1 (create tables)", tier1_res, tier1_com, True),
+        ("tier2 (independent shares)", tier2_res, tier2_com, False),
+        ("tier3 (norm, depends on tier2)", tier3_res, tier3_com, False),
+    ]
+    for tier_label, files_res, files_com, is_create in tiers:
+        queries = [
+            q
+            for sectorid, files in (("res", files_res), ("com", files_com))
+            for tbl_name in files
+            for q in build_queries_for_sql_file(cfg, tbl_name, sectorid, yearid, turnover)
+        ]
+        if not queries:
+            continue
+        print(f"RUN {len(queries)} queries concurrently for {tier_label}")
+        run_queries_concurrently(athena_client, cfg, queries, is_create=is_create)
 
 
 def county_hourly_examples_60_days(s3_client, athena_client, cfg: Config, turnover: str):
