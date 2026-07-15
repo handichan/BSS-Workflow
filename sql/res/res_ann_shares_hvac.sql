@@ -128,6 +128,23 @@ WHERE heating_fo_total > 0
 
 UNION ALL
 
+-- Fallback: no Distillate/Other sample for this state+group; use combined fossil distribution as proxy.
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    (heating_fo + heating_ng + heating_prop) / (heating_fo_total + heating_ng_total + heating_prop_total) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Distillate/Other' AS fuel
+FROM geo_totals
+WHERE heating_fo_total = 0
+  AND (heating_fo_total + heating_ng_total + heating_prop_total) > 0
+
+UNION ALL
+
 SELECT 
     "in.county",
     "in.weather_file_city",
@@ -140,6 +157,23 @@ SELECT
     'Propane' AS fuel
 FROM geo_totals
 WHERE heating_prop_total > 0
+
+UNION ALL
+
+-- Fallback: no Propane sample for this state+group; use combined fossil distribution as proxy.
+SELECT 
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    (heating_fo + heating_ng + heating_prop) / (heating_fo_total + heating_ng_total + heating_prop_total) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Heating (Equip.)' AS end_use,
+    'Propane' AS fuel
+FROM geo_totals
+WHERE heating_prop_total = 0
+  AND (heating_fo_total + heating_ng_total + heating_prop_total) > 0
 
 UNION ALL
 

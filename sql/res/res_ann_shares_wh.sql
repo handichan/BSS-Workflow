@@ -111,4 +111,21 @@ SELECT "in.county",
 	'Propane' AS fuel
 FROM geo_totals
 WHERE wh_prop_total > 0
+
+UNION ALL
+
+-- Fallback: for state+group_ann combos where BuildStock has no propane WH sample,
+-- use the NG+Distillate+Propane combined fossil distribution as a proxy.
+SELECT "in.county",
+	"in.weather_file_city",
+	"in.weather_file_longitude",
+	group_ann,
+	(wh_fo + wh_ng + wh_prop) / (wh_fo_total + wh_ng_total + wh_prop_total) as multiplier_annual,
+	'res' AS sector,
+	"in.state",
+	'Water Heating' AS end_use,
+	'Propane' AS fuel
+FROM geo_totals
+WHERE wh_prop_total = 0
+  AND (wh_fo_total + wh_ng_total + wh_prop_total) > 0
 ;
