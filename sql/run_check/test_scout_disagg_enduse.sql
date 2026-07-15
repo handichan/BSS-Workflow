@@ -5,6 +5,7 @@ SELECT turnover, reg as "in.state", sector,
 end_use, fuel, "year", sum(state_ann_kwh) as scout_kwh
 FROM scout_annual_state_{turnover}
 WHERE "year" in ({years})
+AND turnover != 'baseline'
 GROUP BY turnover, 2, sector,
 end_use, fuel, "year"),
 
@@ -14,19 +15,21 @@ SELECT turnover, "in.state", sector,
 end_use, fuel, "year", sum(county_ann_kwh) as bss_ann_kwh
 FROM long_county_annual_{turnover}_{disag_id}
 WHERE "year" in ({years})
+AND turnover != 'baseline'
 GROUP BY turnover, "in.state", sector,
 end_use, fuel, "year"
-), 
+),
 
 bss_hr AS(
 
-SELECT turnover, "in.state", sector, 
+SELECT turnover, "in.state", sector,
 end_use, fuel, "year", sum(county_hourly_uncal_kwh) as bss_hr_kwh
 FROM long_county_hourly_{turnover}_{disag_id}
 WHERE "year" in ({years})
-GROUP BY turnover, "in.state", sector, 
+AND turnover != 'baseline'
+GROUP BY turnover, "in.state", sector,
 end_use, fuel, "year"
-), 
+),
 
 calc1 AS(
 SELECT 
