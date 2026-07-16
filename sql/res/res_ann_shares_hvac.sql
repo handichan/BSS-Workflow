@@ -177,7 +177,7 @@ WHERE heating_prop_total = 0
 
 UNION ALL
 
-SELECT 
+SELECT
     "in.county",
     "in.weather_file_city",
     "in.weather_file_longitude",
@@ -192,7 +192,26 @@ WHERE cooling_total > 0
 
 UNION ALL
 
-SELECT 
+-- Fallback: "no cool" groups have zero cooling output in BuildStock.
+-- Use fossil fuel county distribution as a proxy for where cooling will occur
+-- (same buildings, and fossil heat correlates with climate zones that need cooling).
+SELECT
+    "in.county",
+    "in.weather_file_city",
+    "in.weather_file_longitude",
+    group_ann,
+    (heating_fo + heating_ng + heating_prop) / (heating_fo_total + heating_ng_total + heating_prop_total) AS multiplier_annual,
+    'res' AS sector,
+    "in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM geo_totals
+WHERE cooling_total = 0
+  AND (heating_fo_total + heating_ng_total + heating_prop_total) > 0
+
+UNION ALL
+
+SELECT
     "in.county",
     "in.weather_file_city",
     "in.weather_file_longitude",

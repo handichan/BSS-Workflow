@@ -40,6 +40,15 @@ ts_agg AS(
 	"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
+),
+
+-- Compute annual totals per (city, shape_ts) to detect zero-fossil cities
+ts_agg_totals AS (
+    SELECT *,
+        SUM(heating_fossil) OVER (
+            PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts
+        ) AS annual_fossil_total
+    FROM ts_agg
 )
 
 SELECT
@@ -51,8 +60,15 @@ SELECT
     'res'              AS sector,
     'Heating (Equip.)' AS end_use,
     u.fuel
-FROM ts_agg a
+FROM ts_agg_totals a
 CROSS JOIN UNNEST(
     ARRAY['Electric', 'Natural Gas', 'Propane', 'Distillate/Other', 'Biomass'],
-	ARRAY[a.heating_elec, a.heating_fossil, a.heating_fossil, a.heating_fossil, a.heating_fossil]
+    ARRAY[
+        a.heating_elec,
+        -- Fallback: if no fossil heat in time series for this city+shape, use electric shape as proxy
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END
+    ]
 ) AS u(fuel, kwh);

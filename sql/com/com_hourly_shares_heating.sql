@@ -85,6 +85,15 @@ ts_agg AS (
         "in.state",
         shape_ts,
         timestamp_hour
+),
+
+-- Compute annual totals per (county, shape_ts) to detect zero-fossil counties
+ts_agg_totals AS (
+    SELECT *,
+        SUM(heating_fossil) OVER (
+            PARTITION BY "in.county", shape_ts
+        ) AS annual_fossil_total
+    FROM ts_agg
 )
 
 SELECT
@@ -96,8 +105,13 @@ SELECT
     a."in.state",
     'Heating (Equip.)' AS end_use,
     u.fuel
-FROM ts_agg a
+FROM ts_agg_totals a
 CROSS JOIN UNNEST(
     ARRAY['Electric', 'Natural Gas', 'Distillate/Other'],
-    ARRAY[a.heating_elec, a.heating_fossil, a.heating_fossil]
+    ARRAY[
+        a.heating_elec,
+        -- Fallback: if no fossil heat in time series for this county+shape, use electric shape as proxy
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,
+        CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END
+    ]
 ) AS u(fuel, kwh);
