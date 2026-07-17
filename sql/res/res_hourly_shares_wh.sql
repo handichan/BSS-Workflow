@@ -39,6 +39,22 @@ ts_agg AS(
 	"in.weather_file_longitude",
         "in.weather_file_city",
 		shape_ts
+),
+
+-- Compute annual electric total per (city, shape_ts) to detect shapes with
+-- structurally zero electric output -- e.g. res_wh_ts_1 ("fossil WH") only maps to
+-- fossil in.water_heater_efficiency types, so wh_elec is zero for every building on
+-- that shape everywhere, not just in some cities. res_ann_shares_wh.sql still
+-- assigns these groups an annual Electric multiplier (using the fossil county
+-- distribution as proxy) when BuildStock has no electric WH sample for the group,
+-- so an Electric hourly shape is needed here too; use the fossil shape as the same
+-- proxy at the hourly level.
+ts_agg_totals AS (
+    SELECT *,
+        SUM(wh_elec) OVER (
+            PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts
+        ) AS annual_elec_total
+    FROM ts_agg
 )
 
 SELECT
@@ -50,8 +66,13 @@ SELECT
     'res'              AS sector,
     'Water Heating' AS end_use,
     u.fuel
-FROM ts_agg a
+FROM ts_agg_totals a
 CROSS JOIN UNNEST(
     ARRAY['Electric', 'Natural Gas', 'Distillate/Other', 'Propane'],
-	ARRAY[a.wh_elec, a.wh_fossil, a.wh_fossil, a.wh_fossil]
+	ARRAY[
+	    CASE WHEN a.annual_elec_total > 0 THEN a.wh_elec ELSE a.wh_fossil END,
+	    a.wh_fossil,
+	    a.wh_fossil,
+	    a.wh_fossil
+	]
 ) AS u(fuel, kwh);

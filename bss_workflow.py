@@ -1373,6 +1373,11 @@ def gen_countydata(s3, athena_client, cfg: Config):
                 "annual_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
+    # Run diagnostics now, before the expensive hourly disaggregation loop below.
+    # test_missing_shape_ts_{res,com}.sql only needs county_annual_* (just built above)
+    # and mult_res_hourly/mult_com_hourly (already built by gen_multipliers), so this
+    # catches missing/bad multipliers before burning time on hourly disaggregation.
+    run_disaggregation_diagnostics(s3, athena_client, cfg)
     # hourly disaggregation
     for s in sectors:
         test_missing_mults(s3, athena_client, cfg, f"test_missing_shape_ts_{s}.sql")
