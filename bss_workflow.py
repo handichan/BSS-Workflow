@@ -2399,8 +2399,24 @@ def main(opts):
     # calculate calibration multipliers
     if opts.calibrate:
         s3, athena = get_boto3_clients()
+        TURNOVERS_backup = cfg.TURNOVERS
+        YEARS_backup = cfg.YEARS
+        cfg.TURNOVERS = ["aeo"]
+        
+        # Calibration multipliers are calculated from 2020-2024 subset
+        cfg.YEARS = [str(i) for i in range(2020, 2025)]
+        
+        gen_scoutdata(s3, athena, cfg)
+        # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
+        gen_countydata(s3, athena, cfg)
+        combine_countydata(s3, athena, cfg)
+        
+        # Calibration multipliers are calculated from historical subset (2020-2024 only)
         get_csv_for_calibration(s3, athena, cfg)
         calc_calibration_multipliers(cfg)
+        run_r_script("calibration.R")
+        cfg.TURNOVERS = TURNOVERS_backup
+        cfg.YEARS = YEARS_backup
 
     # combine tables from gen_county into one long table per scenario
     if opts.combine_county:
