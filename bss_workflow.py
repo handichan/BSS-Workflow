@@ -1227,7 +1227,7 @@ def get_csv_for_calibration(s3_client, athena_client, cfg: Config):
 
 def calc_calibration_multipliers(cfg: Config):
     state_monthly = pd.read_csv("diagnostics/state_monthly_for_cal.csv")
-    eia_gross = pd.read_csv(EIA_GROSS_PATH)
+    eia_gross = pd.read_csv(cfg.EIA_GROSS_PATH)
 
     monthly_ratios = (
     state_monthly
@@ -1776,11 +1776,15 @@ def run_r_script(r_file: str):
     r_path = os.path.join(project_root, "R", r_file)
     with open(r_path, "r", encoding="utf-8") as f:
         r_code = f.read()
+    original_cwd = os.getcwd()
     try:
         robjects.r(r_code)
         print("R script executed successfully.")
     except Exception as e:
         print(f"Error executing R script: {e}")
+    finally:
+        os.chdir(original_cwd)
+        robjects.r(f'setwd("{original_cwd}")')
 
 
 # ----------------------------
@@ -2123,7 +2127,7 @@ def check_missing_meas(annual_state_scout_df: pd.DataFrame, cfg: Config):
             missing = meas_enduse_in_scout - meas_enduse_in_map
             
             if missing:
-                n_missing = len(missing.index)
+                n_missing = len(missing)
                 print(f"WARNING: {n_missing} measure-end_use combinations from scout are missing in {mfile}.")
                 for combo in missing:
                     if isinstance(combo, tuple):
@@ -2308,6 +2312,22 @@ def test_county(s3_client, athena_client, cfg: Config):
             (final['bss_hr_kwh'].notna() & (final['scout_kwh'].isna())) | 
             (final['bss_hr_kwh'].isna() & (final['scout_kwh'] != 0)))]
         n_bad = len(bad_aggregation.index)
+
+        # Detect hourly-only NULLs: annual is present but hourly is missing — indicates a
+        # per-year/sector county_hourly table was generated AFTER combine_countydata ran,
+        # leaving long_county_hourly stale. Fix: drop long_county_hourly_{t}_{disag_id}
+        # in Athena and re-run --combine_county.
+        hr_null_only = final.loc[
+            final['bss_ann_kwh'].notna() & final['bss_hr_kwh'].isna() & final['scout_kwh'].notna()
+        ]
+        if not hr_null_only.empty:
+            stale = hr_null_only.groupby(['turnover','sector','year']).size().reset_index(name='n')
+            print(f"  NOTE: {len(hr_null_only)} rows have annual data but NULL hourly — "
+                  f"long_county_hourly combined table may be stale for:")
+            for _, row in stale.iterrows():
+                print(f"    turnover={row['turnover']} sector={row['sector']} year={row['year']} ({row['n']} rows)")
+            print(f"  Fix: DROP TABLE long_county_hourly_<turnover>_{disag_id} in Athena, then re-run --combine_county")
+
         if n_bad > 0:
             print(f"FAILED: {n_bad} re-aggregations are off by more than 0.1% in {sql_file}. Check {out_csv} for details.")
             print(bad_aggregation.head())
