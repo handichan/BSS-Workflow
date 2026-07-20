@@ -1383,7 +1383,14 @@ def athena_table_exists(athena_client, cfg: Config, table_name: str) -> bool:
 
 
 # disaggregate to county, hourly; one table per sector, year, and scenario combination
-def gen_countydata(s3, athena_client, cfg: Config):
+def run_disaggregation_diagnostics(s3, athena_client, cfg: Config):
+    """Run diagnostics to check that disaggregation multipliers are present and sum to 1."""
+    sectors = ["res", "com"]
+    test_missing_mults(s3, athena_client, cfg, "test_missing_group_ann.sql")
+    for s in sectors:
+        test_missing_mults(s3, athena_client, cfg, f"test_missing_shape_ts_{s}.sql")
+
+
 def gen_countydata(s3, athena_client, cfg: Config, force: bool = False):
     sectors = ["res", "com"]
     years = cfg.YEARS
