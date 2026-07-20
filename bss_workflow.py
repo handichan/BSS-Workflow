@@ -206,17 +206,39 @@ def execute_athena_query(athena_client, query: str, cfg: Config, *, is_create: b
     """
     Generic runner. If wait=True, returns (results_s3_uri, df_or_None).
     If is_create=True, df_or_None is None.
+
+    Retries up to 4 times on HIVE_S3_THROTTLING with exponential backoff, but only for
+    is_create=True (DDL like CREATE TABLE) -- those are safe to retry blindly. INSERT
+    queries (is_create=False) are NOT retried: a throttled INSERT can leave partial
+    output files in S3 (these are plain Hive/Parquet external tables, not transactional,
+    so a failed INSERT doesn't roll back), and blindly resubmitting the same INSERT on
+    top of a surviving partial write silently duplicates rows -- multiplier sums come
+    out as exact integer multiples (2x, 3x) of 1 instead of missing/NaN, so it doesn't
+    even fail loud. Fail fast instead and re-run --gen_mults, which drops+clears all
+    tables before rebuilding.
     """
     output_location = f"s3://{cfg.BUCKET_NAME}/configs/"
-    qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
+    max_retries = 4 if is_create else 0
+    backoff = 30  # seconds; doubles each attempt
 
-    if not wait:
-        return qid, None
+    for attempt in range(max_retries + 1):
+        qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
 
-    qexec = wait_for_query_completion(athena_client, qid)
-    result_loc = qexec["QueryExecution"]["ResultConfiguration"]["OutputLocation"]
-    print(f"Results at: {result_loc}")
-    return result_loc, (None if is_create else result_loc)
+        if not wait:
+            return qid, None
+
+        try:
+            qexec = wait_for_query_completion(athena_client, qid)
+            result_loc = qexec["QueryExecution"]["ResultConfiguration"]["OutputLocation"]
+            print(f"Results at: {result_loc}")
+            return result_loc, (None if is_create else result_loc)
+        except RuntimeError as exc:
+            if "HIVE_S3_THROTTLING" in str(exc) and attempt < max_retries:
+                wait_time = backoff * (2 ** attempt)
+                print(f"S3 throttling on attempt {attempt + 1}/{max_retries + 1}, retrying in {wait_time}s …")
+                time.sleep(wait_time)
+            else:
+                raise
 
 
 def run_queries_concurrently(athena_client, cfg: Config, queries, *, is_create: bool, max_workers: int = None):
@@ -949,7 +971,6 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "com_ann_shares_wh.sql",
         "com_ann_shares_wh_agnostic.sql",
         "com_hourly_shares_cooking.sql",
-        "com_hourly_shares_gap.sql",
         "com_hourly_shares_lighting.sql",
         "com_hourly_shares_misc.sql",
         "com_hourly_shares_refrig.sql",
@@ -959,6 +980,13 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "com_hourly_shares_ventilation.sql",
         "com_hourly_shares_ventilation_ref.sql",
     ]
+    # com_hourly_shares_gap.sql has no {state} placeholder -- it writes every
+    # (end_use, state) partition of {mult_com_hourly} in a single query, which
+    # overlaps every partition the per-state files above write to. Running it
+    # concurrently with tier2_com causes HIVE_CONCURRENT_MODIFICATION_DETECTED
+    # (two writers racing to add the same partition), so it gets its own serial
+    # tier instead.
+    tier2b_com = ["com_hourly_shares_gap.sql"]
     tier3_com = ["com_hourly_hvac_norm.sql"]
 
     # year/turnover are not used by these templates -> pass placeholders anyway
@@ -967,6 +995,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     tiers = [
         ("tier1 (create tables)", tier1_res, tier1_com, True),
         ("tier2 (independent shares)", tier2_res, tier2_com, False),
+        ("tier2b (gap, serial to avoid partition race)", [], tier2b_com, False),
         ("tier3 (norm, depends on tier2)", tier3_res, tier3_com, False),
     ]
     for tier_label, files_res, files_com, is_create in tiers:
