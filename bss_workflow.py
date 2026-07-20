@@ -1384,21 +1384,28 @@ def athena_table_exists(athena_client, cfg: Config, table_name: str) -> bool:
 
 # disaggregate to county, hourly; one table per sector, year, and scenario combination
 def gen_countydata(s3, athena_client, cfg: Config):
+def gen_countydata(s3, athena_client, cfg: Config, force: bool = False):
     sectors = ["res", "com"]
-    # sectors = ["res"]
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
+    
+    # Sync measure_map.tsv to S3 so the Athena EXTERNAL table picks up any local changes
+    s3_create_table_from_tsv(s3, athena_client, cfg.MEAS_MAP_PATH, cfg)
 
     # annual disaggregation
-    test_missing_mults(s3, athena_client, cfg, "test_missing_group_ann.sql")
     for s in sectors:
         for y in years:
             for t in turnovers:
                 ann_table = f"county_annual_{s}_{y}_{t}_{cfg.DISAG_ID}"
                 if athena_table_exists(athena_client, cfg, ann_table):
-                    print(f"SKIP (already exists): {ann_table}")
-                    continue
-                for name in ["tbl_ann_county.sql", 
+                    if force:
+                        drop_athena_table_if_exists(athena_client, ann_table, cfg)
+                        delete_folder_from_s3(s3, cfg.BUCKET_NAME,
+                            f"{cfg.DISAG_ID}/county_runs/county_annual_{s}_{y}_{t}_{cfg.DISAG_ID}/")
+                    else:
+                        print(f"SKIP (already exists): {ann_table}")
+                        continue
+                for name in ["tbl_ann_county.sql",
                 "annual_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
@@ -1409,11 +1416,19 @@ def gen_countydata(s3, athena_client, cfg: Config):
     run_disaggregation_diagnostics(s3, athena_client, cfg)
     # hourly disaggregation
     for s in sectors:
-        test_missing_mults(s3, athena_client, cfg, f"test_missing_shape_ts_{s}.sql")
         for y in years:
             for t in turnovers:
+                hourly_table = f"county_hourly_{s}_{y}_{t}_{cfg.DISAG_ID}"
+                if athena_table_exists(athena_client, cfg, hourly_table):
+                    if force:
+                        drop_athena_table_if_exists(athena_client, hourly_table, cfg)
+                        delete_folder_from_s3(s3, cfg.BUCKET_NAME,
+                            f"{cfg.DISAG_ID}/county_runs/county_hourly_{s}_{y}_{t}_{cfg.DISAG_ID}/")
+                    else:
+                        print(f"SKIP (already exists): {hourly_table}")
+                        continue
                 for name in [
-                    "tbl_hr_county.sql", 
+                    "tbl_hr_county.sql",
                     "hourly_county.sql"
                 ]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
@@ -1613,11 +1628,17 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
 
 def _combine_countydata(
     sectors,
-    years
+    years,
+    use_insert: bool = False
 ):
 
     # ---- HOURLY ----
-    hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{disag_id}}
+    if use_insert:
+        hourly_header = f"""INSERT INTO long_county_hourly_{{turnover}}_{{disag_id}}
+        WITH
+        """
+    else:
+        hourly_header = f"""CREATE TABLE long_county_hourly_{{turnover}}_{{disag_id}}
         WITH (
             external_location = 's3://{{dest_bucket}}/{{disag_id}}/long/county_hourly_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
@@ -1625,10 +1646,6 @@ def _combine_countydata(
         ) AS
         WITH
         """
-
-    # # if the table already exists
-    # hourly_header = f"""INSERT INTO long_county_hourly_{{turnover}}_{{disag_id}} WITH 
-    # """
     
     
     hourly_cte_tpl = (
@@ -1665,17 +1682,17 @@ def _combine_countydata(
     )
 
     # ---- ANNUAL ----
-    annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{disag_id}}
+    if use_insert:
+        annual_header = f"""INSERT INTO long_county_annual_{{turnover}}_{{disag_id}}
+        """
+    else:
+        annual_header = f"""CREATE TABLE long_county_annual_{{turnover}}_{{disag_id}}
         WITH (
             external_location = 's3://{{dest_bucket}}/{{disag_id}}/long/county_annual_{{turnover}}_{{disag_id}}/',
             format = 'Parquet',
             partitioned_by = ARRAY['sector', 'year', 'in.state']
         ) AS
         """
-
-    # # if the table already exists
-    # annual_header = f"""INSERT INTO long_county_annual_{{turnover}}_{{disag_id}}
-    #     """
 
     annual_select_tpl = (
         'SELECT "in.county", fuel, meas, tech_stage, multiplier_annual, '
@@ -1695,7 +1712,7 @@ def _combine_countydata(
 
 # combine the tables for each year and sector combination (output of gen_countydata) into one per scenario
 # apply electricity and gas calibration multipliers
-def combine_countydata(s3_client, athena_client, cfg: Config):
+def combine_countydata(s3_client, athena_client, cfg: Config, force: bool = False):
 
     # Ensure the calibration multipliers exist in Athena
     s3_create_table_from_tsv(s3_client, athena_client, cfg.CALIB_MULT_PATH, cfg)
@@ -2350,7 +2367,7 @@ def main(opts):
     # disaggregate to county hourly; one table per sector, year, scenario combination
     if opts.gen_county:
         s3, athena = get_boto3_clients()
-        gen_countydata(s3, athena, cfg)
+        gen_countydata(s3, athena, cfg, force=opts.force)
 
     # calculate calibration multipliers
     if opts.calibrate:
@@ -2361,7 +2378,7 @@ def main(opts):
     # combine tables from gen_county into one long table per scenario
     if opts.combine_county:
         s3, athena = get_boto3_clients()
-        combine_countydata(s3, athena, cfg)
+        combine_countydata(s3, athena, cfg, force=opts.force)
         test_county(s3, athena, cfg)
 
     # download required csvs, create county and hourly graphs
@@ -2399,8 +2416,8 @@ def main(opts):
         cfg.YEARS = [str(i) for i in range(2020, 2025)]
         gen_scoutdata(s3, athena, cfg)
         # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
-        gen_countydata(athena, cfg)
-        combine_countydata(athena, cfg)
+        gen_countydata(s3, athena, cfg)
+        combine_countydata(s3, athena, cfg)
         get_csvs_for_R(s3, athena, cfg, for_calibration=True)
         generate_state_monthly_for_cal(s3, athena, cfg)
         run_r_script("calibration.R")
@@ -2468,6 +2485,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_scoutdata", action="store_true", help="Process and upload Scout data")
     parser.add_argument("--gen_mults", action="store_true", help="Generate disaggregation multipliers from BuildStock")
     parser.add_argument("--gen_county", action="store_true", help="Generate county hourly data")
+    parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_county or --combine_county)")
     parser.add_argument("--calibrate", action="store_true", help="Generate calibration multipliers and apply to existing county hourly tables")
     parser.add_argument("--combine_county", action="store_true", help="Combine county hourly tables")
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
