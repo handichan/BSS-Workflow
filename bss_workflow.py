@@ -2430,9 +2430,6 @@ def main(opts):
         get_csvs_for_R(s3, athena, cfg)
         # run_r_script("county and hourly graphs.R")
 
-    if opts.combine_countydata:
-        _, athena = get_boto3_clients()
-        combine_countydata(athena, cfg)
 
     if opts.convert_wide:
         _, athena = get_boto3_clients()
@@ -2466,26 +2463,6 @@ def main(opts):
         run_r_script("calibration.R")
         cfg.TURNOVERS = TURNOVERS_backup
         cfg.YEARS = YEARS_backup
-
-    # previous workflow without running calibration
-    if opts.gen_countyall_no_calib:
-        s3, athena = get_boto3_clients()
-        # remove scout_annual_state_aeo (produced from calibration)
-        # also remove long_county_hourly_aeo_amy and long_county_annual_aeo_amy, as 2026 onward data will be generated and concatenated
-        drop_tables = [
-            "scout_annual_state_aeo",
-            "long_county_hourly_aeo_amy",
-            "long_county_annual_aeo_amy"
-        ]
-        for t in drop_tables:
-            drop_athena_table_if_exists(athena, t, cfg)
-        gen_scoutdata(s3, athena, cfg)
-        run_r_script("annual_graphs.R")
-        gen_countydata(athena, cfg)
-        combine_countydata(athena, cfg)
-        test_county(s3, athena, cfg)
-        get_csvs_for_R(s3, athena, cfg)
-        run_r_script("county and hourly graphs.R")
 
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
