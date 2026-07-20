@@ -63,6 +63,15 @@ all_counties AS (
     WHERE state = '{state}'
 ),
 
+-- One row per (county, shape_ts, fuel) instead of one per hour -- county_totals is
+-- still at hourly grain, and joining against it directly for an existence check
+-- would fan each candidate out across up to 8760 hourly rows before collapsing back
+-- down, which is needlessly expensive at state scale.
+county_annual_summary AS (
+    SELECT DISTINCT "in.county", shape_ts, fuel, county_annual_total
+    FROM county_totals
+),
+
 -- (county, shape_ts, fuel) combos that occur somewhere in the state but for which
 -- this particular county has no usable data
 county_gaps AS (
@@ -74,12 +83,12 @@ county_gaps AS (
     FROM all_counties ac
     JOIN (SELECT DISTINCT "in.state", shape_ts, fuel FROM state_totals WHERE state_annual_total > 0) needed
       ON ac."in.state" = needed."in.state"
-    LEFT JOIN county_totals ct
-      ON ac."in.county" = ct."in.county"
-     AND needed.shape_ts = ct.shape_ts
-     AND needed.fuel = ct.fuel
-     AND ct.county_annual_total > 0
-    WHERE ct."in.county" IS NULL
+    LEFT JOIN county_annual_summary cas
+      ON ac."in.county" = cas."in.county"
+     AND needed.shape_ts = cas.shape_ts
+     AND needed.fuel = cas.fuel
+     AND cas.county_annual_total > 0
+    WHERE cas."in.county" IS NULL
 ),
 
 county_fallback AS (

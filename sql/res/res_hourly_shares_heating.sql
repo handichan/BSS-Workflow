@@ -42,12 +42,23 @@ ts_agg AS(
 		shape_ts
 ),
 
--- Compute annual totals per (city, shape_ts) to detect zero-fossil cities
+-- Compute annual totals per (city, shape_ts) to detect zero-fossil cities and,
+-- separately, shapes with structurally zero electric output -- e.g. res_heating_ts_2
+-- ("Fossil heating") and res_heating_ts_15 ("Fossil furnace") only map to fossil
+-- in.hvac_heating_type_and_fuel types, so heating_elec is zero for every building on
+-- those shapes everywhere, not just in some cities. res_ann_shares_hvac.sql still
+-- assigns these baseline groups an annual Electric multiplier (using the fossil
+-- county distribution as proxy) when BuildStock has no electric heating sample for
+-- the group, so an Electric hourly shape is needed here too; use the fossil shape as
+-- the same proxy at the hourly level.
 ts_agg_totals AS (
     SELECT *,
         SUM(heating_fossil) OVER (
             PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts
-        ) AS annual_fossil_total
+        ) AS annual_fossil_total,
+        SUM(heating_elec) OVER (
+            PARTITION BY "in.weather_file_longitude", "in.weather_file_city", shape_ts
+        ) AS annual_elec_total
     FROM ts_agg
 )
 
@@ -64,7 +75,7 @@ FROM ts_agg_totals a
 CROSS JOIN UNNEST(
     ARRAY['Electric', 'Natural Gas', 'Propane', 'Distillate/Other', 'Biomass'],
     ARRAY[
-        a.heating_elec,
+        CASE WHEN a.annual_elec_total > 0 THEN a.heating_elec ELSE a.heating_fossil END,
         -- Fallback: if no fossil heat in time series for this city+shape, use electric shape as proxy
         CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,
         CASE WHEN a.annual_fossil_total > 0 THEN a.heating_fossil ELSE a.heating_elec END,

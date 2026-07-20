@@ -22,12 +22,17 @@ GROUP BY
     fuel
 ),
 
+-- Weather stations near state borders can serve buildings from more than one state
+-- (e.g. Texarkana, TX/AR; Wheeling Ohio Co, WV/OH) -- meta_res can have more than one
+-- "in.state" value for the same (city, longitude). Collapse to a single deterministic
+-- state per city so the join below doesn't fan out and duplicate rows.
 city_state AS (
-    SELECT DISTINCT
+    SELECT
         "in.weather_file_city",
         "in.weather_file_longitude",
-        "in.state"
+        MIN("in.state") AS "in.state"
     FROM "{meta_res}"
+    GROUP BY "in.weather_file_city", "in.weather_file_longitude"
 ),
 
 city_totals AS (
@@ -73,6 +78,21 @@ state_totals AS (
     FROM state_hourly
 ),
 
+-- One row per (city, shape_ts, fuel) instead of one per hour -- city_totals is still
+-- at hourly grain, and joining against it directly for an existence check would fan
+-- each candidate out across up to 8760 hourly rows before collapsing back down,
+-- which is needlessly expensive at nationwide scale (this file runs once per end use
+-- across all states, with no per-state filter).
+city_annual_summary AS (
+    SELECT DISTINCT
+        "in.weather_file_city",
+        "in.weather_file_longitude",
+        shape_ts,
+        fuel,
+        city_annual_total
+    FROM city_totals
+),
+
 -- (city, shape_ts, fuel) combos that occur somewhere in the city's state but for
 -- which this particular city has no usable data
 city_gaps AS (
@@ -85,13 +105,13 @@ city_gaps AS (
     FROM city_state cs
     JOIN (SELECT DISTINCT "in.state", shape_ts, fuel FROM state_totals WHERE state_annual_total > 0) needed
       ON cs."in.state" = needed."in.state"
-    LEFT JOIN city_totals ct
-      ON cs."in.weather_file_city" = ct."in.weather_file_city"
-     AND cs."in.weather_file_longitude" = ct."in.weather_file_longitude"
-     AND needed.shape_ts = ct.shape_ts
-     AND needed.fuel = ct.fuel
-     AND ct.city_annual_total > 0
-    WHERE ct."in.weather_file_city" IS NULL
+    LEFT JOIN city_annual_summary cas
+      ON cs."in.weather_file_city" = cas."in.weather_file_city"
+     AND cs."in.weather_file_longitude" = cas."in.weather_file_longitude"
+     AND needed.shape_ts = cas.shape_ts
+     AND needed.fuel = cas.fuel
+     AND cas.city_annual_total > 0
+    WHERE cas."in.weather_file_city" IS NULL
 ),
 
 city_fallback AS (
