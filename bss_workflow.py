@@ -61,7 +61,9 @@ class Config:
 
     # Max number of Athena queries to run concurrently (bounded by the account's
     # concurrent-DML-query quota; keep well under it to leave headroom for other jobs)
-    ATHENA_MAX_WORKERS = 15 
+    # use 3 or 2 for gen_mults, to prevent throttling errors when creating tables in parallel
+    # use 15 for gen_county, combine_county to speed up the queries
+    ATHENA_MAX_WORKERS = 3
 
     # S3 locations
     DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
