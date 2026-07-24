@@ -486,9 +486,9 @@ def _scout_json_to_df(filename: str, include_env: bool, cfg: Config) -> pd.DataF
         cols = ["meas"] + [c for c in all_df.columns if c != "meas"]
         all_df = all_df[cols]
 
-        # ---- ComStock Gap Weights ----
-        if "ComStock Gap Weights" in json_df[mea]:
-            w_data = reshape_json(json_df[mea]["ComStock Gap Weights"])
+        # ---- ComStock Electric Gap Weights ----
+        if "ComStock Electric Gap Weights" in json_df[mea]:
+            w_data = reshape_json(json_df[mea]["ComStock Electric Gap Weights"])
             wdf = pd.DataFrame(w_data)
             wdf["meas"] = mea
             wdf = wdf[["meas",0,1,2]]
