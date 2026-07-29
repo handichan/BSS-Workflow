@@ -147,6 +147,13 @@ class Config:
     EIA_GROSS_PATH = "map_meas/eia_gross_consumption_by_state_sector_year_month.csv"    # file with monthly EIA electricity and gas consumption
     SCOUT_OUT_TSV = "scout_tsv"         # location where transformed Scout files will be saved as TSV
     SCOUT_IN_JSON = "scout_results"     # location of raw JSON files from Scout
+    # Measures whose gap-model portion (see GAP SPLIT in _calc_annual_common) should be
+    # kept out of the shared "Gap" bucket and routed to their own measure_map.tsv entry
+    # instead, so they can be assigned a load shape different from the generic
+    # com_gap_ts_1 shape used by every other measure's gap portion.
+    GAP_MEAS_OVERRIDE = {
+        "(C) Ref. Case Data Centers": "Gap - Data Centers",
+    }
 
 
 # ----------------------------
@@ -639,10 +646,12 @@ def _calc_annual_common(df: pd.DataFrame, gap_weights: pd.DataFrame, include_bas
             part1 = merged.copy()
             part1["state_ann_kwh"] = (1.0 - part1["gap_weight"]) * part1["state_ann_kwh"]
 
-            # gap portion
+            # gap portion -- most measures collapse into the shared "Gap" bucket, but
+            # measures listed in GAP_MEAS_OVERRIDE get their own bucket instead (see
+            # Config.GAP_MEAS_OVERRIDE for why)
             part2 = merged.copy()
             part2["state_ann_kwh"] = part2["gap_weight"] * part2["state_ann_kwh"]
-            part2["meas"] = "Gap"
+            part2["meas"] = part2["meas"].map(lambda m: cfg.GAP_MEAS_OVERRIDE.get(m, "Gap"))
 
             expanded = pd.concat([part1[cols], part2[cols]], ignore_index=True)
             dflong = pd.concat([dflong.loc[~subset_mask], expanded], ignore_index=True)
@@ -989,6 +998,12 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     # (two writers racing to add the same partition), so it gets its own serial
     # tier instead.
     tier2b_com = ["com_hourly_shares_gap.sql"]
+    # com_hourly_shares_flat.sql (the flat com_flat_ts shape) also has no {state}
+    # placeholder and also writes into the end_use='Computers and Electronics'
+    # partition that both tier2_com (com_hourly_shares_misc.sql) and tier2b_com
+    # (com_hourly_shares_gap.sql) write to -- give it its own serial tier for the
+    # same reason tier2b is separate from tier2.
+    tier2c_com = ["com_hourly_shares_flat.sql"]
     tier3_com = ["com_hourly_hvac_norm.sql"]
 
     # year/turnover are not used by these templates -> pass placeholders anyway
@@ -998,6 +1013,7 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         ("tier1 (create tables)", tier1_res, tier1_com, True),
         ("tier2 (independent shares)", tier2_res, tier2_com, False),
         ("tier2b (gap, serial to avoid partition race)", [], tier2b_com, False),
+        ("tier2c (flat shape, serial to avoid partition race)", [], tier2c_com, False),
         ("tier3 (norm, depends on tier2)", tier3_res, tier3_com, False),
     ]
     for tier_label, files_res, files_com, is_create in tiers:
