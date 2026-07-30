@@ -912,7 +912,7 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
 # Specific pipelines
 # ----------------------------
 
-def gen_multipliers(s3_client, athena_client, cfg: Config):
+def gen_multipliers(s3_client, athena_client, cfg: Config, sectors=("res", "com")):
     # drop tables before rerunning multipliers
     drop_tables = [
         "com_annual_disaggregation_multipliers_amy",
@@ -923,6 +923,9 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
         "res_hourly_disaggregation_multipliers_amy",
         "res_hourly_disaggregation_multipliers_amy_temp",
     ]
+    # only drop/rebuild tables for the requested sector(s) -- e.g. after a com-only
+    # failure there's no need to also wipe and re-run the (unaffected) res tables
+    drop_tables = [t for t in drop_tables if t.split("_", 1)[0] in sectors]
     for t in drop_tables:
         drop_athena_table_if_exists(athena_client, t, cfg)
         delete_folder_from_s3(s3_client, cfg.BUCKET_NAME, f"{t}/")
@@ -1009,24 +1012,51 @@ def gen_multipliers(s3_client, athena_client, cfg: Config):
     # year/turnover are not used by these templates -> pass placeholders anyway
     yearid, turnover = "2024", "brk"
 
-    tiers = [
-        ("tier1 (create tables)", tier1_res, tier1_com, True),
-        ("tier2 (independent shares)", tier2_res, tier2_com, False),
-        ("tier2b (gap, serial to avoid partition race)", [], tier2b_com, False),
-        ("tier2c (flat shape, serial to avoid partition race)", [], tier2c_com, False),
-        ("tier3 (norm, depends on tier2)", tier3_res, tier3_com, False),
-    ]
-    for tier_label, files_res, files_com, is_create in tiers:
-        queries = [
-            q
-            for sectorid, files in (("res", files_res), ("com", files_com))
-            for tbl_name in files
-            for q in build_queries_for_sql_file(cfg, tbl_name, sectorid, yearid, turnover)
-        ]
-        if not queries:
+    # res and com are fully independent pipelines -- run res to completion, then com,
+    # rather than batching their tiers together. This costs no wall-clock time (the same
+    # total query count still drains through the same ATHENA_MAX_WORKERS pool either
+    # way, just as two sequential batches instead of one combined one) and guarantees
+    # a failure in one sector can never affect the other, since no batch ever contains
+    # queries from both sectors.
+    sector_tiers = {
+        "res": [
+            ("res tier1 (create tables)", tier1_res, True),
+            ("res tier2 (independent shares)", tier2_res, False),
+            ("res tier3 (norm, depends on tier2)", tier3_res, False),
+        ],
+        "com": [
+            ("com tier1 (create tables)", tier1_com, True),
+            ("com tier2 (independent shares)", tier2_com, False),
+            ("com tier2b (gap, serial to avoid partition race)", tier2b_com, False),
+            ("com tier2c (flat shape, serial to avoid partition race)", tier2c_com, False),
+            ("com tier3 (norm, depends on tier2)", tier3_com, False),
+        ],
+    }
+
+    errors = []
+    for sectorid in ("res", "com"):
+        if sectorid not in sectors:
             continue
-        print(f"RUN {len(queries)} queries concurrently for {tier_label}")
-        run_queries_concurrently(athena_client, cfg, queries, is_create=is_create)
+        for tier_label, files, is_create in sector_tiers[sectorid]:
+            queries = [
+                q
+                for tbl_name in files
+                for q in build_queries_for_sql_file(cfg, tbl_name, sectorid, yearid, turnover)
+            ]
+            if not queries:
+                continue
+            print(f"RUN {len(queries)} queries concurrently for {tier_label}")
+            try:
+                run_queries_concurrently(athena_client, cfg, queries, is_create=is_create)
+            except RuntimeError as exc:
+                errors.append((tier_label, exc))
+                print(f"WARNING: {tier_label} failed; skipping remaining {sectorid} tiers")
+                break  # stop this sector's pipeline; the other sector still runs
+
+    if errors:
+        raise RuntimeError(
+            "gen_multipliers failed:\n" + "\n".join(f"  {label}: {exc}" for label, exc in errors)
+        )
 
 
 def county_hourly_examples_60_days(s3_client, athena_client, cfg: Config, turnover: str):
@@ -2426,7 +2456,7 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_create_table_from_tsv(s3, athena, cfg.MEAS_MAP_PATH, cfg)
         s3_create_tables_from_csvdir(s3, athena, cfg)
-        gen_multipliers(s3, athena, cfg)
+        gen_multipliers(s3, athena, cfg, sectors=opts.sectors)
         test_multipliers(s3, athena, cfg)
 
     # process and upload Scout results
