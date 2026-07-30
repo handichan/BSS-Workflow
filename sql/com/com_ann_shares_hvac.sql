@@ -36,6 +36,37 @@ geo_totals AS (
     ventilation,
     sum(ventilation) OVER (PARTITION BY "in.state", group_ann) as ventilation_total
 FROM meta_filtered
+),
+
+-- com_hvac_ann_4 (DOAS+GSHP, upgrade 0) maps to exactly one heating_fuel/hvac_combined_type
+-- row in com_ann_hvac, so a state with zero ComStock sample buildings of that exact type
+-- has NO geo_totals row at all for (state, group_ann) -- unlike the fossil-backup fallback
+-- above, there's no other fuel column within the same group to borrow from. Use the
+-- state's overall commercial building distribution (all upgrade=0 buildings, any HVAC
+-- type) as a general floor-area/activity proxy for those states instead.
+com_totals AS (
+    SELECT
+        "in.nhgis_county_gisjoin" AS "in.county",
+        "in.state",
+        sum(weight) AS com_weight
+    FROM "{meta_com}"
+    WHERE upgrade = 0
+    GROUP BY "in.nhgis_county_gisjoin", "in.state"
+),
+com_share AS (
+    SELECT
+        "in.county",
+        "in.state",
+        com_weight / sum(com_weight) OVER (PARTITION BY "in.state") AS multiplier_annual
+    FROM com_totals
+),
+missing_hvac_4_states AS (
+    SELECT DISTINCT cs."in.state"
+    FROM com_share cs
+    WHERE NOT EXISTS (
+        SELECT 1 FROM geo_totals gt
+        WHERE gt."in.state" = cs."in.state" AND gt.group_ann = 'com_hvac_ann_4'
+    )
 )
 
 
@@ -120,7 +151,7 @@ FROM geo_totals
 
 UNION ALL
 
-SELECT 
+SELECT
     "in.nhgis_county_gisjoin" as "in.county",
     group_ann,
     ventilation / ventilation_total AS multiplier_annual,
@@ -129,4 +160,32 @@ SELECT
     'Ventilation' AS end_use,
     'Electric' AS fuel
 FROM geo_totals
+
+UNION ALL
+
+-- Fallback: no com_hvac_ann_4 sample buildings at all in this state (see
+-- missing_hvac_4_states above) -- use the general commercial building distribution.
+SELECT
+    cs."in.county",
+    'com_hvac_ann_4' AS group_ann,
+    cs.multiplier_annual,
+    'com' AS sector,
+    cs."in.state",
+    'Heating (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM com_share cs
+JOIN missing_hvac_4_states m ON m."in.state" = cs."in.state"
+
+UNION ALL
+
+SELECT
+    cs."in.county",
+    'com_hvac_ann_4' AS group_ann,
+    cs.multiplier_annual,
+    'com' AS sector,
+    cs."in.state",
+    'Cooling (Equip.)' AS end_use,
+    'Electric' AS fuel
+FROM com_share cs
+JOIN missing_hvac_4_states m ON m."in.state" = cs."in.state"
 ;
