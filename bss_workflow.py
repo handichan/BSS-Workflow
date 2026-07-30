@@ -1337,53 +1337,79 @@ def county_partition_multipliers(athena_client, cfg: Config):
             execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
 # process Scout json from SCOUT_IN_JSON, register to Athena, and save as TSV to SCOUT_OUT_TSV
+def _gen_scoutdata_for_turnover(s3_client, athena_client, cfg: Config, turnover: str):
+    scout_file = f"{turnover}.json"
+    print(f">>> SCOUT FILE: {scout_file}")
+    fp = os.path.join(cfg.SCOUT_IN_JSON, scout_file)
+
+    # choose conversion path
+    # Scout scenario does NOT have envelope measures
+    if scout_file in cfg.no_env_meas:
+        sdf, gap_weights = scout_to_df_noenv(fp, cfg)
+        use_gap_model = not gap_weights.empty
+
+        ann_df, out_path = calc_annual_noenv(
+            sdf,
+            gap_weights,
+            include_baseline=True,
+            turnover=turnover,
+            include_bldg_type=use_gap_model,
+            cfg=cfg,
+        )
+
+    # Scout scenario HAS have envelope measures
+    else:
+        sdf, gap_weights = scout_to_df(fp, cfg)
+        use_gap_model = not gap_weights.empty
+
+        ann_df, out_path = calc_annual(
+            sdf,
+            gap_weights,
+            include_baseline=True,
+            turnover=turnover,
+            include_bldg_type=use_gap_model,
+            cfg=cfg,
+        )
+    # check coverage of: measure map, envelope packages
+    check_missing_meas_path = sdf
+    check_missing_meas(check_missing_meas_path, cfg)
+    if scout_file not in cfg.no_env_meas:
+        check_missing_packages(sdf, cfg)
+
+    # register TSV to Athena
+    s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
+    print(f"Finished adding scout data {scout_file}")
+
+
 def gen_scoutdata(s3_client, athena_client, cfg: Config):
 
     # Ensure measure_map exists in Athena
     s3_create_table_from_tsv(s3_client, athena_client, cfg.MEAS_MAP_PATH, cfg)
 
-    for turnover in cfg.TURNOVERS:
-        scout_file = f"{turnover}.json"
-        print(f">>> SCOUT FILE: {scout_file}")
-        fp = os.path.join(cfg.SCOUT_IN_JSON, scout_file)
-
-        # choose conversion path
-        # Scout scenario does NOT have envelope measures
-        if scout_file in cfg.no_env_meas:
-            sdf, gap_weights = scout_to_df_noenv(fp, cfg)
-            use_gap_model = not gap_weights.empty 
-
-            ann_df, out_path = calc_annual_noenv(
-                sdf,
-                gap_weights,
-                include_baseline=True,
-                turnover=turnover,
-                include_bldg_type=use_gap_model,
-                cfg=cfg,
-            )
-
-        # Scout scenario HAS have envelope measures
-        else:
-            sdf, gap_weights = scout_to_df(fp, cfg) 
-            use_gap_model = not gap_weights.empty
-
-            ann_df, out_path = calc_annual(
-                sdf,
-                gap_weights,
-                include_baseline=True,
-                turnover=turnover,
-                include_bldg_type=use_gap_model,
-                cfg=cfg,
-            )
-        # check coverage of: measure map, envelope packages
-        check_missing_meas_path = sdf
-        check_missing_meas(check_missing_meas_path, cfg)
-        if scout_file not in cfg.no_env_meas:
-            check_missing_packages(sdf, cfg)
-
-        # register TSV to Athena
-        s3_create_table_from_tsv(s3_client, athena_client, out_path, cfg)
-        print(f"Finished adding scout data {scout_file}")
+    # Turnovers are independent (separate local files, separate Athena tables), so run them
+    # concurrently -- each spends most of its time blocked on the CREATE TABLE Athena call
+    # (s3_create_table_from_tsv), which otherwise serializes the whole loop on network waits.
+    # Keep worker count low (same as gen_mults) since concurrent CREATE TABLE calls are prone
+    # to HIVE_S3_THROTTLING.
+    max_workers = min(cfg.ATHENA_MAX_WORKERS, len(cfg.TURNOVERS))
+    errors = []
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_to_turnover = {
+            pool.submit(_gen_scoutdata_for_turnover, s3_client, athena_client, cfg, turnover): turnover
+            for turnover in cfg.TURNOVERS
+        }
+        for future in as_completed(future_to_turnover):
+            turnover = future_to_turnover[future]
+            try:
+                future.result()
+            except Exception as exc:
+                print(f"FAILED turnover={turnover}: {exc}")
+                errors.append((turnover, exc))
+    if errors:
+        raise RuntimeError(
+            f"{len(errors)} of {len(cfg.TURNOVERS)} turnovers failed in gen_scoutdata:\n"
+            + "\n".join(f"  {turnover}: {exc}" for turnover, exc in errors)
+        )
 
 def athena_table_exists(athena_client, cfg: Config, table_name: str) -> bool:
     """Return True if the given table already exists in the Athena database."""
