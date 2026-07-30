@@ -2515,7 +2515,7 @@ def main(opts):
         # Calibration multipliers are calculated from historical subset (2020-2024 only)
         get_csv_for_calibration(s3, athena, cfg)
         calc_calibration_multipliers(cfg)
-        run_r_script("calibration.R")
+        run_r_script("calibration graphs.R")
         cfg.TURNOVERS = TURNOVERS_backup
         cfg.YEARS = YEARS_backup
 
@@ -2561,7 +2561,7 @@ def main(opts):
         combine_countydata(s3, athena, cfg)
         get_csvs_for_R(s3, athena, cfg, for_calibration=True)
         generate_state_monthly_for_cal(s3, athena, cfg)
-        run_r_script("calibration.R")
+        run_r_script("calibration graphs.R")
         cfg.TURNOVERS = TURNOVERS_backup
         cfg.YEARS = YEARS_backup
 
