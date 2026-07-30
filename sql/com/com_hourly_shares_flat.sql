@@ -1,4 +1,10 @@
 INSERT INTO {mult_com_hourly}
+WITH states AS (
+    SELECT "in.state", "in.county"
+    FROM "{meta_res}"
+    WHERE upgrade = 0
+    GROUP BY "in.state", "in.county"
+)
 SELECT DISTINCT
     g."in.county",
     CAST('com_flat_ts' AS varchar) AS shape_ts,
@@ -12,6 +18,7 @@ SELECT DISTINCT
     CAST('com' AS varchar) AS sector,
     CAST('Electric' AS varchar) AS fuel,
     CAST('Computers and Electronics' AS varchar) AS end_use,
-    g."in.state"
+    states."in.state"
 FROM "{gap_com}" g
+LEFT JOIN states ON states."in.county" = g."in.county"
 ;
