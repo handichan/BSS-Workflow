@@ -1457,19 +1457,19 @@ def athena_table_exists(athena_client, cfg: Config, table_name: str) -> bool:
 
 
 # disaggregate to county, hourly; one table per sector, year, and scenario combination
-def run_disaggregation_diagnostics(s3, athena_client, cfg: Config):
+def run_disaggregation_diagnostics(s3, athena_client, cfg: Config, sectors=("res", "com")):
     """Run diagnostics to check that disaggregation multipliers are present and sum to 1."""
-    sectors = ["res", "com"]
     test_missing_mults(s3, athena_client, cfg, "test_missing_group_ann.sql")
     for s in sectors:
         test_missing_mults(s3, athena_client, cfg, f"test_missing_shape_ts_{s}.sql")
 
 
-def gen_countydata(s3, athena_client, cfg: Config, force: bool = False):
-    sectors = ["res", "com"]
+def gen_countydata_annual(s3, athena_client, cfg: Config, force: bool = False, sectors=("res", "com")):
+    """Run annual disaggregation, then diagnostics to catch missing/bad multipliers
+    before burning time on the (much slower) hourly disaggregation."""
     years = cfg.YEARS
     turnovers = cfg.TURNOVERS
-    
+
     # Sync measure_map.tsv to S3 so the Athena EXTERNAL table picks up any local changes
     s3_create_table_from_tsv(s3, athena_client, cfg.MEAS_MAP_PATH, cfg)
 
@@ -1490,11 +1490,19 @@ def gen_countydata(s3, athena_client, cfg: Config, force: bool = False):
                 "annual_county.sql"]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
 
-    # Run diagnostics now, before the expensive hourly disaggregation loop below.
     # test_missing_shape_ts_{res,com}.sql only needs county_annual_* (just built above)
     # and mult_res_hourly/mult_com_hourly (already built by gen_multipliers), so this
     # catches missing/bad multipliers before burning time on hourly disaggregation.
-    run_disaggregation_diagnostics(s3, athena_client, cfg)
+    run_disaggregation_diagnostics(s3, athena_client, cfg, sectors=sectors)
+
+
+def gen_countydata_hourly(s3, athena_client, cfg: Config, force: bool = False, sectors=("res", "com")):
+    years = cfg.YEARS
+    turnovers = cfg.TURNOVERS
+
+    # Sync measure_map.tsv to S3 so the Athena EXTERNAL table picks up any local changes
+    s3_create_table_from_tsv(s3, athena_client, cfg.MEAS_MAP_PATH, cfg)
+
     # hourly disaggregation
     for s in sectors:
         for y in years:
@@ -1513,6 +1521,14 @@ def gen_countydata(s3, athena_client, cfg: Config, force: bool = False):
                     "hourly_county.sql"
                 ]:
                     sql_to_s3table(athena_client, cfg, name, s, y, t)
+
+
+def gen_countydata(s3, athena_client, cfg: Config, force: bool = False, sectors=("res", "com")):
+    """Run annual disaggregation + diagnostics, then hourly disaggregation.
+    Prefer calling gen_countydata_annual and gen_countydata_hourly separately
+    when you want to verify diagnostics pass before starting the slow hourly run."""
+    gen_countydata_annual(s3, athena_client, cfg, force=force, sectors=sectors)
+    gen_countydata_hourly(s3, athena_client, cfg, force=force, sectors=sectors)
 
 
 # ----------------------------
@@ -2468,7 +2484,18 @@ def main(opts):
     # disaggregate to county hourly; one table per sector, year, scenario combination
     if opts.gen_county:
         s3, athena = get_boto3_clients()
-        gen_countydata(s3, athena, cfg, force=opts.force)
+        gen_countydata(s3, athena, cfg, force=opts.force, sectors=opts.sectors)
+
+    # annual disaggregation + diagnostics only (fast; run this first to sanity-check
+    # before kicking off the slow --gen_county_hourly run)
+    if opts.gen_county_annual:
+        s3, athena = get_boto3_clients()
+        gen_countydata_annual(s3, athena, cfg, force=opts.force, sectors=opts.sectors)
+
+    # hourly disaggregation only (assumes annual tables already exist)
+    if opts.gen_county_hourly:
+        s3, athena = get_boto3_clients()
+        gen_countydata_hourly(s3, athena, cfg, force=opts.force, sectors=opts.sectors)
 
     # calculate calibration multipliers
     if opts.calibrate:
@@ -2580,6 +2607,12 @@ if __name__ == "__main__":
     parser.add_argument("--gen_mults", action="store_true", help="Generate disaggregation multipliers from BuildStock")
     parser.add_argument("--gen_county", action="store_true", help="Generate county hourly data")
     parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_county or --combine_county)")
+    parser.add_argument("--sectors", nargs="+", choices=["res", "com"], default=["res", "com"],
+                         help="Limit --gen_mults/--gen_county/--gen_county_annual/--gen_county_hourly/--gen_countyall "
+                              "to the given sector(s) (default: both). Useful for re-running just the sector that failed.")
+    parser.add_argument("--gen_county", action="store_true", help="Generate county data (annual + diagnostics, then hourly)")
+    parser.add_argument("--gen_county_annual", action="store_true", help="Generate county annual data and run disaggregation diagnostics (fast; run before --gen_county_hourly)")
+    parser.add_argument("--gen_county_hourly", action="store_true", help="Generate county hourly data (assumes annual tables already exist; slow)")
     parser.add_argument("--calibrate", action="store_true", help="Generate calibration multipliers and apply to existing county hourly tables")
     parser.add_argument("--combine_county", action="store_true", help="Combine county hourly tables")
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
