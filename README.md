@@ -479,6 +479,7 @@ The `Config` class of `bss_workflow.py` centralizes all constants and runtime sw
 | `YEARS` | Analysis years to disaggregate. | Looped in county/hourly disaggregation. |
 | `BASE_YEAR` | Base year for calculating percent differences. | Hourly visualizations. |
 | `US_STATES` | List of two-letter U.S. state abbreviations to disaggregate. | SQL templates with `{state}` placeholders. |
+| `ATHENA_MAX_WORKERS` | Max number of Athena queries to run concurrently. Default `3`; keep well under your account's concurrent-DML-query quota to leave headroom for other jobs and to avoid throttling errors. Can be overridden per-run with `--max_workers` (see [command line arguments](#summary-of-command-line-arguments)). | `run_queries_concurrently`, `gen_scoutdata`; used by `gen_county`/`combine_county`/`gen_mults`. |
 
 **Table 9:** Configuration paramters in `bss_workflow.py`
 
@@ -605,6 +606,7 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
 - `--gen_mults` (or `--gen_multipliers`)
   - Creates/recreates annual/hourly disaggregation multipliers and runs multiplier diagnostics.
   - Use when you changed multiplier SQL templates under `sql/res` or `sql/com`, updated files in `map_eu/`, or Glued a new version of BuildStock SDR.
+  - Can be limited to one sector with `--sectors` (see below), e.g. to re-run just the sector that failed.
 
 ### Disaggregation
 
@@ -616,30 +618,51 @@ The command line arguments for `bss_workflow.py` specify which parts of the work
   - Disaggregates annual state-level data to county annual and then to county hourly. Each year and sector combination will be a separate S3 table. These results are uncalibrated.
   - Checks that all the necessary disaggregation multipliers are present and sum to 1.
   - Use if you are disaggregating a new scenario, have new disaggregation multipliers, or updated the measure or envelope maps.
+  - Equivalent to running `--gen_county_annual` followed by `--gen_county_hourly`.
+
+- `--gen_county_annual`
+  - Runs just the annual disaggregation and diagnostics portion of `--gen_county`.
+  - Hourly disaggregation is much slower than annual, so prefer running this first to catch missing/bad multipliers before committing to the full `--gen_county` or `--gen_county_hourly` run.
+
+- `--gen_county_hourly`
+  - Runs just the hourly disaggregation portion of `--gen_county`. Assumes the county annual tables already exist (e.g. from a prior `--gen_county_annual` run).
+
+- `--sectors {res,com}` (default: both)
+  - Limits `--gen_mults`, `--gen_county`, `--gen_county_annual`, `--gen_county_hourly`, and `--gen_countyall` to the given sector(s). Accepts one or both, e.g. `--sectors res` or `--sectors res com`.
+  - Useful for re-running just the sector that failed rather than redoing both.
+
+- `--force`
+  - Drops the existing Athena table(s) and cleans the corresponding S3 folder(s) before regenerating, instead of skipping tables that already exist (or, for `--combine_county` with the `aeo` turnover, appending to them via `INSERT`).
+  - Use with `--gen_county`, `--gen_county_annual`, `--gen_county_hourly`, `--combine_county`, or `--gen_countyall` when you need to regenerate tables that were already built — for example after fixing a mapping issue or re-running with updated Scout data.
 
 - `--calibrate`
   - Calculate new calibration multipliers for electricity and natural gas. Requires `YEARS` to have years with data in `map_meas/eia_gross_consumption_by_state_sector_year_month.csv`.
   - Run after `--gen_county` if there have been significant changes to disaggregation multipliers or the measure or envelope maps.
 
-- `--combine_countydata`
+- `--combine_county`
   - Consolidates the tables for the year and sector combinations created by `--gen_county` into two tables per scenario: one with annual county-level results and one with hourly county-level results. See [Tables 1 and 2](#output-schema) for the variables present in each.
   - Applies calibration multipliers to the hourly results.
   - Runs diagnostics.
-  - Run after `--gen_county`.
+  - Run after `--gen_county`. Combine with `--force` to rebuild from scratch instead of appending to (or erroring on) existing combined tables — see `--force` above.
 
 - `--gen_hourlyviz`
-  - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_countydata`.
+  - Downloads data from S3 and creates [hourly county-level visualizations](#county-and-hourly-graphs-county_and_hourly_graphsr) using the output from `--combine_county`.
 
 - `--calibration`
   - Generate calibration multipliers using AEO historic data from 2020 to 2024
 
 - `--run_test`
-  - Runs diagnostics that are included in `--gen_mults` and `--combine_countydata`: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
+  - Runs diagnostics that are included in `--gen_mults` and `--combine_county`: disaggregation multipliers checks, county annual/hourly checks, measure coverage tests.
   - Use after changes to disaggregation multipliers or county generation templates.
 
 - `--gen_countyall`
-  - One-shot pipeline that performs the complete disaggregation.
-  - Equivalent to running `--gen_scoutdata`, `--gen_county`, `--combine_countydata`, and `--gen_hourlyviz` in succession.
+  - One-shot pipeline that performs the complete disaggregation, assuming disaggregation multipliers and calibration multipliers are already in place.
+  - Equivalent to running `--gen_scoutdata`, `--gen_county`, `--combine_county`, and `--gen_hourlyviz` in succession.
+  - Respects `--sectors` (passed through to `--gen_county`) and `--force` (passed through to both `--gen_county` and `--combine_county`, so a `--force` re-run rebuilds the combined tables instead of duplicating or erroring on existing ones).
+
+- `--max_workers`
+  - Overrides `ATHENA_MAX_WORKERS` (default `3`) for the current run, controlling how many Athena queries execute concurrently across `gen_mults`, `gen_county`/`gen_county_annual`/`gen_county_hourly`, `combine_county`, and `gen_scoutdata`.
+  - Lower it (e.g. `2`–`3`) if you see Athena throttling errors when many tables are created in parallel, such as during `--gen_mults`; raise it (e.g. `15`) to speed up query-only steps like `--gen_county`/`--combine_county` if your account's concurrent-DML-query quota allows it.
 
 ### Publication
 
