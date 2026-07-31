@@ -70,6 +70,7 @@ class Config:
     BUCKET_NAME = "margaretbucket"      # bucket in DATABASE_NAME where intermediate and long results will be stored
     EXTERNAL_S3_DIR = "datasets"        # folder in BUCKET_NAME where the files in MAP_EU_DIR, MAP_MEAS_DIR, CALIB_MULT_PATH will be uploaded
     DEST_BUCKET = "bss-workflow"        # bucket in DATABASE_NAME where publication ready results (e.g. wide tables) will be stored
+    PUBLISH_VERSION = "v5"              # top-level folder in DEST_BUCKET for this data release; bump (e.g. "v5") for a new shared release
 
     # names of tables that contain disaggregation multipliers
     MULTIPLIERS_TABLES = [
@@ -299,7 +300,7 @@ def execute_athena_query_to_df2(s3_client, athena_client, query: str, table_name
     """
 
     s3_bucket_target = "bss-workflow"
-    s3_folder = "v4/annual/"
+    s3_folder = f"{cfg.PUBLISH_VERSION}/annual/"
     s3_output_prefix = "athena_results/"
     output_location = f"s3://{cfg.BUCKET_NAME}/{s3_output_prefix}/"
     qid = start_athena_query(athena_client, query, output_location, cfg.DATABASE_NAME)
