@@ -46,7 +46,7 @@ WITH (
             LOWER(REGEXP_REPLACE(end_use, '[^A-Za-z0-9]+', '_')) AS eu,
             SUM(county_hourly_cal_kwh)          AS cal_elec,
             SUM(county_hourly_uncal_kwh)        AS uncal_elec1
-        FROM long_county_hourly_aeo_amy
+        FROM long_county_hourly_aeo_{disag_id}
         WHERE turnover = 'baseline'
         GROUP BY "year", "in.state", turnover, sector, end_use
     ),

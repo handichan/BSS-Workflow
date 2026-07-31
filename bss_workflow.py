@@ -1535,7 +1535,7 @@ def gen_countydata(s3, athena_client, cfg: Config, force: bool = False, sectors=
 # Athena data conversions (long<->wide, county aggregation, etc.)
 # ----------------------------
 
-def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
+def convert_countyhourly_long_to_wide(s3_client, athena_client, cfg: Config, force: bool = False):
     sql_dir = "data_conversion"
     turnovers = cfg.TURNOVERS
 
@@ -1546,21 +1546,49 @@ def convert_countyhourly_long_to_wide(athena_client, cfg: Config):
 
     # scenarios
     template = read_sql_file(f"{sql_dir}/long_to_wide.sql", cfg)
+    queries = []
     for t in turnovers:
-        q = template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)
+        table = f"wide_county_hourly_{t}_{cfg.DISAG_ID}"
+        if athena_table_exists(athena_client, cfg, table):
+            if force:
+                drop_athena_table_if_exists(athena_client, table, cfg)
+                delete_folder_from_s3(s3_client, cfg.BUCKET_NAME,
+                    f"{cfg.DISAG_ID}/wide/county_hourly_{t}_{cfg.DISAG_ID}/")
+            else:
+                print(f"SKIP (already exists): {table}")
+                continue
+        queries.append((t, template.format(turnover=t, dest_bucket=cfg.BUCKET_NAME, disag_id=cfg.DISAG_ID)))
+    run_queries_concurrently(athena_client, cfg, queries, is_create=True)
+
+
+def convert_scout_long_to_wide(s3_client, athena_client, cfg: Config, force: bool = False):
+    sql_dir = "data_conversion"
+    turnovers = cfg.TURNOVERS
+
+    # baseline
+    baseline_table = "wide_scout_annual_state_baseline"
+    baseline_exists = athena_table_exists(athena_client, cfg, baseline_table)
+    if baseline_exists and not force:
+        print(f"SKIP (already exists): {baseline_table}")
+    else:
+        if baseline_exists:
+            drop_athena_table_if_exists(athena_client, baseline_table, cfg)
+            delete_folder_from_s3(s3_client, cfg.BUCKET_NAME,
+                f"{cfg.VERSION_ID}/wide/scout_annual_state_baseline/")
+        template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
+        q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID, disag_id=cfg.DISAG_ID)
         execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
 
-
-def convert_scout_long_to_wide(athena_client, cfg: Config):
-    # sql_dir = "data_conversion"
-    turnovers = cfg.TURNOVERS
-    
-    # baseline
-    template = read_sql_file(f"{sql_dir}/long_to_wide_ann_baseline.sql", cfg)
-    q = template.format(dest_bucket=cfg.BUCKET_NAME, version=cfg.VERSION_ID)
-    execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
-
     # scenarios
+    scenario_table = "wide_scout_annual_state"
+    scenario_exists = athena_table_exists(athena_client, cfg, scenario_table)
+    if scenario_exists and not force:
+        print(f"SKIP (already exists): {scenario_table}")
+        return
+    if scenario_exists:
+        drop_athena_table_if_exists(athena_client, scenario_table, cfg)
+        delete_folder_from_s3(s3_client, cfg.BUCKET_NAME, f"{cfg.DISAG_ID}/wide/scout_annual_state/")
+
     scout_header = f"""CREATE TABLE wide_scout_annual_state
         WITH (
             external_location = 's3://{{dest_bucket}}/{{disag_id}}/wide/scout_annual_state/',
@@ -1711,7 +1739,7 @@ def convert_scout_long_to_wide(athena_client, cfg: Config):
             scout_select_tpl.format(turnover=turnover)
         )
         county_hourly_parts.append(
-            county_hourly_select_tpl.format(turnover=turnover)
+            county_hourly_select_tpl.format(turnover=turnover, disag_id=cfg.DISAG_ID)
         )
     all_sql = scout_header + "\nUNION ALL\n".join(scout_parts) + "),\n" + scout_footer + \
                 county_hourly_header + "\nUNION ALL\n".join(county_hourly_parts) + "),\n" + combined_footer
@@ -1998,25 +2026,30 @@ def bssbucket_insert(athena_client, cfg: Config):
     query_template = """
         CREATE TABLE bss_county_hourly_{turnover}_amy_{sector}_{year}
         WITH (
-            external_location = 's3://{dest_bucket}/v4/county_hourly/{turnover}/sector={sector}/year={year}/',
+            external_location = 's3://{dest_bucket}/{version}/county_hourly/{turnover}/sector={sector}/year={year}/',
             format = 'PARQUET',
             write_compression = 'SNAPPY',
             partitioned_by = ARRAY['state']
         ) AS
         SELECT *
-        FROM wide_county_hourly_{turnover}_amy
+        FROM wide_county_hourly_{turnover}_{disag_id}
         WHERE sector = '{sectorlong}' AND year = {year};
     """.strip()
 
-    for t in turnovers:
-        for s in sectors:
-            for y in years:
-                sectorlong = "Commercial" if s == "com" else "Residential"
-                q = query_template.format(
-                    turnover=t, sector=s, year=y, dest_bucket=dest_bucket, sectorlong=sectorlong
-                )
-                print(f"bss insert: {t} {s} {y}")
-                execute_athena_query(athena_client, q, cfg, is_create=False, wait=True)
+    queries = [
+        (
+            f"bss insert: {t} {s} {y}",
+            query_template.format(
+                turnover=t, sector=s, year=y, dest_bucket=dest_bucket, disag_id=cfg.DISAG_ID,
+                version=cfg.PUBLISH_VERSION,
+                sectorlong="Commercial" if s == "com" else "Residential",
+            ),
+        )
+        for t in turnovers
+        for s in sectors
+        for y in years
+    ]
+    run_queries_concurrently(athena_client, cfg, queries, is_create=True)
 
 
 #rename the files for publication
@@ -2029,12 +2062,35 @@ def bssbucket_parquetmerge(s3_client, cfg: Config):
     dest_bucket = cfg.DEST_BUCKET
     sectors = ["com", "res"]
 
-    for t in turnovers:
-        for s in sectors:
-            for y in years:
-                top = f"v4/county_hourly/{t}/sector={s}/year={y}/"
-                print(f"Merging BSS bucket for {t} {s} {y}")
-                merge_and_replace_folders(s3_client, dest_bucket, top)
+    # Each (turnover, sector, year) merges a disjoint S3 prefix into its own local
+    # scratch dir (see merge_and_replace_folders' prefix_safe namespacing), so these
+    # are safe to run concurrently. This is pure S3/local I/O, not Athena, so it isn't
+    # subject to HIVE_S3_THROTTLING -- still cap workers to avoid saturating local
+    # disk/bandwidth with simultaneous downloads.
+    jobs = [(t, s, y) for t in turnovers for s in sectors for y in years]
+    max_workers = min(cfg.ATHENA_MAX_WORKERS, len(jobs)) or 1
+    errors = []
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_to_job = {
+            pool.submit(
+                merge_and_replace_folders,
+                s3_client, dest_bucket, f"{cfg.PUBLISH_VERSION}/county_hourly/{t}/sector={s}/year={y}/",
+            ): (t, s, y)
+            for t, s, y in jobs
+        }
+        for future in as_completed(future_to_job):
+            t, s, y = future_to_job[future]
+            try:
+                future.result()
+                print(f"DONE merging BSS bucket for {t} {s} {y}")
+            except Exception as exc:
+                print(f"FAILED merging BSS bucket for {t} {s} {y}: {exc}")
+                errors.append(((t, s, y), exc))
+    if errors:
+        raise RuntimeError(
+            f"{len(errors)} of {len(jobs)} bssbucket_parquetmerge jobs failed:\n"
+            + "\n".join(f"  {job}: {exc}" for job, exc in errors)
+        )
 
 
 def bssbucket_parquet_scout(s3_client, athena_client, cfg:Config):
@@ -2075,20 +2131,25 @@ def merge_and_replace_folders(s3_client, bucket_name: str, prefix: str):
 
     print(f"Found folders to merge: {folder_names}")
 
+    # Namespace local scratch paths by `prefix` so concurrent calls for different
+    # prefixes (e.g. different turnover/sector/year) never collide, even when they
+    # happen to process a folder_name (county) in common.
+    prefix_safe = prefix.strip("/").replace("/", "_").replace("=", "-")
+
     for folder_name in folder_names:
         print(f"Processing folder: {folder_name}")
         folder_prefix = f"{prefix}{folder_name}/"
-        
+
         # List all files in this folder
         page = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=folder_prefix)
         folder_files = page.get("Contents", [])
-        
+
         if not folder_files:
             print(f"No files found in folder {folder_name}")
             continue
-        
+
         # Create temporary directory for this folder
-        temp_dir = os.path.join("temp_files", folder_name)
+        temp_dir = os.path.join("temp_files", prefix_safe, folder_name)
         os.makedirs(temp_dir, exist_ok=True)
         local_files = []
 
@@ -2117,23 +2178,24 @@ def merge_and_replace_folders(s3_client, bucket_name: str, prefix: str):
         if df_list:
             # Combine all dataframes
             combined = pd.concat(df_list, ignore_index=True)
-            
-            # Create parquet file
+
+            # Create parquet file (kept inside this call's own temp_dir)
             parquet_filename = f"{folder_name}.parquet"
-            combined.to_parquet(parquet_filename, engine="pyarrow", index=False)
-            
+            local_parquet_path = os.path.join(temp_dir, parquet_filename)
+            combined.to_parquet(local_parquet_path, engine="pyarrow", index=False)
+
             # Upload the parquet file to the same location as the original folder
             parquet_key = f"{prefix}{parquet_filename}"
-            s3_client.upload_file(parquet_filename, bucket_name, parquet_key)
+            s3_client.upload_file(local_parquet_path, bucket_name, parquet_key)
             print(f"Uploaded {parquet_filename} to s3://{bucket_name}/{parquet_key}")
-            
+
             # Delete the original folder
             delete_folder_from_s3(s3_client, bucket_name, folder_prefix)
             print(f"Deleted original folder: s3://{bucket_name}/{folder_prefix}")
-            
+
             # Clean up local parquet file
             try:
-                os.remove(parquet_filename)
+                os.remove(local_parquet_path)
             except Exception:
                 pass
 
@@ -2533,9 +2595,9 @@ def main(opts):
 
 
     if opts.convert_wide:
-        _, athena = get_boto3_clients()
-        convert_countyhourly_long_to_wide(athena, cfg)
-        convert_scout_long_to_wide(athena, cfg)
+        s3, athena = get_boto3_clients()
+        convert_countyhourly_long_to_wide(s3, athena, cfg, force=opts.force)
+        convert_scout_long_to_wide(s3, athena, cfg, force=opts.force)
 
     if opts.gen_countyall:
         s3, athena = get_boto3_clients()
@@ -2580,7 +2642,7 @@ def main(opts):
         # Insert and merge (BSS)
         bssbucket_insert(athena, cfg)
         bssbucket_parquetmerge(s3, cfg)
-        merge_and_replace_folders(s3, 'bss-workflow', 'v4/annual_results/')
+        merge_and_replace_folders(s3, 'bss-workflow', f"{cfg.PUBLISH_VERSION}/annual_results/")
         bssbucket_parquet_scout(s3, athena, cfg)
 
     if opts.run_test:
@@ -2610,7 +2672,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_county", action="store_true", help="Generate county data (annual + diagnostics, then hourly)")
     parser.add_argument("--gen_county_annual", action="store_true", help="Generate county annual data and run disaggregation diagnostics (fast; run before --gen_county_hourly)")
     parser.add_argument("--gen_county_hourly", action="store_true", help="Generate county hourly data (assumes annual tables already exist; slow)")
-    parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_county, --gen_county_annual, --gen_county_hourly, --combine_county, or --gen_countyall)")
+    parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_county, --gen_county_annual, --gen_county_hourly, --combine_county, --convert_wide, or --gen_countyall)")
     parser.add_argument("--calibrate", action="store_true", help="Generate calibration multipliers and apply to existing county hourly tables")
     parser.add_argument("--combine_county", action="store_true", help="Combine county hourly tables")
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
