@@ -54,9 +54,9 @@ class Config:
     OUTPUT_DIR = "agg_results"
 
     # data version identifiers
-    SCOUT_RUN_DATE = "2026-01-09"       # identifier for the Scout result vintage
-    VERSION_ID = "20260109"
-    DISAG_ID = "20260305"               # identifier for disaggregated energy data
+    SCOUT_RUN_DATE = "2026-07-29"       # identifier for the Scout result vintage
+    VERSION_ID = "20260722"
+    DISAG_ID = "20260729"               # identifier for disaggregated energy data
     WEATHER = "amy"
 
     # Max number of Athena queries to run concurrently (bounded by the account's
@@ -66,8 +66,8 @@ class Config:
     ATHENA_MAX_WORKERS = 3
 
     # S3 locations
-    DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
-    BUCKET_NAME = "margaretbucket"      # bucket in DATABASE_NAME where intermediate and long results will be stored
+    DATABASE_NAME = "rerun4"
+    BUCKET_NAME = "yujie-bucket" 
     EXTERNAL_S3_DIR = "datasets"        # folder in BUCKET_NAME where the files in MAP_EU_DIR, MAP_MEAS_DIR, CALIB_MULT_PATH will be uploaded
     DEST_BUCKET = "bss-workflow"        # bucket in DATABASE_NAME where publication ready results (e.g. wide tables) will be stored
     PUBLISH_VERSION = "v5"              # top-level folder in DEST_BUCKET for this data release; bump (e.g. "v5") for a new shared release
@@ -146,8 +146,9 @@ class Config:
     MEAS_MAP_PATH = os.path.join(MAP_MEAS_DIR, "measure_map.tsv")
     CALIB_MULT_PATH = os.path.join(MAP_MEAS_DIR, "calibration_multipliers.tsv")
     EIA_GROSS_PATH = "map_meas/eia_gross_consumption_by_state_sector_year_month.csv"    # file with monthly EIA electricity and gas consumption
-    SCOUT_OUT_TSV = "scout_tsv"         # location where transformed Scout files will be saved as TSV
-    SCOUT_IN_JSON = "scout_results"     # location of raw JSON files from Scout
+    SCOUT_OUT_TSV = "scout/scout_tsv"         # location where transformed Scout files will be saved as TSV
+    SCOUT_IN_JSON = "scout/scout_json"     # location of raw JSON files from Scout
+
     # Measures whose gap-model portion (see GAP SPLIT in _calc_annual_common) should be
     # kept out of the shared "Gap" bucket and routed to their own measure_map.tsv entry
     # instead, so they can be assigned a load shape different from the generic
