@@ -81,9 +81,7 @@ def main():
         "res_hourly_disaggregation_multipliers": "res_hourly_disaggregation_multipliers_amy"
     }
     
-    # database_name = "default2"
-    # database_name = "baseline"
-    database_name = "rerun"
+    database_name = "euss_oedi" # Replace with your target database name
     
     try:
         copied, failed = copy_tables_with_new_names(database_name, table_mappings)

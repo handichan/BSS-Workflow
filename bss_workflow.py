@@ -66,8 +66,8 @@ class Config:
     ATHENA_MAX_WORKERS = 3
 
     # S3 locations
-    DATABASE_NAME = "rerun4"
-    BUCKET_NAME = "yujie-bucket" 
+    DATABASE_NAME = "euss_oedi"         # S3 database in which all tables are located
+    BUCKET_NAME = "margaretbucket"      # bucket in DATABASE_NAME where intermediate and long results will be stored
     EXTERNAL_S3_DIR = "datasets"        # folder in BUCKET_NAME where the files in MAP_EU_DIR, MAP_MEAS_DIR, CALIB_MULT_PATH will be uploaded
     DEST_BUCKET = "bss-workflow"        # bucket in DATABASE_NAME where publication ready results (e.g. wide tables) will be stored
     PUBLISH_VERSION = "v5"              # top-level folder in DEST_BUCKET for this data release; bump (e.g. "v5") for a new shared release
