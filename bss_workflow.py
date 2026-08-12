@@ -2612,22 +2612,6 @@ def main(opts):
         get_csvs_for_R(s3, athena, cfg)
         run_r_script("county and hourly graphs.R")
 
-    if opts.calibration:
-        s3, athena = get_boto3_clients()
-        TURNOVERS_backup = cfg.TURNOVERS
-        YEARS_backup = cfg.YEARS
-        cfg.TURNOVERS = ["aeo"]
-        cfg.YEARS = [str(i) for i in range(2020, 2025)]
-        gen_scoutdata(s3, athena, cfg)
-        # might need to run --gen_mults to generate disaggregation multipliers if mapping changed
-        gen_countydata(s3, athena, cfg)
-        combine_countydata(s3, athena, cfg)
-        get_csvs_for_R(s3, athena, cfg, for_calibration=True)
-        generate_state_monthly_for_cal(s3, athena, cfg)
-        run_r_script("calibration graphs.R")
-        cfg.TURNOVERS = TURNOVERS_backup
-        cfg.YEARS = YEARS_backup
-
     if opts.bssbucket_insert:
         _, athena = get_boto3_clients()
         bssbucket_insert(athena, cfg)
@@ -2686,7 +2670,6 @@ if __name__ == "__main__":
     parser.add_argument("--iefbucket_parquetmerge", action="store_true", help="Populate + merge parquet under ief bucket")
     parser.add_argument("--run_test", action="store_true", help="Run diagnostics")
     parser.add_argument("--county_partition_mults", action="store_true", help="Partition multipliers by county")
-    parser.add_argument("--calibration", action="store_true", help="Generate calibration multipliers")
     
     parser.add_argument("--max_workers", type=int, default=None, help="Max concurrent Athena queries (default: Config.ATHENA_MAX_WORKERS)")
     opts = parser.parse_args()
