@@ -54,9 +54,8 @@ WHERE wh_elec_total > 0
 
 UNION ALL
 
--- Fallback: for state+group_ann combos where BuildStock has no electric WH output
--- (e.g. fossil WH groups in states with near-zero HP WH sample), use the fossil
--- county distribution as a proxy for the Electric multiplier.
+-- Fallback: for state+group_ann combos where BuildStock has no electric WH output,
+-- use the fossil county distribution as a proxy for the Electric multiplier.
 SELECT "in.county",
 	"in.weather_file_city",
 	"in.weather_file_longitude",
