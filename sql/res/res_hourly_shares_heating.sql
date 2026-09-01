@@ -46,11 +46,16 @@ ts_agg AS(
 -- separately, shapes with structurally zero electric output -- e.g. res_heating_ts_2
 -- ("Fossil heating") and res_heating_ts_15 ("Fossil furnace") only map to fossil
 -- in.hvac_heating_type_and_fuel types, so heating_elec is zero for every building on
--- those shapes everywhere, not just in some cities. res_ann_shares_hvac.sql still
--- assigns these baseline groups an annual Electric multiplier (using the fossil
--- county distribution as proxy) when BuildStock has no electric heating sample for
--- the group, so an Electric hourly shape is needed here too; use the fossil shape as
--- the same proxy at the hourly level.
+-- those shapes everywhere, not just in some cities (confirmed nationwide: every such
+-- type sums to exactly 0.0 electric heating output in the ResStock metadata). Scout
+-- still reports real, nonzero Electric energy for these baseline groups (e.g. backup
+-- resistance heat), so res_ann_shares_hvac.sql still assigns them an annual Electric
+-- multiplier (using the fossil county distribution as proxy) -- an Electric hourly
+-- shape is needed here too; use the fossil shape as the same proxy at the hourly
+-- level. Note this is unrelated to filtering out Scout's zero-energy combinations
+-- (Issue #36): that would skip combos Scout reports as truly zero, but the case here
+-- has nonzero Scout energy with zero BuildStock coverage -- the opposite situation --
+-- so #36 wouldn't remove the need for this fallback.
 ts_agg_totals AS (
     SELECT *,
         SUM(heating_fossil) OVER (

@@ -52,9 +52,13 @@ city_totals AS (
 ),
 
 -- State-level hourly shape per shape_ts+fuel: fallback for weather cities that have
--- zero buildings sampled for a given shape_ts (e.g. no fossil-heated homes sampled
--- in a warm-climate weather city), used below when a city has no usable data of its
--- own for that shape_ts+fuel.
+-- zero buildings sampled for a given shape_ts, used below when a city has no usable
+-- data of its own for that shape_ts+fuel. Confirmed real example: res_heating_ts_14
+-- ("Fossil boiler") has usable data in 6 MS weather cities, but zero in Trent Lott
+-- Intl (Gulfport, on the Gulf Coast) -- fossil boilers are a cold-climate hydronic
+-- technology, so a warm coastal city can easily sample none while colder inland MS
+-- cities have a few. MS as a whole still has real Scout energy for the group, so
+-- Trent Lott Intl needs the state-level shape.
 state_hourly AS (
     SELECT
         cs."in.state",
