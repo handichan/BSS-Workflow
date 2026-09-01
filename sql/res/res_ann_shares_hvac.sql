@@ -192,9 +192,13 @@ WHERE cooling_total > 0
 
 UNION ALL
 
--- Fallback: "no cool" groups have zero cooling output in BuildStock.
--- Use fossil fuel county distribution as a proxy for where cooling will occur
--- (same buildings, and fossil heat correlates with climate zones that need cooling).
+-- Fallback: Scout's reference-case measures (e.g. "Ref. Case {fuel} Heat, No Cooling")
+-- report nonzero Cooling (Equip.) energy for "no cool" groups even with no HVAC measure
+-- applied (original_ann = measure_ann), presumably modeling assumed future AC adoption
+-- in currently-no-cool homes. BuildStock's "no cool" characteristic group has zero
+-- electric cooling equipment by definition, so there's no real distribution to draw
+-- from -- use the fossil heating distribution as a proxy instead (same homes, and
+-- fossil heat correlates with climate zones that need cooling).
 SELECT
     "in.county",
     "in.weather_file_city",
