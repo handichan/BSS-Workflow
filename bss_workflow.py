@@ -225,8 +225,8 @@ def execute_athena_query(athena_client, query: str, cfg: Config, *, is_create: b
     so a failed INSERT doesn't roll back), and blindly resubmitting the same INSERT on
     top of a surviving partial write silently duplicates rows -- multiplier sums come
     out as exact integer multiples (2x, 3x) of 1 instead of missing/NaN, so it doesn't
-    even fail loud. Fail fast instead and re-run --gen_mults, which drops+clears all
-    tables before rebuilding.
+    even fail loud. Fail fast instead and re-run --gen_mults --force, which drops+clears
+    all tables before rebuilding.
     """
     output_location = f"s3://{cfg.BUCKET_NAME}/configs/"
     max_retries = 4 if is_create else 0
@@ -914,7 +914,7 @@ def sql_to_s3table(athena_client, cfg: Config, sql_file: str, sectorid: str, yea
 # Specific pipelines
 # ----------------------------
 
-def gen_multipliers(s3_client, athena_client, cfg: Config, sectors=("res", "com")):
+def gen_multipliers(s3_client, athena_client, cfg: Config, force: bool = False, sectors=("res", "com")):
     # drop tables before rerunning multipliers
     drop_tables = [
         "com_annual_disaggregation_multipliers_amy",
@@ -928,6 +928,18 @@ def gen_multipliers(s3_client, athena_client, cfg: Config, sectors=("res", "com"
     # only drop/rebuild tables for the requested sector(s) -- e.g. after a com-only
     # failure there's no need to also wipe and re-run the (unaffected) res tables
     drop_tables = [t for t in drop_tables if t.split("_", 1)[0] in sectors]
+
+    # gen_multipliers always drops+rebuilds from scratch (see execute_athena_query's
+    # docstring on why a throttled INSERT can't just be safely re-run in place), so
+    # require --force before wiping existing tables -- same guard as --gen_county.
+    existing = [t for t in drop_tables if athena_table_exists(athena_client, cfg, t)]
+    if existing and not force:
+        print(
+            "SKIP gen_multipliers: multiplier tables already exist "
+            f"({', '.join(existing)}). Pass --force to drop and rebuild them."
+        )
+        return
+
     for t in drop_tables:
         drop_athena_table_if_exists(athena_client, t, cfg)
         delete_folder_from_s3(s3_client, cfg.BUCKET_NAME, f"{t}/")
@@ -2536,7 +2548,7 @@ def main(opts):
         s3, athena = get_boto3_clients()
         s3_create_table_from_tsv(s3, athena, cfg.MEAS_MAP_PATH, cfg)
         s3_create_tables_from_csvdir(s3, athena, cfg)
-        gen_multipliers(s3, athena, cfg, sectors=opts.sectors)
+        gen_multipliers(s3, athena, cfg, force=opts.force, sectors=opts.sectors)
         test_multipliers(s3, athena, cfg)
 
     # process and upload Scout results
@@ -2658,7 +2670,7 @@ if __name__ == "__main__":
     parser.add_argument("--gen_county", action="store_true", help="Generate county data (annual + diagnostics, then hourly)")
     parser.add_argument("--gen_county_annual", action="store_true", help="Generate county annual data and run disaggregation diagnostics (fast; run before --gen_county_hourly)")
     parser.add_argument("--gen_county_hourly", action="store_true", help="Generate county hourly data (assumes annual tables already exist; slow)")
-    parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_county, --gen_county_annual, --gen_county_hourly, --combine_county, --convert_wide, or --gen_countyall)")
+    parser.add_argument("--force", action="store_true", help="Drop and clean S3 before regenerating (use with --gen_mults, --gen_county, --gen_county_annual, --gen_county_hourly, --combine_county, --convert_wide, or --gen_countyall)")
     parser.add_argument("--calibrate", action="store_true", help="Generate calibration multipliers and apply to existing county hourly tables")
     parser.add_argument("--combine_county", action="store_true", help="Combine county hourly tables")
     parser.add_argument("--gen_hourlyviz", action="store_true", help="Generate hourly visualizations")
