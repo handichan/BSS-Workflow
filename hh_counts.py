@@ -1,3 +1,8 @@
+import os
+import json
+import numpy as np
+import pandas as pd
+
 total_bldgs_cdiv = pd.read_csv('map_meas/com floor areas.csv')
 state_share_bldgs = pd.read_csv('map_meas/com state floor area shares.csv')
 scenarios = ['aeo','accel','fossil','state','brk','min_switch','high_switch','dual_switch','ref']
@@ -202,11 +207,13 @@ def calc_hh_counts(df, turnover):
 
 
 
+os.makedirs('agg_results', exist_ok=True)
+
 for scen in scenarios:
     print(scen)
-    df = scout_to_df_stock('scout_results' + scen+'.json')
+    df = scout_to_df_stock(os.path.join('scout', 'scout_json', scen + '.json'))
     df['scenario'] = scen
     hh = calc_hh_counts(df,scen)
-    hh.to_csv('agg_results' + scen+'_hh_counts.tsv', sep='\t', index = False)
+    hh.to_csv(os.path.join('agg_results', scen + '_hh_counts.tsv'), sep='\t', index = False)
     com_cust = calc_com_buildings(df)
-    com_cust.to_csv('agg_results' + scen+'_com_bldg_counts.tsv', sep='\t', index = False)
+    com_cust.to_csv(os.path.join('agg_results', scen + '_com_bldg_counts.tsv'), sep='\t', index = False)
