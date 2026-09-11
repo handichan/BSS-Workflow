@@ -15,7 +15,7 @@ At the highest level and as shown in the diagram below, the steps for generating
 
 This repository contains the code and instructions for the disaggregation of annual, state-level electricity projections to hourly, county-level projections (Steps 3-5). It also includes some initial setup, diagnostics, and visualizations of the results.
 
-See Langevin et al., 2026 for a detailed conceptual description of the methodology.
+See [Langevin et al., 2026](https://www.nature.com/articles/s41597-026-07616-2) for a detailed conceptual description of the methodology.
 
 ## Overview
 
@@ -428,7 +428,7 @@ Update these files to add new groups of multipliers or change the characteristic
 
 #### ComStock Gap Model
 
-The ComStock gap model provides an exception to this methodology. Currently, ComStock does not explicitly model all commercial building types, which means that it excludes 37% of energy consumption in commercial buildings ([Parker et al., 2025](https://nrel.github.io/ComStock.github.io/assets/files/comstock_reference_documentation_2025_2.pdf)). The difference between the measured total consumption and what is explicitly modeled is referred to as the gap, and the SDR includes hourly county-level electricity consumption to represent it. Because Scout includes all commercial building types, we calculate the share of electricity consumption by measure that is not modeled in ComStock and disaggregate it using the gap model. The gap is not split out by building type or end use and simply represents the magnitude of commercial electricity that is not explicitly modeled. We therefore calculate one set of geographic and one set of temporal gap multipliers and apply them to all of the gap energy. See Langevin et al., 2026 for more information about how we use the gap model.
+The ComStock gap model provides an exception to this methodology. Currently, ComStock does not explicitly model all commercial building types, which means that it excludes 37% of energy consumption in commercial buildings ([Parker et al., 2025](https://nrel.github.io/ComStock.github.io/assets/files/comstock_reference_documentation_2025_2.pdf)). The difference between the measured total consumption and what is explicitly modeled is referred to as the gap, and the SDR includes hourly county-level electricity consumption to represent it. Because Scout includes all commercial building types, we calculate the share of electricity consumption by measure that is not modeled in ComStock and disaggregate it using the gap model. The gap is not split out by building type or end use and simply represents the magnitude of commercial electricity that is not explicitly modeled. We therefore calculate one set of geographic and one set of temporal gap multipliers and apply them to all of the gap energy. See [Langevin et al., 2026](https://www.nature.com/articles/s41597-026-07616-2) for more information about how we use the gap model.
 
 ### Measure Mapping
 
@@ -539,7 +539,7 @@ When performing the county hourly disaggregation, automatic checks are performed
 
 ## Calculating Calibration Multipliers (optional)
 
-We calibrate our BSS results on a sector, state, and monthly basis to [EIA-861M](https://www.eia.gov/electricity/data/eia861m/). We calculate a monthly multiplier on total electricity as the ratio of gross consumption from EIA-861M to our BSS results for historical years. Then, during the disaggregation process we multiply the hourly electricity consumption for each end use by the calibration multiplier for that state, sector, and month. This will change the monthly load shape and the annual distribution of end uses but not the load shape within a sector, state, and month or the geographic distribution within a state. See Langevin et al. 2026 for more information and a description of the impact of the calibration.
+We calibrate our BSS results on a sector, state, and monthly basis to [EIA-861M](https://www.eia.gov/electricity/data/eia861m/). We calculate a monthly multiplier on total electricity as the ratio of gross consumption from EIA-861M to our BSS results for historical years. Then, during the disaggregation process we multiply the hourly electricity consumption for each end use by the calibration multiplier for that state, sector, and month. This will change the monthly load shape and the annual distribution of end uses but not the load shape within a sector, state, and month or the geographic distribution within a state. See [Langevin et al. 2026](https://www.nature.com/articles/s41597-026-07616-2) for more information and a description of the impact of the calibration.
 
 ### EIA Data -- Gross Consumption
 
